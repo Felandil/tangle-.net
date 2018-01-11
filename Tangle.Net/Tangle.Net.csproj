@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Cryptography\Converter.cs" />
-    <Compile Include="Source\Cryptography\Extensions.cs" />
     <Compile Include="Source\Cryptography\Kerl.cs" />
     <Compile Include="Source\Entity\AddressBalances.cs" />
     <Compile Include="Source\Entity\Neighbor.cs" />
