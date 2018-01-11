@@ -1,4 +1,9 @@
-﻿namespace Tangle.Net.Source.Repository
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RestIotaRepository.cs" company="Felandil IT">
+//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
+//  </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+namespace Tangle.Net.Source.Repository
 {
   using System;
   using System.Collections.Generic;
@@ -14,36 +19,26 @@
   /// </summary>
   public class RestIotaRepository : IIotaRepository
   {
+    #region Static Fields
+
     /// <summary>
     /// The null hash trytes.
     /// </summary>
     private static readonly string NullHashTrytes = string.Concat(Enumerable.Repeat("9", 244));
+
+    #endregion
 
     #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RestIotaRepository"/> class.
     /// </summary>
-    /// <param name="nodeAddress">
-    /// The node address.
+    /// <param name="client">
+    /// The client.
     /// </param>
-    /// <param name="nodePort">
-    /// The node port.
-    /// </param>
-    public RestIotaRepository(string nodeAddress, int nodePort)
+    public RestIotaRepository(IRestClient client)
     {
-      this.NodeUri = string.Format("{0}:{1}", nodeAddress, nodePort);
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RestIotaRepository"/> class.
-    /// </summary>
-    /// <param name="nodeUri">
-    /// The node uri.
-    /// </param>
-    public RestIotaRepository(string nodeUri)
-    {
-      this.NodeUri = nodeUri;
+      this.Client = client;
     }
 
     #endregion
@@ -51,9 +46,9 @@
     #region Properties
 
     /// <summary>
-    /// Gets or sets the node address.
+    /// Gets or sets the client.
     /// </summary>
-    private string NodeUri { get; set; }
+    private IRestClient Client { get; set; }
 
     #endregion
 
@@ -166,6 +161,46 @@
     }
 
     /// <summary>
+    /// The execute command.
+    /// </summary>
+    /// <param name="parameters">
+    /// The parameters.
+    /// </param>
+    /// <typeparam name="T">
+    /// The node property to return
+    /// </typeparam>
+    /// <returns>
+    /// The <see cref="T"/>.
+    /// </returns>
+    private T ExecuteParameterizedCommand<T>(Dictionary<string, object> parameters) where T : new()
+    {
+      var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
+      request.AddHeader("X-IOTA-API-Version", "1");
+      request.AddJsonBody(parameters);
+
+      var response = this.Client.Execute<T>(request);
+
+      return response.Data;
+    }
+
+    /// <summary>
+    /// The execute command.
+    /// </summary>
+    /// <param name="commandName">
+    /// The command name.
+    /// </param>
+    /// <typeparam name="T">
+    /// The node property to return
+    /// </typeparam>
+    /// <returns>
+    /// The <see cref="T"/>.
+    /// </returns>
+    private T ExecuteParameterlessCommand<T>(string commandName) where T : new()
+    {
+      return this.ExecuteParameterizedCommand<T>(new Dictionary<string, object> { { "command", commandName } });
+    }
+
+    /// <summary>
     /// The prepare transfers.
     /// </summary>
     /// <param name="seed">
@@ -215,47 +250,6 @@
 
         transfer.Address = Checksum.Strip(transfer.Address);
       }
-    }
-
-    /// <summary>
-    /// The execute command.
-    /// </summary>
-    /// <param name="parameters">
-    /// The parameters.
-    /// </param>
-    /// <typeparam name="T">
-    /// The node property to return
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="T"/>.
-    /// </returns>
-    private T ExecuteParameterizedCommand<T>(Dictionary<string, object> parameters) where T : new()
-    {
-      var client = new RestClient(this.NodeUri);
-      var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
-      request.AddHeader("X-IOTA-API-Version", "1");
-      request.AddJsonBody(parameters);
-
-      var response = client.Execute<T>(request);
-
-      return response.Data;
-    }
-
-    /// <summary>
-    /// The execute command.
-    /// </summary>
-    /// <param name="commandName">
-    /// The command name.
-    /// </param>
-    /// <typeparam name="T">
-    /// The node property to return
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="T"/>.
-    /// </returns>
-    private T ExecuteParameterlessCommand<T>(string commandName) where T : new()
-    {
-      return this.ExecuteParameterizedCommand<T>(new Dictionary<string, object> { { "command", commandName } });
     }
 
     #endregion

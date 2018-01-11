@@ -8,6 +8,8 @@ namespace Tangle.Net.Console
   using System;
   using System.Collections.Generic;
 
+  using RestSharp;
+
   using Tangle.Net.Source.Repository;
 
   /// <summary>
@@ -25,7 +27,7 @@ namespace Tangle.Net.Console
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository("https://nodes.iota.cafe:443");
+      var repository = new RestIotaRepository(new RestClient("https://nodes.iota.cafe:443"));
       var nodeInfo = repository.GetNodeInfo();
       var neighbours = repository.GetNeighbors();
       var transactions = repository.GetTransactionsByAddresses(new List<string> { "GVZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9" });
