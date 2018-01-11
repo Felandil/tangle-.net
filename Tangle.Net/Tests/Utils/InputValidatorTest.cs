@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputValidatorTest.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Tests.Utils
+﻿namespace Tangle.Net.Tests.Utils
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 

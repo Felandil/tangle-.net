@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConverterTest.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Tests.Cryptography
+﻿namespace Tangle.Net.Tests.Cryptography
 {
   using System;
   using System.Linq;
@@ -127,6 +122,19 @@ namespace Tangle.Net.Tests.Cryptography
     }
 
     /// <summary>
+    /// The test convert trytes to trits.
+    /// </summary>
+    [TestMethod]
+    public void TestConvertTrytesToTritsAndBack()
+    {
+      string expected = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var value = Converter.TrytesToTrits(expected);
+      var convertedExpected = Converter.TritsToTrytes(value);
+
+      Assert.AreEqual(expected, convertedExpected);
+    }
+
+    /// <summary>
     /// The test int coverts to trits.
     /// </summary>
     [TestMethod]
@@ -149,19 +157,6 @@ namespace Tangle.Net.Tests.Cryptography
     {
       var value = Converter.TritsToInt(new[] { 0, 0, 1 });
       Assert.AreEqual(9, value);
-    }
-
-    /// <summary>
-    /// The test convert trytes to trits.
-    /// </summary>
-    [TestMethod]
-    public void TestConvertTrytesToTritsAndBack()
-    {
-      string expected = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      var value = Converter.TrytesToTrits(expected);
-      var convertedExpected = Converter.TritsToTrytes(value);
-
-      Assert.AreEqual(expected, convertedExpected);
     }
 
     #endregion

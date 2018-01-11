@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NodeInfo.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2017 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Source.Entity
+﻿namespace Tangle.Net.Source.Entity
 {
   /// <summary>
   /// The node info.

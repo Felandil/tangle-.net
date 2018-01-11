@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KerlTest.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Tests.Cryptography
+﻿namespace Tangle.Net.Tests.Cryptography
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 

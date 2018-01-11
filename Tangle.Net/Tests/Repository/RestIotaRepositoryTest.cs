@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RestIotaRepositoryTest.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Tests.Repository
+﻿namespace Tangle.Net.Tests.Repository
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -37,21 +32,23 @@ namespace Tangle.Net.Tests.Repository
                                    Data =
                                      new NodeInfo
                                        {
-                                         AppName = "IRI",
-                                         AppVersion = "1.4.1.1",
-                                         Duration = 0,
-                                         JreAvailableProcessors = 4,
-                                         JreFreeMemory = 1433752216,
-                                         JreMaxMemory = 4294967296,
-                                         JreTotalMemory = 4294967296,
-                                         LatestMilestone = "MWBOADDZVATGJWCZSEQSPJSEEMGROZOGEERYBTIBZIKTJTXGNKMKWDFKIJOAKEPEJBGEMZLE9UVCA9999",
-                                         LatestMilestoneIndex = 325116,
-                                         LatestSolidSubtangleMilestone = "MWBOADDZVATGJWCZSEQSPJSEEMGROZOGEERYBTIBZIKTJTXGNKMKWDFKIJOAKEPEJBGEMZLE9UVCA9999",
-                                         LatestSolidSubtangleMilestoneIndex = 325116,
-                                         Neighbors = 6,
-                                         PacketsQueueSize = 0,
-                                         Time = 1515707837727,
-                                         Tips = 5946,
+                                         AppName = "IRI", 
+                                         AppVersion = "1.4.1.1", 
+                                         Duration = 0, 
+                                         JreAvailableProcessors = 4, 
+                                         JreFreeMemory = 1433752216, 
+                                         JreMaxMemory = 4294967296, 
+                                         JreTotalMemory = 4294967296, 
+                                         LatestMilestone =
+                                           "MWBOADDZVATGJWCZSEQSPJSEEMGROZOGEERYBTIBZIKTJTXGNKMKWDFKIJOAKEPEJBGEMZLE9UVCA9999", 
+                                         LatestMilestoneIndex = 325116, 
+                                         LatestSolidSubtangleMilestone =
+                                           "MWBOADDZVATGJWCZSEQSPJSEEMGROZOGEERYBTIBZIKTJTXGNKMKWDFKIJOAKEPEJBGEMZLE9UVCA9999", 
+                                         LatestSolidSubtangleMilestoneIndex = 325116, 
+                                         Neighbors = 6, 
+                                         PacketsQueueSize = 0, 
+                                         Time = 1515707837727, 
+                                         Tips = 5946, 
                                          TransactionsToRequest = 550
                                        }
                                  };

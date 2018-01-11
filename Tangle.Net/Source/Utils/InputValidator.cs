@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InputValidator.cs" company="Felandil IT">
-//    Copyright (c) 2008 -2018 Felandil IT. All rights reserved.
-//  </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Tangle.Net.Source.Utils
+﻿namespace Tangle.Net.Source.Utils
 {
   using System.Text.RegularExpressions;
 
