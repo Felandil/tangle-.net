@@ -12,11 +12,11 @@ The project was set up a little different from most iota libs, since Clean Archi
 ## Note
 
 The project is still in development. Therefore breaking changes may occur.
-You cann reach me via iota slack (@felandil) if you've got any questions.
+You can reach me via iota slack (@felandil) if you've got any questions.
 
 ## Donate
 
 ```javascript
-TADXSYYLYWROOFNRJFBBQQQRLFLKVXXFRVLTUUIYYUSVHMEOIOKHBLMACELFLQPNLBSUWHDVHTVVQREOCUIOWKKZBX
+P9TQJGIXBRAFPUPJSCGIRQIWCLTHMHFAVGLTZMWBOWYDNKYIJ9KHYYCTVWYHSECOUWBSNTAHLHRAUNDA9DYRTPAIWX
 ```
 
