@@ -122,7 +122,7 @@
     /// The transfers.
     /// </param>
     /// <param name="options">
-    /// The options.
+    /// The inputs.
     /// </param>
     public void SendTransfers(string seed, int depth, int minWeightMagnitude, IEnumerable<Transfer> transfers, Dictionary<string, string> options)
     {
@@ -201,40 +201,33 @@
     /// <param name="seed">
     /// The seed.
     /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder Address.
+    /// </param>
     /// <param name="transfers">
     /// The transfers.
     /// </param>
-    /// <param name="options">
-    /// The options.
+    /// <param name="inputs">
+    /// The inputs.
     /// </param>
-    private void PrepareTransfers(string seed, IReadOnlyCollection<Transfer> transfers, IReadOnlyDictionary<string, string> options)
+    /// <param name="validateInputs">
+    /// The validate inputs.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    private List<string> PrepareTransfers(string seed, int security, string remainderAddress, IReadOnlyCollection<Transfer> transfers, List<Input> inputs, bool validateInputs)
     {
-      var addHmac = false;
-      var addedHmac = false;
-
       if (!InputValidator.IsTrytes(seed))
       {
         throw new ArgumentException("Seed does contain non tryte characters.");
       }
 
-      if (options.ContainsKey("hmacKey"))
-      {
-        if (!InputValidator.IsTrytes(options.FirstOrDefault(o => o.Key == "hmacKey").Value))
-        {
-          throw new ArgumentException("HmacKey does contain non tryte characters.");
-        }
-
-        addHmac = true;
-      }
-
       foreach (var transfer in transfers)
       {
-        if (addHmac && transfer.Value > 0)
-        {
-          transfer.Message = NullHashTrytes + transfer.Message;
-          addedHmac = true;
-        }
-
         if (transfer.Address.Length == 90)
         {
           if (!Checksum.HasValidChecksum(transfer.Address))
@@ -250,6 +243,159 @@
       {
         throw new ArgumentException("Malformed transfers");
       }
+
+      if (!InputValidator.AreValidInputs(inputs))
+      {
+        throw new ArgumentException("One or more inputs are malformed.");
+      }
+
+      var bundle = new Bundle();
+      var signatureFragments = new List<string>();
+      long totalValue = 0;
+      var tag = string.Empty;
+
+      foreach (var transfer in transfers)
+      {
+        var signatureMessageLength = 1;
+        if (transfer.Message.Length > 2187)
+        {
+          signatureMessageLength += (int)Math.Floor((decimal)transfer.Message.Length / 2187);
+
+          var message = transfer.Message;
+          while (message.Length > 0)
+          {
+            var fragment = message.Substring(0, message.Length >= 2187 ? 2187 : message.Length);
+            message = message.Substring(2187, message.Length >= 2187 ? message.Length - 2187 : message.Length);
+            fragment = fragment.FillTrytes(2187);
+
+            signatureFragments.Add(fragment);
+          }
+        }
+        else
+        {
+          var fragment = transfer.Message.FillTrytes(2187);
+          signatureFragments.Add(fragment);
+        }
+
+        tag = transfer.Tag.FillTrytes(27);
+        var timestamp = (long)Math.Floor((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
+        bundle.AddEntry(signatureMessageLength, transfer.Address, transfer.Value, tag, timestamp);
+        totalValue += transfer.Value;
+      }
+
+      if (totalValue > 0)
+      {
+        if (inputs.Count > 0)
+        {
+          if (!validateInputs)
+          {
+            return this.AddRemainder(seed, security, inputs, bundle, tag, totalValue, remainderAddress, signatureFragments);
+          }
+
+          var inputAddresses = inputs.Select(input => input.Address).ToList();
+          var balances = this.GetBalances(inputAddresses, 100);
+
+          var inputsWithBalanceOnAddress = new List<Input>();
+          long totalBalance = 0;
+
+          for (var i = 0; i < balances.Balances.Count; i++)
+          {
+            if (balances.Balances[i] <= 0)
+            {
+              continue;
+            }
+
+            totalBalance += balances.Balances[i];
+            inputs[i].Balance = balances.Balances[i];
+            inputsWithBalanceOnAddress.Add(inputs[i]);
+
+            if (totalBalance >= totalValue)
+            {
+              // enough value reached, we can skip further calc
+              break;
+            }
+          }
+
+          if (totalValue > totalBalance)
+          {
+            throw new InsufficientBalanceException();
+          }
+
+          return this.AddRemainder(seed, security, inputsWithBalanceOnAddress, bundle, tag, totalValue, remainderAddress, signatureFragments);
+        }
+
+        var inputsAndBalance = this.GetInputsAndBalance(seed, security, 0, 0, totalValue);
+        return this.AddRemainder(seed, security, inputsAndBalance.Item1, bundle, tag, totalValue, remainderAddress, signatureFragments);
+      }
+
+      bundle.Finalize();
+      bundle.AddTrytes(signatureFragments);
+
+      var bundleTrytes = bundle.GetTransactions().Select(transaction => transaction.ToTrytes()).ToList();
+      bundleTrytes.Reverse();
+
+      return bundleTrytes;
+    }
+
+    /// <summary>
+    /// The add remainder.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="item1">
+    /// The item 1.
+    /// </param>
+    /// <param name="bundle">
+    /// The bundle.
+    /// </param>
+    /// <param name="tag">
+    /// The tag.
+    /// </param>
+    /// <param name="totalValue">
+    /// The total value.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
+    /// <param name="signatureFragments">
+    /// The signature fragments.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    private List<string> AddRemainder(string seed, int security, List<Input> item1, Bundle bundle, string tag, long totalValue, string remainderAddress, List<string> signatureFragments)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// The get inputs and balance.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="i">
+    /// The i.
+    /// </param>
+    /// <param name="i1">
+    /// The i 1.
+    /// </param>
+    /// <param name="totalValue">
+    /// The total value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Tuple"/>.
+    /// </returns>
+    private Tuple<List<Input>, long> GetInputsAndBalance(string seed, int security, int i, int i1, long totalValue)
+    {
+      return new Tuple<List<Input>, long>(new List<Input>(), 100);
     }
 
     #endregion

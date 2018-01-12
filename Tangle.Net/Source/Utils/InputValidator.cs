@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Source.Utils
 {
   using System.Collections.Generic;
+  using System.Linq;
   using System.Text.RegularExpressions;
 
   using Tangle.Net.Source.Entity;
@@ -22,6 +23,20 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The are valid inputs.
+    /// </summary>
+    /// <param name="inputs">
+    /// The inputs.
+    /// </param>
+    /// <returns>
+    /// The <see cref="bool"/>.
+    /// </returns>
+    public static bool AreValidInputs(IEnumerable<Input> inputs)
+    {
+      return inputs.All(input => IsAddress(input.Address));
+    }
+
+    /// <summary>
     /// The is hash.
     /// </summary>
     /// <param name="hash">
@@ -33,6 +48,38 @@
     public static bool IsHash(string hash)
     {
       return IsTrytes(hash, HashLength);
+    }
+
+    /// <summary>
+    /// The is transfers array.
+    /// </summary>
+    /// <param name="transfers">
+    /// The transfers.
+    /// </param>
+    /// <returns>
+    /// The <see cref="bool"/>.
+    /// </returns>
+    public static bool IsTransfersArray(IEnumerable<Transfer> transfers)
+    {
+      foreach (var transfer in transfers)
+      {
+        if (!IsAddress(transfer.Address))
+        {
+          return false;
+        }
+
+        if (!IsTrytes(transfer.Message))
+        {
+          return false;
+        }
+
+        if (!IsTrytes(transfer.Tag, 0, 27))
+        {
+          return false;
+        }
+      }
+
+      return true;
     }
 
     /// <summary>
@@ -91,37 +138,7 @@
 
     #endregion
 
-    /// <summary>
-    /// The is transfers array.
-    /// </summary>
-    /// <param name="transfers">
-    /// The transfers.
-    /// </param>
-    /// <returns>
-    /// The <see cref="bool"/>.
-    /// </returns>
-    public static bool IsTransfersArray(IEnumerable<Transfer> transfers)
-    {
-      foreach (var transfer in transfers)
-      {
-        if (!IsAddress(transfer.Address))
-        {
-          return false;
-        }
-
-        if (!IsTrytes(transfer.Message))
-        {
-          return false;
-        }
-
-        if (!IsTrytes(transfer.Tag, 0, 27))
-        {
-          return false;
-        }
-      }
-
-      return true;
-    }
+    #region Methods
 
     /// <summary>
     /// The is address.
@@ -134,22 +151,14 @@
     /// </returns>
     private static bool IsAddress(string address)
     {
-      if (address.Length == 90)
+      if (address.Length == 90 && !IsTrytes(address, 90))
       {
-        if (!IsTrytes(address, 90))
-        {
-          return false;
-        }
-      }
-      else
-      {
-        if (!IsTrytes(address, 81))
-        {
-          return false;
-        }
+        return false;
       }
 
-      return true;
+      return IsTrytes(address, 81);
     }
+
+    #endregion
   }
 }
