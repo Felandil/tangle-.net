@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Tests.Repository
 {
+  using System.Collections.Generic;
+
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Moq;
@@ -74,6 +76,113 @@
       Assert.AreEqual(1515707837727, nodeInfo.Time);
       Assert.AreEqual(5946, nodeInfo.Tips);
       Assert.AreEqual(550, nodeInfo.TransactionsToRequest);
+    }
+
+    /// <summary>
+    /// The test get neighbors should include all parameters.
+    /// </summary>
+    [TestMethod]
+    public void TestGetNeighborsShouldIncludeAllParameters()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      restClientMock.Setup(r => r.Execute<NeighborList>(It.IsAny<IRestRequest>())).Returns(
+        () =>
+        {
+          var restResponse = new RestResponse<NeighborList>
+          {
+            Data =
+              new NeighborList
+                {
+                  Duration = 1,
+                  Neighbors = new List<Neighbor>
+                                {
+                                  new Neighbor
+                                    {
+                                      Address = "/8.8.8.8:14265",
+                                      ConnectionType = "Remote",
+                                      NumberOfAllTransactions = 45,
+                                      NumberOfInvalidTransactions = 0,
+                                      NumberOfNewTransactions = 5,
+                                      NumberOfRandomTransactionRequests = 3,
+                                      NumberOfSentTransactions = 40
+                                    }
+                                }
+                }
+          };
+          return restResponse;
+        });
+
+      var repository = new RestIotaRepository(restClientMock.Object);
+      var neighbors = repository.GetNeighbors();
+
+      Assert.AreEqual(1, neighbors.Duration);
+      Assert.AreEqual("/8.8.8.8:14265", neighbors.Neighbors[0].Address);
+      Assert.AreEqual("Remote", neighbors.Neighbors[0].ConnectionType);
+      Assert.AreEqual(45, neighbors.Neighbors[0].NumberOfAllTransactions);
+      Assert.AreEqual(0, neighbors.Neighbors[0].NumberOfInvalidTransactions);
+      Assert.AreEqual(5, neighbors.Neighbors[0].NumberOfNewTransactions);
+      Assert.AreEqual(3, neighbors.Neighbors[0].NumberOfRandomTransactionRequests);
+      Assert.AreEqual(40, neighbors.Neighbors[0].NumberOfSentTransactions);
+    }
+
+    /// <summary>
+    /// The test get balances should include all parameters.
+    /// </summary>
+    [TestMethod]
+    public void TestGetBalancesShouldIncludeAllParameters()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      restClientMock.Setup(r => r.Execute<AddressBalances>(It.IsAny<IRestRequest>())).Returns(
+        () =>
+        {
+          var restResponse = new RestResponse<AddressBalances>
+          {
+            Data =
+              new AddressBalances
+                {
+                  Balances = new List<long> { 10000 },
+                  Duration = 100,
+                  MilestoneIndex = 38274234,
+                  References = new List<string> { "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" }
+                }
+          };
+          return restResponse;
+        });
+
+      var repository = new RestIotaRepository(restClientMock.Object);
+      var balances = repository.GetBalances(new List<string> { "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" }, 100);
+
+      Assert.AreEqual(10000, balances.Balances[0]);
+      Assert.AreEqual(100, balances.Duration);
+      Assert.AreEqual(38274234, balances.MilestoneIndex);
+      Assert.AreEqual("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB", balances.References[0]);
+    }
+
+    [TestMethod]
+    public void TestGetTransactionsByAddressesShouldIncludeAllParameters()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      restClientMock.Setup(r => r.Execute<Transactions>(It.IsAny<IRestRequest>())).Returns(
+        () =>
+        {
+          var restResponse = new RestResponse<Transactions>
+          {
+            Data =
+              new Transactions
+              {
+                Hashes = new List<string>
+                  {
+                    "EJEAOOZYSAWFPZQESYDHZCGYNSTWXUMVJOVDWUNZJXDGWCLUFGIMZRMGCAZGKNPLBRLGUNYWKLJTYEAQX"
+                  }
+              }
+          };
+          return restResponse;
+        });
+
+      var repository = new RestIotaRepository(restClientMock.Object);
+      var transactions = repository.GetTransactionsByAddresses(new List<string> { "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" });
+
+      Assert.AreEqual("EJEAOOZYSAWFPZQESYDHZCGYNSTWXUMVJOVDWUNZJXDGWCLUFGIMZRMGCAZGKNPLBRLGUNYWKLJTYEAQX", transactions.Hashes[0]);
     }
 
     #endregion
