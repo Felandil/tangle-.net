@@ -19,5 +19,10 @@
     /// Gets or sets the address.
     /// </summary>
     public string Address { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tag.
+    /// </summary>
+    public string Tag { get; set; }
   }
 }

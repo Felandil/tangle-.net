@@ -158,6 +158,9 @@
       Assert.AreEqual("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB", balances.References[0]);
     }
 
+    /// <summary>
+    /// The test get transactions by addresses should include all parameters.
+    /// </summary>
     [TestMethod]
     public void TestGetTransactionsByAddressesShouldIncludeAllParameters()
     {

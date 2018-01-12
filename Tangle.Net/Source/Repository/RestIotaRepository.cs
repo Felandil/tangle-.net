@@ -207,7 +207,7 @@
     /// <param name="options">
     /// The options.
     /// </param>
-    private void PrepareTransfers(string seed, IEnumerable<Transfer> transfers, IReadOnlyDictionary<string, string> options)
+    private void PrepareTransfers(string seed, IReadOnlyCollection<Transfer> transfers, IReadOnlyDictionary<string, string> options)
     {
       var addHmac = false;
       var addedHmac = false;
@@ -244,6 +244,11 @@
         }
 
         transfer.Address = Checksum.Strip(transfer.Address);
+      }
+
+      if (!InputValidator.IsTransfersArray(transfers))
+      {
+        throw new ArgumentException("Malformed transfers");
       }
     }
 
