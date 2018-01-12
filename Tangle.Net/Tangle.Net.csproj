@@ -86,7 +86,9 @@
     <Compile Include="Source\Utils\InputValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\crypto\crypto.Net45.csproj">

@@ -107,16 +107,16 @@
     {
       ValidateLength(length);
 
-      do
+      while (offset < length)
       {
         this.digest.DoFinal(this.byteState, 0);
         this.tritState = Converter.ConvertBytesToTrits(this.byteState);
         this.tritState[HashLength - 1] = 0;
-        Array.Copy(this.tritState, offset, trits, 0, HashLength);
+        Array.Copy(this.tritState, 0, trits, offset, HashLength);
 
         this.digest.Reset();
 
-        for (var i = this.byteState.Length; i-- > 0;)
+        for (var i = this.byteState.Length; i-- > 0; )
         {
           this.byteState[i] = (byte)(this.byteState[i] ^ 0xFF);
         }
@@ -124,7 +124,6 @@
         this.digest.BlockUpdate(this.byteState, 0, this.byteState.Length);
         offset += HashLength;
       }
-      while ((length -= HashLength) > 0);
     }
 
     #endregion
