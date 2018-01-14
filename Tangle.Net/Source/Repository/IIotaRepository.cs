@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Source.Repository
 {
+  using System;
   using System.Collections.Generic;
 
   using Tangle.Net.Source.Entity;
@@ -64,13 +65,37 @@
     /// <param name="minWeightMagnitude">
     /// The min weight magnitude.
     /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
     /// <param name="transfers">
     /// The transfers.
     /// </param>
-    /// <param name="options">
-    /// The options.
+    /// <param name="inputs">
+    /// The inputs.
     /// </param>
-    void SendTransfers(string seed, int depth, int minWeightMagnitude, IEnumerable<Transfer> transfers, Dictionary<string, string> options);
+    /// <param name="validateInputs">
+    /// The validate inputs.
+    /// </param>
+    /// <param name="validateInputAddresses">
+    /// The validate input addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<Tuple<Transaction, bool>> SendTransfers(
+      string seed, 
+      int depth, 
+      int minWeightMagnitude, 
+      int security, 
+      string remainderAddress, 
+      IReadOnlyCollection<Transfer> transfers, 
+      List<Input> inputs, 
+      bool validateInputs, 
+      bool validateInputAddresses);
 
     #endregion
   }

@@ -83,6 +83,7 @@
     <Compile Include="Source\Utils\StringExtensions.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />
+    <Compile Include="Tests\Entity\BundleTest.cs" />
     <Compile Include="Tests\Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="Tests\Utils\AsciiToTrytesTest.cs" />
     <Compile Include="Tests\Utils\ChecksumTest.cs" />

@@ -225,12 +225,15 @@
     /// <param name="value">
     /// The value.
     /// </param>
+    /// <param name="size">
+    /// The size.
+    /// </param>
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    public static int[] IntToTrits(int value)
+    public static int[] IntToTrits(int value, int size)
     {
-      var destination = new List<int>();
+      var destination = new int[size];
       var absoluteValue = value < 0 ? -value : value;
       var i = 0;
 
@@ -245,13 +248,13 @@
           absoluteValue++;
         }
 
-        destination.Insert(i, remainder);
+        destination[i] = remainder;
         i++;
       }
 
       if (value < 0)
       {
-        for (var y = 0; y < destination.Count; y++)
+        for (var y = 0; y < destination.Length; y++)
         {
           destination[i] = -destination[i];
         }
@@ -324,5 +327,29 @@
     }
 
     #endregion
+
+    /// <summary>
+    /// The increment.
+    /// </summary>
+    /// <param name="trits">
+    /// The trits.
+    /// </param>
+    /// <param name="size">
+    /// The size.
+    /// </param>
+    public static void Increment(int[] trits, int size)
+    {
+      for (var i = 0; i < size; i++)
+      {
+        if (++trits[i] > MaxTritValue)
+        {
+          trits[i] = MinTritValue;
+        }
+        else
+        {
+          break;
+        }
+      }
+    }
   }
 }

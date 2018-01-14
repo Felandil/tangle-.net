@@ -118,14 +118,59 @@
     /// <param name="minWeightMagnitude">
     /// The min weight magnitude.
     /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
     /// <param name="transfers">
     /// The transfers.
     /// </param>
-    /// <param name="options">
+    /// <param name="inputs">
     /// The inputs.
     /// </param>
-    public void SendTransfers(string seed, int depth, int minWeightMagnitude, IEnumerable<Transfer> transfers, Dictionary<string, string> options)
+    /// <param name="validateInputs">
+    /// The validate inputs.
+    /// </param>
+    /// <param name="validateInputAddresses">
+    /// The validate input addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Tuple<Transaction, bool>> SendTransfers(
+      string seed, 
+      int depth, 
+      int minWeightMagnitude, 
+      int security, 
+      string remainderAddress, 
+      IReadOnlyCollection<Transfer> transfers, 
+      List<Input> inputs, 
+      bool validateInputs, 
+      bool validateInputAddresses)
     {
+      var trytes = this.PrepareTransfers(seed, security, remainderAddress, transfers, inputs, validateInputs);
+
+      if (validateInputAddresses)
+      {
+        // ValidateTransfersAddresses(seed, security, trytes); TODO
+      }
+
+      var transactions = this.SendTrytes(trytes.ToArray(), depth, minWeightMagnitude);
+
+      var successful = new bool[transactions.Count];
+      var result = new List<Tuple<Transaction, bool>>();
+
+      for (var i = 0; i < transactions.Count; i++)
+      {
+        // final FindTransactionResponse response = findTransactionsByBundles(transactions[i].Bundle); TODO: get bundle status
+        // successful[i] = response.getHashes().length != 0;
+
+        result.Add(new Tuple<Transaction, bool>(transactions[i], true));
+      }
+
+      return result;
     }
 
     #endregion
@@ -153,6 +198,49 @@
       }
 
       return normalizedAddresses;
+    }
+
+    /// <summary>
+    /// The add remainder.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="item1">
+    /// The item 1.
+    /// </param>
+    /// <param name="bundle">
+    /// The bundle.
+    /// </param>
+    /// <param name="tag">
+    /// The tag.
+    /// </param>
+    /// <param name="totalValue">
+    /// The total value.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
+    /// <param name="signatureFragments">
+    /// The signature fragments.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    private List<string> AddRemainder(
+      string seed, 
+      int security, 
+      List<Input> item1, 
+      Bundle bundle, 
+      string tag, 
+      long totalValue, 
+      string remainderAddress, 
+      List<string> signatureFragments)
+    {
+      throw new NotImplementedException();
     }
 
     /// <summary>
@@ -196,6 +284,32 @@
     }
 
     /// <summary>
+    /// The get inputs and balance.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="i">
+    /// The i.
+    /// </param>
+    /// <param name="i1">
+    /// The i 1.
+    /// </param>
+    /// <param name="totalValue">
+    /// The total value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Tuple"/>.
+    /// </returns>
+    private Tuple<List<Input>, long> GetInputsAndBalance(string seed, int security, int i, int i1, long totalValue)
+    {
+      return new Tuple<List<Input>, long>(new List<Input>(), 100);
+    }
+
+    /// <summary>
     /// The prepare transfers.
     /// </summary>
     /// <param name="seed">
@@ -219,11 +333,22 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    private List<string> PrepareTransfers(string seed, int security, string remainderAddress, IReadOnlyCollection<Transfer> transfers, List<Input> inputs, bool validateInputs)
+    private List<string> PrepareTransfers(
+      string seed, 
+      int security, 
+      string remainderAddress, 
+      IReadOnlyCollection<Transfer> transfers, 
+      List<Input> inputs, 
+      bool validateInputs)
     {
       if (!InputValidator.IsTrytes(seed))
       {
         throw new ArgumentException("Seed does contain non tryte characters.");
+      }
+
+      if (!InputValidator.AreValidInputs(inputs))
+      {
+        throw new ArgumentException("One or more inputs are malformed.");
       }
 
       foreach (var transfer in transfers)
@@ -242,11 +367,6 @@
       if (!InputValidator.IsTransfersArray(transfers))
       {
         throw new ArgumentException("Malformed transfers");
-      }
-
-      if (!InputValidator.AreValidInputs(inputs))
-      {
-        throw new ArgumentException("One or more inputs are malformed.");
       }
 
       var bundle = new Bundle();
@@ -331,71 +451,32 @@
       bundle.Finalize();
       bundle.AddTrytes(signatureFragments);
 
-      var bundleTrytes = bundle.GetTransactions().Select(transaction => transaction.ToTrytes()).ToList();
+      var bundleTrytes = bundle.Transactions.Select(transaction => transaction.ToTrytes()).ToList();
       bundleTrytes.Reverse();
 
       return bundleTrytes;
     }
 
     /// <summary>
-    /// The add remainder.
+    /// The send trytes.
     /// </summary>
-    /// <param name="seed">
-    /// The seed.
+    /// <param name="toArray">
+    /// The to array.
     /// </param>
-    /// <param name="security">
-    /// The security.
+    /// <param name="depth">
+    /// The depth.
     /// </param>
-    /// <param name="item1">
-    /// The item 1.
-    /// </param>
-    /// <param name="bundle">
-    /// The bundle.
-    /// </param>
-    /// <param name="tag">
-    /// The tag.
-    /// </param>
-    /// <param name="totalValue">
-    /// The total value.
-    /// </param>
-    /// <param name="remainderAddress">
-    /// The remainder address.
-    /// </param>
-    /// <param name="signatureFragments">
-    /// The signature fragments.
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
     /// </param>
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    private List<string> AddRemainder(string seed, int security, List<Input> item1, Bundle bundle, string tag, long totalValue, string remainderAddress, List<string> signatureFragments)
+    /// <exception cref="NotImplementedException">
+    /// </exception>
+    private List<Transaction> SendTrytes(string[] toArray, int depth, int minWeightMagnitude)
     {
       throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// The get inputs and balance.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="security">
-    /// The security.
-    /// </param>
-    /// <param name="i">
-    /// The i.
-    /// </param>
-    /// <param name="i1">
-    /// The i 1.
-    /// </param>
-    /// <param name="totalValue">
-    /// The total value.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Tuple"/>.
-    /// </returns>
-    private Tuple<List<Input>, long> GetInputsAndBalance(string seed, int security, int i, int i1, long totalValue)
-    {
-      return new Tuple<List<Input>, long>(new List<Input>(), 100);
     }
 
     #endregion

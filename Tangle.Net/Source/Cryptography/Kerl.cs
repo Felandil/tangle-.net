@@ -92,6 +92,14 @@
     }
 
     /// <summary>
+    /// The reset.
+    /// </summary>
+    public void Reset()
+    {
+      this.digest.Reset();
+    }
+
+    /// <summary>
     /// The squeeze.
     /// </summary>
     /// <param name="trits">
@@ -116,7 +124,7 @@
 
         this.digest.Reset();
 
-        for (var i = this.byteState.Length; i-- > 0; )
+        for (var i = this.byteState.Length; i-- > 0;)
         {
           this.byteState[i] = (byte)(this.byteState[i] ^ 0xFF);
         }

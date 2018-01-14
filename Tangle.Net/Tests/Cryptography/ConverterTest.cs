@@ -140,7 +140,7 @@
     [TestMethod]
     public void TestIntCovertsToTrits()
     {
-      var value = Converter.IntToTrits(9);
+      var value = Converter.IntToTrits(9, 3);
       var expected = new[] { 0, 0, 1 };
 
       for (var i = 0; i < expected.Count(); i++)
