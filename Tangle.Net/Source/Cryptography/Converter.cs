@@ -145,22 +145,30 @@
     /// </returns>
     public static byte[] ConvertBigIntToBytes(BigInteger value)
     {
-        var result = new byte[Kerl.ByteHashLength];
-        var bytes = value.ToByteArray();
+      var result = new byte[Kerl.ByteHashLength];
+      var bytes = value.ToByteArray();
+      var isNegative = value.CompareTo(BigInteger.Zero) < 0;
 
-        var i = 0;
-        while (i + bytes.Length < Kerl.ByteHashLength)
+      var i = 0;
+      while (i + bytes.Length < Kerl.ByteHashLength)
+      {
+        if (isNegative)
         {
-
+          result[i++] = 255;
+        }
+        else
+        {
           result[i++] = 0;
         }
+      }
 
-        for (var j = bytes.Length; j-- > 0;)
-        {
-          result[i++] = bytes[bytes.Length - 1 - j];
-        }
+      for (var j = bytes.Length; j-- > 0;)
+      {
+        result[i++] = bytes[bytes.Length - 1 - j];
+      }
+      
 
-        return result;
+      return result;
     }
 
     /// <summary>

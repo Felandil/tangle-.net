@@ -22,7 +22,7 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("https://nodes.iota.cafe:443"));
+      var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
       var nodeInfo = repository.GetNodeInfo();
       var neighbours = repository.GetNeighbors();
       var transactions =
