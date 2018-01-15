@@ -1,6 +1,11 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
   using System;
+  using System.Globalization;
+
+  using Org.BouncyCastle.Math;
+
+  using Tangle.Net.Source.Cryptography;
 
   /// <summary>
   /// The transaction.
@@ -96,7 +101,13 @@
     /// </returns>
     public string ToTrytes()
     {
-      throw new NotImplementedException();
+      var currentIndexTrits = Converter.IntToTrits(this.CurrentIndex, 27);
+      var valueTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Value.ToString(CultureInfo.InvariantCulture)), 81);
+      var timestampTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Timestamp.ToString(CultureInfo.InvariantCulture)), 27);
+      var lastIndexTrits = Converter.IntToTrits(this.LastIndex, 27);
+
+      return this.Address + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag + Converter.TritsToTrytes(timestampTrits)
+             + Converter.TritsToTrytes(currentIndexTrits) + Converter.TritsToTrytes(lastIndexTrits);
     }
 
     #endregion

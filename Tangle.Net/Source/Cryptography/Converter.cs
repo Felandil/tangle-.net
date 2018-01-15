@@ -34,11 +34,6 @@
     private const int MinTritValue = -1;
 
     /// <summary>
-    /// The number of trits in a tryte.
-    /// </summary>
-    private const int NumberOfTritsInATryte = 3;
-
-    /// <summary>
     /// The radix.
     /// </summary>
     private const int Radix = 3;
@@ -47,14 +42,6 @@
 
     #region Static Fields
 
-    /// <summary>
-    /// The half 3.
-    /// </summary>
-    private static readonly uint[] Half3 = new uint[]
-                                             {
-                                               0xa5ce8964, 0x9f007669, 0x1484504f, 0x3ade00d9, 0x0c24486e, 0x50979d57, 0x79a4c702, 0x48bbae36, 
-                                               0xa9f6808b, 0xaa06a805, 0xa87fabdf, 0x5e69ebef
-                                             };
 
     /// <summary>
     /// The trytes lookup.
@@ -93,6 +80,59 @@
     #endregion
 
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The increment.
+    /// </summary>
+    /// <param name="leftTrits">
+    /// The left Trits.
+    /// </param>
+    /// <param name="rightTrits">
+    /// The right Trits.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    public static int[] AddTrits(int[] leftTrits, int[] rightTrits)
+    {
+      var outputTrits = new int[leftTrits.Length > rightTrits.Length ? leftTrits.Length : rightTrits.Length];
+      var carry = 0;
+
+      for (var i = 0; i < outputTrits.Length; i++)
+      {
+        var a_i = i < leftTrits.Length ? leftTrits[i] : 0;
+        var b_i = i < rightTrits.Length ? rightTrits[i] : 0;
+        var f_a = FullAdd(a_i, b_i, carry);
+        outputTrits[i] = f_a[0];
+        carry = f_a[1];
+      }
+
+      return outputTrits;
+    }
+
+    /// <summary>
+    /// The increment.
+    /// </summary>
+    /// <param name="trits">
+    /// The trits.
+    /// </param>
+    /// <param name="size">
+    /// The size.
+    /// </param>
+    public static void Increment(int[] trits, int size)
+    {
+      for (var i = 0; i < size; i++)
+      {
+        if (++trits[i] > MaxTritValue)
+        {
+          trits[i] = MinTritValue;
+        }
+        else
+        {
+          break;
+        }
+      }
+    }
 
     /// <summary>
     /// The convert bigint to bytes.
@@ -328,28 +368,107 @@
 
     #endregion
 
+    #region Methods
+
     /// <summary>
-    /// The increment.
+    /// The any.
     /// </summary>
-    /// <param name="trits">
-    /// The trits.
+    /// <param name="left">
+    /// The left.
     /// </param>
-    /// <param name="size">
-    /// The size.
+    /// <param name="right">
+    /// The right.
     /// </param>
-    public static void Increment(int[] trits, int size)
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    private static int Any(int left, int right)
     {
-      for (var i = 0; i < size; i++)
+      var s = left + right;
+
+      if (s > 0)
       {
-        if (++trits[i] > MaxTritValue)
-        {
-          trits[i] = MinTritValue;
-        }
-        else
-        {
-          break;
-        }
+        return 1;
+      }
+
+      if (s < 0)
+      {
+        return -1;
+      }
+
+      return 0;
+    }
+
+    /// <summary>
+    /// The cons.
+    /// </summary>
+    /// <param name="left">
+    /// The left.
+    /// </param>
+    /// <param name="right">
+    /// The right.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    private static int Cons(int left, int right)
+    {
+      return left == right ? left : 0;
+    }
+
+    /// <summary>
+    /// The full add.
+    /// </summary>
+    /// <param name="left">
+    /// The left.
+    /// </param>
+    /// <param name="right">
+    /// The right.
+    /// </param>
+    /// <param name="carry">
+    /// The carry.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    private static int[] FullAdd(int left, int right, int carry)
+    {
+      var s_a = Sum(left, right);
+      var c_a = Cons(left, right);
+      var c_b = Cons(s_a, carry);
+      var c_out = Any(c_a, c_b);
+      var s_out = Sum(s_a, carry);
+
+      return new[] { s_out, c_out };
+    }
+
+    /// <summary>
+    /// The sum.
+    /// </summary>
+    /// <param name="left">
+    /// The left.
+    /// </param>
+    /// <param name="right">
+    /// The right.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    private static int Sum(int left, int right)
+    {
+      var sum = left + right;
+
+      switch (sum)
+      {
+        case 2:
+          return -1;
+        case -2:
+          return 1;
+        default:
+          return sum;
       }
     }
+
+    #endregion
   }
 }

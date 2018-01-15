@@ -1,6 +1,8 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
+  using System;
   using System.Collections.Generic;
+  using System.Globalization;
   using System.Linq;
 
   using Castle.Core.Internal;
@@ -14,6 +16,25 @@
   /// </summary>
   public class Bundle
   {
+    #region Constants
+
+    /// <summary>
+    /// The empty hash.
+    /// </summary>
+    public const string EmptyHash = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
+
+    /// <summary>
+    /// The empty tag.
+    /// </summary>
+    public const string EmptyTag = "999999999999999999999999999";
+
+    /// <summary>
+    /// The empty timestamp.
+    /// </summary>
+    public const long EmptyTimestamp = 999999999L;
+
+    #endregion
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -59,7 +80,7 @@
     {
       for (var i = 0; i < signatureMessageLength; i++)
       {
-        var trx = new Transaction { Address = address, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? value : 0 };
+        var trx = new Transaction { Address = address, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? value : 0, Tag = tag };
         this.Transactions.Add(trx);
       }
     }
@@ -72,9 +93,6 @@
     /// </param>
     public void AddTrytes(List<string> signatureFragments)
     {
-      const string EmptyHash = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-      const string EmptyTag = "999999999999999999999999999";
-      const long EmptyTimestamp = 999999999L;
       var emptySignatureFragment = "9";
 
       for (var j = 0; emptySignatureFragment.Length < 2187; j++)
@@ -109,56 +127,41 @@
     /// </summary>
     public void Finalize()
     {
-      int[] normalizedBundleValue;
-      var hash = new int[243];
-      var obsoleteTagTrits = new int[81];
-      string hashInTrytes;
-      bool valid;
-      var kerl = new Kerl();
-      do
-      {
-        kerl.Reset();
+      var bundleHashTrytes = string.Empty;
+      var valid = false;
 
+      while (!valid)
+      {
+        var kerl = new Kerl();
         for (var i = 0; i < this.Transactions.Count; i++)
         {
-          var valueTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Transactions[i].Value.ToString()), 81);
-          var timestampTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Transactions[i].Timestamp.ToString()), 27);
-
           this.Transactions[i].CurrentIndex = i;
-          var currentIndexTrits = Converter.IntToTrits(this.Transactions[i].CurrentIndex, 27);
-
           this.Transactions[i].LastIndex = this.Transactions.Count - 1;
 
-          var lastIndexTrits = Converter.IntToTrits(this.Transactions[i].LastIndex, 27);
-
-          var t =
-            Converter.TrytesToTrits(
-              this.Transactions[i].Address + Converter.TritsToTrytes(valueTrits) + this.Transactions[i].ObsoleteTag
-              + Converter.TritsToTrytes(timestampTrits) + Converter.TritsToTrytes(currentIndexTrits) + Converter.TritsToTrytes(lastIndexTrits));
-
-          kerl.Absorb(t, 0, t.Length);
+          var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].ToTrytes());
+          kerl.Absorb(transactionTrits, 0, transactionTrits.Length);
         }
 
+        var hash = new int[Kerl.HashLength];
         kerl.Squeeze(hash, 0, hash.Length);
-        hashInTrytes = Converter.TritsToTrytes(hash);
-        normalizedBundleValue = this.NormalizeBundle(hashInTrytes);
+        bundleHashTrytes = Converter.TritsToTrytes(hash);
+        var normalizedBundleValue = NormalizeBundle(bundleHashTrytes);
 
-        var foundValue = false;
-        foreach (var normalizedBundleValueEntry in normalizedBundleValue.Where(normalizedBundleValueEntry => normalizedBundleValueEntry == 13))
+        if (Array.IndexOf(normalizedBundleValue, 13) != -1)
         {
-          foundValue = true;
-          obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag);
+          var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag);
           Converter.Increment(obsoleteTagTrits, 81);
           this.Transactions[0].ObsoleteTag = Converter.TritsToTrytes(obsoleteTagTrits);
         }
-
-        valid = !foundValue;
+        else
+        {
+          valid = true;
+        }
       }
-      while (!valid);
 
       foreach (var transaction in this.Transactions)
       {
-        transaction.Bundle = hashInTrytes;
+        transaction.Bundle = bundleHashTrytes;
       }
     }
 
@@ -175,49 +178,51 @@
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    private int[] NormalizeBundle(string bundleHash)
+    private static int[] NormalizeBundle(string bundleHash)
     {
-      var normalizedBundle = new int[81];
+      var sourceBundle = bundleHash.Select(hashTryte => Converter.TritsToInt(Converter.TrytesToTrits(string.Empty + hashTryte))).ToList();
+      var normalizedBundle = new List<int>();
+      const int ChunkSize = 27;
 
       for (var i = 0; i < 3; i++)
       {
-        long sum = 0;
-        for (var j = 0; j < 27; j++)
+        var chunk = sourceBundle.GetRange(i * ChunkSize, ChunkSize);
+        long sum = chunk.Sum();
+
+        while (sum > 0)
         {
-          sum += normalizedBundle[i * 27 + j] = Converter.TritsToInt(Converter.TrytesToTrits(string.Empty + bundleHash[i * 27 + j]));
+          sum -= 1;
+          for (var j = 0; j < ChunkSize; j++)
+          {
+            if (chunk[j] <= -13)
+            {
+              continue;
+            }
+
+            chunk[j]--;
+            break;
+          }
         }
 
-        if (sum >= 0)
+        while (sum < 0)
         {
-          while (sum-- > 0)
+          sum += 1;
+          for (var j = 0; j < ChunkSize; j++)
           {
-            for (var j = 0; j < 27; j++)
+            if (chunk[j] >= 13)
             {
-              if (normalizedBundle[i * 27 + j] > -13)
-              {
-                normalizedBundle[i * 27 + j]--;
-                break;
-              }
+              continue;
             }
+
+            chunk[j]++;
+            break;
           }
         }
-        else
-        {
-          while (sum++ < 0)
-          {
-            for (int j = 0; j < 27; j++)
-            {
-              if (normalizedBundle[i * 27 + j] < 13)
-              {
-                normalizedBundle[i * 27 + j]++;
-                break;
-              }
-            }
-          }
-        }
+
+        normalizedBundle.AddRange(chunk);
       }
 
-      return normalizedBundle;
+      return normalizedBundle.ToArray();
     }
 
     #endregion
