@@ -95,7 +95,7 @@
     [TestMethod]
     public void TestTransfersAddressesAreMalformedShouldReturnFalse()
     {
-      var transfers = new List<Transfer> { new Transfer { Address = "RBTC9D9DCDEAUCFDCDADEAMBHAFA" } };
+      var transfers = new List<Transfer> { new Transfer { Address = new Address { Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFA" } } };
       Assert.IsFalse(InputValidator.IsTransfersArray(transfers));
     }
 
@@ -109,8 +109,7 @@
                         {
                           new Transfer
                             {
-                              Address =
-                                "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB", 
+                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
                               Message = "RBTC9D9DCDEAUCFDCDADEAMBHAFA", 
                               Tag = "RBTC9D9DCDEAUCFDCDADEAMBHAF"
                             }
@@ -128,8 +127,7 @@
                         {
                           new Transfer
                             {
-                              Address =
-                                "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB", 
+                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
                               Message = "666 aaa"
                             }
                         };
@@ -146,8 +144,7 @@
                         {
                           new Transfer
                             {
-                              Address =
-                                "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB", 
+                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
                               Message = "RBTC9D9DCDEAUCFDCDADEAMBHAFA", 
                               Tag = "RBTC9D9DCDEAUCFDCDADEAMBHAFA"
                             }

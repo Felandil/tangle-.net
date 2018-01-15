@@ -63,7 +63,7 @@
     {
       foreach (var transfer in transfers)
       {
-        if (!IsAddress(transfer.Address))
+        if (!IsAddress(transfer.Address.Trytes))
         {
           return false;
         }

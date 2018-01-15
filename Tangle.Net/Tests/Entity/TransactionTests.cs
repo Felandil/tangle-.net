@@ -20,7 +20,7 @@
     {
       var transaction = new Transaction
                           {
-                            Address = "9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ", 
+                            Address = new Address { Trytes = "9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ" },
                             Tag = "PPDIDNQDJZGUQKOWJ9JZRCKOVGP", 
                             ObsoleteTag = "PPDIDNQDJZGUQKOWJ9JZRCKOVGP", 
                             Timestamp = 1509136296, 

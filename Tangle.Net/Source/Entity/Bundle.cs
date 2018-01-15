@@ -2,12 +2,9 @@
 {
   using System;
   using System.Collections.Generic;
-  using System.Globalization;
   using System.Linq;
 
   using Castle.Core.Internal;
-
-  using Org.BouncyCastle.Math;
 
   using Tangle.Net.Source.Cryptography;
 
@@ -50,25 +47,89 @@
     #region Public Properties
 
     /// <summary>
-    /// Gets or sets the transactions.
+    /// Gets the balance.
     /// </summary>
-    public List<Transaction> Transactions { get; set; }
+    public long Balance
+    {
+      get
+      {
+        var inputValue = this.Transactions.Where(transaction => transaction.Value > 0).Sum(transaction => transaction.Value);
+        var outputValue = this.Transactions.Where(transaction => transaction.Value < 0).Sum(transaction => transaction.Value);
+
+        return inputValue + outputValue;
+      }
+    }
+
+    /// <summary>
+    /// Gets the hash.
+    /// </summary>
+    public string Hash { get; private set; }
+
+    /// <summary>
+    /// Gets the transactions.
+    /// </summary>
+    public List<Transaction> Transactions { get; private set; }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets or sets the remainder address.
+    /// </summary>
+    private Address RemainderAddress { get; set; }
 
     #endregion
 
     #region Public Methods and Operators
 
     /// <summary>
-    /// The add entry.
+    /// The add input.
     /// </summary>
-    /// <param name="signatureMessageLength">
-    /// The signature message length.
+    /// <param name="addresses">
+    /// The addresses.
     /// </param>
+    public void AddInput(IEnumerable<Address> addresses)
+    {
+      if (!string.IsNullOrEmpty(this.Hash))
+      {
+        throw new InvalidOperationException("Bundle is already finalized!");
+      }
+
+      foreach (var address in addresses)
+      {
+        for (var i = 0; i < address.SecurityLevel; i++)
+        {
+          this.Transactions.Add(
+            new Transaction { Address = address, Value = i == 0 ? -address.Balance : 0, Tag = EmptyTag, ObsoleteTag = EmptyTag });
+        }
+      }
+    }
+
+    /// <summary>
+    /// The add remainder.
+    /// </summary>
     /// <param name="address">
     /// The address.
     /// </param>
-    /// <param name="value">
-    /// The value.
+    public void AddRemainder(Address address)
+    {
+      if (!string.IsNullOrEmpty(this.Hash))
+      {
+        throw new InvalidOperationException("Bundle is already finalized!");
+      }
+
+      this.RemainderAddress = address;
+    }
+
+    /// <summary>
+    /// The add entry.
+    /// </summary>
+    /// <param name="address">
+    /// The address.
+    /// </param>
+    /// <param name="message">
+    /// The message.
     /// </param>
     /// <param name="tag">
     /// The tag.
@@ -76,12 +137,37 @@
     /// <param name="timestamp">
     /// The timestamp.
     /// </param>
-    public void AddEntry(int signatureMessageLength, string address, long value, string tag, long timestamp)
+    public void AddTransaction(Address address, string message, string tag, long timestamp)
     {
-      for (var i = 0; i < signatureMessageLength; i++)
+      if (!string.IsNullOrEmpty(this.Hash))
       {
-        var trx = new Transaction { Address = address, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? value : 0, Tag = tag };
-        this.Transactions.Add(trx);
+        throw new InvalidOperationException("Bundle is already finalized!");
+      }
+
+      if (address.Balance < 0)
+      {
+        throw new ArgumentException("Use AddInputs add transfers for spending tokens.");
+      }
+
+      if (message.Length > Transaction.MaxMessageLength)
+      {
+        var i = 0;
+        while (message.Length > 0)
+        {
+          var chunkLength = message.Length > Transaction.MaxMessageLength ? Transaction.MaxMessageLength : message.Length;
+          var fragment = message.Substring(0, chunkLength);
+          this.Transactions.Add(
+            new Transaction { Address = address, Message = fragment, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? address.Balance : 0, Tag = tag });
+
+          message = message.Substring(chunkLength, message.Length - chunkLength);
+
+          i++;
+        }
+      }
+      else
+      {
+        this.Transactions.Add(
+          new Transaction { Address = address, Message = message, ObsoleteTag = tag, Timestamp = timestamp, Value = address.Balance, Tag = tag });
       }
     }
 
@@ -103,7 +189,7 @@
       for (var i = 0; i < this.Transactions.Count; i++)
       {
         // Fill empty signatureMessageFragment
-        this.Transactions[i].SignatureFragments = (signatureFragments.Count <= i || signatureFragments[i].IsNullOrEmpty())
+        this.Transactions[i].SignatureFragment = (signatureFragments.Count <= i || signatureFragments[i].IsNullOrEmpty())
                                                     ? emptySignatureFragment
                                                     : signatureFragments[i];
 
@@ -127,7 +213,35 @@
     /// </summary>
     public void Finalize()
     {
-      var bundleHashTrytes = string.Empty;
+      if (!string.IsNullOrEmpty(this.Hash))
+      {
+        throw new InvalidOperationException("Bundle is already finalized!");
+      }
+
+      if (this.Transactions.Count == 0)
+      {
+        throw new ArgumentException("At least one transaction must be added before finalizing bundle.");
+      }
+
+      var balance = this.Balance;
+      if (balance < 0)
+      {
+        if (this.RemainderAddress != null && !string.IsNullOrEmpty(this.RemainderAddress.Trytes))
+        {
+          this.Transactions.Add(new Transaction { Address = this.RemainderAddress, Tag = EmptyTag, Value = -balance, ObsoleteTag = EmptyTag });
+        }
+        else
+        {
+          throw new InvalidOperationException("Bundle balance is not even. Add remainder address.");
+        }
+      }
+
+      if (balance > 0)
+      {
+        throw new InvalidOperationException("Insufficient value submitted.");
+      }
+
+      string bundleHashTrytes;
       var valid = false;
       var kerl = new Kerl();
 
@@ -161,12 +275,47 @@
       }
       while (!valid);
 
+      this.Hash = bundleHashTrytes;
       foreach (var transaction in this.Transactions)
       {
         transaction.Bundle = bundleHashTrytes;
       }
     }
-    
+
+    /// <summary>
+    /// The sign.
+    /// </summary>
+    /// <param name="keyGenerator">
+    /// The key Generator.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when bundle is not finalized.
+    /// </exception>
+    public void Sign(IKeyGenerator keyGenerator)
+    {
+      if (string.IsNullOrEmpty(this.Hash))
+      {
+        throw new InvalidOperationException("Bundle must be finalized in order to sign it!");
+      }
+
+      var i = 0;
+      while (i < this.Transactions.Count)
+      {
+        var transaction = this.Transactions[i];
+
+        if (transaction.Value < 0)
+        {
+          var privateKey = keyGenerator.GetKeyFor(transaction.Address);
+          privateKey.SignInputTransactions(this.Transactions, i);
+
+          i += transaction.Address.SecurityLevel;
+        }
+        else
+        {
+          i += 1;
+        }
+      }
+    }
 
     #endregion
 

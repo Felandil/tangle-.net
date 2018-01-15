@@ -138,7 +138,7 @@
     /// The test int coverts to trits.
     /// </summary>
     [TestMethod]
-    public void TestIntCovertsToTrits()
+    public void TestIntConvertsToTrits()
     {
       var value = Converter.IntToTrits(9, 3);
       var expected = new[] { 0, 0, 1 };

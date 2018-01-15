@@ -1,6 +1,5 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
-  using System;
   using System.Globalization;
 
   using Org.BouncyCastle.Math;
@@ -12,12 +11,17 @@
   /// </summary>
   public class Transaction
   {
+    /// <summary>
+    /// The max message length.
+    /// </summary>
+    public const int MaxMessageLength = 2187;
+
     #region Public Properties
 
     /// <summary>
     /// Gets or sets the address.
     /// </summary>
-    public string Address { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
     /// Gets or sets the attachment timestamp.
@@ -55,6 +59,11 @@
     public int LastIndex { get; set; }
 
     /// <summary>
+    /// Gets or sets the message.
+    /// </summary>
+    public string Message { get; set; }
+
+    /// <summary>
     /// Gets or sets the nonce.
     /// </summary>
     public string Nonce { get; set; }
@@ -67,7 +76,7 @@
     /// <summary>
     /// Gets or sets the signature fragments.
     /// </summary>
-    public string SignatureFragments { get; set; }
+    public string SignatureFragment { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.
@@ -106,7 +115,7 @@
       var timestampTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Timestamp.ToString(CultureInfo.InvariantCulture)), 27);
       var lastIndexTrits = Converter.IntToTrits(this.LastIndex, 27);
 
-      return this.Address + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag + Converter.TritsToTrytes(timestampTrits)
+      return this.Address.Trytes + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag + Converter.TritsToTrytes(timestampTrits)
              + Converter.TritsToTrytes(currentIndexTrits) + Converter.TritsToTrytes(lastIndexTrits);
     }
 

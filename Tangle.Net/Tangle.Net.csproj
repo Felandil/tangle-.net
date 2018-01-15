@@ -64,7 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Cryptography\Converter.cs" />
+    <Compile Include="Source\Cryptography\IKeyGenerator.cs" />
+    <Compile Include="Source\Cryptography\IPrivateKey.cs" />
     <Compile Include="Source\Cryptography\Kerl.cs" />
+    <Compile Include="Source\Cryptography\PrivateKey.cs" />
+    <Compile Include="Source\Entity\Address.cs" />
     <Compile Include="Source\Entity\AddressBalances.cs" />
     <Compile Include="Source\Entity\Bundle.cs" />
     <Compile Include="Source\Entity\Input.cs" />
@@ -72,18 +76,22 @@
     <Compile Include="Source\Entity\NeighborList.cs" />
     <Compile Include="Source\Entity\NodeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Entity\Seed.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
     <Compile Include="Source\Entity\Transactions.cs" />
     <Compile Include="Source\Entity\Transfer.cs" />
     <Compile Include="Source\Repository\IIotaRepository.cs" />
-    <Compile Include="Source\Repository\InsufficientBalanceException.cs" />
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
     <Compile Include="Source\Utils\Checksum.cs" />
     <Compile Include="Source\Utils\NodeCommands.cs" />
     <Compile Include="Source\Utils\StringExtensions.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />
+    <Compile Include="Tests\Cryptography\KeyGeneratorStub.cs" />
+    <Compile Include="Tests\Cryptography\PrivateKeyStub.cs" />
+    <Compile Include="Tests\Cryptography\PrivateKeyTest.cs" />
     <Compile Include="Tests\Entity\BundleTest.cs" />
+    <Compile Include="Tests\Entity\SeedTest.cs" />
     <Compile Include="Tests\Entity\TransactionTests.cs" />
     <Compile Include="Tests\Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="Tests\Utils\AsciiToTrytesTest.cs" />

@@ -157,7 +157,6 @@
 
         for (var j = bytes.Length; j-- > 0;)
         {
-
           result[i++] = bytes[bytes.Length - 1 - j];
         }
 
@@ -178,8 +177,11 @@
     /// </returns>
     public static int[] ConvertBigIntToTrits(BigInteger value, int size)
     {
+      var isNegative = value.CompareTo(BigInteger.Zero) < 0;
+
       var destination = new int[size];
-      var absoluteValue = value.CompareTo(BigInteger.Zero) < 0 ? value.Negate() : value;
+
+      var absoluteValue = isNegative ? value.Abs() : value;
       for (var i = 0; i < size; i++)
       {
         var divRemainder = absoluteValue.DivideAndRemainder(BigInteger.ValueOf(Radix));
@@ -195,7 +197,7 @@
         destination[i] = remainder;
       }
 
-      if (value.CompareTo(BigInteger.Zero) < 0)
+      if (isNegative)
       {
         for (var i = 0; i < size; i++)
         {
@@ -217,7 +219,7 @@
     /// </returns>
     public static BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
     {
-      return new BigInteger(bytes.Skip(0).Take(Kerl.ByteHashLength).ToArray());
+      return new BigInteger(bytes.ToArray());
     }
 
     /// <summary>
@@ -229,7 +231,7 @@
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    public static int[] ConvertBytesToTrits(byte[] bytes)
+    public static int[] ConvertBytesToTrits(IEnumerable<byte> bytes)
     {
       return ConvertBigIntToTrits(ConvertBytesToBigInt(bytes), Kerl.HashLength);
     }

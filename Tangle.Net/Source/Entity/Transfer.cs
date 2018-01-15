@@ -10,7 +10,7 @@
     /// <summary>
     /// Gets or sets the address.
     /// </summary>
-    public string Address { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
     /// Gets or sets the message.
@@ -26,11 +26,6 @@
     /// Gets or sets the timestamp.
     /// </summary>
     public long Timestamp { get; set; }
-
-    /// <summary>
-    /// Gets or sets the value.
-    /// </summary>
-    public long Value { get; set; }
 
     #endregion
   }
