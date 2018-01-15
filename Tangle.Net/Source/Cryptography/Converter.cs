@@ -145,7 +145,23 @@
     /// </returns>
     public static byte[] ConvertBigIntToBytes(BigInteger value)
     {
-      return value.ToByteArray();
+        var result = new byte[Kerl.ByteHashLength];
+        var bytes = value.ToByteArray();
+
+        var i = 0;
+        while (i + bytes.Length < Kerl.ByteHashLength)
+        {
+
+          result[i++] = 0;
+        }
+
+        for (var j = bytes.Length; j-- > 0;)
+        {
+
+          result[i++] = bytes[bytes.Length - 1 - j];
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -199,9 +215,9 @@
     /// <returns>
     /// The <see cref="BigInteger"/>.
     /// </returns>
-    public static BigInteger ConvertBytesToBigInt(byte[] bytes)
+    public static BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
     {
-      return new BigInteger(bytes);
+      return new BigInteger(bytes.Skip(0).Take(Kerl.ByteHashLength).ToArray());
     }
 
     /// <summary>

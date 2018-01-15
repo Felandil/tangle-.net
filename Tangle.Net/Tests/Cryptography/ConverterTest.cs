@@ -55,7 +55,7 @@
     public void BytesFromBigInt()
     {
       var bigInteger =
-        new BigInteger("-66248497288545646587965756301073752609153309903615058272110219162589578449843267902828749585619297747485540592508");
+        new BigInteger("13190295509826637194583200125168488859623001289643321872497025844241981297292953903419783680940401133507992851240799");
       var outBytes = Converter.ConvertBigIntToBytes(bigInteger);
       var outBigInteger = Converter.ConvertBytesToBigInt(outBytes);
       Assert.IsTrue(bigInteger.Equals(outBigInteger));
@@ -85,7 +85,7 @@
       const int ByteSize = 48;
       const int TritSize = 243;
       var inBytes = new byte[ByteSize];
-      for (var i = 0; i < 100; i++)
+      for (var i = 0; i < 10000; i++)
       {
         Seed.NextBytes(inBytes);
         var inBigInteger = Converter.ConvertBytesToBigInt(inBytes);
@@ -107,7 +107,7 @@
     public void LoopRandTritsFromBigInt()
     {
       const int TritSize = 243;
-      for (var i = 0; i < 100; i++)
+      for (var i = 0; i < 10000; i++)
       {
         var inTrits = GetRandomTrits(TritSize);
         inTrits[242] = 0;

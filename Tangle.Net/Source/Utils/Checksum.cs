@@ -39,10 +39,10 @@
       var addressTrits = Converter.TrytesToTrits(address);
 
       var kerl = new Kerl();
-      kerl.Absorb(addressTrits, 0, addressTrits.Length);
+      kerl.Absorb(addressTrits);
 
       var checksumTrits = new int[Kerl.HashLength];
-      kerl.Squeeze(checksumTrits, 0, Kerl.HashLength);
+      kerl.Squeeze(checksumTrits);
 
       var tritsToTrytes = Converter.TritsToTrytes(checksumTrits);
       var checksum = tritsToTrytes.Substring(81 - ChecksumLength, ChecksumLength);

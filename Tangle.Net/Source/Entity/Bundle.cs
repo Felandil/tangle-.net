@@ -129,21 +129,22 @@
     {
       var bundleHashTrytes = string.Empty;
       var valid = false;
+      var kerl = new Kerl();
 
-      while (!valid)
+      do
       {
-        var kerl = new Kerl();
+        kerl.Reset();
         for (var i = 0; i < this.Transactions.Count; i++)
         {
           this.Transactions[i].CurrentIndex = i;
           this.Transactions[i].LastIndex = this.Transactions.Count - 1;
 
           var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].ToTrytes());
-          kerl.Absorb(transactionTrits, 0, transactionTrits.Length);
+          kerl.Absorb(transactionTrits);
         }
 
         var hash = new int[Kerl.HashLength];
-        kerl.Squeeze(hash, 0, hash.Length);
+        kerl.Squeeze(hash);
         bundleHashTrytes = Converter.TritsToTrytes(hash);
         var normalizedBundleValue = NormalizeBundle(bundleHashTrytes);
 
@@ -158,12 +159,14 @@
           valid = true;
         }
       }
+      while (!valid);
 
       foreach (var transaction in this.Transactions)
       {
         transaction.Bundle = bundleHashTrytes;
       }
     }
+    
 
     #endregion
 

@@ -97,6 +97,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Tests\Cryptography\generate_trytes_and_multi_squeeze.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\crypto\crypto.Net45.csproj">

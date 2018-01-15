@@ -1,6 +1,14 @@
 ﻿namespace Tangle.Net.Tests.Cryptography
 {
+  using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Security.Cryptography;
+  using System.Text;
+  using System.Threading;
+
   using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
   using Tangle.Net.Source.Cryptography;
 
@@ -18,16 +26,16 @@
     [TestMethod]
     public void TestKerlOneAbsorb()
     {
-      var tritValue = Converter.TrytesToTrits("EMIDYNHBWMBCXVDEFOFWINXTERALUKYYPPHKP9JJFGJEIUY9MUDVNFZHMMWZUYUSWAIOWEVTHNWMHANBH");
+      var tritValue = Converter.TrytesToTrits("KFNNRVYTYYYNHJLBTXOEFYBZTHGXHTX9XKXB9KUZDHGLKBQGPQCNHPGDSGYKWGHVXVLHPOEAWREBIVK99");
 
       var kerl = new Kerl();
-      kerl.Absorb(tritValue, 0, tritValue.Length);
+      kerl.Absorb(tritValue);
 
       var hashValue = new int[Kerl.HashLength];
-      kerl.Squeeze(hashValue, 0, hashValue.Length);
+      kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
-      Assert.AreEqual("EJEAOOZYSAWFPZQESYDHZCGYNSTWXUMVJOVDWUNZJXDGWCLUFGIMZRMGCAZGKNPLBRLGUNYWKLJTYEAQX", hash);
+      Assert.AreEqual("SHTKPLZWIXLDVHAEAGFSVWNDGVIX9SDVGEHAFGXEIMLWSHDTQYNZZKPBGMUF9GNEWIGIFYWWMSCLJ9RCD", hash);
     }
 
     /// <summary>
@@ -39,10 +47,10 @@
       var tritValue = Converter.TrytesToTrits("9MIDYNHBWMBCXVDEFOFWINXTERALUKYYPPHKP9JJFGJEIUY9MUDVNFZHMMWZUYUSWAIOWEVTHNWMHANBH");
 
       var kerl = new Kerl();
-      kerl.Absorb(tritValue, 0, tritValue.Length);
+      kerl.Absorb(tritValue);
 
       var hashValue = new int[Kerl.HashLength * 2];
-      kerl.Squeeze(hashValue, 0, hashValue.Length);
+      kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
       Assert.AreEqual("G9JYBOMPUXHYHKSNRNMMSSZCSHOFYOYNZRSZMAAYWDYEIMVVOGKPJBVBM9TDPULSFUNMTVXRKFIDOHUXXVYDLFSZYZTWQYTE9SPYYWYTXJYQ9IFGYOLZXWZBKWZN9QOOTBQMWMUBLEWUEEASRHRTNIQWJQNDWRYLCA", hash);
@@ -57,13 +65,66 @@
       var tritValue = Converter.TrytesToTrits("G9JYBOMPUXHYHKSNRNMMSSZCSHOFYOYNZRSZMAAYWDYEIMVVOGKPJBVBM9TDPULSFUNMTVXRKFIDOHUXXVYDLFSZYZTWQYTE9SPYYWYTXJYQ9IFGYOLZXWZBKWZN9QOOTBQMWMUBLEWUEEASRHRTNIQWJQNDWRYLCA");
 
       var kerl = new Kerl();
-      kerl.Absorb(tritValue, 0, tritValue.Length);
+      kerl.Absorb(tritValue);
 
       var hashValue = new int[Kerl.HashLength * 2];
-      kerl.Squeeze(hashValue, 0, hashValue.Length);
+      kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
       Assert.AreEqual("LUCKQVACOGBFYSPPVSSOXJEKNSQQRQKPZC9NXFSMQNRQCGGUL9OHVVKBDSKEQEBKXRNUJSRXYVHJTXBPDWQGNSCDCBAIRHAQCOWZEBSNHIJIGPZQITIBJQ9LNTDIBTCQ9EUWKHFLGFUVGGUWJONK9GBCDUIMAYMMQX", hash);
+    }
+
+    /// <summary>
+    /// The test generate trytes and multi squeeze.
+    /// </summary>
+    [TestMethod]
+    public void TestGenerateTrytesAndMultiSqueeze()
+    {
+      // CSV from Python lib. Thanks alot!
+      using (var reader = new StreamReader(@"../../Tests/Cryptography/generate_trytes_and_multi_squeeze.csv"))
+      {
+        var i = 0;
+        while (!reader.EndOfStream)
+        {
+          var line = reader.ReadLine();
+          if (line == null || i == 0)
+          {
+            i++;
+            continue;
+          }
+
+          var values = line.Split(',');
+
+          var trytes = values[0];
+          var hashes1 = values[1];
+          var hashes2 = values[2];
+          var hashes3 = values[3];
+
+          var trits = Converter.TrytesToTrits(trytes);
+
+          var kerl = new Kerl();
+          kerl.Absorb(trits);
+
+          var tritsOut = new int[Kerl.HashLength];
+          kerl.Squeeze(tritsOut);
+          var trytesOut = Converter.TritsToTrytes(tritsOut);
+
+          Assert.AreEqual(hashes1, trytesOut);
+
+          tritsOut = new int[Kerl.HashLength];
+          kerl.Squeeze(tritsOut);
+          trytesOut = Converter.TritsToTrytes(tritsOut);
+
+          Assert.AreEqual(hashes2, trytesOut);
+
+          tritsOut = new int[Kerl.HashLength];
+          kerl.Squeeze(tritsOut);
+          trytesOut = Converter.TritsToTrytes(tritsOut);
+
+          Assert.AreEqual(hashes3, trytesOut);
+          i++;
+        }
+      }
     }
 
     #endregion

@@ -69,17 +69,12 @@
     /// <param name="trits">
     /// The trits.
     /// </param>
-    /// <param name="offset">
-    /// The offset.
-    /// </param>
-    /// <param name="length">
-    /// The length.
-    /// </param>
-    public void Absorb(int[] trits, int offset, int length)
+    public void Absorb(int[] trits)
     {
-      ValidateLength(length);
+      ValidateLength(trits.Length);
+      var offset = 0;
 
-      while (offset < length)
+      while (offset < trits.Length)
       {
         Array.Copy(trits, offset, this.tritState, 0, HashLength);
         this.tritState[HashLength - 1] = 0;
@@ -105,17 +100,12 @@
     /// <param name="trits">
     /// The checksum trits.
     /// </param>
-    /// <param name="offset">
-    /// The offset.
-    /// </param>
-    /// <param name="length">
-    /// The length.
-    /// </param>
-    public void Squeeze(int[] trits, int offset, int length)
+    public void Squeeze(int[] trits)
     {
-      ValidateLength(length);
+      ValidateLength(trits.Length);
+      var offset = 0;
 
-      while (offset < length)
+      while (offset < trits.Length)
       {
         this.digest.DoFinal(this.byteState, 0);
         this.tritState = Converter.ConvertBytesToTrits(this.byteState);
