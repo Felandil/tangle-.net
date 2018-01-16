@@ -76,7 +76,7 @@
     /// <summary>
     /// Gets or sets the signature fragments.
     /// </summary>
-    public string SignatureFragment { get; set; }
+    public TryteString SignatureFragment { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.

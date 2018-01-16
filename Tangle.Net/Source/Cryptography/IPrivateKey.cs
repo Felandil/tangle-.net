@@ -17,6 +17,11 @@
     /// </summary>
     string Value { get; }
 
+    /// <summary>
+    /// Gets the security level.
+    /// </summary>
+    int SecurityLevel { get; }
+
     #endregion
 
     #region Public Methods and Operators
@@ -24,13 +29,13 @@
     /// <summary>
     /// The sign input transactions.
     /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
+    /// <param name="bundle">
+    /// The bundle.
     /// </param>
     /// <param name="startIndex">
     /// The start index.
     /// </param>
-    void SignInputTransactions(List<Transaction> transactions, int startIndex);
+    void SignInputTransactions(Bundle bundle, int startIndex);
 
     #endregion
   }

@@ -1,6 +1,5 @@
 ﻿namespace Tangle.Net.Tests.Cryptography
 {
-  using System.Collections.Generic;
   using System.Linq;
 
   using Tangle.Net.Source.Cryptography;
@@ -14,6 +13,11 @@
     #region Public Properties
 
     /// <summary>
+    /// Gets the security level.
+    /// </summary>
+    public int SecurityLevel { get; private set; }
+
+    /// <summary>
     /// Gets or sets the value.
     /// </summary>
     public string Value { get; set; }
@@ -25,17 +29,17 @@
     /// <summary>
     /// The sign input transactions.
     /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
+    /// <param name="bundle">
+    /// The bundle.
     /// </param>
     /// <param name="startIndex">
     /// The start index.
     /// </param>
-    public void SignInputTransactions(List<Transaction> transactions, int startIndex)
+    public void SignInputTransactions(Bundle bundle, int startIndex)
     {
-      for (var i = startIndex; i < transactions.Count(); i++)
+      for (var i = startIndex; i < bundle.Transactions.Count(); i++)
       {
-        transactions[i].SignatureFragment = "SOMESIGNATUREFRAGMENTWILLBEGENERATEDHERE";
+        bundle.Transactions[i].SignatureFragment = new TryteString("SOMESIGNATUREFRAGMENTWILLBEGENERATEDHERE");
       }
     }
 

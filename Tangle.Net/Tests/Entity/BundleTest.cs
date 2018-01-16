@@ -5,6 +5,7 @@
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Utils;
   using Tangle.Net.Tests.Cryptography;
@@ -448,11 +449,11 @@
 
       Assert.AreEqual(3, bundle.Transactions.Count);
 
-      Assert.IsTrue(string.IsNullOrEmpty(bundle.Transactions[0].SignatureFragment));
+      Assert.IsTrue(bundle.Transactions[0].SignatureFragment == null);
 
       for (var i = 1; i < bundle.Transactions.Count; i++)
       {
-        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment));
+        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment.Value));
       }
     }
 
@@ -491,11 +492,11 @@
 
       Assert.AreEqual(6, bundle.Transactions.Count);
 
-      Assert.IsTrue(string.IsNullOrEmpty(bundle.Transactions[0].SignatureFragment));
+      Assert.IsTrue(bundle.Transactions[0].SignatureFragment == null);
 
       for (var i = 1; i < bundle.Transactions.Count; i++)
       {
-        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment));
+        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment.Value));
       }
     }
 

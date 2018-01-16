@@ -162,43 +162,6 @@
     }
 
     /// <summary>
-    /// The add trytes.
-    /// </summary>
-    /// <param name="signatureFragments">
-    /// The signature fragments.
-    /// </param>
-    public void AddTrytes(List<string> signatureFragments)
-    {
-      var emptySignatureFragment = "9";
-
-      for (var j = 0; emptySignatureFragment.Length < 2187; j++)
-      {
-        emptySignatureFragment += '9';
-      }
-
-      for (var i = 0; i < this.Transactions.Count; i++)
-      {
-        // Fill empty signatureMessageFragment
-        this.Transactions[i].SignatureFragment = (signatureFragments.Count <= i || signatureFragments[i].IsNullOrEmpty())
-                                                    ? emptySignatureFragment
-                                                    : signatureFragments[i];
-
-        // Fill empty trunkTransaction
-        this.Transactions[i].TrunkTransaction = Entity.Hash.Empty;
-
-        // Fill empty branchTransaction
-        this.Transactions[i].BranchTransaction = Entity.Hash.Empty;
-
-        this.Transactions[i].AttachmentTimestamp = EmptyTimestamp;
-        this.Transactions[i].AttachmentTimestampLowerBound = EmptyTimestamp;
-        this.Transactions[i].AttachmentTimestampUpperBound = EmptyTimestamp;
-
-        // Fill empty nonce
-        this.Transactions[i].Nonce = new Tag();
-      }
-    }
-
-    /// <summary>
     /// The finalize.
     /// </summary>
     public void Finalize()
@@ -296,7 +259,7 @@
         if (transaction.Value < 0)
         {
           var privateKey = keyGenerator.GetKeyFor(transaction.Address);
-          privateKey.SignInputTransactions(this.Transactions, i);
+          privateKey.SignInputTransactions(this, i);
 
           i += transaction.Address.SecurityLevel;
         }

@@ -111,7 +111,7 @@
       }
 
       var trytes = Converter.TritsToTrytes(keyTrits.ToArray());
-      return new PrivateKey(trytes);
+      return new PrivateKey(trytes, securityLevel);
     }
 
     /// <summary>

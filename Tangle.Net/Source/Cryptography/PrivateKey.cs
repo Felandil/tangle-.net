@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
 
@@ -44,6 +45,22 @@
     public PrivateKey(string privateKey)
       : base(privateKey)
     {
+      this.SecurityLevel = 1;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
+    /// </summary>
+    /// <param name="privateKey">
+    /// The private key.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    public PrivateKey(string privateKey, int securityLevel)
+      : base(privateKey)
+    {
+      this.SecurityLevel = securityLevel;
     }
 
     #endregion
@@ -103,6 +120,11 @@
       }
     }
 
+    /// <summary>
+    /// Gets the security level.
+    /// </summary>
+    public int SecurityLevel { get; private set; }
+
     #endregion
 
     #region Public Methods and Operators
@@ -110,14 +132,27 @@
     /// <summary>
     /// The sign input transactions.
     /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
+    /// <param name="bundle">
+    /// The bundle.
     /// </param>
     /// <param name="startIndex">
     /// The start index.
     /// </param>
-    public void SignInputTransactions(List<Transaction> transactions, int startIndex)
+    public void SignInputTransactions(Bundle bundle, int startIndex)
     {
+      if (bundle.Hash == null)
+      {
+        throw new ArgumentException("Bundle must contain valid Hash in order to be signed!");
+      }
+
+      var signatureFragmentGenerator = new SignatureFragmentGenerator(this, bundle.Hash);
+      var signatureFragments = signatureFragmentGenerator.Generate();
+
+      for (var i = 0; i < this.SecurityLevel; i++)
+      {
+        var transaction = bundle.Transactions[i + startIndex];
+        transaction.SignatureFragment = signatureFragments[i];
+      }
     }
 
     #endregion
