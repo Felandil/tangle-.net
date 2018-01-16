@@ -2,8 +2,6 @@
 {
   using System;
 
-  using Tangle.Net.Source.Utils;
-
   /// <summary>
   /// The digest.
   /// </summary>
@@ -17,26 +15,18 @@
     /// <param name="trytes">
     /// The trytes.
     /// </param>
-    public Digest(string trytes)
-      : base(trytes)
-    {
-      ValidateTryteLength(trytes);
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Digest"/> class.
-    /// </summary>
-    /// <param name="trytes">
-    /// The trytes.
-    /// </param>
     /// <param name="keyIndex">
     /// The key index.
     /// </param>
-    public Digest(string trytes, int keyIndex)
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
+    public Digest(string trytes, int keyIndex, int securityLevel)
       : base(trytes)
     {
       ValidateTryteLength(trytes);
       this.KeyIndex = keyIndex;
+      this.SecurityLevel = securityLevel;
     }
 
     #endregion
@@ -47,6 +37,11 @@
     /// Gets the key index.
     /// </summary>
     public int KeyIndex { get; private set; }
+
+    /// <summary>
+    /// Gets the security level.
+    /// </summary>
+    public int SecurityLevel { get; private set; }
 
     #endregion
 

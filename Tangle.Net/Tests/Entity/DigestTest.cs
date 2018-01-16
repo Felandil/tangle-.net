@@ -21,7 +21,7 @@
     [ExpectedException(typeof(ArgumentException))]
     public void TestDigestIsOfIncorrectLengthShouldThrowException()
     {
-      var digest = new Digest("JAHGSASASAFUIGHAUIH");
+      var digest = new Digest("JAHGSASASAFUIGHAUIH", 1, 1);
     }
 
     /// <summary>
@@ -31,13 +31,13 @@
     [ExpectedException(typeof(ArgumentException))]
     public void TestDigestIsOfIncorrectLengthWithKeyIndexShouldThrowException()
     {
-      var digest = new Digest("JAHGSASASAFUIGHAUIH", 1);
+      var digest = new Digest("JAHGSASASAFUIGHAUIH", 1, 1);
     }
 
     [TestMethod]
     public void TestKeyIndexIsGivenShouldSetProperly()
     {
-      var digest = new Digest("9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ", 1);
+      var digest = new Digest("9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ", 1, 1);
       Assert.AreEqual(1, digest.KeyIndex);
     }
 

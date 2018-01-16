@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Cryptography\AddressGenerator.cs" />
     <Compile Include="Source\Cryptography\Converter.cs" />
     <Compile Include="Source\Cryptography\IKeyGenerator.cs" />
     <Compile Include="Source\Cryptography\IPrivateKey.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
     <Compile Include="Source\Utils\NodeCommands.cs" />
     <Compile Include="Source\Utils\StringExtensions.cs" />
+    <Compile Include="Tests\Cryptography\AddressGeneratorTest.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />
     <Compile Include="Tests\Cryptography\KeyGeneratorStub.cs" />

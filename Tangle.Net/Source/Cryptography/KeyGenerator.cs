@@ -41,7 +41,7 @@
     /// <summary>
     /// Gets or sets the seed trits.
     /// </summary>
-    public int[] SeedTrits { get; set; }
+    private int[] SeedTrits { get; set; }
 
     #endregion
 
@@ -111,7 +111,7 @@
       }
 
       var trytes = Converter.TritsToTrytes(keyTrits.ToArray());
-      return new PrivateKey(trytes, securityLevel);
+      return new PrivateKey(trytes, securityLevel, index);
     }
 
     /// <summary>

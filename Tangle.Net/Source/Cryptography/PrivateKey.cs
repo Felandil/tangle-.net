@@ -57,10 +57,14 @@
     /// <param name="securityLevel">
     /// The security level.
     /// </param>
-    public PrivateKey(string privateKey, int securityLevel)
+    /// <param name="keyIndex">
+    /// The key Index.
+    /// </param>
+    public PrivateKey(string privateKey, int securityLevel, int keyIndex)
       : base(privateKey)
     {
       this.SecurityLevel = securityLevel;
+      this.KeyIndex = keyIndex;
     }
 
     #endregion
@@ -114,11 +118,16 @@
           }
         }
 
-        this.digest = new Digest(Converter.TritsToTrytes(digests.ToArray()));
+        this.digest = new Digest(Converter.TritsToTrytes(digests.ToArray()), this.KeyIndex, this.SecurityLevel);
 
         return this.digest;
       }
     }
+
+    /// <summary>
+    /// Gets or sets the key index.
+    /// </summary>
+    public int KeyIndex { get; set; }
 
     /// <summary>
     /// Gets the security level.

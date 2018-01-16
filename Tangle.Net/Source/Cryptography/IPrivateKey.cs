@@ -1,8 +1,5 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
-  using System.Collections;
-  using System.Collections.Generic;
-
   using Tangle.Net.Source.Entity;
 
   /// <summary>
@@ -13,14 +10,19 @@
     #region Public Properties
 
     /// <summary>
-    /// Gets the value.
+    /// Gets the digest.
     /// </summary>
-    string Value { get; }
+    Digest Digest { get; }
 
     /// <summary>
     /// Gets the security level.
     /// </summary>
     int SecurityLevel { get; }
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    string Value { get; }
 
     #endregion
 

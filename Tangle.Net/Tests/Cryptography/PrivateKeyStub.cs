@@ -13,6 +13,11 @@
     #region Public Properties
 
     /// <summary>
+    /// Gets the digest.
+    /// </summary>
+    public Digest Digest { get; private set; }
+
+    /// <summary>
     /// Gets the security level.
     /// </summary>
     public int SecurityLevel { get; private set; }

@@ -74,6 +74,20 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The from trits.
+    /// </summary>
+    /// <param name="addressTrits">
+    /// The address trits.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Address"/>.
+    /// </returns>
+    public static Address FromTrits(int[] addressTrits)
+    {
+      return new Address(Converter.TritsToTrytes(addressTrits));
+    }
+
+    /// <summary>
     /// The has valid checksum.
     /// </summary>
     /// <returns>
