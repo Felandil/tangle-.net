@@ -13,6 +13,11 @@
     #region Constants
 
     /// <summary>
+    /// The chunk length.
+    /// </summary>
+    public const int ChunkLength = 2187;
+
+    /// <summary>
     /// The fragment length.
     /// </summary>
     public const int FragmentLength = 6561;

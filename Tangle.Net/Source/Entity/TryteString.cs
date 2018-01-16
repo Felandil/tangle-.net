@@ -1,6 +1,8 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
   using System;
+  using System.Collections;
+  using System.Collections.Generic;
 
   using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Utils;
@@ -44,7 +46,7 @@
     #region Public Properties
 
     /// <summary>
-    /// Gets the length.
+    /// Gets the chunkLength.
     /// </summary>
     public int Length
     {
@@ -84,7 +86,7 @@
     /// The offset.
     /// </param>
     /// <param name="length">
-    /// The length.
+    /// The chunkLength.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
@@ -92,6 +94,27 @@
     public TryteString GetChunk(int offset, int length)
     {
       return new TryteString(this.Value.Substring(offset, length));
+    }
+
+    /// <summary>
+    /// The get chunks.
+    /// </summary>
+    /// <param name="chunkLength">
+    /// The chunkLength.
+    /// </param>
+    /// <returns>
+    /// The <see cref="IEnumerable"/>.
+    /// </returns>
+    public List<TryteString> GetChunks(int chunkLength)
+    {
+      var chunks = new List<TryteString>();
+      for (var i = 0; i * chunkLength < this.Value.Length; i++)
+      {
+        var offset = i * chunkLength;
+        chunks.Add(this.GetChunk(offset, offset + chunkLength > this.Value.Length ? this.Value.Length - offset : chunkLength));
+      }
+
+      return chunks;
     }
 
     /// <summary>

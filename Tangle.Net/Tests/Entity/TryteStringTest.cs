@@ -15,6 +15,18 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The test chunks are sliced correctly.
+    /// </summary>
+    [TestMethod]
+    public void TestChunksAreSlicedCorrectly()
+    {
+      var tryteString = new TryteString("IAMGROOTU");
+      var chunks = tryteString.GetChunks(2);
+
+      Assert.AreEqual(5, chunks.Count);
+    }
+
+    /// <summary>
     /// The test given string is no tryte string should throw exception.
     /// </summary>
     [TestMethod]

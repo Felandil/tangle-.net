@@ -231,7 +231,7 @@
         throw new InvalidOperationException("Insufficient value submitted.");
       }
 
-      string bundleHashTrytes;
+      Hash bundleHash;
       var valid = false;
       var kerl = new Kerl();
 
@@ -247,10 +247,10 @@
           kerl.Absorb(transactionTrits);
         }
 
-        var hash = new int[Kerl.HashLength];
-        kerl.Squeeze(hash);
-        bundleHashTrytes = Converter.TritsToTrytes(hash);
-        var normalizedBundleValue = NormalizeBundle(bundleHashTrytes);
+        var hashTrits = new int[Kerl.HashLength];
+        kerl.Squeeze(hashTrits);
+        bundleHash = new Hash(Converter.TritsToTrytes(hashTrits));
+        var normalizedBundleValue = Hash.Normalize(bundleHash);
 
         if (Array.IndexOf(normalizedBundleValue, 13) != -1)
         {
@@ -265,7 +265,7 @@
       }
       while (!valid);
 
-      this.Hash = new Hash(bundleHashTrytes);
+      this.Hash = bundleHash;
       foreach (var transaction in this.Transactions)
       {
         transaction.BundleHash = this.Hash;
@@ -305,66 +305,6 @@
           i += 1;
         }
       }
-    }
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// The normalize bundle.
-    /// </summary>
-    /// <param name="bundleHash">
-    /// The bundle hash.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int[]"/>.
-    /// </returns>
-    private static int[] NormalizeBundle(string bundleHash)
-    {
-      var sourceBundle = bundleHash.Select(hashTryte => Converter.TritsToInt(Converter.TrytesToTrits(string.Empty + hashTryte))).ToList();
-      var normalizedBundle = new List<int>();
-      const int ChunkSize = 27;
-
-      for (var i = 0; i < 3; i++)
-      {
-        var chunk = sourceBundle.GetRange(i * ChunkSize, ChunkSize);
-        long sum = chunk.Sum();
-
-        while (sum > 0)
-        {
-          sum -= 1;
-          for (var j = 0; j < ChunkSize; j++)
-          {
-            if (chunk[j] <= -13)
-            {
-              continue;
-            }
-
-            chunk[j]--;
-            break;
-          }
-        }
-
-        while (sum < 0)
-        {
-          sum += 1;
-          for (var j = 0; j < ChunkSize; j++)
-          {
-            if (chunk[j] >= 13)
-            {
-              continue;
-            }
-
-            chunk[j]++;
-            break;
-          }
-        }
-
-        normalizedBundle.AddRange(chunk);
-      }
-
-      return normalizedBundle.ToArray();
     }
 
     #endregion

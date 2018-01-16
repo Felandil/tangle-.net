@@ -11,9 +11,16 @@
   /// </summary>
   internal class PrivateKeyStub : IPrivateKey
   {
-    #region Public Methods and Operators
+    #region Public Properties
 
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
     public string Value { get; set; }
+
+    #endregion
+
+    #region Public Methods and Operators
 
     /// <summary>
     /// The sign input transactions.

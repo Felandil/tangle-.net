@@ -115,7 +115,8 @@
     }
 
     /// <summary>
-    /// The get key for.
+    /// Note that this method will generate the wrong key if the input
+    /// address was generated from a different key!
     /// </summary>
     /// <param name="address">
     /// The address.
@@ -125,7 +126,7 @@
     /// </returns>
     public IPrivateKey GetKeyFor(Address address)
     {
-      return new PrivateKeyStub();
+      return this.GetKey(address.KeyIndex, address.SecurityLevel);
     }
 
     /// <summary>

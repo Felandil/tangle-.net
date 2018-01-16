@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
+  using System.Collections;
   using System.Collections.Generic;
 
   using Tangle.Net.Source.Entity;
@@ -9,7 +10,14 @@
   /// </summary>
   public interface IPrivateKey
   {
+    #region Public Properties
+
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
     string Value { get; }
+
+    #endregion
 
     #region Public Methods and Operators
 
