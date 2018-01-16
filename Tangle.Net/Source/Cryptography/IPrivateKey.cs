@@ -9,6 +9,8 @@
   /// </summary>
   public interface IPrivateKey
   {
+    string Value { get; }
+
     #region Public Methods and Operators
 
     /// <summary>

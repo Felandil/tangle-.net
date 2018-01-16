@@ -2,6 +2,7 @@
 {
   using System;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Utils;
 
   /// <summary>
@@ -91,6 +92,17 @@
     public TryteString GetChunk(int offset, int length)
     {
       return new TryteString(this.Value.Substring(offset, length));
+    }
+
+    /// <summary>
+    /// The to trits.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    public virtual int[] ToTrits()
+    {
+      return Converter.TrytesToTrits(this.Value);
     }
 
     #endregion

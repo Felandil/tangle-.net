@@ -314,7 +314,7 @@
         }
       }
 
-      return destination.ToArray();
+      return destination;
     }
 
     /// <summary>

@@ -67,6 +67,7 @@
     <Compile Include="Source\Cryptography\IKeyGenerator.cs" />
     <Compile Include="Source\Cryptography\IPrivateKey.cs" />
     <Compile Include="Source\Cryptography\Kerl.cs" />
+    <Compile Include="Source\Cryptography\KeyGenerator.cs" />
     <Compile Include="Source\Cryptography\PrivateKey.cs" />
     <Compile Include="Source\Entity\Address.cs" />
     <Compile Include="Source\DataTransfer\AddressBalances.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />
     <Compile Include="Tests\Cryptography\KeyGeneratorStub.cs" />
+    <Compile Include="Tests\Cryptography\KeyGeneratorTest.cs" />
     <Compile Include="Tests\Cryptography\PrivateKeyStub.cs" />
     <Compile Include="Tests\Cryptography\PrivateKeyTest.cs" />
     <Compile Include="Tests\Entity\AddressTest.cs" />

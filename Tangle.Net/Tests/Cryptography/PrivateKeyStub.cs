@@ -13,6 +13,8 @@
   {
     #region Public Methods and Operators
 
+    public string Value { get; set; }
+
     /// <summary>
     /// The sign input transactions.
     /// </summary>

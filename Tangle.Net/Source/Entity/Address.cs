@@ -2,6 +2,7 @@
 {
   using System;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Utils;
 
   /// <summary>

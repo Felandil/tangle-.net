@@ -8,12 +8,16 @@
   /// <summary>
   /// The private key.
   /// </summary>
-  public class PrivateKey : IPrivateKey
+  public class PrivateKey : TryteString, IPrivateKey
   {
+    #region Constants
+
     /// <summary>
     /// The fragment length.
     /// </summary>
     public const int FragmentLength = 6561;
+
+    #endregion
 
     #region Fields
 
@@ -33,8 +37,8 @@
     /// The private key.
     /// </param>
     public PrivateKey(string privateKey)
+      : base(privateKey)
     {
-      this.PrivateKeyValue = privateKey;
     }
 
     #endregion
@@ -53,9 +57,9 @@
           return this.digest;
         }
 
-        var buffer = new int[243];
+        var buffer = new int[Kerl.HashLength];
         var digests = new List<int>();
-        var privateKeyAsTrits = Converter.TrytesToTrits(this.PrivateKeyValue);
+        var privateKeyAsTrits = Converter.TrytesToTrits(this.Value);
 
         for (var i = 0; i < privateKeyAsTrits.Length / FragmentLength; i++)
         {
@@ -63,7 +67,7 @@
 
           for (var j = 0; j < 27; j++)
           {
-            buffer = keyFragment.Skip(j * 243).Take(243).ToArray();
+            buffer = keyFragment.Skip(j * Kerl.HashLength).Take(Kerl.HashLength).ToArray();
 
             for (var k = 0; k < 26; k++)
             {
@@ -72,9 +76,9 @@
               innerKerl.Squeeze(buffer);
             }
 
-            for (var k = 0; k < 243; k++)
+            for (var k = 0; k < Kerl.HashLength; k++)
             {
-              keyFragment[(j * 243) + k] = buffer[k];
+              keyFragment[(j * Kerl.HashLength) + k] = buffer[k];
             }
           }
 
@@ -82,9 +86,9 @@
           kerl.Absorb(keyFragment);
           kerl.Squeeze(buffer);
 
-          for (var j = 0; j < 243; j++)
+          for (var j = 0; j < Kerl.HashLength; j++)
           {
-            digests.Insert((i * 243) + j, buffer[j]);
+            digests.Insert((i * Kerl.HashLength) + j, buffer[j]);
           }
         }
 
@@ -93,15 +97,6 @@
         return this.digest;
       }
     }
-
-    #endregion
-
-    #region Properties
-
-    /// <summary>
-    /// Gets or sets the private key.
-    /// </summary>
-    private string PrivateKeyValue { get; set; }
 
     #endregion
 
