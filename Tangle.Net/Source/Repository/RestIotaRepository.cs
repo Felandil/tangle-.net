@@ -172,13 +172,8 @@
     /// </exception>
     private static List<string> NormalizeAddresses(IEnumerable<string> addresses)
     {
-      var normalizedAddresses = addresses.Select(Checksum.Strip).ToList();
-      if (normalizedAddresses.Any(address => !InputValidator.IsTrytes(address, Hash.Length)))
-      {
-        throw new ArgumentException("An address does contain non tryte characters.");
-      }
-
-      return normalizedAddresses;
+      var normalizedAddresses = addresses.Select(a => new Address(a)).ToList();
+      return normalizedAddresses.Select(normalizedAddress => normalizedAddress.Value).ToList();
     }
 
     /// <summary>
