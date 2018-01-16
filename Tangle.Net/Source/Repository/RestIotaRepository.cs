@@ -6,6 +6,7 @@
 
   using RestSharp;
 
+  using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Utils;
 
@@ -172,7 +173,7 @@
     private static List<string> NormalizeAddresses(IEnumerable<string> addresses)
     {
       var normalizedAddresses = addresses.Select(Checksum.Strip).ToList();
-      if (normalizedAddresses.Any(address => !InputValidator.IsTrytes(address, InputValidator.HashLength)))
+      if (normalizedAddresses.Any(address => !InputValidator.IsTrytes(address, Hash.Length)))
       {
         throw new ArgumentException("An address does contain non tryte characters.");
       }

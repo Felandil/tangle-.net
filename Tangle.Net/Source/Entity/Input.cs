@@ -10,7 +10,7 @@
     /// <summary>
     /// Gets or sets the address.
     /// </summary>
-    public string Address { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
     /// Gets or sets the balance.

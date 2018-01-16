@@ -11,30 +11,7 @@
   /// </summary>
   public static class InputValidator
   {
-    #region Constants
-
-    /// <summary>
-    /// The hash length.
-    /// </summary>
-    public const int HashLength = 81;
-
-    #endregion
-
     #region Public Methods and Operators
-
-    /// <summary>
-    /// The are valid inputs.
-    /// </summary>
-    /// <param name="inputs">
-    /// The inputs.
-    /// </param>
-    /// <returns>
-    /// The <see cref="bool"/>.
-    /// </returns>
-    public static bool AreValidInputs(IEnumerable<Input> inputs)
-    {
-      return inputs.All(input => IsAddress(input.Address));
-    }
 
     /// <summary>
     /// The is hash.
@@ -47,7 +24,7 @@
     /// </returns>
     public static bool IsHash(string hash)
     {
-      return IsTrytes(hash, HashLength);
+      return IsTrytes(hash, Hash.Length);
     }
 
     /// <summary>
@@ -61,25 +38,7 @@
     /// </returns>
     public static bool IsTransfersArray(IEnumerable<Transfer> transfers)
     {
-      foreach (var transfer in transfers)
-      {
-        if (!IsAddress(transfer.Address.Trytes))
-        {
-          return false;
-        }
-
-        if (!IsTrytes(transfer.Message))
-        {
-          return false;
-        }
-
-        if (!IsTrytes(transfer.Tag, 0, 27))
-        {
-          return false;
-        }
-      }
-
-      return true;
+      return transfers.All(transfer => IsAddress(transfer.Address.Value));
     }
 
     /// <summary>
@@ -149,14 +108,14 @@
     /// <returns>
     /// The <see cref="bool"/>.
     /// </returns>
-    private static bool IsAddress(string address)
+    public static bool IsAddress(string address)
     {
       if (address.Length == 90 && !IsTrytes(address, 90))
       {
         return false;
       }
 
-      return IsTrytes(address, 81);
+      return IsTrytes(address, Address.Length);
     }
 
     #endregion

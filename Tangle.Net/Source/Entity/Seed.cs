@@ -8,8 +8,17 @@
   /// <summary>
   /// The seed.
   /// </summary>
-  public class Seed
+  public class Seed : TryteString
   {
+    #region Constants
+
+    /// <summary>
+    /// The length.
+    /// </summary>
+    public new const int Length = 81;
+
+    #endregion
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -22,25 +31,17 @@
     /// Thrown if the seed has an incorrect length
     /// </exception>
     public Seed(string seed)
+      : base(seed)
     {
-      if (seed.Length != InputValidator.HashLength)
+      if (seed.Length != Length)
       {
         throw new ArgumentException("Seed must be of length 81");
       }
-
-      this.Value = seed;
     }
 
     #endregion
 
-    #region Public Properties
-
-    /// <summary>
-    /// Gets the value.
-    /// </summary>
-    public string Value { get; private set; }
-
-    #endregion
+    #region Public Methods and Operators
 
     /// <summary>
     /// The random.
@@ -51,9 +52,11 @@
     public static Seed Random()
     {
       var random = new Random(Guid.NewGuid().GetHashCode());
-      var seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, InputValidator.HashLength).Select(s => s[random.Next(s.Length)]).ToArray());
+      var seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, Length).Select(s => s[random.Next(s.Length)]).ToArray());
 
       return new Seed(seed);
     }
+
+    #endregion
   }
 }

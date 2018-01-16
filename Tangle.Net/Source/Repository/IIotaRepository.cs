@@ -3,6 +3,7 @@
   using System;
   using System.Collections.Generic;
 
+  using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
 
   /// <summary>

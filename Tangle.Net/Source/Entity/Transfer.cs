@@ -15,12 +15,12 @@
     /// <summary>
     /// Gets or sets the message.
     /// </summary>
-    public string Message { get; set; }
+    public TryteString Message { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.
     /// </summary>
-    public string Tag { get; set; }
+    public Tag Tag { get; set; }
 
     /// <summary>
     /// Gets or sets the timestamp.

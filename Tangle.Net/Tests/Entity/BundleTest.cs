@@ -6,7 +6,6 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Source.Entity;
-  using Tangle.Net.Source.Repository;
   using Tangle.Net.Source.Utils;
   using Tangle.Net.Tests.Cryptography;
 
@@ -26,37 +25,35 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 29, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty,
-        Bundle.EmptyTag,
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 29 },
+        new TryteString(), 
+        Tag.Empty, 
         999999999L);
       bundle.AddTransaction(
-        new Address { Balance = 13, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y" },
-        string.Empty, 
-        Bundle.EmptyTag, 
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y") { Balance = 13 },
+        new TryteString(),
+        Tag.Empty, 
         999999999L);
 
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
               {
                 Balance = 40, 
                 KeyIndex = 1, 
-                SecurityLevel = 1, 
-                Trytes = "KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX"
+                SecurityLevel = 1
               }, 
-            new Address
+            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
               {
                 Balance = 2, 
                 KeyIndex = 2, 
-                SecurityLevel = 1, 
-                Trytes = "GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG"
+                SecurityLevel = 1
               }
           });
 
       // since balance and spent tokens are even, this should be ignored
-      bundle.AddRemainder(new Address { Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999KAFGVCIBLHS9JBZCEFDELEGFDCZGIEGCPFEIQEYGA9UFPAE" });
+      bundle.AddRemainder(new Address("TESTVALUE9DONTUSEINPRODUCTION99999KAFGVCIBLHS9JBZCEFDELEGFDCZGIEGCPFEIQEYGA9UFPAE"));
 
       bundle.Finalize();
 
@@ -71,27 +68,25 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 84, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty, 
-        Bundle.EmptyTag, 
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
+        new TryteString(),
+        Tag.Empty, 
         999999999L);
 
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
               {
                 Balance = 42, 
                 KeyIndex = 4, 
-                SecurityLevel = 2, 
-                Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"
+                SecurityLevel = 2
               }, 
-            new Address
+            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
               {
                 Balance = 42, 
                 KeyIndex = 5, 
-                SecurityLevel = 3, 
-                Trytes = "XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ"
+                SecurityLevel = 3
               }
           });
 
@@ -109,9 +104,9 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address { Balance = 42, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-                         Message = AsciiToTrytes.FromString(GetSuperLongMessage()), 
-                         Tag = Bundle.EmptyTag
+                         Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
+                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Tag = Tag.Empty
                        };
 
       var bundle = new Bundle();
@@ -130,9 +125,9 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 84, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty, 
-        Bundle.EmptyTag, 
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
+        new TryteString(),
+        Tag.Empty, 
         999999999L);
 
       bundle.Finalize();
@@ -140,12 +135,11 @@
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
               {
                 Balance = 42, 
                 KeyIndex = 4, 
-                SecurityLevel = 2, 
-                Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"
+                SecurityLevel = 2
               }
           });
     }
@@ -159,14 +153,14 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 84, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty, 
-        Bundle.EmptyTag, 
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
+        new TryteString(),
+        Tag.Empty, 
         999999999L);
 
       bundle.Finalize();
 
-      bundle.AddRemainder(new Address { Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD" });
+      bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
     }
 
     /// <summary>
@@ -178,9 +172,9 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 84, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty, 
-        Bundle.EmptyTag, 
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
+        new TryteString(),
+        Tag.Empty, 
         999999999L);
 
       bundle.Finalize();
@@ -195,10 +189,10 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address { Balance = 0, Trytes = "9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ" },
-                         Tag = "PPDIDNQDJZGUQKOWJ9JZRCKOVGP", 
+                         Address = new Address("9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ"),
+                         Tag = new Tag("PPDIDNQDJZGUQKOWJ9JZRCKOVGP"), 
                          Timestamp = 1509136296, 
-                         Message = "Insecure Bundle Test"
+                         Message = new TryteString("JKAHSAAS")
                        };
 
       var bundle = new Bundle();
@@ -206,9 +200,9 @@
       bundle.Finalize();
 
       Assert.AreEqual(1, bundle.Transactions.Count);
-      Assert.AreEqual("ZTDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].ObsoleteTag);
-      Assert.AreEqual("PPDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].Tag);
-      Assert.AreEqual("NYSJSEGCWESDAFLIFCNJFWGZ9PCYDOT9VCSALKBD9UUNKBJAJCB9KVMTHZDPRDDXC9UFJQBJBQFUPJKFC", bundle.Hash);
+      Assert.AreEqual("ZTDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].ObsoleteTag.Value);
+      Assert.AreEqual("PPDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].Tag.Value);
+      Assert.AreEqual("NYSJSEGCWESDAFLIFCNJFWGZ9PCYDOT9VCSALKBD9UUNKBJAJCB9KVMTHZDPRDDXC9UFJQBJBQFUPJKFC", bundle.Hash.Value);
     }
 
     /// <summary>
@@ -219,9 +213,9 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address { Balance = 42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-                         Message = AsciiToTrytes.FromString(GetSuperLongMessage()), 
-                         Tag = Bundle.EmptyTag
+                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
+                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Tag = Tag.Empty
                        };
 
       var bundle = new Bundle();
@@ -248,9 +242,9 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address { Balance = 42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-                         Message = AsciiToTrytes.FromString("Hello World!"), 
-                         Tag = Bundle.EmptyTag
+                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
+                         Message = TryteString.FromString("Hello World!"),
+                         Tag = Tag.Empty
                        };
 
       var bundle = new Bundle();
@@ -268,9 +262,9 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address { Balance = -42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-                         Message = AsciiToTrytes.FromString(GetSuperLongMessage()), 
-                         Tag = Bundle.EmptyTag
+                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = -42 },
+                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Tag = Tag.Empty
                        };
 
       var bundle = new Bundle();
@@ -297,9 +291,9 @@
     {
       var transfer = new Transfer
       {
-        Address = new Address { Balance = 42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-        Message = string.Empty,
-        Tag = Bundle.EmptyTag
+        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
+        Message = new TryteString("ASDF"),
+        Tag = Tag.Empty
       };
 
       var bundle = new Bundle();
@@ -308,19 +302,17 @@
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
               {
                 Balance = 42,
                 KeyIndex = 0,
-                SecurityLevel = 1,
-                Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"
+                SecurityLevel = 1
               },
-            new Address
+            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
               {
                 Balance = 2,
                 KeyIndex = 2,
-                SecurityLevel = 1,
-                Trytes = "XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ"
+                SecurityLevel = 1
               }
           });
 
@@ -338,9 +330,9 @@
     {
       var transfer = new Transfer
       {
-        Address = new Address { Balance = 42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-        Message = string.Empty,
-        Tag = Bundle.EmptyTag
+        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
+        Message = new TryteString(),
+        Tag = Tag.Empty
       };
 
       var bundle = new Bundle();
@@ -349,12 +341,11 @@
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
               {
                 Balance = 40,
                 KeyIndex = 0,
-                SecurityLevel = 1,
-                Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"
+                SecurityLevel = 1
               }
           });
 
@@ -371,9 +362,9 @@
     {
       var transfer = new Transfer
       {
-        Address = new Address { Balance = 42, Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" },
-        Message = string.Empty,
-        Tag = Bundle.EmptyTag
+        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
+        Message = new TryteString(),
+        Tag = Tag.Empty
       };
 
       var bundle = new Bundle();
@@ -382,24 +373,22 @@
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
               {
                 Balance = 42,
                 KeyIndex = 0,
-                SecurityLevel = 1,
-                Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"
+                SecurityLevel = 1
               },
-            new Address
+            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
               {
                 Balance = 2,
                 KeyIndex = 2,
-                SecurityLevel = 1,
-                Trytes = "XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ"
+                SecurityLevel = 1
               }
           });
 
 
-      bundle.AddRemainder(new Address { Trytes = "NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD" });
+      bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
 
       bundle.Finalize();
 
@@ -416,9 +405,9 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 42, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty,
-        Bundle.EmptyTag,
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
+        new TryteString("ASDF"),
+        Tag.Empty,
         999999999L);
 
       bundle.Sign(new KeyGeneratorStub());
@@ -432,27 +421,25 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 42, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty,
-        Bundle.EmptyTag,
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
+        new TryteString("ASDF"),
+        Tag.Empty,
         999999999L);
 
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
               {
                 Balance = 40, 
                 KeyIndex = 1, 
-                SecurityLevel = 1, 
-                Trytes = "KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX"
+                SecurityLevel = 1
               }, 
-            new Address
+            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
               {
                 Balance = 2, 
                 KeyIndex = 2, 
-                SecurityLevel = 1, 
-                Trytes = "GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG"
+                SecurityLevel = 1
               }
           });
 
@@ -477,27 +464,25 @@
     {
       var bundle = new Bundle();
       bundle.AddTransaction(
-        new Address { Balance = 42, Trytes = "TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ" },
-        string.Empty,
-        Bundle.EmptyTag,
+        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
+        new TryteString("ASDF"),
+        Tag.Empty,
         999999999L);
 
       bundle.AddInput(
         new List<Address>
           {
-            new Address
+            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
               {
                 Balance = 40, 
                 KeyIndex = 1, 
-                SecurityLevel = 2, 
-                Trytes = "KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX"
+                SecurityLevel = 2
               }, 
-            new Address
+            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
               {
                 Balance = 2, 
                 KeyIndex = 2, 
-                SecurityLevel = 3, 
-                Trytes = "GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG"
+                SecurityLevel = 3
               }
           });
 

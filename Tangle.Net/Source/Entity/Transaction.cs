@@ -41,12 +41,12 @@
     /// <summary>
     /// Gets or sets the branch transaction.
     /// </summary>
-    public string BranchTransaction { get; set; }
+    public Hash BranchTransaction { get; set; }
 
     /// <summary>
     /// Gets or sets the bundle.
     /// </summary>
-    public string Bundle { get; set; }
+    public Hash BundleHash { get; set; }
 
     /// <summary>
     /// Gets or sets the current index.
@@ -61,17 +61,17 @@
     /// <summary>
     /// Gets or sets the message.
     /// </summary>
-    public string Message { get; set; }
+    public TryteString Message { get; set; }
 
     /// <summary>
     /// Gets or sets the nonce.
     /// </summary>
-    public string Nonce { get; set; }
+    public Tag Nonce { get; set; }
 
     /// <summary>
     /// Gets or sets the obsolete tag.
     /// </summary>
-    public string ObsoleteTag { get; set; }
+    public Tag ObsoleteTag { get; set; }
 
     /// <summary>
     /// Gets or sets the signature fragments.
@@ -81,7 +81,7 @@
     /// <summary>
     /// Gets or sets the tag.
     /// </summary>
-    public string Tag { get; set; }
+    public Tag Tag { get; set; }
 
     /// <summary>
     /// Gets or sets the timestamp.
@@ -91,7 +91,7 @@
     /// <summary>
     /// Gets or sets the trunk transaction.
     /// </summary>
-    public string TrunkTransaction { get; set; }
+    public Hash TrunkTransaction { get; set; }
 
     /// <summary>
     /// Gets or sets the value.
@@ -115,7 +115,7 @@
       var timestampTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Timestamp.ToString(CultureInfo.InvariantCulture)), 27);
       var lastIndexTrits = Converter.IntToTrits(this.LastIndex, 27);
 
-      return this.Address.Trytes + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag + Converter.TritsToTrytes(timestampTrits)
+      return this.Address.Value + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag.Value + Converter.TritsToTrytes(timestampTrits)
              + Converter.TritsToTrytes(currentIndexTrits) + Converter.TritsToTrytes(lastIndexTrits);
     }
 

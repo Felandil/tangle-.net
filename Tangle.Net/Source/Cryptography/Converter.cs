@@ -14,14 +14,9 @@
     #region Constants
 
     /// <summary>
-    /// The byte length.
+    /// The radix.
     /// </summary>
-    private const int ByteLength = 48;
-
-    /// <summary>
-    /// The int length.
-    /// </summary>
-    private const int IntLength = ByteLength / 4;
+    public const int Radix = 3;
 
     /// <summary>
     /// The max trit value.
@@ -33,15 +28,9 @@
     /// </summary>
     private const int MinTritValue = -1;
 
-    /// <summary>
-    /// The radix.
-    /// </summary>
-    private const int Radix = 3;
-
     #endregion
 
     #region Static Fields
-
 
     /// <summary>
     /// The trytes lookup.
@@ -111,30 +100,6 @@
     }
 
     /// <summary>
-    /// The increment.
-    /// </summary>
-    /// <param name="trits">
-    /// The trits.
-    /// </param>
-    /// <param name="size">
-    /// The size.
-    /// </param>
-    public static void Increment(int[] trits, int size)
-    {
-      for (var i = 0; i < size; i++)
-      {
-        if (++trits[i] > MaxTritValue)
-        {
-          trits[i] = MinTritValue;
-        }
-        else
-        {
-          break;
-        }
-      }
-    }
-
-    /// <summary>
     /// The convert bigint to bytes.
     /// </summary>
     /// <param name="value">
@@ -166,7 +131,6 @@
       {
         result[i++] = bytes[bytes.Length - 1 - j];
       }
-      
 
       return result;
     }
@@ -283,6 +247,30 @@
     public static byte[] ConvertTritsToBytes(int[] trits)
     {
       return ConvertBigIntToBytes(ConvertTritsToBigInt(trits, 0, Kerl.HashLength));
+    }
+
+    /// <summary>
+    /// The increment.
+    /// </summary>
+    /// <param name="trits">
+    /// The trits.
+    /// </param>
+    /// <param name="size">
+    /// The size.
+    /// </param>
+    public static void Increment(int[] trits, int size)
+    {
+      for (var i = 0; i < size; i++)
+      {
+        if (++trits[i] > MaxTritValue)
+        {
+          trits[i] = MinTritValue;
+        }
+        else
+        {
+          break;
+        }
+      }
     }
 
     /// <summary>

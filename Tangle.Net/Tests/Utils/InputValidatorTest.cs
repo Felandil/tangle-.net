@@ -70,36 +70,6 @@
     }
 
     /// <summary>
-    /// The test inputs do contain invalid addresses should return false.
-    /// </summary>
-    [TestMethod]
-    public void TestInputsDoContainInvalidAddressesShouldReturnFalse()
-    {
-      var inputs = new List<Input> { new Input { Address = "jsahdas8665" } };
-      Assert.IsFalse(InputValidator.AreValidInputs(inputs));
-    }
-
-    /// <summary>
-    /// The test inputs do contain valid addresses should return true.
-    /// </summary>
-    [TestMethod]
-    public void TestInputsDoContainValidAddressesShouldReturnTrue()
-    {
-      var inputs = new List<Input> { new Input { Address = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" } };
-      Assert.IsTrue(InputValidator.AreValidInputs(inputs));
-    }
-
-    /// <summary>
-    /// The test transfers addresses are malformed should return false.
-    /// </summary>
-    [TestMethod]
-    public void TestTransfersAddressesAreMalformedShouldReturnFalse()
-    {
-      var transfers = new List<Transfer> { new Transfer { Address = new Address { Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFA" } } };
-      Assert.IsFalse(InputValidator.IsTransfersArray(transfers));
-    }
-
-    /// <summary>
     /// The test transfers are correctly formed should return true.
     /// </summary>
     [TestMethod]
@@ -109,47 +79,12 @@
                         {
                           new Transfer
                             {
-                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
-                              Message = "RBTC9D9DCDEAUCFDCDADEAMBHAFA", 
-                              Tag = "RBTC9D9DCDEAUCFDCDADEAMBHAF"
+                              Address = new Address ("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"),
+                              Message = new TryteString("RBTC9D9DCDEAUCFDCDADEAMBHAFA"), 
+                              Tag = new Tag("RBTC9D9DCDEAUCFDCDADEAMBHAF")
                             }
                         };
       Assert.IsTrue(InputValidator.IsTransfersArray(transfers));
-    }
-
-    /// <summary>
-    /// The test transfers messages are malformed should return false.
-    /// </summary>
-    [TestMethod]
-    public void TestTransfersMessagesAreMalformedShouldReturnFalse()
-    {
-      var transfers = new List<Transfer>
-                        {
-                          new Transfer
-                            {
-                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
-                              Message = "666 aaa"
-                            }
-                        };
-      Assert.IsFalse(InputValidator.IsTransfersArray(transfers));
-    }
-
-    /// <summary>
-    /// The test transfers tags are malformed should return false.
-    /// </summary>
-    [TestMethod]
-    public void TestTransfersTagsAreMalformedShouldReturnFalse()
-    {
-      var transfers = new List<Transfer>
-                        {
-                          new Transfer
-                            {
-                              Address = new Address {Trytes = "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"},
-                              Message = "RBTC9D9DCDEAUCFDCDADEAMBHAFA", 
-                              Tag = "RBTC9D9DCDEAUCFDCDADEAMBHAFA"
-                            }
-                        };
-      Assert.IsFalse(InputValidator.IsTransfersArray(transfers));
     }
 
     #endregion

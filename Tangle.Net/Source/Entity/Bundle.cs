@@ -16,16 +16,6 @@
     #region Constants
 
     /// <summary>
-    /// The empty hash.
-    /// </summary>
-    public const string EmptyHash = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-
-    /// <summary>
-    /// The empty tag.
-    /// </summary>
-    public const string EmptyTag = "999999999999999999999999999";
-
-    /// <summary>
     /// The empty timestamp.
     /// </summary>
     public const long EmptyTimestamp = 999999999L;
@@ -63,7 +53,7 @@
     /// <summary>
     /// Gets the hash.
     /// </summary>
-    public string Hash { get; private set; }
+    public Hash Hash { get; private set; }
 
     /// <summary>
     /// Gets the transactions.
@@ -91,9 +81,9 @@
     /// </param>
     public void AddInput(IEnumerable<Address> addresses)
     {
-      if (!string.IsNullOrEmpty(this.Hash))
+      if (this.Hash != null)
       {
-        throw new InvalidOperationException("Bundle is already finalized!");
+        throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
       foreach (var address in addresses)
@@ -101,7 +91,7 @@
         for (var i = 0; i < address.SecurityLevel; i++)
         {
           this.Transactions.Add(
-            new Transaction { Address = address, Value = i == 0 ? -address.Balance : 0, Tag = EmptyTag, ObsoleteTag = EmptyTag });
+            new Transaction { Address = address, Value = i == 0 ? -address.Balance : 0, Tag = Tag.Empty, ObsoleteTag = Tag.Empty });
         }
       }
     }
@@ -114,9 +104,9 @@
     /// </param>
     public void AddRemainder(Address address)
     {
-      if (!string.IsNullOrEmpty(this.Hash))
+      if (this.Hash != null)
       {
-        throw new InvalidOperationException("Bundle is already finalized!");
+        throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
       this.RemainderAddress = address;
@@ -137,11 +127,11 @@
     /// <param name="timestamp">
     /// The timestamp.
     /// </param>
-    public void AddTransaction(Address address, string message, string tag, long timestamp)
+    public void AddTransaction(Address address, TryteString message, Tag tag, long timestamp)
     {
-      if (!string.IsNullOrEmpty(this.Hash))
+      if (this.Hash != null)
       {
-        throw new InvalidOperationException("Bundle is already finalized!");
+        throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
       if (address.Balance < 0)
@@ -155,11 +145,11 @@
         while (message.Length > 0)
         {
           var chunkLength = message.Length > Transaction.MaxMessageLength ? Transaction.MaxMessageLength : message.Length;
-          var fragment = message.Substring(0, chunkLength);
+          var fragment = message.GetChunk(0, chunkLength);
           this.Transactions.Add(
             new Transaction { Address = address, Message = fragment, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? address.Balance : 0, Tag = tag });
 
-          message = message.Substring(chunkLength, message.Length - chunkLength);
+          message = message.GetChunk(chunkLength, message.Length - chunkLength);
 
           i++;
         }
@@ -194,17 +184,17 @@
                                                     : signatureFragments[i];
 
         // Fill empty trunkTransaction
-        this.Transactions[i].TrunkTransaction = EmptyHash;
+        this.Transactions[i].TrunkTransaction = Entity.Hash.Empty;
 
         // Fill empty branchTransaction
-        this.Transactions[i].BranchTransaction = EmptyHash;
+        this.Transactions[i].BranchTransaction = Entity.Hash.Empty;
 
         this.Transactions[i].AttachmentTimestamp = EmptyTimestamp;
         this.Transactions[i].AttachmentTimestampLowerBound = EmptyTimestamp;
         this.Transactions[i].AttachmentTimestampUpperBound = EmptyTimestamp;
 
         // Fill empty nonce
-        this.Transactions[i].Nonce = EmptyTag;
+        this.Transactions[i].Nonce = new Tag();
       }
     }
 
@@ -213,9 +203,9 @@
     /// </summary>
     public void Finalize()
     {
-      if (!string.IsNullOrEmpty(this.Hash))
+      if (this.Hash != null)
       {
-        throw new InvalidOperationException("Bundle is already finalized!");
+        throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
       if (this.Transactions.Count == 0)
@@ -226,13 +216,13 @@
       var balance = this.Balance;
       if (balance < 0)
       {
-        if (this.RemainderAddress != null && !string.IsNullOrEmpty(this.RemainderAddress.Trytes))
+        if (this.RemainderAddress != null && !string.IsNullOrEmpty(this.RemainderAddress.Value))
         {
-          this.Transactions.Add(new Transaction { Address = this.RemainderAddress, Tag = EmptyTag, Value = -balance, ObsoleteTag = EmptyTag });
+          this.Transactions.Add(new Transaction { Address = this.RemainderAddress, Tag = Tag.Empty, Value = -balance, ObsoleteTag = Tag.Empty });
         }
         else
         {
-          throw new InvalidOperationException("Bundle balance is not even. Add remainder address.");
+          throw new InvalidOperationException("BundleHash balance is not even. Add remainder address.");
         }
       }
 
@@ -264,9 +254,9 @@
 
         if (Array.IndexOf(normalizedBundleValue, 13) != -1)
         {
-          var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag);
+          var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag.Value);
           Converter.Increment(obsoleteTagTrits, 81);
-          this.Transactions[0].ObsoleteTag = Converter.TritsToTrytes(obsoleteTagTrits);
+          this.Transactions[0].ObsoleteTag = new Tag(Converter.TritsToTrytes(obsoleteTagTrits));
         }
         else
         {
@@ -275,10 +265,10 @@
       }
       while (!valid);
 
-      this.Hash = bundleHashTrytes;
+      this.Hash = new Hash(bundleHashTrytes);
       foreach (var transaction in this.Transactions)
       {
-        transaction.Bundle = bundleHashTrytes;
+        transaction.BundleHash = this.Hash;
       }
     }
 
@@ -293,9 +283,9 @@
     /// </exception>
     public void Sign(IKeyGenerator keyGenerator)
     {
-      if (string.IsNullOrEmpty(this.Hash))
+      if (this.Hash == null)
       {
-        throw new InvalidOperationException("Bundle must be finalized in order to sign it!");
+        throw new InvalidOperationException("BundleHash must be finalized in order to sign it!");
       }
 
       var i = 0;

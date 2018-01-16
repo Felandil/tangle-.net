@@ -1,14 +1,9 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
-  using System;
   using System.Collections.Generic;
   using System.Linq;
-  using System.Web.UI;
-
-  using Castle.DynamicProxy.Contributors;
 
   using Tangle.Net.Source.Entity;
-  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The private key.
@@ -25,7 +20,7 @@
     /// <summary>
     /// The digest.
     /// </summary>
-    private string digest = string.Empty;
+    private Digest digest;
 
     #endregion
 
@@ -49,11 +44,11 @@
     /// <summary>
     /// Gets the digest.
     /// </summary>
-    public string Digest
+    public Digest Digest
     {
       get
       {
-        if (!string.IsNullOrEmpty(this.digest))
+        if (this.digest != null)
         {
           return this.digest;
         }
@@ -93,7 +88,7 @@
           }
         }
 
-        this.digest = Converter.TritsToTrytes(digests.ToArray());
+        this.digest = new Digest(Converter.TritsToTrytes(digests.ToArray()));
 
         return this.digest;
       }

@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Source.Entity
+﻿namespace Tangle.Net.Source.DataTransfer
 {
   /// <summary>
   /// The neighbor.
