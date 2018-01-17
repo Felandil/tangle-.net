@@ -4,8 +4,6 @@
   using System.Collections.Generic;
   using System.Linq;
 
-  using Castle.Core.Internal;
-
   using Tangle.Net.Source.Cryptography;
 
   /// <summary>
@@ -13,15 +11,6 @@
   /// </summary>
   public class Bundle
   {
-    #region Constants
-
-    /// <summary>
-    /// The empty timestamp.
-    /// </summary>
-    public const long EmptyTimestamp = 999999999L;
-
-    #endregion
-
     #region Constructors and Destructors
 
     /// <summary>
@@ -139,17 +128,17 @@
         throw new ArgumentException("Use AddInputs add transfers for spending tokens.");
       }
 
-      if (message.Length > Transaction.MaxMessageLength)
+      if (message.TrytesLength > Transaction.MaxMessageLength)
       {
         var i = 0;
-        while (message.Length > 0)
+        while (message.TrytesLength > 0)
         {
-          var chunkLength = message.Length > Transaction.MaxMessageLength ? Transaction.MaxMessageLength : message.Length;
+          var chunkLength = message.TrytesLength > Transaction.MaxMessageLength ? Transaction.MaxMessageLength : message.TrytesLength;
           var fragment = message.GetChunk(0, chunkLength);
           this.Transactions.Add(
             new Transaction { Address = address, Message = fragment, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? address.Balance : 0, Tag = tag });
 
-          message = message.GetChunk(chunkLength, message.Length - chunkLength);
+          message = message.GetChunk(chunkLength, message.TrytesLength - chunkLength);
 
           i++;
         }

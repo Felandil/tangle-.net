@@ -7,7 +7,7 @@
   /// <summary>
   /// The kerl.
   /// </summary>
-  public class Kerl
+  public class Kerl : ICurl
   {
     #region Constants
 

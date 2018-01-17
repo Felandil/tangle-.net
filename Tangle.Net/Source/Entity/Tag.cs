@@ -27,17 +27,15 @@
     public Tag(string trytes)
       : base(trytes)
     {
-      if (trytes.Length > Length)
+      if (this.TrytesLength > Length)
       {
         throw new ArgumentException("Tag length must not be longer than " + Length);
       }
 
-      while (trytes.Length < Length)
+      if (this.TrytesLength < Length)
       {
-        trytes += '9';
+        this.Pad(Length);
       }
-
-      this.Value = trytes;
     }
 
     /// <summary>

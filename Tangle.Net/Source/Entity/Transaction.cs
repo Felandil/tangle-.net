@@ -2,6 +2,8 @@
 {
   using System.Globalization;
 
+  using Castle.Components.DictionaryAdapter.Xml;
+
   using Org.BouncyCastle.Math;
 
   using Tangle.Net.Source.Cryptography;
@@ -11,10 +13,14 @@
   /// </summary>
   public class Transaction
   {
+    #region Constants
+
     /// <summary>
     /// The max message length.
     /// </summary>
     public const int MaxMessageLength = 2187;
+
+    #endregion
 
     #region Public Properties
 
@@ -52,6 +58,11 @@
     /// Gets or sets the current index.
     /// </summary>
     public int CurrentIndex { get; set; }
+
+    /// <summary>
+    /// Gets or sets the hash.
+    /// </summary>
+    public Hash Hash { get; set; }
 
     /// <summary>
     /// Gets or sets the last index.
@@ -101,6 +112,45 @@
     #endregion
 
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The from trytes.
+    /// </summary>
+    /// <param name="trytes">
+    /// The trytes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Transaction"/>.
+    /// </returns>
+    public static Transaction FromTrytes(TransactionTrytes trytes)
+    {
+      var hashTrits = new int[Kerl.HashLength];
+      var kerl = new Curl();
+      kerl.Absorb(trytes.ToTrits());
+      kerl.Squeeze(hashTrits);
+
+      var hash = new Hash(Converter.TritsToTrytes(hashTrits));
+
+      return new Transaction
+               {
+                 Address = trytes.GetChunk<Address>(2187, Address.Length),
+                 Hash = hash,
+                 SignatureFragment = trytes.GetChunk(0, 2187),
+                 Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()),
+                 ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length),
+                 Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()),
+                 CurrentIndex = Converter.TritsToInt(trytes.GetChunk(2331, 9).ToTrits()),
+                 LastIndex = Converter.TritsToInt(trytes.GetChunk(2340, 9).ToTrits()),
+                 BundleHash = trytes.GetChunk<Hash>(2349, Hash.Length),
+                 TrunkTransaction = trytes.GetChunk<Hash>(2430, Hash.Length),
+                 BranchTransaction = trytes.GetChunk<Hash>(2511, Hash.Length),
+                 Tag = trytes.GetChunk<Tag>(2592, Tag.Length),
+                 Nonce = trytes.GetChunk<Tag>(2646, Tag.Length),
+                 AttachmentTimestamp = Converter.TritsToInt(trytes.GetChunk(2619, 9).ToTrits()),
+                 AttachmentTimestampLowerBound = Converter.TritsToInt(trytes.GetChunk(2628, 9).ToTrits()),
+                 AttachmentTimestampUpperBound = Converter.TritsToInt(trytes.GetChunk(2637, 9).ToTrits()),
+               };
+    }
 
     /// <summary>
     /// The to trytes.

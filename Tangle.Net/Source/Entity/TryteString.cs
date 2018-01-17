@@ -48,7 +48,7 @@
     /// <summary>
     /// Gets the chunkLength.
     /// </summary>
-    public int Length
+    public int TrytesLength
     {
       get
       {
@@ -97,6 +97,26 @@
     }
 
     /// <summary>
+    /// The get chunk.
+    /// </summary>
+    /// <param name="offset">
+    /// The offset.
+    /// </param>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    /// <typeparam name="T">
+    /// The TryteString object to return
+    /// </typeparam>
+    /// <returns>
+    /// The <see cref="T"/>.
+    /// </returns>
+    public T GetChunk<T>(int offset, int length) where T : TryteString, new()
+    {
+      return (T)Activator.CreateInstance(typeof(T), this.Value.Substring(offset, length));
+    }
+
+    /// <summary>
     /// The get chunks.
     /// </summary>
     /// <param name="chunkLength">
@@ -123,9 +143,27 @@
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    public virtual int[] ToTrits()
+    public int[] ToTrits()
     {
       return Converter.TrytesToTrits(this.Value);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// The pad value.
+    /// </summary>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    protected void Pad(int length)
+    {
+      while (this.TrytesLength < length)
+      {
+        this.Value += '9';
+      }
     }
 
     #endregion

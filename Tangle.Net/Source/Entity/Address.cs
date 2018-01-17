@@ -15,7 +15,7 @@
     /// <summary>
     /// The length.
     /// </summary>
-    public new const int Length = 81;
+    public const int Length = 81;
 
     #endregion
 
@@ -30,19 +30,32 @@
     public Address(string value)
       : base(value)
     {
-      if (!InputValidator.IsTrytes(value, Length) && !InputValidator.IsTrytes(value, Length + Checksum.Length))
+      if (this.TrytesLength < Length)
       {
-        throw new ArgumentException(
-          "Given value is no address. Address should be of length " + Length + ". Or " + Length + Checksum.Length + " if provided with checksum.");
+        this.Pad(Length);
       }
 
-      if (value.Length == Length)
+      if (!InputValidator.IsTrytes(this.Value, Length) && !InputValidator.IsTrytes(this.Value, Length + Checksum.Length))
+      {
+        throw new ArgumentException(
+          "Given value is no address. Address should be of length " + Length + ". Or " + (Length + Checksum.Length) + " if provided with checksum.");
+      }
+
+      if (this.TrytesLength == Length)
       {
         return;
       }
 
-      this.Value = value.Substring(0, Length);
-      this.Checksum = new Checksum(value.Substring(Length, Checksum.Length));
+      this.Checksum = new Checksum(this.Value.Substring(Length, Checksum.Length));
+      this.Value = this.Value.Substring(0, Length);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Address"/> class.
+    /// </summary>
+    public Address()
+      : this(string.Empty)
+    {
     }
 
     #endregion

@@ -15,17 +15,6 @@
     #region Public Methods and Operators
 
     /// <summary>
-    /// The test address does not include checksum should have invalid checksum.
-    /// </summary>
-    [TestMethod]
-    public void TestAddressDoesNotIncludeChecksumShouldHaveInvalidChecksum()
-    {
-      var address = new Address("UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VY");
-
-      Assert.IsFalse(address.HasValidChecksum());
-    }
-
-    /// <summary>
     /// The test address does not include checksum shouldgenerate correct checksum.
     /// </summary>
     [TestMethod]
@@ -39,13 +28,14 @@
     }
 
     /// <summary>
-    /// The test address has incorrect length should throw exception.
+    /// The test address does not include checksum should have invalid checksum.
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void TestAddressHasIncorrectLengthShouldThrowException()
+    public void TestAddressDoesNotIncludeChecksumShouldHaveInvalidChecksum()
     {
-      var address = new Address("IAMNOTLONGENOUGH");
+      var address = new Address("UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VY");
+
+      Assert.IsFalse(address.HasValidChecksum());
     }
 
     /// <summary>
@@ -80,6 +70,26 @@
       var address = new Address("UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VYXOEDEOMRC");
 
       Assert.IsTrue(address.HasValidChecksum());
+    }
+
+    /// <summary>
+    /// The test address has incorrect length should throw exception.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestAddressIsTooLongShouldThrowException()
+    {
+      var address = new Address("IAMNOTLONGENOUGHUYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9VYXOEDEOMRC");
+    }
+
+    /// <summary>
+    /// The test address is too short should pad to addresslength.
+    /// </summary>
+    [TestMethod]
+    public void TestAddressIsTooShortShouldPadToAddressLength()
+    {
+      var address = new Address("UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD9");
+      Assert.AreEqual("UYEEERFQYTPFAHIPXDQAQYWYMSMCLMGBTYAXLWFRFFWPYFOICOVLK9A9VYNCKK9TQUNBTARCEQXJHD999", address.Value);
     }
 
     #endregion

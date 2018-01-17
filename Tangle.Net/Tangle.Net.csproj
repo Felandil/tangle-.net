@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Source\Cryptography\AddressGenerator.cs" />
     <Compile Include="Source\Cryptography\Converter.cs" />
+    <Compile Include="Source\Cryptography\Curl.cs" />
+    <Compile Include="Source\Cryptography\ICurl.cs" />
     <Compile Include="Source\Cryptography\IKeyGenerator.cs" />
     <Compile Include="Source\Cryptography\IPrivateKey.cs" />
     <Compile Include="Source\Cryptography\Kerl.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
     <Compile Include="Source\DataTransfer\Transactions.cs" />
+    <Compile Include="Source\Entity\TransactionTrytes.cs" />
     <Compile Include="Source\Entity\Transfer.cs" />
     <Compile Include="Source\Entity\TryteString.cs" />
     <Compile Include="Source\Repository\IIotaRepository.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Tests\Entity\SeedTest.cs" />
     <Compile Include="Tests\Entity\TagTest.cs" />
     <Compile Include="Tests\Entity\TransactionTests.cs" />
+    <Compile Include="Tests\Entity\TransactionTrytesTest.cs" />
     <Compile Include="Tests\Entity\TryteStringTest.cs" />
     <Compile Include="Tests\Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="Tests\Utils\AsciiToTrytesTest.cs" />

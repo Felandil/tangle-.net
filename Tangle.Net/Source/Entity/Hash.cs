@@ -31,10 +31,23 @@
     public Hash(string trytes)
       : base(trytes)
     {
-      if (trytes.Length != Length)
+      if (this.TrytesLength < Length)
       {
-        throw new ArgumentException("Hash must be exactly of length " + Length);
+        this.Pad(Length);
       }
+
+      if (this.TrytesLength > Length)
+      {
+        throw new ArgumentException("Hash must not have length above " + Length);
+      }
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hash"/> class.
+    /// </summary>
+    public Hash()
+      : this(string.Empty)
+    {
     }
 
     #endregion

@@ -31,7 +31,17 @@
     [ExpectedException(typeof(ArgumentException))]
     public void TestGivenValueIsOfIncorrectLengthShouldThrowException()
     {
+      var hash = new Hash("999999999999999999999999999999999999999999999999999999999999999999999999999999999JHAGS");
+    }
+
+    /// <summary>
+    /// The test given value is shorter than length should pad.
+    /// </summary>
+    [TestMethod]
+    public void TestGivenValueIsShorterThanLengthShouldPad()
+    {
       var hash = new Hash("JHAGS");
+      Assert.AreEqual("JHAGS9999999999999999999999999999999999999999999999999999999999999999999999999999", hash.Value);
     }
 
     #endregion
