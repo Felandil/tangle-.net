@@ -3,6 +3,7 @@
   using System;
   using System.Linq;
   using System.Security.Cryptography;
+
   using Tangle.Net.Source.Utils;
 
   /// <summary>
@@ -51,35 +52,42 @@
     /// </returns>
     public static Seed Random()
     {
-      string seed = string.Empty;
+      string seed;
 
-      using (RNGCryptoServiceProvider rnd = new RNGCryptoServiceProvider())
+      using (var rnd = new RNGCryptoServiceProvider())
       {
         seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, Length).Select(s => s[GetCryptoInt(rnd, s.Length)]).ToArray());
       }
-      
+
       return new Seed(seed);
     }
 
     #endregion
 
-    #region Private Methods and Operators
+    #region Methods
 
     /// <summary>
     /// Return cryptographically strong random Int value
     /// </summary>
-    /// <param name="rnd"></param>
-    /// <param name="max"></param>
-    /// <returns></returns>
-    private static int GetCryptoInt(RNGCryptoServiceProvider rnd, int max)
+    /// <param name="rnd">
+    /// The rnd.
+    /// </param>
+    /// <param name="max">
+    /// The max.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    private static int GetCryptoInt(RandomNumberGenerator rnd, int max)
     {
-      byte[] r = new byte[4];
+      var r = new byte[4];
       int value;
       do
       {
         rnd.GetBytes(r);
-        value = BitConverter.ToInt32(r, 0) & Int32.MaxValue;
-      } while (value >= max * (Int32.MaxValue / max));
+        value = BitConverter.ToInt32(r, 0) & int.MaxValue;
+      }
+      while (value >= max * (int.MaxValue / max));
       return value % max;
     }
 
