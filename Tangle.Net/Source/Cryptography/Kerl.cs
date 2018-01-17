@@ -7,7 +7,7 @@
   /// <summary>
   /// The kerl.
   /// </summary>
-  public class Kerl : ICurl
+  public class Kerl : AbstractCurl
   {
     #region Constants
 
@@ -20,11 +20,6 @@
     /// The byte hash length.
     /// </summary>
     public const int ByteHashLength = BitHashLength / 8;
-
-    /// <summary>
-    /// The hash length.
-    /// </summary>
-    public const int HashLength = 243;
 
     #endregion
 
@@ -69,7 +64,7 @@
     /// <param name="trits">
     /// The trits.
     /// </param>
-    public void Absorb(int[] trits)
+    public override void Absorb(int[] trits)
     {
       ValidateLength(trits.Length);
       var offset = 0;
@@ -89,7 +84,7 @@
     /// <summary>
     /// The reset.
     /// </summary>
-    public void Reset()
+    public override void Reset()
     {
       this.digest.Reset();
     }
@@ -100,7 +95,7 @@
     /// <param name="trits">
     /// The checksum trits.
     /// </param>
-    public void Squeeze(int[] trits)
+    public override void Squeeze(int[] trits)
     {
       ValidateLength(trits.Length);
       var offset = 0;

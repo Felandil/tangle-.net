@@ -3,8 +3,17 @@
   /// <summary>
   /// The Curl interface.
   /// </summary>
-  public interface ICurl
+  public abstract class AbstractCurl
   {
+    #region Constants
+
+    /// <summary>
+    /// The hash length.
+    /// </summary>
+    public const int HashLength = 243;
+
+    #endregion
+
     #region Public Methods and Operators
 
     /// <summary>
@@ -13,7 +22,12 @@
     /// <param name="trits">
     /// The trits.
     /// </param>
-    void Absorb(int[] trits);
+    public abstract void Absorb(int[] trits);
+
+    /// <summary>
+    /// The reset.
+    /// </summary>
+    public abstract void Reset();
 
     /// <summary>
     /// The squeeze.
@@ -21,7 +35,7 @@
     /// <param name="trits">
     /// The trits.
     /// </param>
-    void Squeeze(int[] trits);
+    public abstract void Squeeze(int[] trits);
 
     #endregion
   }
