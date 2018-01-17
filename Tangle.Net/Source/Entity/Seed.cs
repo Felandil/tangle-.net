@@ -51,8 +51,13 @@
     /// </returns>
     public static Seed Random()
     {
-      RNGCryptoServiceProvider rnd = new RNGCryptoServiceProvider();
-      var seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, Length).Select(s => s[GetCryptoInt(rnd, s.Length)]).ToArray());
+      string seed = string.Empty;
+
+      using (RNGCryptoServiceProvider rnd = new RNGCryptoServiceProvider())
+      {
+        seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, Length).Select(s => s[GetCryptoInt(rnd, s.Length)]).ToArray());
+      }
+      
       return new Seed(seed);
     }
 
