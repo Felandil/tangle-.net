@@ -16,7 +16,7 @@
     /// <summary>
     /// The length.
     /// </summary>
-    public new const int Length = Kerl.HashLength / Converter.Radix;
+    public const int Length = AbstractCurl.HashLength / Converter.Radix;
 
     #endregion
 

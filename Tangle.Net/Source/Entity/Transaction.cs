@@ -1,12 +1,7 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
-  using System.Globalization;
-
-  using Castle.Components.DictionaryAdapter.Xml;
-
-  using Org.BouncyCastle.Math;
-
   using Tangle.Net.Source.Cryptography;
+  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The transaction.
@@ -32,17 +27,17 @@
     /// <summary>
     /// Gets or sets the attachment timestamp.
     /// </summary>
-    public long AttachmentTimestamp { get; set; }
+    public int AttachmentTimestamp { get; set; }
 
     /// <summary>
     /// Gets or sets the attachment timestamp lower bound.
     /// </summary>
-    public long AttachmentTimestampLowerBound { get; set; }
+    public int AttachmentTimestampLowerBound { get; set; }
 
     /// <summary>
     /// Gets or sets the attachment timestamp upper bound.
     /// </summary>
-    public long AttachmentTimestampUpperBound { get; set; }
+    public int AttachmentTimestampUpperBound { get; set; }
 
     /// <summary>
     /// Gets or sets the branch transaction.
@@ -97,7 +92,7 @@
     /// <summary>
     /// Gets or sets the timestamp.
     /// </summary>
-    public long Timestamp { get; set; }
+    public int Timestamp { get; set; }
 
     /// <summary>
     /// Gets or sets the trunk transaction.
@@ -107,7 +102,7 @@
     /// <summary>
     /// Gets or sets the value.
     /// </summary>
-    public long Value { get; set; }
+    public int Value { get; set; }
 
     #endregion
 
@@ -119,36 +114,42 @@
     /// <param name="trytes">
     /// The trytes.
     /// </param>
+    /// <param name="hash">
+    /// The hash.
+    /// </param>
     /// <returns>
     /// The <see cref="Transaction"/>.
     /// </returns>
-    public static Transaction FromTrytes(TransactionTrytes trytes)
+    public static Transaction FromTrytes(TransactionTrytes trytes, Hash hash = null)
     {
-      var hashTrits = new int[Kerl.HashLength];
-      var kerl = new Curl();
-      kerl.Absorb(trytes.ToTrits());
-      kerl.Squeeze(hashTrits);
+      if (hash == null)
+      {
+        var hashTrits = new int[Kerl.HashLength];
+        var kerl = new Curl();
+        kerl.Absorb(trytes.ToTrits());
+        kerl.Squeeze(hashTrits);
 
-      var hash = new Hash(Converter.TritsToTrytes(hashTrits));
+        hash = new Hash(Converter.TritsToTrytes(hashTrits));
+      }
 
       return new Transaction
                {
-                 Address = trytes.GetChunk<Address>(2187, Address.Length),
-                 Hash = hash,
-                 SignatureFragment = trytes.GetChunk(0, 2187),
-                 Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()),
-                 ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length),
-                 Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()),
-                 CurrentIndex = Converter.TritsToInt(trytes.GetChunk(2331, 9).ToTrits()),
-                 LastIndex = Converter.TritsToInt(trytes.GetChunk(2340, 9).ToTrits()),
-                 BundleHash = trytes.GetChunk<Hash>(2349, Hash.Length),
-                 TrunkTransaction = trytes.GetChunk<Hash>(2430, Hash.Length),
-                 BranchTransaction = trytes.GetChunk<Hash>(2511, Hash.Length),
-                 Tag = trytes.GetChunk<Tag>(2592, Tag.Length),
-                 Nonce = trytes.GetChunk<Tag>(2646, Tag.Length),
-                 AttachmentTimestamp = Converter.TritsToInt(trytes.GetChunk(2619, 9).ToTrits()),
-                 AttachmentTimestampLowerBound = Converter.TritsToInt(trytes.GetChunk(2628, 9).ToTrits()),
-                 AttachmentTimestampUpperBound = Converter.TritsToInt(trytes.GetChunk(2637, 9).ToTrits()),
+                 Address = trytes.GetChunk<Address>(2187, Address.Length), 
+                 Hash = hash, 
+                 SignatureFragment = trytes.GetChunk(0, 2187), 
+                 Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()), 
+                 ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length), 
+                 Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()), 
+                 CurrentIndex = Converter.TritsToInt(trytes.GetChunk(2331, 9).ToTrits()), 
+                 LastIndex = Converter.TritsToInt(trytes.GetChunk(2340, 9).ToTrits()), 
+                 BundleHash = trytes.GetChunk<Hash>(2349, Hash.Length), 
+                 TrunkTransaction = trytes.GetChunk<Hash>(2430, Hash.Length), 
+                 BranchTransaction = trytes.GetChunk<Hash>(2511, Hash.Length), 
+                 Tag = trytes.GetChunk<Tag>(2592, Tag.Length), 
+                 Nonce = trytes.GetChunk<Tag>(2646, Tag.Length), 
+                 AttachmentTimestamp = Converter.TritsToInt(trytes.GetChunk(2619, 9).ToTrits()), 
+                 AttachmentTimestampLowerBound = Converter.TritsToInt(trytes.GetChunk(2628, 9).ToTrits()), 
+                 AttachmentTimestampUpperBound = Converter.TritsToInt(trytes.GetChunk(2637, 9).ToTrits()), 
                };
     }
 
@@ -158,15 +159,26 @@
     /// <returns>
     /// The <see cref="string"/>.
     /// </returns>
-    public string ToTrytes()
+    public string SignatureValidationTrytes()
     {
-      var currentIndexTrits = Converter.IntToTrits(this.CurrentIndex, 27);
-      var valueTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Value.ToString(CultureInfo.InvariantCulture)), 81);
-      var timestampTrits = Converter.ConvertBigIntToTrits(new BigInteger(this.Timestamp.ToString(CultureInfo.InvariantCulture)), 27);
-      var lastIndexTrits = Converter.IntToTrits(this.LastIndex, 27);
+      return this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value + this.Timestamp.ToTrytes(27).Value
+             + this.CurrentIndex.ToTrytes(27).Value + this.LastIndex.ToTrytes(27).Value;
+    }
 
-      return this.Address.Value + Converter.TritsToTrytes(valueTrits) + this.ObsoleteTag.Value + Converter.TritsToTrytes(timestampTrits)
-             + Converter.TritsToTrytes(currentIndexTrits) + Converter.TritsToTrytes(lastIndexTrits);
+    /// <summary>
+    /// The to trytes.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="TransactionTrytes"/>.
+    /// </returns>
+    public TransactionTrytes ToTrytes()
+    {
+      return
+        new TransactionTrytes(
+          this.SignatureFragment.Value + this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value
+          + this.Timestamp.ToTrytes(27).Value + this.CurrentIndex.ToTrytes(27).Value + this.LastIndex.ToTrytes(27).Value + this.BundleHash.Value
+          + this.TrunkTransaction.Value + this.BranchTransaction.Value + this.Tag.Value + this.AttachmentTimestamp.ToTrytes(27).Value
+          + this.AttachmentTimestampLowerBound.ToTrytes(27).Value + this.AttachmentTimestampUpperBound.ToTrytes(27).Value + this.Nonce.Value);
     }
 
     #endregion

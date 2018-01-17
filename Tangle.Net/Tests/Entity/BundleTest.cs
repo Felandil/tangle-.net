@@ -29,12 +29,12 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 29 },
         new TryteString(), 
         Tag.Empty, 
-        999999999L);
+        999999999);
       bundle.AddTransaction(
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y") { Balance = 13 },
         new TryteString(),
         Tag.Empty, 
-        999999999L);
+        999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -72,7 +72,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
         new TryteString(),
         Tag.Empty, 
-        999999999L);
+        999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -111,10 +111,10 @@
                        };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
       bundle.Finalize();
 
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
     }
 
     /// <summary>
@@ -129,7 +129,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
         new TryteString(),
         Tag.Empty, 
-        999999999L);
+        999999999);
 
       bundle.Finalize();
 
@@ -157,7 +157,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
         new TryteString(),
         Tag.Empty, 
-        999999999L);
+        999999999);
 
       bundle.Finalize();
 
@@ -176,7 +176,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
         new TryteString(),
         Tag.Empty, 
-        999999999L);
+        999999999);
 
       bundle.Finalize();
       bundle.Finalize();
@@ -220,7 +220,7 @@
                        };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
 
       Assert.AreEqual(2, bundle.Transactions.Count);
 
@@ -249,7 +249,7 @@
                        };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
 
       Assert.AreEqual(1, bundle.Transactions.Count);
     }
@@ -269,7 +269,7 @@
                        };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
     }
 
     /// <summary>
@@ -298,7 +298,7 @@
       };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -337,7 +337,7 @@
       };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -369,7 +369,7 @@
       };
 
       var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999L);
+      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -409,7 +409,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
         new TryteString("ASDF"),
         Tag.Empty,
-        999999999L);
+        999999999);
 
       bundle.Sign(new KeyGeneratorStub());
     }
@@ -425,7 +425,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
         new TryteString("ASDF"),
         Tag.Empty,
-        999999999L);
+        999999999);
 
       bundle.AddInput(
         new List<Address>
@@ -468,7 +468,7 @@
         new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
         new TryteString("ASDF"),
         Tag.Empty,
-        999999999L);
+        999999999);
 
       bundle.AddInput(
         new List<Address>

@@ -95,7 +95,7 @@
     <Compile Include="Source\Repository\IIotaRepository.cs" />
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
     <Compile Include="Source\Utils\NodeCommands.cs" />
-    <Compile Include="Source\Utils\StringExtensions.cs" />
+    <Compile Include="Source\Utils\Extensions.cs" />
     <Compile Include="Tests\Cryptography\AddressGeneratorTest.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />
@@ -116,7 +116,6 @@
     <Compile Include="Tests\Entity\TryteStringTest.cs" />
     <Compile Include="Tests\Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="Tests\Utils\AsciiToTrytesTest.cs" />
-    <Compile Include="Tests\Utils\ExtensionTests.cs" />
     <Compile Include="Tests\Utils\InputValidatorTest.cs" />
     <Compile Include="Source\Utils\AsciiToTrytes.cs" />
     <Compile Include="Source\Utils\InputValidator.cs" />

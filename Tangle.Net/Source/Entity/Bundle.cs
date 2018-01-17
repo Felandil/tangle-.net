@@ -28,7 +28,7 @@
     /// <summary>
     /// Gets the balance.
     /// </summary>
-    public long Balance
+    public int Balance
     {
       get
       {
@@ -116,7 +116,7 @@
     /// <param name="timestamp">
     /// The timestamp.
     /// </param>
-    public void AddTransaction(Address address, TryteString message, Tag tag, long timestamp)
+    public void AddTransaction(Address address, TryteString message, Tag tag, int timestamp)
     {
       if (this.Hash != null)
       {
@@ -195,7 +195,7 @@
           this.Transactions[i].CurrentIndex = i;
           this.Transactions[i].LastIndex = this.Transactions.Count - 1;
 
-          var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].ToTrytes());
+          var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].SignatureValidationTrytes());
           kerl.Absorb(transactionTrits);
         }
 

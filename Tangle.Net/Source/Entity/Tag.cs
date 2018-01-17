@@ -12,7 +12,7 @@
     /// <summary>
     /// The length.
     /// </summary>
-    public new const int Length = 27;
+    public const int Length = 27;
 
     #endregion
 

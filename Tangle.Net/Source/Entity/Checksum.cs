@@ -14,7 +14,7 @@
     /// <summary>
     /// The length.
     /// </summary>
-    public new const int Length = 9;
+    public const int Length = 9;
 
     #endregion
 
