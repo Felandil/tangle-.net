@@ -27,17 +27,17 @@
     /// <summary>
     /// Gets or sets the attachment timestamp.
     /// </summary>
-    public int AttachmentTimestamp { get; set; }
+    public long AttachmentTimestamp { get; set; }
 
     /// <summary>
     /// Gets or sets the attachment timestamp lower bound.
     /// </summary>
-    public int AttachmentTimestampLowerBound { get; set; }
+    public long AttachmentTimestampLowerBound { get; set; }
 
     /// <summary>
     /// Gets or sets the attachment timestamp upper bound.
     /// </summary>
-    public int AttachmentTimestampUpperBound { get; set; }
+    public long AttachmentTimestampUpperBound { get; set; }
 
     /// <summary>
     /// Gets or sets the branch transaction.
@@ -92,7 +92,7 @@
     /// <summary>
     /// Gets or sets the timestamp.
     /// </summary>
-    public int Timestamp { get; set; }
+    public long Timestamp { get; set; }
 
     /// <summary>
     /// Gets or sets the trunk transaction.
@@ -102,7 +102,7 @@
     /// <summary>
     /// Gets or sets the value.
     /// </summary>
-    public int Value { get; set; }
+    public long Value { get; set; }
 
     #endregion
 

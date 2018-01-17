@@ -65,7 +65,7 @@
     /// <summary>
     /// Gets or sets the balance.
     /// </summary>
-    public int Balance { get; set; }
+    public long Balance { get; set; }
 
     /// <summary>
     /// Gets the checksum.

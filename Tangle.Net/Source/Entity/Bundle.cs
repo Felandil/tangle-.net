@@ -28,7 +28,7 @@
     /// <summary>
     /// Gets the balance.
     /// </summary>
-    public int Balance
+    public long Balance
     {
       get
       {
@@ -116,7 +116,7 @@
     /// <param name="timestamp">
     /// The timestamp.
     /// </param>
-    public void AddTransaction(Address address, TryteString message, Tag tag, int timestamp)
+    public void AddTransaction(Address address, TryteString message, Tag tag, long timestamp)
     {
       if (this.Hash != null)
       {
