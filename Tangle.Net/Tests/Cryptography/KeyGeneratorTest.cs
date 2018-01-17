@@ -33,7 +33,7 @@
     public void TestGetKeysWithHigherSecurityLevel()
     {
       var keyGenerator = new KeyGenerator(new Seed("TESTSEED9DONTUSEINPRODUCTION99999TPXGCGPRTMI9QQNCW9PKWTAAOPYHU9999999999999999999"));
-      var privateKey = keyGenerator.GetKeys(1, 2, 2);
+      var privateKey = keyGenerator.GetKeys(1, 2, SecurityLevel.Medium);
 
       Assert.AreEqual(
         "IQOTORFDCOZORDLUUQAXXNFCILODCMVOOEJEGUCZTSFMQONYDALBCAD9YETATQRRRFAHUAHU9VARQZPFWVLRUPXXPGDTQJDVJBMUMOBXFMEKFNGOIKUMZBIGNJGLWCPPCHHX"
@@ -81,7 +81,7 @@
     public void TestGetKeyWithHigherSecurityLevel()
     {
       var keyGenerator = new KeyGenerator(new Seed("TESTSEED9DONTUSEINPRODUCTION99999TPXGCGPRTMI9QQNCW9PKWTAAOPYHU9999999999999999999"));
-      var privateKey = keyGenerator.GetKey(1, 2);
+      var privateKey = keyGenerator.GetKey(1, SecurityLevel.Medium);
 
       Assert.AreEqual(
         "IQOTORFDCOZORDLUUQAXXNFCILODCMVOOEJEGUCZTSFMQONYDALBCAD9YETATQRRRFAHUAHU9VARQZPFWVLRUPXXPGDTQJDVJBMUMOBXFMEKFNGOIKUMZBIGNJGLWCPPCHHX"

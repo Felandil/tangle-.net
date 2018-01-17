@@ -1,6 +1,10 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
-  using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+  using System.Threading;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Source.Entity;
 
@@ -20,7 +24,7 @@
     /// <param name="securityLevel">
     /// The security level.
     /// </param>
-    public AddressGenerator(Seed seed, int securityLevel = 2)
+    public AddressGenerator(Seed seed, int securityLevel = Cryptography.SecurityLevel.Medium)
     {
       this.Seed = seed;
       this.SecurityLevel = securityLevel;
@@ -28,16 +32,12 @@
 
     #endregion
 
-    #region Public Properties
+    #region Properties
 
     /// <summary>
     /// Gets or sets the security level.
     /// </summary>
     private int SecurityLevel { get; set; }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the seed.
@@ -73,6 +73,37 @@
       address.SecurityLevel = digest.SecurityLevel;
 
       return address;
+    }
+
+    /// <summary>
+    /// The get addresses.
+    /// </summary>
+    /// <param name="startIndex">
+    /// The start index.
+    /// </param>
+    /// <param name="count">
+    /// The count.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> GetAddresses(int startIndex, int count)
+    {
+      var result = new List<Address>();
+
+      // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
+      startIndex--;
+      Parallel.For(
+        0,
+        count,
+        i =>
+          {
+            startIndex++;
+            result.Add(this.GetAddress(startIndex));
+          });
+
+      // sort by index to ensure correct order
+      return result.OrderBy(a => a.KeyIndex).ToList();
     }
 
     #endregion

@@ -62,27 +62,13 @@
     /// <param name="index">
     /// The index.
     /// </param>
-    /// <returns>
-    /// The <see cref="IPrivateKey"/>.
-    /// </returns>
-    public IPrivateKey GetKey(int index)
-    {
-      return this.GetKey(index, 1);
-    }
-
-    /// <summary>
-    /// The get key.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
     /// <param name="securityLevel">
     /// The security level.
     /// </param>
     /// <returns>
     /// The <see cref="IPrivateKey"/>.
     /// </returns>
-    public IPrivateKey GetKey(int index, int securityLevel)
+    public IPrivateKey GetKey(int index, int securityLevel = SecurityLevel.Low)
     {
       if (index < 0)
       {
@@ -144,7 +130,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public List<IPrivateKey> GetKeys(int index, int count, int securityLevel)
+    public List<IPrivateKey> GetKeys(int index, int count, int securityLevel = SecurityLevel.Low)
     {
       if (count < 1)
       {
@@ -159,23 +145,6 @@
       }
 
       return keys;
-    }
-
-    /// <summary>
-    /// The get keys.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<IPrivateKey> GetKeys(int index, int count)
-    {
-      return this.GetKeys(index, count, 1);
     }
 
     #endregion
