@@ -3,6 +3,7 @@
   using System;
   using System.Collections;
   using System.Collections.Generic;
+  using System.Linq;
 
   using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Utils;
@@ -138,6 +139,26 @@
     }
 
     /// <summary>
+    /// The to string.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public override string ToString()
+    {
+      var messageTrytes = this.Value;
+      if (this.Value.Last() != '9')
+      {
+        return AsciiToTrytes.FromString(messageTrytes);
+      }
+
+      messageTrytes = messageTrytes.TrimEnd(new[] { '9' });
+      messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
+
+      return AsciiToTrytes.FromTrytes(messageTrytes);
+    }
+
+    /// <summary>
     /// The to trits.
     /// </summary>
     /// <returns>
@@ -160,10 +181,7 @@
     /// </param>
     protected void Pad(int length)
     {
-      while (this.TrytesLength < length)
-      {
-        this.Value += '9';
-      }
+      this.Value = this.Value.PadRight(length, '9');
     }
 
     #endregion

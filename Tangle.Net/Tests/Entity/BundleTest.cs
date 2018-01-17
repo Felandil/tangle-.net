@@ -5,7 +5,6 @@
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Utils;
   using Tangle.Net.Tests.Cryptography;
@@ -16,7 +15,200 @@
   [TestClass]
   public class BundleTest
   {
+    #region Fields
+
+    /// <summary>
+    /// The bundle.
+    /// </summary>
+    private Bundle bundle;
+
+    #endregion
+
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The setup.
+    /// </summary>
+    [TestInitialize]
+    public void Setup()
+    {
+      this.bundle = new Bundle();
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = new Fragment(), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999A9PG9AXCQANAWGJBTFWEAEQCN9WBZB9BJAIIY9UDLIGFOAA"), 
+            CurrentIndex = 0, 
+            LastIndex = 7, 
+            Value = 0, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = new Fragment("OHCFVELH9GYEMHCF9GPHBGIEWHZFU"), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999HAA9UAMHCGKEUGYFUBIARAXBFASGLCHCBEVGTBDCSAEBTBM"), 
+            CurrentIndex = 1, 
+            LastIndex = 7, 
+            Value = 10, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = Fragment.FromString("Hello, world!"), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999D99HEAM9XADCPFJDFANCIHR9OBDHTAGGE9TGCI9EO9ZCRBN"), 
+            CurrentIndex = 2, 
+            LastIndex = 7, 
+            Value = 20, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment =
+              new Fragment(
+              "LAQBCDCDSCEAADCDFDBDXCBDVCQALAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDEAPCHDEA9DPCGDHDSALAOBFDSASASAEAQBCDCDSCEAADCDFDBDXCBDVCQAEAYBEANBTCTCDDEACCWCCDIDVCWCHDQALAEAGDPCXCSCEAVBCDCDBDEDIDPCKD9DEABDTCFDJDCDIDGD9DMDSALANBCDEAMDCDIDEAWCPCJDTCSASASAEATCFDQAEAHDWCPCHDEAXCGDSASASALASASASAEAPCBDEAPCBDGDKDTCFDEAUCCDFDEAMDCDIDIBLAEAXCBDHDTCFDFDIDDDHDTCSCEANBTCTCDDEACCWCCDIDVCWCHDEAADPCYCTCGDHDXCRCPC9D9DMDSAEALAHCTCGDSAEASBEAWCPCJDTCSALACCWCTCEAHDKDCDEAADTCBDEAGDWCXCJDTCFDTCSCEAKDXCHDWCEATCLDDDTCRCHDPCBDRCMDSAEACCWCTCXCFDEAKDPCXCHDXCBDVCEAWCPCSCEABDCDHDEAQCTCTCBDEAXCBDEAJDPCXCBDSALACCWCTCFDTCEAFDTCPC9D9DMDEAXCGDEACDBDTCIBLAEAQCFDTCPCHDWCTCSCEAZBWCCDIDRCWCVCSALACCWCTCFDTCEAFDTCPC9D9DMDEAXCGDEACDBDTCQALAEARCCDBDUCXCFDADTCSCEANBTCTCDDEACCWCCDIDVCWCHDSALACCCDEAOBJDTCFDMDHDWCXCBDVCIBEACCCDEAHDWCTCEAVCFDTCPCHDEA9CIDTCGDHDXCCDBDEACDUCEAVBXCUCTCQAEAHDWCTCEADCBDXCJDTCFDGDTCEAPCBDSCEAOBJDTCFDMDHDWCXCBDVCIBLALAHCTCGDSALAEALBCDHDWCEACDUCEAHDWCTCEAADTCBDEAWCPCSCEAQCTCTCBDEAHDFDPCXCBDTCSCEAUCCDFDEAHDWCXCGDEAADCDADTCBDHDEBEAHDWCTCXCFDEA9DXCJDTCGDEAWCPCSCEAQCTCTCBDEAPCEAEADDFDTCDDPCFDPCHDXCCDBDEAUCCDFDEAXCHDEBEAHDWCTCMDEAWCPCSCEAQCTCTCBDEAGDTC9DTCRCHDTCSCEAPCHDEAQCXCFDHDWCEAPCGDEAHDWCCDGDTCEAKDWCCDEAKDCDID9DSCEAEAKDXCHDBDTCGDGDEAHDWCTCEAPCBDGDKDTCFDEBEAQCIDHDEATCJDTCBDEAGDCDEAHDWCTCMDEAUCCDIDBDSCEAHDWCTCADGDTC9DJDTCGDEAVCPCGDDDXCBDVCEAPCBDSCEAGDEDIDXCFDADXCBDVCEA9DXCZCTCEATCLDRCXCHDTCSCEARCWCXC9DSCFDTCBDSALAKBBDSCEAMDCDIDLAFDTCEAFDTCPCSCMDEAHDCDEAVCXCJDTCEAXCHDEAHDCDEAIDGDIBLAEAIDFDVCTCSCEAVBCDCDBDEDIDPCKD9DSALASBEAPCADSALALAXBCDKDIBLALAXBCDKDQALAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDSACCWCTCMDEAQCCDHDWCEA9DXCRCZCTCSCEAHDWCTCXCFDEASCFDMDEA9DXCDDGDSALACCWCCDIDVCWCEASBEASCCDBDLAHDEAHDWCXCBDZCQALAEAPCSCSCTCSCEANBTCTCDDEACCWCCDIDVCWCHDQAEALAHDWCPCHDEAMDCDIDLAFDTCEAVCCDXCBDVCEAHDCDEA9DXCZCTCEAXCHDSALALANBCDTCGDBDLAHDEAADPCHDHDTCFDQALAEAGDPCXCSCEAZBWCCDIDRCWCVCSAEALAFCTCEAADIDGDHDEAZCBDCDKDEAXCHDFAEAXBCDKDFALALAXBCDKDIBLAEATCBDEDIDXCFDTCSCEANBTCTCDDEACCWCCDIDVCWCHDSALAHCTCGDFAEAXBCDKDFALALAKB9D9DEAFDXCVCWCHDQALAEAGDPCXCSCEAHDWCTCEARCCDADDDIDHDTCFDEAPCBDSCEAGDTCHDHD9DTCSCEAXCBDHDCDEAGDXC9DTCBDRCTCEAPCVCPCXCBDSAEACCWCTCEAHDKDCDEAADTCBDEAUCXCSCVCTCHDTCSCSAEACCWCTCEAHDTCBDGDXCCDBDEAKDPCGDEAI"), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999A9PG9AXCQANAWGJBTFWEAEQCN9WBZB9BJAIIY9UDLIGFOAA"), 
+            CurrentIndex = 3, 
+            LastIndex = 7, 
+            Value = 30, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment =
+              new Fragment(
+              "DBDQCTCPCFDPCQC9DTCSALAHCCDIDLAFDTCEAFDTCPC9D9DMDEABDCDHDEAVCCDXCBDVCEAHDCDEA9DXCZCTCEAXCHDQALAEACDQCGDTCFDJDTCSCEANBTCTCDDEACCWCCDIDVCWCHDSALACCTC9D9DEAIDGDFALALAKB9D9DEAFDXCVCWCHDQALAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDSAEALACCWCTCEAKBBDGDKDTCFDEAHDCDEAHDWCTCEAQBFDTCPCHDEA9CIDTCGDHDXCCDBDSASASALALAHCTCGDIBLALAYBUCEAVBXCUCTCQAEAHDWCTCEADCBDXCJDTCFDGDTCEAPCBDSCEAOBJDTCFDMDHDWCXCBDVCSASASALAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDSALAHCTCGDIBIBLALASBGDSASASALALAHCTCGDIBFALALAPBCDFDHDMDRAHDKDCDQALAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDQAEAKDXCHDWCEAXCBDUCXCBDXCHDTCEAADPCYCTCGDHDMDEAPCBDSCEARCPC9DADSA"),
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999A9PG9AXCQANAWGJBTFWEAEQCN9WBZB9BJAIIY9UDLIGFOAA"),
+            CurrentIndex = 4,
+            LastIndex = 7,
+            Value = 0,
+            BranchTransaction = new Hash(),
+            BundleHash = new Hash(),
+            Hash = new Hash(),
+            Nonce = new Tag(),
+            TrunkTransaction = new Hash(),
+            Tag = new Tag(),
+            AttachmentTimestamp = 1485020456,
+            AttachmentTimestampLowerBound = 1485020456,
+            AttachmentTimestampUpperBound = 1485020456,
+            Timestamp = 1485020456,
+            ObsoleteTag = new Tag()
+          });
+
+      // Make the signature look like a message, so we can verify that
+      // the Bundle skips it correctly.
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
+            CurrentIndex = 5, 
+            LastIndex = 7, 
+            Value = -100, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      // Make the signature look like a message, so we can verify that
+      // the Bundle skips it correctly.
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
+            CurrentIndex = 6, 
+            LastIndex = 7, 
+            Value = 0, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+
+      this.bundle.Transactions.Add(
+        new Transaction
+          {
+            Fragment = Fragment.FromString("I can haz change?"), // Yes PyOTA you can!
+            Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999FFYALHN9ACYCP99GZBSDK9CECFI9RAIH9BRCCAHAIAWEFAN"), 
+            CurrentIndex = 7, 
+            LastIndex = 7, 
+            Value = 40, 
+            BranchTransaction = new Hash(), 
+            BundleHash = new Hash(), 
+            Hash = new Hash(), 
+            Nonce = new Tag(), 
+            TrunkTransaction = new Hash(), 
+            Tag = new Tag(), 
+            AttachmentTimestamp = 1485020456, 
+            AttachmentTimestampLowerBound = 1485020456, 
+            AttachmentTimestampUpperBound = 1485020456, 
+            Timestamp = 1485020456, 
+            ObsoleteTag = new Tag()
+          });
+    }
 
     /// <summary>
     /// The test add inputs covers the exact amount spent should create correct transaction count.
@@ -24,19 +216,13 @@
     [TestMethod]
     public void TestAddInputsCoversTheExactAmountSpentShouldCreateCorrectTransactionCount()
     {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 29 },
-        new TryteString(), 
-        Tag.Empty, 
-        999999999);
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y") { Balance = 13 },
-        new TryteString(),
-        Tag.Empty, 
-        999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 29 } });
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y") { Balance = 13 } });
 
-      bundle.AddInput(
+      this.bundle.AddInput(
         new List<Address>
           {
             new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
@@ -54,11 +240,11 @@
           });
 
       // since balance and spent tokens are even, this should be ignored
-      bundle.AddRemainder(new Address("TESTVALUE9DONTUSEINPRODUCTION99999KAFGVCIBLHS9JBZCEFDELEGFDCZGIEGCPFEIQEYGA9UFPAE"));
+      this.bundle.AddRemainder(new Address("TESTVALUE9DONTUSEINPRODUCTION99999KAFGVCIBLHS9JBZCEFDELEGFDCZGIEGCPFEIQEYGA9UFPAE"));
 
-      bundle.Finalize();
+      this.bundle.Finalize();
 
-      Assert.AreEqual(4, bundle.Transactions.Count);
+      Assert.AreEqual(4, this.bundle.Transactions.Count);
     }
 
     /// <summary>
@@ -67,14 +253,11 @@
     [TestMethod]
     public void TestAddInputsWithSecurityLevelHigherThanOneShouldAddMultipleTransactionsToHoldSignature()
     {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
-        new TryteString(),
-        Tag.Empty, 
-        999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
 
-      bundle.AddInput(
+      this.bundle.AddInput(
         new List<Address>
           {
             new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
@@ -91,9 +274,225 @@
               }
           });
 
-      bundle.Finalize();
+      this.bundle.Finalize();
 
-      Assert.AreEqual(6, bundle.Transactions.Count);
+      Assert.AreEqual(6, this.bundle.Transactions.Count);
+    }
+
+    /// <summary>
+    /// The test bundle has unspent inputs should notbe finalizable.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void TestBundleHasInsufficientInputsShouldNotBeFinalizable()
+    {
+      var transfer = new Transfer
+                       {
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = new TryteString(), 
+                         Tag = Tag.Empty
+                       };
+
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
+
+      this.bundle.AddInput(
+        new List<Address>
+          {
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
+              {
+                Balance = 40, 
+                KeyIndex = 0, 
+                SecurityLevel = 1
+              }
+          });
+
+      Assert.AreEqual(2, this.bundle.Balance);
+
+      this.bundle.Finalize();
+    }
+
+    /// <summary>
+    /// The test bundle has no transactions should throw exception on finalize.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestBundleHasNoTransactionsShouldThrowExceptionOnFinalize()
+    {
+      this.bundle = new Bundle();
+      this.bundle.Finalize();
+    }
+
+    /// <summary>
+    /// The test bundle has unspent inputs but remainder is given should be finalizable.
+    /// </summary>
+    [TestMethod]
+    public void TestBundleHasUnspentInputsButRemainderIsGivenShouldBeFinalizable()
+    {
+      var transfer = new Transfer
+                       {
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = new TryteString(), 
+                         Tag = Tag.Empty
+                       };
+
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
+
+      this.bundle.AddInput(
+        new List<Address>
+          {
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
+              {
+                Balance = 42, 
+                KeyIndex = 0, 
+                SecurityLevel = 1
+              }, 
+            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
+              {
+                Balance = 2, 
+                KeyIndex = 2, 
+                SecurityLevel = 1
+              }
+          });
+
+      this.bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
+
+      this.bundle.Finalize();
+
+      Assert.AreEqual(0, this.bundle.Balance);
+      Assert.AreEqual(4, this.bundle.Transactions.Count);
+    }
+
+    /// <summary>
+    /// The test bundle has unspent inputs should notbe finalizable.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void TestBundleHasUnspentInputsShouldNotBeFinalizable()
+    {
+      var transfer = new Transfer
+                       {
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = new TryteString("ASDF"), 
+                         Tag = Tag.Empty
+                       };
+
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
+
+      this.bundle.AddInput(
+        new List<Address>
+          {
+            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
+              {
+                Balance = 42, 
+                KeyIndex = 0, 
+                SecurityLevel = 1
+              }, 
+            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
+              {
+                Balance = 2, 
+                KeyIndex = 2, 
+                SecurityLevel = 1
+              }
+          });
+
+      Assert.AreEqual(-2, this.bundle.Balance);
+
+      this.bundle.Finalize();
+    }
+
+    /// <summary>
+    /// The test bundle is finalized should apply signing fragment.
+    /// </summary>
+    [TestMethod]
+    public void TestBundleIsFinalizedShouldApplySigningFragmentAndNoExtraTransactionsForSecurityLevelOne()
+    {
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+
+      this.bundle.AddInput(
+        new List<Address>
+          {
+            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
+              {
+                Balance = 40, 
+                KeyIndex = 1, 
+                SecurityLevel = 1
+              }, 
+            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
+              {
+                Balance = 2, 
+                KeyIndex = 2, 
+                SecurityLevel = 1
+              }
+          });
+
+      this.bundle.Finalize();
+      this.bundle.Sign(new KeyGeneratorStub());
+
+      Assert.AreEqual(3, this.bundle.Transactions.Count);
+
+      Assert.IsTrue(this.bundle.Transactions[0].Fragment.Value == new Fragment().Value);
+
+      for (var i = 1; i < this.bundle.Transactions.Count; i++)
+      {
+        Assert.IsTrue(!string.IsNullOrEmpty(this.bundle.Transactions[i].Fragment.Value));
+      }
+    }
+
+    /// <summary>
+    /// The test bundle is finalized should apply signing fragment and with extra transactions for security level above one.
+    /// </summary>
+    [TestMethod]
+    public void TestBundleIsFinalizedShouldApplySigningFragmentAndWithExtraTransactionsForSecurityLevelAboveOne()
+    {
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+
+      this.bundle.AddInput(
+        new List<Address>
+          {
+            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
+              {
+                Balance = 40, 
+                KeyIndex = 1, 
+                SecurityLevel = 2
+              }, 
+            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
+              {
+                Balance = 2, 
+                KeyIndex = 2, 
+                SecurityLevel = 3
+              }
+          });
+
+      this.bundle.Finalize();
+      this.bundle.Sign(new KeyGeneratorStub());
+
+      Assert.AreEqual(6, this.bundle.Transactions.Count);
+
+      Assert.IsTrue(this.bundle.Transactions[0].Fragment.Value == new Fragment().Value);
+
+      for (var i = 1; i < this.bundle.Transactions.Count; i++)
+      {
+        Assert.IsTrue(!string.IsNullOrEmpty(this.bundle.Transactions[i].Fragment.Value));
+      }
     }
 
     /// <summary>
@@ -105,16 +504,20 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
-                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Address =
+                           new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = TryteString.FromString(GetSuperLongMessage()), 
                          Tag = Tag.Empty
                        };
 
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
-      bundle.Finalize();
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
+      this.bundle.Finalize();
 
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
+      this.bundle.AddTransaction(transfer);
     }
 
     /// <summary>
@@ -124,16 +527,13 @@
     [ExpectedException(typeof(InvalidOperationException))]
     public void TestBundleIsFinalizedShouldThrowExceptionOnAddInput()
     {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
-        new TryteString(),
-        Tag.Empty, 
-        999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
 
-      bundle.Finalize();
+      this.bundle.Finalize();
 
-      bundle.AddInput(
+      this.bundle.AddInput(
         new List<Address>
           {
             new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
@@ -152,16 +552,13 @@
     [ExpectedException(typeof(InvalidOperationException))]
     public void TestBundleIsFinalizedShouldThrowExceptionOnAddRemainder()
     {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
-        new TryteString(),
-        Tag.Empty, 
-        999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
 
-      bundle.Finalize();
+      this.bundle.Finalize();
 
-      bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
+      this.bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
     }
 
     /// <summary>
@@ -171,15 +568,42 @@
     [ExpectedException(typeof(InvalidOperationException))]
     public void TestBundleIsFinalizedShouldThrowExceptionOnFinalize()
     {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 },
-        new TryteString(),
-        Tag.Empty, 
-        999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
 
-      bundle.Finalize();
-      bundle.Finalize();
+      this.bundle.Finalize();
+      this.bundle.Finalize();
+    }
+
+    /// <summary>
+    /// The test bundle is not finalized should not be signable.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void TestBundleIsNotFinalizedShouldNotBeSignable()
+    {
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+
+      this.bundle.Sign(new KeyGeneratorStub());
+    }
+
+    /// <summary>
+    /// The test get messages.
+    /// </summary>
+    [TestMethod]
+    public void TestGetMessages()
+    {
+      var messages = this.bundle.GetMessages();
+
+      Assert.AreEqual(4, messages.Count);
+
+      Assert.AreEqual(GetSuperLongMessage(), messages[0]);
+      // Assert.AreEqual("祝你好运\x15", messages[1]); Ignore non UTF8 characters.
+      Assert.AreEqual("Hello, world!", messages[2]);
+      Assert.AreEqual("I can haz change?", messages[3]);
     }
 
     /// <summary>
@@ -190,20 +614,20 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address("9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ"),
+                         Address = new Address("9XV9RJGFJJZWITDPKSQXRTHCKJAIZZY9BYLBEQUXUNCLITRQDR9CCD99AANMXYEKD9GLJGVB9HIAGRIBQ"), 
                          Tag = new Tag("PPDIDNQDJZGUQKOWJ9JZRCKOVGP"), 
                          Timestamp = 1509136296, 
                          Message = new TryteString("JKAHSAAS")
                        };
 
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, transfer.Timestamp);
-      bundle.Finalize();
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
+      this.bundle.Finalize();
 
-      Assert.AreEqual(1, bundle.Transactions.Count);
-      Assert.AreEqual("ZTDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].ObsoleteTag.Value);
-      Assert.AreEqual("PPDIDNQDJZGUQKOWJ9JZRCKOVGP", bundle.Transactions[0].Tag.Value);
-      Assert.AreEqual("NYSJSEGCWESDAFLIFCNJFWGZ9PCYDOT9VCSALKBD9UUNKBJAJCB9KVMTHZDPRDDXC9UFJQBJBQFUPJKFC", bundle.Hash.Value);
+      Assert.AreEqual(1, this.bundle.Transactions.Count);
+      Assert.AreEqual("ZTDIDNQDJZGUQKOWJ9JZRCKOVGP", this.bundle.Transactions[0].ObsoleteTag.Value);
+      Assert.AreEqual("PPDIDNQDJZGUQKOWJ9JZRCKOVGP", this.bundle.Transactions[0].Tag.Value);
+      Assert.AreEqual("NYSJSEGCWESDAFLIFCNJFWGZ9PCYDOT9VCSALKBD9UUNKBJAJCB9KVMTHZDPRDDXC9UFJQBJBQFUPJKFC", this.bundle.Hash.Value);
     }
 
     /// <summary>
@@ -214,22 +638,26 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
-                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = TryteString.FromString(GetSuperLongMessage()), 
                          Tag = Tag.Empty
                        };
 
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
 
-      Assert.AreEqual(2, bundle.Transactions.Count);
+      Assert.AreEqual(2, this.bundle.Transactions.Count);
 
-      var transactionOne = bundle.Transactions[0];
+      var transactionOne = this.bundle.Transactions[0];
       Assert.AreEqual(transfer.Address, transactionOne.Address);
       Assert.AreEqual(transfer.Tag, transactionOne.Tag);
       Assert.AreEqual(transfer.Address.Balance, transactionOne.Value);
 
-      var transactionTwo = bundle.Transactions[1];
+      var transactionTwo = this.bundle.Transactions[1];
       Assert.AreEqual(transfer.Address, transactionTwo.Address);
       Assert.AreEqual(transfer.Tag, transactionTwo.Tag);
       Assert.AreEqual(0, transactionTwo.Value);
@@ -243,15 +671,19 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
-                         Message = TryteString.FromString("Hello World!"),
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = 42
+                             }, 
+                         Message = TryteString.FromString("Hello World!"), 
                          Tag = Tag.Empty
                        };
 
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
 
-      Assert.AreEqual(1, bundle.Transactions.Count);
+      Assert.AreEqual(1, this.bundle.Transactions.Count);
     }
 
     /// <summary>
@@ -263,241 +695,17 @@
     {
       var transfer = new Transfer
                        {
-                         Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = -42 },
-                         Message = TryteString.FromString(GetSuperLongMessage()),
+                         Address =
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                             {
+                               Balance = -42
+                             }, 
+                         Message = TryteString.FromString(GetSuperLongMessage()), 
                          Tag = Tag.Empty
                        };
 
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
-    }
-
-    /// <summary>
-    /// The test bundle has no transactions should throw exception on finalize.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void TestBundleHasNoTransactionsShouldThrowExceptionOnFinalize()
-    {
-      var bundle = new Bundle();
-      bundle.Finalize();
-    }
-
-    /// <summary>
-    /// The test bundle has unspent inputs should notbe finalizable.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
-    public void TestBundleHasUnspentInputsShouldNotBeFinalizable()
-    {
-      var transfer = new Transfer
-      {
-        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
-        Message = new TryteString("ASDF"),
-        Tag = Tag.Empty
-      };
-
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
-
-      bundle.AddInput(
-        new List<Address>
-          {
-            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
-              {
-                Balance = 42,
-                KeyIndex = 0,
-                SecurityLevel = 1
-              },
-            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
-              {
-                Balance = 2,
-                KeyIndex = 2,
-                SecurityLevel = 1
-              }
-          });
-
-      Assert.AreEqual(-2, bundle.Balance);
-
-      bundle.Finalize();
-    }
-
-    /// <summary>
-    /// The test bundle has unspent inputs should notbe finalizable.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
-    public void TestBundleHasInsufficientInputsShouldNotBeFinalizable()
-    {
-      var transfer = new Transfer
-      {
-        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
-        Message = new TryteString(),
-        Tag = Tag.Empty
-      };
-
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
-
-      bundle.AddInput(
-        new List<Address>
-          {
-            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
-              {
-                Balance = 40,
-                KeyIndex = 0,
-                SecurityLevel = 1
-              }
-          });
-
-      Assert.AreEqual(2, bundle.Balance);
-
-      bundle.Finalize();
-    }
-
-    /// <summary>
-    /// The test bundle has unspent inputs but remainder is given should be finalizable.
-    /// </summary>
-    [TestMethod]
-    public void TestBundleHasUnspentInputsButRemainderIsGivenShouldBeFinalizable()
-    {
-      var transfer = new Transfer
-      {
-        Address = new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") { Balance = 42 },
-        Message = new TryteString(),
-        Tag = Tag.Empty
-      };
-
-      var bundle = new Bundle();
-      bundle.AddTransaction(transfer.Address, transfer.Message, transfer.Tag, 999999999);
-
-      bundle.AddInput(
-        new List<Address>
-          {
-            new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD")
-              {
-                Balance = 42,
-                KeyIndex = 0,
-                SecurityLevel = 1
-              },
-            new Address("XXYRPQ9BDZGKZZQLYNSBDD9HZLI9OFRK9TZCTU9PFAJYXZIZGO9BWLOCNGVMTLFQFMGJWYRMLXSCW9UTQ")
-              {
-                Balance = 2,
-                KeyIndex = 2,
-                SecurityLevel = 1
-              }
-          });
-
-
-      bundle.AddRemainder(new Address("NVGLHFZWLEQAWBDJXCWJBMVBVNXEG9DALNBTAYMKEMMJ9BCDVVHJJLSTQW9JEJXUUX9JNFGALBNASRDUD"));
-
-      bundle.Finalize();
-
-      Assert.AreEqual(0, bundle.Balance);
-      Assert.AreEqual(4, bundle.Transactions.Count);
-    }
-
-    /// <summary>
-    /// The test bundle is not finalized should not be signable.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
-    public void TestBundleIsNotFinalizedShouldNotBeSignable()
-    {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
-        new TryteString("ASDF"),
-        Tag.Empty,
-        999999999);
-
-      bundle.Sign(new KeyGeneratorStub());
-    }
-
-    /// <summary>
-    /// The test bundle is finalized should apply signing fragment.
-    /// </summary>
-    [TestMethod]
-    public void TestBundleIsFinalizedShouldApplySigningFragmentAndNoExtraTransactionsForSecurityLevelOne()
-    {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
-        new TryteString("ASDF"),
-        Tag.Empty,
-        999999999);
-
-      bundle.AddInput(
-        new List<Address>
-          {
-            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
-              {
-                Balance = 40, 
-                KeyIndex = 1, 
-                SecurityLevel = 1
-              }, 
-            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
-              {
-                Balance = 2, 
-                KeyIndex = 2, 
-                SecurityLevel = 1
-              }
-          });
-
-      bundle.Finalize();
-      bundle.Sign(new KeyGeneratorStub());
-
-      Assert.AreEqual(3, bundle.Transactions.Count);
-
-      Assert.IsTrue(bundle.Transactions[0].SignatureFragment == null);
-
-      for (var i = 1; i < bundle.Transactions.Count; i++)
-      {
-        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment.Value));
-      }
-    }
-
-    /// <summary>
-    /// The test bundle is finalized should apply signing fragment and with extra transactions for security level above one.
-    /// </summary>
-    [TestMethod]
-    public void TestBundleIsFinalizedShouldApplySigningFragmentAndWithExtraTransactionsForSecurityLevelAboveOne()
-    {
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 },
-        new TryteString("ASDF"),
-        Tag.Empty,
-        999999999);
-
-      bundle.AddInput(
-        new List<Address>
-          {
-            new Address("KHWHSTISMVVSDCOMHVFIFCTINWZT9EHJUATYSMCXDSMZXPL9KXREBBYHJGRBCYVGPJQEHEDPXLBDJNQNX")
-              {
-                Balance = 40, 
-                KeyIndex = 1, 
-                SecurityLevel = 2
-              }, 
-            new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
-              {
-                Balance = 2, 
-                KeyIndex = 2, 
-                SecurityLevel = 3
-              }
-          });
-
-      bundle.Finalize();
-      bundle.Sign(new KeyGeneratorStub());
-
-      Assert.AreEqual(6, bundle.Transactions.Count);
-
-      Assert.IsTrue(bundle.Transactions[0].SignatureFragment == null);
-
-      for (var i = 1; i < bundle.Transactions.Count; i++)
-      {
-        Assert.IsTrue(!string.IsNullOrEmpty(bundle.Transactions[i].SignatureFragment.Value));
-      }
+      this.bundle = new Bundle();
+      this.bundle.AddTransaction(transfer);
     }
 
     #endregion

@@ -160,7 +160,7 @@
       for (var i = 0; i < this.SecurityLevel; i++)
       {
         var transaction = bundle.Transactions[i + startIndex];
-        transaction.SignatureFragment = signatureFragments[i];
+        transaction.Fragment = signatureFragments[i];
       }
     }
 

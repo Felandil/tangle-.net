@@ -112,6 +112,17 @@
     }
 
     /// <summary>
+    /// The to string.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public override string ToString()
+    {
+      return this.Value;
+    }
+
+    /// <summary>
     /// The to trytes.
     /// </summary>
     /// <returns>

@@ -86,7 +86,7 @@
     <Compile Include="Source\DataTransfer\NodeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Entity\Seed.cs" />
-    <Compile Include="Source\Entity\SignatureFragment.cs" />
+    <Compile Include="Source\Entity\Fragment.cs" />
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
     <Compile Include="Source\DataTransfer\Transactions.cs" />

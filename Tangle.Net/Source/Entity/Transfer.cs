@@ -5,6 +5,18 @@
   /// </summary>
   public class Transfer
   {
+    #region Constructors and Destructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Transfer"/> class.
+    /// </summary>
+    public Transfer()
+    {
+      this.Tag = new Tag();
+    }
+
+    #endregion
+
     #region Public Properties
 
     /// <summary>

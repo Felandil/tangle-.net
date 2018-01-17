@@ -8,15 +8,6 @@
   /// </summary>
   public class Transaction
   {
-    #region Constants
-
-    /// <summary>
-    /// The max message length.
-    /// </summary>
-    public const int MaxMessageLength = 2187;
-
-    #endregion
-
     #region Public Properties
 
     /// <summary>
@@ -65,11 +56,6 @@
     public int LastIndex { get; set; }
 
     /// <summary>
-    /// Gets or sets the message.
-    /// </summary>
-    public TryteString Message { get; set; }
-
-    /// <summary>
     /// Gets or sets the nonce.
     /// </summary>
     public Tag Nonce { get; set; }
@@ -82,7 +68,7 @@
     /// <summary>
     /// Gets or sets the signature fragments.
     /// </summary>
-    public SignatureFragment SignatureFragment { get; set; }
+    public Fragment Fragment { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.
@@ -136,7 +122,7 @@
                {
                  Address = trytes.GetChunk<Address>(2187, Address.Length), 
                  Hash = hash, 
-                 SignatureFragment = trytes.GetChunk<SignatureFragment>(0, 2187), 
+                 Fragment = trytes.GetChunk<Fragment>(0, 2187), 
                  Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()), 
                  ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length), 
                  Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()), 
@@ -175,7 +161,7 @@
     {
       return
         new TransactionTrytes(
-          this.SignatureFragment.Value + this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value
+          this.Fragment.Value + this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value
           + this.Timestamp.ToTrytes(27).Value + this.CurrentIndex.ToTrytes(27).Value + this.LastIndex.ToTrytes(27).Value + this.BundleHash.Value
           + this.TrunkTransaction.Value + this.BranchTransaction.Value + this.Tag.Value + this.AttachmentTimestamp.ToTrytes(27).Value
           + this.AttachmentTimestampLowerBound.ToTrytes(27).Value + this.AttachmentTimestampUpperBound.ToTrytes(27).Value + this.Nonce.Value);

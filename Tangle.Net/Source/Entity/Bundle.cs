@@ -5,6 +5,7 @@
   using System.Linq;
 
   using Tangle.Net.Source.Cryptography;
+  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The bundle.
@@ -42,12 +43,18 @@
     /// <summary>
     /// Gets the hash.
     /// </summary>
-    public Hash Hash { get; private set; }
+    public Hash Hash
+    {
+      get
+      {
+        return this.Transactions.Count > 0 ? this.Transactions[0].BundleHash : null;
+      }
+    }
 
     /// <summary>
-    /// Gets the transactions.
+    /// Gets or sets the transactions.
     /// </summary>
-    public List<Transaction> Transactions { get; private set; }
+    public List<Transaction> Transactions { get; set; }
 
     #endregion
 
@@ -104,41 +111,40 @@
     /// <summary>
     /// The add entry.
     /// </summary>
-    /// <param name="address">
-    /// The address.
+    /// <param name="transfer">
+    /// The transfer.
     /// </param>
-    /// <param name="message">
-    /// The message.
-    /// </param>
-    /// <param name="tag">
-    /// The tag.
-    /// </param>
-    /// <param name="timestamp">
-    /// The timestamp.
-    /// </param>
-    public void AddTransaction(Address address, TryteString message, Tag tag, long timestamp)
+    public void AddTransaction(Transfer transfer)
     {
       if (this.Hash != null)
       {
         throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
-      if (address.Balance < 0)
+      if (transfer.Address.Balance < 0)
       {
         throw new ArgumentException("Use AddInputs add transfers for spending tokens.");
       }
 
-      if (message.TrytesLength > Transaction.MaxMessageLength)
+      if (transfer.Message != null && transfer.Message.TrytesLength > Fragment.Length)
       {
         var i = 0;
-        while (message.TrytesLength > 0)
+        while (transfer.Message.TrytesLength > 0)
         {
-          var chunkLength = message.TrytesLength > Transaction.MaxMessageLength ? Transaction.MaxMessageLength : message.TrytesLength;
-          var fragment = message.GetChunk(0, chunkLength);
+          var chunkLength = transfer.Message.TrytesLength > Fragment.Length ? Fragment.Length : transfer.Message.TrytesLength;
+          var fragment = transfer.Message.GetChunk<Fragment>(0, chunkLength);
           this.Transactions.Add(
-            new Transaction { Address = address, Message = fragment, ObsoleteTag = tag, Timestamp = timestamp, Value = i == 0 ? address.Balance : 0, Tag = tag });
+            new Transaction
+              {
+                Address = transfer.Address, 
+                Fragment = fragment, 
+                ObsoleteTag = transfer.Tag, 
+                Timestamp = transfer.Timestamp, 
+                Value = i == 0 ? transfer.Address.Balance : 0, 
+                Tag = transfer.Tag
+              });
 
-          message = message.GetChunk(chunkLength, message.TrytesLength - chunkLength);
+          transfer.Message = transfer.Message.GetChunk(chunkLength, transfer.Message.TrytesLength - chunkLength);
 
           i++;
         }
@@ -146,7 +152,15 @@
       else
       {
         this.Transactions.Add(
-          new Transaction { Address = address, Message = message, ObsoleteTag = tag, Timestamp = timestamp, Value = address.Balance, Tag = tag });
+          new Transaction
+            {
+              Address = transfer.Address, 
+              Fragment = new Fragment(transfer.Message == null ? string.Empty : transfer.Message.Value), 
+              ObsoleteTag = transfer.Tag, 
+              Timestamp = transfer.Timestamp, 
+              Value = transfer.Address.Balance, 
+              Tag = transfer.Tag
+            });
       }
     }
 
@@ -217,11 +231,47 @@
       }
       while (!valid);
 
-      this.Hash = bundleHash;
       foreach (var transaction in this.Transactions)
       {
-        transaction.BundleHash = this.Hash;
+        transaction.BundleHash = bundleHash;
       }
+    }
+
+    /// <summary>
+    /// The get messages.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<string> GetMessages()
+    {
+      var messages = new List<string>();
+      var groupTransactions = this.GroupTransactions();
+      foreach (var transactionGroup in groupTransactions)
+      {
+        if (transactionGroup[0].Value < 0)
+        {
+          continue;
+        }
+
+        var messageTrytes = string.Empty;
+        foreach (var transaction in transactionGroup)
+        {
+          if (!transaction.Fragment.IsEmpty)
+          {
+            messageTrytes += transaction.Fragment.Value;
+          }
+        }
+
+        var message = new TryteString(messageTrytes);
+
+        if (!string.IsNullOrEmpty(message.Value))
+        {
+          messages.Add(message.ToString());
+        }
+      }
+
+      return messages;
     }
 
     /// <summary>
@@ -257,6 +307,21 @@
           i += 1;
         }
       }
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// The group transactions.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    private List<List<Transaction>> GroupTransactions()
+    {
+      return this.Transactions.GroupBy(t => t.Address.Value).Select(group => group.Select(transaction => transaction).ToList()).ToList();
     }
 
     #endregion

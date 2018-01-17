@@ -51,9 +51,9 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public List<SignatureFragment> Generate()
+    public List<Fragment> Generate()
     {
-      var result = new List<SignatureFragment>();
+      var result = new List<Fragment>();
       var normalizedHash = Hash.Normalize(this.Hash);
 
       var i = 0;
@@ -80,7 +80,7 @@
           finalizedSignatureFragmentTrits.AddRange(buffer);
         }
 
-        result.Add(new SignatureFragment(Converter.TritsToTrytes(finalizedSignatureFragmentTrits.ToArray())));
+        result.Add(new Fragment(Converter.TritsToTrytes(finalizedSignatureFragmentTrits.ToArray())));
 
         i++;
       }
