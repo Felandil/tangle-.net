@@ -46,7 +46,6 @@
     public static TryteString ToTrytes(this long value, int padding)
     {
       // TODO: this is ugly. create conversion method for long within converter
-
       return
         new TryteString(
           Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value.ToString(CultureInfo.InvariantCulture)), padding)));

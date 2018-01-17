@@ -82,7 +82,7 @@
     /// <summary>
     /// Gets or sets the signature fragments.
     /// </summary>
-    public TryteString SignatureFragment { get; set; }
+    public SignatureFragment SignatureFragment { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.
@@ -136,7 +136,7 @@
                {
                  Address = trytes.GetChunk<Address>(2187, Address.Length), 
                  Hash = hash, 
-                 SignatureFragment = trytes.GetChunk(0, 2187), 
+                 SignatureFragment = trytes.GetChunk<SignatureFragment>(0, 2187), 
                  Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()), 
                  ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length), 
                  Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()), 

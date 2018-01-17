@@ -44,7 +44,7 @@
     {
       for (var i = startIndex; i < bundle.Transactions.Count(); i++)
       {
-        bundle.Transactions[i].SignatureFragment = new TryteString("SOMESIGNATUREFRAGMENTWILLBEGENERATEDHERE");
+        bundle.Transactions[i].SignatureFragment = new SignatureFragment("SOMESIGNATUREFRAGMENTWILLBEGENERATEDHERE");
       }
     }
 
