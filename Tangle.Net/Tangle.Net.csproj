@@ -74,6 +74,7 @@
     <Compile Include="Source\Cryptography\PrivateKey.cs" />
     <Compile Include="Source\Cryptography\SecurityLevel.cs" />
     <Compile Include="Source\Cryptography\SignatureFragmentGenerator.cs" />
+    <Compile Include="Source\DataTransfer\TransactionsToApprove.cs" />
     <Compile Include="Source\Entity\Address.cs" />
     <Compile Include="Source\DataTransfer\AddressBalances.cs" />
     <Compile Include="Source\Entity\Bundle.cs" />

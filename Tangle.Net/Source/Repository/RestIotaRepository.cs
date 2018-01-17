@@ -15,15 +15,6 @@
   /// </summary>
   public class RestIotaRepository : IIotaRepository
   {
-    #region Static Fields
-
-    /// <summary>
-    /// The null hash trytes.
-    /// </summary>
-    private static readonly string NullHashTrytes = string.Concat(Enumerable.Repeat("9", 244));
-
-    #endregion
-
     #region Constructors and Destructors
 
     /// <summary>
@@ -105,6 +96,28 @@
       return
         this.ExecuteParameterizedCommand<Transactions>(
           new Dictionary<string, object> { { "command", "findTransactions" }, { "addresses", NormalizeAddresses(addresses) } });
+    }
+
+    /// <summary>
+    /// The get transactions to approve.
+    /// </summary>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionsToApprove"/>.
+    /// </returns>
+    public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
+    {
+      var result =  
+        this.ExecuteParameterizedCommand<Dictionary<string, object>>(
+          new Dictionary<string, object> { { "command", "getTransactionsToApprove" }, { "depth", depth } });
+
+      return new TransactionsToApprove
+               {
+                 BranchTransaction = new Hash(result.First(entry => entry.Key == "branchTransaction").Value.ToString()),
+                 TrunkTransaction = new Hash(result.First(entry => entry.Key == "trunkTransaction").Value.ToString())
+               };
     }
 
     /// <summary>

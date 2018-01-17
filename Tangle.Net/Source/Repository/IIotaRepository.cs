@@ -55,6 +55,17 @@
     Transactions GetTransactionsByAddresses(IEnumerable<string> addresses);
 
     /// <summary>
+    /// The get transactions to approve.
+    /// </summary>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionsToApprove"/>.
+    /// </returns>
+    TransactionsToApprove GetTransactionsToApprove(int depth = 27);
+
+    /// <summary>
     /// The send transfers.
     /// </summary>
     /// <param name="seed">

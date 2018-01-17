@@ -22,7 +22,8 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
+      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+      var transactionsToApprove = repository.GetTransactionsToApprove();
       var nodeInfo = repository.GetNodeInfo();
       var neighbours = repository.GetNeighbors();
       var transactions =
