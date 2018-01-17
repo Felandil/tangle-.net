@@ -12,7 +12,7 @@ The project was set up a little different from most (except the python one) IOTA
 
 ## Development Cycle
 
-If you want to contribute at the moment, please feel free to bombard me with testcases via Slack (@felandil). 
+If you want to contribute at the moment, please feel free to bombard me with testcases via Discord (@Felandil). 
 As soon as the library reaches a stable status (or one which I am happy with) you can also contribute Code if you want to. 
 
 Current development focuses on getting things from the python lib (I found it to be much cleaner than the JAVA one) into this.
@@ -40,7 +40,7 @@ If you want to use the package for your own development I suggest to to check it
 ## Note
 
 The project is still in development. Therefore breaking changes may occur.
-You can reach me via iota slack (@felandil) if you've got any questions.
+You can reach me via iota Discord (@Felandil) if you've got any questions.
 
 ## Donate
 
