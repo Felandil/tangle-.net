@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Tests.Repository
 {
+  using System;
   using System.Collections.Generic;
   using System.Net;
 
@@ -23,6 +24,118 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The test find transactions does not contain parameters should throw exception.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestFindTransactionsDoesNotContainParametersShouldThrowException()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      var repository = new RestIotaRepository(restClientMock.Object);
+      repository.FindTransactions(new Dictionary<string, IEnumerable<TryteString>>());
+    }
+
+    /// <summary>
+    /// The test find transactions parameters include invalid parameter names should throw exception.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestFindTransactionsParametersIncludeInvalidParameterNamesShouldThrowException()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      var repository = new RestIotaRepository(restClientMock.Object);
+      repository.FindTransactions(new Dictionary<string, IEnumerable<TryteString>> { { "invalid", new List<TryteString>() } });
+    }
+
+    /// <summary>
+    /// The test find transactions with given parameters but some are empty should throw exception.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestFindTransactionsWithGivenParametersButSomeAreEmptyShouldThrowException()
+    {
+      var restClientMock = new Mock<IRestClient>();
+
+      var repository = new RestIotaRepository(restClientMock.Object);
+      repository.FindTransactions(
+        new Dictionary<string, IEnumerable<TryteString>>
+          {
+            { "bundles", new List<TryteString>() }, 
+            { "addresses", new List<TryteString>() }, 
+            { "tags", new List<TryteString>() }, 
+            { "approvees", new List<TryteString>() }
+          });
+    }
+
+    /// <summary>
+    /// The test find transactions parameters include invalid parameter names should throw exception.
+    /// </summary>
+    [TestMethod]
+    public void TestFindTransactionsWithValidParametersShouldReturnHashes()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      restClientMock.Setup(r => r.Execute<GetTransactionsResponse>(It.IsAny<IRestRequest>())).Returns(
+        () =>
+          {
+            var restResponse = new RestResponse<GetTransactionsResponse>
+                                 {
+                                   StatusCode = HttpStatusCode.OK, 
+                                   Data =
+                                     new GetTransactionsResponse
+                                       {
+                                         Hashes =
+                                           new List<string>
+                                             {
+                                               "EJEAOOZYSAWFPZQESYDHZCGYNSTWXUMVJOVDWUNZJXDGWCLUFGIMZRMGCAZGKNPLBRLGUNYWKLJTYEAQX"
+                                             }
+                                       }
+                                 };
+            return restResponse;
+          });
+
+      var repository = new RestIotaRepository(restClientMock.Object);
+      var transactions =
+        repository.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>>
+            {
+              {
+                "bundles", 
+                new List<TryteString>
+                  {
+                    new TryteString(
+                      "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                  }
+              }, 
+              {
+                "addresses", 
+                new List<TryteString>
+                  {
+                    new TryteString(
+                      "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                  }
+              }, 
+              {
+                "tags", 
+                new List<TryteString>
+                  {
+                    new TryteString(
+                      "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                  }
+              }, 
+              {
+                "approvees", 
+                new List<TryteString>
+                  {
+                    new TryteString(
+                      "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
+                  }
+              }
+            });
+
+      Assert.AreEqual("EJEAOOZYSAWFPZQESYDHZCGYNSTWXUMVJOVDWUNZJXDGWCLUFGIMZRMGCAZGKNPLBRLGUNYWKLJTYEAQX", transactions.Hashes[0].Value);
+    }
+
+    /// <summary>
     /// The test get balances should include all parameters.
     /// </summary>
     [TestMethod]
@@ -31,26 +144,31 @@
       var restClientMock = new Mock<IRestClient>();
       restClientMock.Setup(r => r.Execute<GetBalanceResponse>(It.IsAny<IRestRequest>())).Returns(
         () =>
-        {
-          var restResponse = new RestResponse<GetBalanceResponse>
           {
-            StatusCode = HttpStatusCode.OK,
-            Data =
-              new GetBalanceResponse
-              {
-                Balances = new List<long> { 10000 },
-                Duration = 100,
-                MilestoneIndex = 38274234,
-                References = new List<string> { "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB" }
-              }
-          };
-          return restResponse;
-        });
+            var restResponse = new RestResponse<GetBalanceResponse>
+                                 {
+                                   StatusCode = HttpStatusCode.OK, 
+                                   Data =
+                                     new GetBalanceResponse
+                                       {
+                                         Balances = new List<long> { 10000 }, 
+                                         Duration = 100, 
+                                         MilestoneIndex = 38274234, 
+                                         References =
+                                           new List<string>
+                                             {
+                                               "RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"
+                                             }
+                                       }
+                                 };
+            return restResponse;
+          });
 
       var repository = new RestIotaRepository(restClientMock.Object);
-      var balances = repository.GetBalances(
-        new List<Address> { new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") }, 
-        100);
+      var balances =
+        repository.GetBalances(
+          new List<Address> { new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB") }, 
+          100);
 
       Assert.AreEqual(10000, balances.Addresses[0].Balance);
       Assert.AreEqual(100, balances.Duration);
@@ -232,14 +350,14 @@
           {
             var restResponse = new RestResponse<GetTransactionsToApproveResponse>
                                  {
-                                   StatusCode = HttpStatusCode.OK,
+                                   StatusCode = HttpStatusCode.OK, 
                                    Data =
                                      new GetTransactionsToApproveResponse
                                        {
                                          BranchTransaction =
-                                           "TKGDZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999",
+                                           "TKGDZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", 
                                          TrunkTransaction =
-                                           "ASDFZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999",
+                                           "ASDFZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", 
                                          Duration = 1000
                                        }
                                  };
@@ -249,8 +367,12 @@
       var repository = new RestIotaRepository(restClientMock.Object);
       var transactionsToApprove = repository.GetTransactionsToApprove();
 
-      Assert.AreEqual("TKGDZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", transactionsToApprove.BranchTransaction.Value);
-      Assert.AreEqual("ASDFZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", transactionsToApprove.TrunkTransaction.Value);
+      Assert.AreEqual(
+        "TKGDZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", 
+        transactionsToApprove.BranchTransaction.Value);
+      Assert.AreEqual(
+        "ASDFZ9GEI9CPNQGHEATIISAKYPPPSXVCXBSR9EIWCTHHSSEQCD9YLDPEXYERCNJVASRGWMAVKFQTC9999", 
+        transactionsToApprove.TrunkTransaction.Value);
       Assert.AreEqual(1000, transactionsToApprove.Duration);
     }
 

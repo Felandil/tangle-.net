@@ -1,6 +1,5 @@
 ﻿namespace Tangle.Net.Source.Repository
 {
-  using System;
   using System.Collections.Generic;
 
   using Tangle.Net.Source.DataTransfer;
@@ -13,6 +12,61 @@
   public interface IIotaRepository
   {
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The find transactions.
+    /// </summary>
+    /// <param name="parameters">
+    /// The parameters.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters);
+
+    /// <summary>
+    /// The get transactions by addresses.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetTransactionsResponse"/>.
+    /// </returns>
+    TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses);
+
+    /// <summary>
+    /// The find transactions by approvees.
+    /// </summary>
+    /// <param name="approveeHashes">
+    /// The approvee hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes);
+
+    /// <summary>
+    /// The find transactions by bundles.
+    /// </summary>
+    /// <param name="bundleHashes">
+    /// The bundle hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes);
+
+    /// <summary>
+    /// The find transactions by tags.
+    /// </summary>
+    /// <param name="tags">
+    /// The tags.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags);
 
     /// <summary>
     /// The get balances.
@@ -43,17 +97,6 @@
     /// The <see cref="NodeInfo"/>.
     /// </returns>
     NodeInfo GetNodeInfo();
-
-    /// <summary>
-    /// The get transactions by addresses.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="GetTransactionsResponse"/>.
-    /// </returns>
-    TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses);
 
     /// <summary>
     /// The get transactions to approve.

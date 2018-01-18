@@ -18,7 +18,7 @@ The project was set up a little different from most (except the python one) IOTA
 | getNodeInfo               | Yes             |   
 | getTransactionsToApprove  | Yes             |
 | getBalances				| Yes    		  |
-| findTransactions			| Partially       |
+| findTransactions			| Yes	          |
 
 
 ## Development Cycle

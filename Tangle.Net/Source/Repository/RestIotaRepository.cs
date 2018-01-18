@@ -10,13 +10,21 @@
   using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository.Responses;
-  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The rest tangle repository.
   /// </summary>
   public class RestIotaRepository : IIotaRepository
   {
+    #region Fields
+
+    /// <summary>
+    /// The valid find transaction parameters.
+    /// </summary>
+    private readonly string[] validFindTransactionParameters = { "addresses", "tags", "approvees", "bundles" };
+
+    #endregion
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -42,6 +50,107 @@
     #endregion
 
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The find transactions.
+    /// </summary>
+    /// <param name="parameters">
+    /// The parameters.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    public TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters)
+    {
+      if (parameters.Count == 0)
+      {
+        throw new ArgumentException("At least one parameter must be set.");
+      }
+
+      if (!parameters.Any(p => this.validFindTransactionParameters.Contains(p.Key)))
+      {
+        throw new ArgumentException("A parameters seems to be invalid.");
+      }
+
+      foreach (var parameter in parameters.Where(parameter => !parameter.Value.Any()))
+      {
+        throw new ArgumentException("Parameter '" + parameter.Key + "' does not contain values!");
+      }
+
+      var command = new Dictionary<string, object> { { "command", NodeCommands.FindTransactions } };
+
+      foreach (var parameter in parameters)
+      {
+        command.Add(parameter.Key, parameter.Value.Select(value => value.Value).ToString());
+      }
+
+      var result = this.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
+
+      return new TransactionHashList { Hashes = result.Hashes.ConvertAll(hash => new Hash(hash)) };
+    }
+
+    /// <summary>
+    /// The get transactions by addresses.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetTransactionsResponse"/>.
+    /// </returns>
+    public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
+    {
+      return
+        this.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>> { { "addresses", addresses.Select(a => new TryteString(a.Value)).ToList() } });
+    }
+
+    /// <summary>
+    /// The find transactions by approvees.
+    /// </summary>
+    /// <param name="approveeHashes">
+    /// The approvee hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    public TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes)
+    {
+      return
+        this.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>> { { "approvees", approveeHashes.Select(a => new TryteString(a.Value)).ToList() } });
+    }
+
+    /// <summary>
+    /// The find transactions by bundles.
+    /// </summary>
+    /// <param name="bundleHashes">
+    /// The bundle hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    public TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes)
+    {
+      return
+        this.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>> { { "bundles", bundleHashes.Select(a => new TryteString(a.Value)).ToList() } });
+    }
+
+    /// <summary>
+    /// The find transactions by tags.
+    /// </summary>
+    /// <param name="tags">
+    /// The tags.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionHashList"/>.
+    /// </returns>
+    public TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags)
+    {
+      return
+        this.FindTransactions(new Dictionary<string, IEnumerable<TryteString>> { { "tags", tags.Select(a => new TryteString(a.Value)).ToList() } });
+    }
 
     /// <summary>
     /// The get balances.
@@ -103,24 +212,6 @@
     }
 
     /// <summary>
-    /// The get transactions by addresses.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="GetTransactionsResponse"/>.
-    /// </returns>
-    public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
-    {
-      var result =
-        this.ExecuteParameterizedCommand<GetTransactionsResponse>(
-          new Dictionary<string, object> { { "command", NodeCommands.FindTransactions }, { "addresses", addresses.Select(a => a.Value).ToList() } });
-
-      return new TransactionHashList { Hashes = result.Hashes.ConvertAll(hash => new Hash(hash)) };
-    }
-
-    /// <summary>
     /// The get transactions to approve.
     /// </summary>
     /// <param name="depth">
@@ -159,7 +250,7 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private T ExecuteParameterizedCommand<T>(Dictionary<string, object> parameters) where T : new()
+    private T ExecuteParameterizedCommand<T>(IEnumerable<KeyValuePair<string, object>> parameters) where T : new()
     {
       var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
       request.AddHeader("X-IOTA-API-Version", "1");
