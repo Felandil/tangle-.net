@@ -15,13 +15,19 @@ The project was set up a little different from most (except the python one) IOTA
 | Operation					 | Supported (Yet) |
 | -------------------------- | --------------- | 
 | getNeighbors				 | Yes		       |
-| getNodeInfo                | Yes             |   
-| getTransactionsToApprove   | Yes             |
-| getBalances				 | Yes    		   |
+| getNodeInfo                | Yes             |
+| addNeighbors               | No              |
+| removeNeighbors            | No              |
+| getTips                    | No              |
 | findTransactions			 | Yes	           |
 | getTrytes				     | Yes			   |
+| getInclusionStates         | No              |
+| getBalances				 | Yes    		   |
+| getTransactionsToApprove   | Yes             |
 | attachToTangle			 | Yes, untested   |
 | interruptAttachingToTangle | Yes, untested   |
+| broadcastTransactions      | No              |
+| storeTransactions          | No              |
 
 
 ## Development Cycle
