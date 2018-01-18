@@ -19,7 +19,7 @@
     #region Fields
 
     /// <summary>
-    /// The valid find transaction parameters.
+    /// The valid find transactions parameters.
     /// </summary>
     private readonly string[] validFindTransactionParameters = { "addresses", "tags", "approvees", "bundles" };
 
@@ -52,34 +52,50 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The add neighbor.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="AddNeighborsResponse"/>.
+    /// </returns>
+    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
+    {
+      return
+        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
+          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+    }
+
+    /// <summary>
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
-    /// The branch transaction.
+    ///   The branch transactions.
     /// </param>
     /// <param name="trunkTransaction">
-    /// The trunk transaction.
+    ///   The trunk transactions.
     /// </param>
-    /// <param name="transaction">
-    /// The transaction.
+    /// <param name="transactions">
+    ///   The transactions.
     /// </param>
     /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
+    ///   The min weight magnitude.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    public TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, Transaction transaction, int minWeightMagnitude = 18)
+    public TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
     {
       var result =
         this.ExecuteParameterizedCommand<AttachToTangleResponse>(
           new Dictionary<string, object>
             {
-              { "command", NodeCommands.AttachToTangle }, 
+              { "command", Commands.AttachToTangle }, 
               { "trunkTransaction", trunkTransaction.ToString() }, 
               { "branchTransaction", branchTransaction.ToString() }, 
               { "minWeightMagnitude", minWeightMagnitude }, 
-              { "trytes", transaction.ToTrytes() }
+              { "trytes", transactions.Select(transaction => transaction.ToTrytes()).ToList() }
             });
 
       return new TryteString(result.Trytes);
@@ -111,7 +127,7 @@
         throw new ArgumentException("A parameters seems to not contain values!");
       }
 
-      var command = new Dictionary<string, object> { { "command", NodeCommands.FindTransactions } };
+      var command = new Dictionary<string, object> { { "command", Commands.FindTransactions } };
 
       foreach (var parameter in parameters)
       {
@@ -204,7 +220,7 @@
         this.ExecuteParameterizedCommand<GetBalanceResponse>(
           new Dictionary<string, object>
             {
-              { "command", NodeCommands.GetBalances }, 
+              { "command", Commands.GetBalances }, 
               { "addresses", addresses.Select(a => a.Value).ToList() }, 
               { "threshold", threshold }
             });
@@ -224,6 +240,38 @@
     }
 
     /// <summary>
+    /// The get inclusion states.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transactions hashes.
+    /// </param>
+    /// <param name="tips">
+    /// The tips.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, List<Hash> tips)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
+          new Dictionary<string, object>
+            {
+              { "command", Commands.GetInclusionStates }, 
+              { "transactions", transactionHashes.Select(t => t.Value).ToList() }, 
+              { "tips", tips.Select(t => t.Value).ToList() }
+            });
+
+      var inclusionStates = new Dictionary<Hash, bool>();
+      for (var i = 0; i < transactionHashes.Count(); i++)
+      {
+        inclusionStates.Add(transactionHashes[i], result.States[i]);
+      }
+
+      return new InclusionStates { States = inclusionStates, Duration = result.Duration };
+    }
+
+    /// <summary>
     /// The get neighbors.
     /// </summary>
     /// <returns>
@@ -231,7 +279,7 @@
     /// </returns>
     public NeighborList GetNeighbors()
     {
-      return this.ExecuteParameterlessCommand<NeighborList>(NodeCommands.GetNeighbors);
+      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
     }
 
     /// <summary>
@@ -242,7 +290,20 @@
     /// </returns>
     public NodeInfo GetNodeInfo()
     {
-      return this.ExecuteParameterlessCommand<NodeInfo>(NodeCommands.GetNodeInfo);
+      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
+    }
+
+    /// <summary>
+    /// The get tips.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="TipHashList"/>.
+    /// </returns>
+    public TipHashList GetTips()
+    {
+      var response = this.ExecuteParameterlessCommand<GetTipsResponse>(Commands.GetTips);
+
+      return new TipHashList { Duration = response.Duration, Hashes = response.Hashes.Select(h => new Hash(h)).ToList() };
     }
 
     /// <summary>
@@ -258,7 +319,7 @@
     {
       var result =
         this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
-          new Dictionary<string, object> { { "command", NodeCommands.GetTransactionsToApprove }, { "depth", depth } });
+          new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
                {
@@ -277,11 +338,11 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    public IEnumerable<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
     {
       var result =
         this.ExecuteParameterizedCommand<GetTrytesResponse>(
-          new Dictionary<string, object> { { "command", NodeCommands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+          new Dictionary<string, object> { { "command", Commands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
 
       return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }
@@ -291,7 +352,23 @@
     /// </summary>
     public void InterruptAttachingToTangle()
     {
-      this.Client.Execute(CreateRequest(new Dictionary<string, object> { { "command", NodeCommands.InterruptAttachingToTangle } }));
+      this.Client.Execute(CreateRequest(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } }));
+    }
+
+    /// <summary>
+    /// The remove neighbors.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="RemoveNeighborsResponse"/>.
+    /// </returns>
+    public RemoveNeighborsResponse RemoveNeighbors(List<Neighbor> neighbors)
+    {
+      return
+        this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
+          new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
     }
 
     #endregion

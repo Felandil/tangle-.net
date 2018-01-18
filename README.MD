@@ -16,12 +16,12 @@ The project was set up a little different from most (except the python one) IOTA
 | -------------------------- | --------------- | 
 | getNeighbors				 | Yes		       |
 | getNodeInfo                | Yes             |
-| addNeighbors               | No              |
-| removeNeighbors            | No              |
-| getTips                    | No              |
+| addNeighbors               | Yes, untested   |
+| removeNeighbors            | Yes, untested   |
+| getTips                    | Yes             |
 | findTransactions			 | Yes	           |
 | getTrytes				     | Yes			   |
-| getInclusionStates         | No              |
+| getInclusionStates         | Yes, untested   |
 | getBalances				 | Yes    		   |
 | getTransactionsToApprove   | Yes             |
 | attachToTangle			 | Yes, untested   |

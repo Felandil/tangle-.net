@@ -74,7 +74,9 @@
     <Compile Include="Source\Cryptography\PrivateKey.cs" />
     <Compile Include="Source\Cryptography\SecurityLevel.cs" />
     <Compile Include="Source\Cryptography\SignatureFragmentGenerator.cs" />
-    <Compile Include="Source\DataTransfer\TransactionsList.cs" />
+    <Compile Include="Source\DataTransfer\InclusionStates.cs" />
+    <Compile Include="Source\DataTransfer\TipHashList.cs" />
+    <Compile Include="Source\DataTransfer\TransactionHashList.cs" />
     <Compile Include="Source\DataTransfer\TransactionsToApprove.cs" />
     <Compile Include="Source\Entity\Address.cs" />
     <Compile Include="Source\DataTransfer\AddressWithBalances.cs" />
@@ -91,7 +93,10 @@
     <Compile Include="Source\Entity\Fragment.cs" />
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
+    <Compile Include="Source\Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />
+    <Compile Include="Source\Repository\Responses\GetInclusionStatesResponse.cs" />
+    <Compile Include="Source\Repository\Responses\GetTipsResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsResponse.cs" />
     <Compile Include="Source\Entity\TransactionTrytes.cs" />
     <Compile Include="Source\Entity\Transfer.cs" />
@@ -101,8 +106,9 @@
     <Compile Include="Source\Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="Source\Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
-    <Compile Include="Source\Repository\NodeCommands.cs" />
+    <Compile Include="Source\Repository\Commands.cs" />
     <Compile Include="Source\Utils\Extensions.cs" />
     <Compile Include="Tests\Cryptography\AddressGeneratorTest.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />

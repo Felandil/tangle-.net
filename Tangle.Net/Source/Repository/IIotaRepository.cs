@@ -14,24 +14,35 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The add neighbor.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="AddNeighborsResponse"/>.
+    /// </returns>
+    AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors);
+
+    /// <summary>
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
-    /// The branch transaction.
+    ///   The branch transactions.
     /// </param>
     /// <param name="trunkTransaction">
-    /// The trunk transaction.
+    ///   The trunk transactions.
     /// </param>
-    /// <param name="transaction">
-    /// The transaction.
+    /// <param name="transactions">
+    ///   The transactions.
     /// </param>
     /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
+    ///   The min weight magnitude.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, Transaction transaction, int minWeightMagnitude = 18);
+    TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18);
 
     /// <summary>
     /// The find transactions.
@@ -103,6 +114,20 @@
     AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100);
 
     /// <summary>
+    /// The get inclusion states.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transactions hashes.
+    /// </param>
+    /// <param name="tips">
+    /// The tips.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    InclusionStates GetInclusionStates(List<Hash> transactionHashes, List<Hash> tips);
+
+    /// <summary>
     /// The get neighbors.
     /// </summary>
     /// <returns>
@@ -117,6 +142,14 @@
     /// The <see cref="NodeInfo"/>.
     /// </returns>
     NodeInfo GetNodeInfo();
+
+    /// <summary>
+    /// The get tips.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="TipHashList"/>.
+    /// </returns>
+    TipHashList GetTips();
 
     /// <summary>
     /// The get transactions to approve.
@@ -138,12 +171,23 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
+    IEnumerable<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
 
     /// <summary>
     /// The interrupt attaching to tangle.
     /// </summary>
     void InterruptAttachingToTangle();
+
+    /// <summary>
+    /// The remove neighbors.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="RemoveNeighborsResponse"/>.
+    /// </returns>
+    RemoveNeighborsResponse RemoveNeighbors(List<Neighbor> neighbors);
 
     #endregion
   }

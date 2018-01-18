@@ -3,9 +3,14 @@
   /// <summary>
   /// The node commands.
   /// </summary>
-  public static class NodeCommands
+  public static class Commands
   {
     #region Constants
+
+    /// <summary>
+    /// The add neighbors.
+    /// </summary>
+    public const string AddNeighbors = "addNeighbors";
 
     /// <summary>
     /// The attach to tangle.
@@ -23,6 +28,11 @@
     public const string GetBalances = "getBalances";
 
     /// <summary>
+    /// The get inclusion states.
+    /// </summary>
+    public const string GetInclusionStates = "getInclusionStates";
+
+    /// <summary>
     /// The get neighbours.
     /// </summary>
     public const string GetNeighbors = "getNeighbors";
@@ -31,6 +41,11 @@
     /// The get node info.
     /// </summary>
     public const string GetNodeInfo = "getNodeInfo";
+
+    /// <summary>
+    /// The get tips.
+    /// </summary>
+    public const string GetTips = "getTips";
 
     /// <summary>
     /// The get transactions to approve.
@@ -46,6 +61,11 @@
     /// The interrupt attaching to tangle.
     /// </summary>
     public const string InterruptAttachingToTangle = "interruptAttachingToTangle";
+
+    /// <summary>
+    /// The remove neighbors.
+    /// </summary>
+    public const string RemoveNeighbors = "removeNeighbors";
 
     #endregion
   }
