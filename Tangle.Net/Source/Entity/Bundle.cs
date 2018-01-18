@@ -5,7 +5,6 @@
   using System.Linq;
 
   using Tangle.Net.Source.Cryptography;
-  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The bundle.
@@ -304,8 +303,17 @@
         }
         else
         {
+          transaction.Fragment = new Fragment();
           i += 1;
         }
+
+        // alternative to AddTrytes from js library
+        transaction.AttachmentTimestamp = 999999999;
+        transaction.AttachmentTimestampLowerBound = 999999999;
+        transaction.AttachmentTimestampUpperBound = 999999999;
+        transaction.Nonce = new Tag();
+        transaction.TrunkTransaction = new Hash();
+        transaction.BranchTransaction = new Hash();
       }
     }
 

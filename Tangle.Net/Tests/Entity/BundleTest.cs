@@ -449,9 +449,23 @@
 
       Assert.IsTrue(this.bundle.Transactions[0].Fragment.Value == new Fragment().Value);
 
+      // check if transactions got filled with empty values
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestamp == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestampLowerBound == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestampUpperBound == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].Nonce.Value == new Tag().Value);
+      Assert.IsTrue(this.bundle.Transactions[0].BranchTransaction.Value == new Hash().Value);
+      Assert.IsTrue(this.bundle.Transactions[0].TrunkTransaction.Value == new Hash().Value);
+
       for (var i = 1; i < this.bundle.Transactions.Count; i++)
       {
         Assert.IsTrue(!string.IsNullOrEmpty(this.bundle.Transactions[i].Fragment.Value));
+        Assert.IsTrue(this.bundle.Transactions[i].AttachmentTimestamp == 999999999);
+        Assert.IsTrue(this.bundle.Transactions[i].AttachmentTimestampLowerBound == 999999999);
+        Assert.IsTrue(this.bundle.Transactions[i].AttachmentTimestampUpperBound == 999999999);
+        Assert.IsTrue(this.bundle.Transactions[i].Nonce.Value == new Tag().Value);
+        Assert.IsTrue(this.bundle.Transactions[i].BranchTransaction.Value == new Hash().Value);
+        Assert.IsTrue(this.bundle.Transactions[i].TrunkTransaction.Value == new Hash().Value);
       }
     }
 
