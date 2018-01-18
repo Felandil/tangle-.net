@@ -52,6 +52,40 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The attach to tangle.
+    /// </summary>
+    /// <param name="branchTransaction">
+    /// The branch transaction.
+    /// </param>
+    /// <param name="trunkTransaction">
+    /// The trunk transaction.
+    /// </param>
+    /// <param name="transaction">
+    /// The transaction.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, Transaction transaction, int minWeightMagnitude = 18)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<AttachToTangleResponse>(
+          new Dictionary<string, object>
+            {
+              { "command", NodeCommands.AttachToTangle }, 
+              { "trunkTransaction", trunkTransaction.ToString() }, 
+              { "branchTransaction", branchTransaction.ToString() }, 
+              { "minWeightMagnitude", minWeightMagnitude }, 
+              { "trytes", transaction.ToTrytes() }
+            });
+
+      return new TryteString(result.Trytes);
+    }
+
+    /// <summary>
     /// The find transactions.
     /// </summary>
     /// <param name="parameters">
@@ -72,9 +106,9 @@
         throw new ArgumentException("A parameters seems to be invalid.");
       }
 
-      foreach (var parameter in parameters.Where(parameter => !parameter.Value.Any()))
+      if (parameters.Any(parameter => !parameter.Value.Any()))
       {
-        throw new ArgumentException("Parameter '" + parameter.Key + "' does not contain values!");
+        throw new ArgumentException("A parameters seems to not contain values!");
       }
 
       var command = new Dictionary<string, object> { { "command", NodeCommands.FindTransactions } };
@@ -234,9 +268,53 @@
                };
     }
 
+    /// <summary>
+    /// The get trytes.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetTrytesResponse>(
+          new Dictionary<string, object> { { "command", NodeCommands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+
+      return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
+    }
+
+    /// <summary>
+    /// The interrupt attaching to tangle.
+    /// </summary>
+    public void InterruptAttachingToTangle()
+    {
+      this.Client.Execute(CreateRequest(new Dictionary<string, object> { { "command", NodeCommands.InterruptAttachingToTangle } }));
+    }
+
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// The create request.
+    /// </summary>
+    /// <param name="parameters">
+    /// The parameters.
+    /// </param>
+    /// <returns>
+    /// The <see cref="RestRequest"/>.
+    /// </returns>
+    private static RestRequest CreateRequest(IEnumerable<KeyValuePair<string, object>> parameters)
+    {
+      var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
+      request.AddHeader("X-IOTA-API-Version", "1");
+      request.AddJsonBody(parameters);
+
+      return request;
+    }
 
     /// <summary>
     /// The execute command.
@@ -250,13 +328,9 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private T ExecuteParameterizedCommand<T>(IEnumerable<KeyValuePair<string, object>> parameters) where T : new()
+    private T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters) where T : new()
     {
-      var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
-      request.AddHeader("X-IOTA-API-Version", "1");
-      request.AddJsonBody(parameters);
-
-      var response = this.Client.Execute<T>(request);
+      var response = this.Client.Execute<T>(CreateRequest(parameters));
       var nullResponse = response == null;
 
       if (!nullResponse && response.StatusCode == HttpStatusCode.OK)

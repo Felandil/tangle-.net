@@ -2,9 +2,11 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
 
   using RestSharp;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository;
 
@@ -23,7 +25,14 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("http://nelson1.iota.fm:80"));
+      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+
+      var transactionTrytes =
+        repository.GetTrytes(new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+
+      var transactionData = transactionTrytes.Select(t => Transaction.FromTrytes(t)).ToList();
+
+      var transactionsToApprove = repository.GetTransactionsToApprove();
 
       var transactions =
         repository.FindTransactionsByAddresses(
@@ -36,8 +45,6 @@
               new Address("GVZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9"),
               new Address("HBBYKAKTILIPVUKFOTSLHGENPTXYBNKXZFQFR9VQFWNBMTQNRVOUKPVPRNBSZVVILMAFBKOTBLGLWLOHQ999999999")
             });
-
-      var transactionsToApprove = repository.GetTransactionsToApprove();
 
       var nodeInfo = repository.GetNodeInfo();
 

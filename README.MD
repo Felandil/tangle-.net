@@ -12,13 +12,16 @@ The project was set up a little different from most (except the python one) IOTA
 
 ## Supportet Operations
 
-| Operation					| Supported (Yet) |
-| ------------------------- | --------------- | 
-| getNeighbors				| Yes		      |
-| getNodeInfo               | Yes             |   
-| getTransactionsToApprove  | Yes             |
-| getBalances				| Yes    		  |
-| findTransactions			| Yes	          |
+| Operation					 | Supported (Yet) |
+| -------------------------- | --------------- | 
+| getNeighbors				 | Yes		       |
+| getNodeInfo                | Yes             |   
+| getTransactionsToApprove   | Yes             |
+| getBalances				 | Yes    		   |
+| findTransactions			 | Yes	           |
+| getTrytes				     | Yes			   |
+| attachToTangle			 | Yes, untested   |
+| interruptAttachingToTangle | Yes, untested   |
 
 
 ## Development Cycle

@@ -8,6 +8,11 @@
     #region Constants
 
     /// <summary>
+    /// The attach to tangle.
+    /// </summary>
+    public const string AttachToTangle = "attachToTangle";
+
+    /// <summary>
     /// The find transactions.
     /// </summary>
     public const string FindTransactions = "findTransactions";
@@ -31,6 +36,16 @@
     /// The get transactions to approve.
     /// </summary>
     public const string GetTransactionsToApprove = "getTransactionsToApprove";
+
+    /// <summary>
+    /// The get trytes.
+    /// </summary>
+    public const string GetTrytes = "getTrytes";
+
+    /// <summary>
+    /// The interrupt attaching to tangle.
+    /// </summary>
+    public const string InterruptAttachingToTangle = "interruptAttachingToTangle";
 
     #endregion
   }

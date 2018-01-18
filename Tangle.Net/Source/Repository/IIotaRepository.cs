@@ -14,6 +14,26 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The attach to tangle.
+    /// </summary>
+    /// <param name="branchTransaction">
+    /// The branch transaction.
+    /// </param>
+    /// <param name="trunkTransaction">
+    /// The trunk transaction.
+    /// </param>
+    /// <param name="transaction">
+    /// The transaction.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, Transaction transaction, int minWeightMagnitude = 18);
+
+    /// <summary>
     /// The find transactions.
     /// </summary>
     /// <param name="parameters">
@@ -108,6 +128,22 @@
     /// The <see cref="TransactionsToApprove"/>.
     /// </returns>
     TransactionsToApprove GetTransactionsToApprove(int depth = 27);
+
+    /// <summary>
+    /// The get trytes.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
+
+    /// <summary>
+    /// The interrupt attaching to tangle.
+    /// </summary>
+    void InterruptAttachingToTangle();
 
     #endregion
   }

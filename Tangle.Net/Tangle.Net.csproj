@@ -91,6 +91,7 @@
     <Compile Include="Source\Entity\Fragment.cs" />
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
+    <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsResponse.cs" />
     <Compile Include="Source\Entity\TransactionTrytes.cs" />
     <Compile Include="Source\Entity\Transfer.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Source\Repository\IriApiException.cs" />
     <Compile Include="Source\Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsToApproveResponse.cs" />
+    <Compile Include="Source\Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
     <Compile Include="Source\Repository\NodeCommands.cs" />
     <Compile Include="Source\Utils\Extensions.cs" />

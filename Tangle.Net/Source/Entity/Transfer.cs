@@ -37,7 +37,7 @@
     /// <summary>
     /// Gets or sets the timestamp.
     /// </summary>
-    public int Timestamp { get; set; }
+    public long Timestamp { get; set; }
 
     #endregion
   }
