@@ -10,9 +10,9 @@
 
   using RestSharp;
 
-  using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository;
+  using Tangle.Net.Source.Repository.DataTransfer;
   using Tangle.Net.Source.Repository.Responses;
 
   /// <summary>

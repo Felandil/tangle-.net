@@ -1,11 +1,13 @@
-﻿namespace Tangle.Net.Source.DataTransfer
+﻿namespace Tangle.Net.Source.Repository.DataTransfer
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Source.Entity;
+
   /// <summary>
-  /// The neighbor list.
+  /// The inclusion state.
   /// </summary>
-  public class NeighborList
+  public class InclusionStates
   {
     #region Public Properties
 
@@ -15,9 +17,9 @@
     public int Duration { get; set; }
 
     /// <summary>
-    /// Gets or sets the neighbors.
+    /// Gets or sets the states.
     /// </summary>
-    public List<Neighbor> Neighbors { get; set; }
+    public Dictionary<Hash, bool> States { get; set; }
 
     #endregion
   }

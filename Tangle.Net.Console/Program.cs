@@ -25,7 +25,7 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("http://iri1.iota.fm:80"));
+      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
 
       var tips = repository.GetTips();
       var inclusionsStates =

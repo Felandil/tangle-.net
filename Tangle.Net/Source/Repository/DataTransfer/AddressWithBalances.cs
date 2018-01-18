@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Source.DataTransfer
+﻿namespace Tangle.Net.Source.Repository.DataTransfer
 {
   using System.Collections.Generic;
 

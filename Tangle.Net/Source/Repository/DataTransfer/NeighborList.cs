@@ -1,13 +1,11 @@
-﻿namespace Tangle.Net.Source.DataTransfer
+﻿namespace Tangle.Net.Source.Repository.DataTransfer
 {
   using System.Collections.Generic;
 
-  using Tangle.Net.Source.Entity;
-
   /// <summary>
-  /// The tip hash list.
+  /// The neighbor list.
   /// </summary>
-  public class TipHashList
+  public class NeighborList
   {
     #region Public Properties
 
@@ -17,9 +15,9 @@
     public int Duration { get; set; }
 
     /// <summary>
-    /// Gets or sets the hashes.
+    /// Gets or sets the neighbors.
     /// </summary>
-    public List<Hash> Hashes { get; set; }
+    public List<Neighbor> Neighbors { get; set; }
 
     #endregion
   }
