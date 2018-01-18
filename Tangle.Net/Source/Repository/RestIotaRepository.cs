@@ -71,21 +71,25 @@
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
-    ///   The branch transactions.
+    /// The branch transactions.
     /// </param>
     /// <param name="trunkTransaction">
-    ///   The trunk transactions.
+    /// The trunk transactions.
     /// </param>
     /// <param name="transactions">
-    ///   The transactions.
+    /// The transactions.
     /// </param>
     /// <param name="minWeightMagnitude">
-    ///   The min weight magnitude.
+    /// The min weight magnitude.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    public TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    public List<TransactionTrytes> AttachToTangle(
+      Hash branchTransaction, 
+      Hash trunkTransaction, 
+      IEnumerable<Transaction> transactions, 
+      int minWeightMagnitude = 18)
     {
       var result =
         this.ExecuteParameterizedCommand<AttachToTangleResponse>(
@@ -98,7 +102,20 @@
               { "trytes", transactions.Select(transaction => transaction.ToTrytes()).ToList() }
             });
 
-      return new TryteString(result.Trytes);
+      return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
+    }
+
+    /// <summary>
+    /// The broadcast transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
+    {
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     /// <summary>
@@ -251,7 +268,7 @@
     /// <returns>
     /// The <see cref="InclusionStates"/>.
     /// </returns>
-    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, List<Hash> tips)
+    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
     {
       var result =
         this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
@@ -369,6 +386,19 @@
       return
         this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
           new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+    }
+
+    /// <summary>
+    /// The store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
+    {
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     #endregion

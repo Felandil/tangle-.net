@@ -26,8 +26,10 @@ The project was set up a little different from most (except the python one) IOTA
 | getTransactionsToApprove   | Yes             |
 | attachToTangle			 | Yes, untested   |
 | interruptAttachingToTangle | Yes, untested   |
-| broadcastTransactions      | No              |
-| storeTransactions          | No              |
+| broadcastTransactions      | Yes, untested   |
+| storeTransactions          | Yes, untested   |
+
+Tests to follow.
 
 
 ## Development Cycle

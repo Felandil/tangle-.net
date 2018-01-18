@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Source.Repository.Responses
 {
+  using System.Collections.Generic;
+
   /// <summary>
   /// The attach to tangle response.
   /// </summary>
@@ -10,7 +12,7 @@
     /// <summary>
     /// Gets or sets the trytes.
     /// </summary>
-    public string Trytes { get; set; }
+    public List<string> Trytes { get; set; }
 
     #endregion
   }

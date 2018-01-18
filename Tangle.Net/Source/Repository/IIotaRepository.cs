@@ -28,21 +28,33 @@
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
-    ///   The branch transactions.
+    /// The branch transactions.
     /// </param>
     /// <param name="trunkTransaction">
-    ///   The trunk transactions.
+    /// The trunk transactions.
     /// </param>
     /// <param name="transactions">
-    ///   The transactions.
+    /// The transactions.
     /// </param>
     /// <param name="minWeightMagnitude">
-    ///   The min weight magnitude.
+    /// The min weight magnitude.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    TryteString AttachToTangle(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18);
+    List<TransactionTrytes> AttachToTangle(
+      Hash branchTransaction, 
+      Hash trunkTransaction, 
+      IEnumerable<Transaction> transactions, 
+      int minWeightMagnitude = 18);
+
+    /// <summary>
+    /// The broadcast transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions);
 
     /// <summary>
     /// The find transactions.
@@ -125,7 +137,7 @@
     /// <returns>
     /// The <see cref="InclusionStates"/>.
     /// </returns>
-    InclusionStates GetInclusionStates(List<Hash> transactionHashes, List<Hash> tips);
+    InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips);
 
     /// <summary>
     /// The get neighbors.
@@ -188,6 +200,14 @@
     /// The <see cref="RemoveNeighborsResponse"/>.
     /// </returns>
     RemoveNeighborsResponse RemoveNeighbors(List<Neighbor> neighbors);
+
+    /// <summary>
+    /// The store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    void StoreTransactions(IEnumerable<TransactionTrytes> transactions);
 
     #endregion
   }

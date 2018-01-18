@@ -18,6 +18,11 @@
     public const string AttachToTangle = "attachToTangle";
 
     /// <summary>
+    /// The broadcast transactions.
+    /// </summary>
+    public const string BroadcastTransactions = "broadcastTransactions";
+
+    /// <summary>
     /// The find transactions.
     /// </summary>
     public const string FindTransactions = "findTransactions";
@@ -66,6 +71,11 @@
     /// The remove neighbors.
     /// </summary>
     public const string RemoveNeighbors = "removeNeighbors";
+
+    /// <summary>
+    /// The store transactions.
+    /// </summary>
+    public const string StoreTransactions = "storeTransactions";
 
     #endregion
   }
