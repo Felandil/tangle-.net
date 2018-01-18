@@ -2,17 +2,19 @@
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Source.Entity;
+
   /// <summary>
-  /// The transactions.
+  /// The transaction hash list.
   /// </summary>
-  public class Transactions
+  public class TransactionHashList
   {
     #region Public Properties
 
     /// <summary>
     /// Gets or sets the hashes.
     /// </summary>
-    public List<string> Hashes { get; set; }
+    public List<Hash> Hashes { get; set; }
 
     #endregion
   }

@@ -3,11 +3,13 @@
   using System;
   using System.Collections.Generic;
   using System.Linq;
+  using System.Net;
 
   using RestSharp;
 
   using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
+  using Tangle.Net.Source.Repository.Responses;
   using Tangle.Net.Source.Utils;
 
   /// <summary>
@@ -51,13 +53,31 @@
     /// The threshold.
     /// </param>
     /// <returns>
-    /// The <see cref="AddressBalances"/>.
+    /// The <see cref="AddressWithBalances"/>.
     /// </returns>
-    public AddressBalances GetBalances(IEnumerable<string> addresses, int threshold)
+    public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
     {
-      return
-        this.ExecuteParameterizedCommand<AddressBalances>(
-          new Dictionary<string, object> { { "command", "getBalances" }, { "addresses", NormalizeAddresses(addresses) }, { "threshold", threshold } });
+      var result =
+        this.ExecuteParameterizedCommand<GetBalanceResponse>(
+          new Dictionary<string, object>
+            {
+              { "command", NodeCommands.GetBalances }, 
+              { "addresses", addresses.Select(a => a.Value).ToList() }, 
+              { "threshold", threshold }
+            });
+
+      for (var i = 0; i < addresses.Count(); i++)
+      {
+        addresses[i].Balance = result.Balances[i];
+      }
+
+      return new AddressWithBalances
+               {
+                 Addresses = addresses, 
+                 Duration = result.Duration, 
+                 MilestoneIndex = result.MilestoneIndex, 
+                 References = result.References.ConvertAll(reference => new TryteString(reference))
+               };
     }
 
     /// <summary>
@@ -89,13 +109,15 @@
     /// The addresses.
     /// </param>
     /// <returns>
-    /// The <see cref="Transactions"/>.
+    /// The <see cref="GetTransactionsResponse"/>.
     /// </returns>
-    public Transactions GetTransactionsByAddresses(IEnumerable<string> addresses)
+    public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
     {
-      return
-        this.ExecuteParameterizedCommand<Transactions>(
-          new Dictionary<string, object> { { "command", "findTransactions" }, { "addresses", NormalizeAddresses(addresses) } });
+      var result =
+        this.ExecuteParameterizedCommand<GetTransactionsResponse>(
+          new Dictionary<string, object> { { "command", NodeCommands.FindTransactions }, { "addresses", addresses.Select(a => a.Value).ToList() } });
+
+      return new TransactionHashList { Hashes = result.Hashes.ConvertAll(hash => new Hash(hash)) };
     }
 
     /// <summary>
@@ -109,85 +131,21 @@
     /// </returns>
     public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
     {
-      var result =  
-        this.ExecuteParameterizedCommand<Dictionary<string, object>>(
-          new Dictionary<string, object> { { "command", "getTransactionsToApprove" }, { "depth", depth } });
+      var result =
+        this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
+          new Dictionary<string, object> { { "command", NodeCommands.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
                {
-                 BranchTransaction = new Hash(result.First(entry => entry.Key == "branchTransaction").Value.ToString()),
-                 TrunkTransaction = new Hash(result.First(entry => entry.Key == "trunkTransaction").Value.ToString())
+                 BranchTransaction = new Hash(result.BranchTransaction), 
+                 TrunkTransaction = new Hash(result.TrunkTransaction), 
+                 Duration = result.Duration
                };
-    }
-
-    /// <summary>
-    /// The send transfers.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <param name="security">
-    /// The security.
-    /// </param>
-    /// <param name="remainderAddress">
-    /// The remainder address.
-    /// </param>
-    /// <param name="transfers">
-    /// The transfers.
-    /// </param>
-    /// <param name="inputs">
-    /// The inputs.
-    /// </param>
-    /// <param name="validateInputs">
-    /// The validate inputs.
-    /// </param>
-    /// <param name="validateInputAddresses">
-    /// The validate input addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Tuple<Transaction, bool>> SendTransfers(
-      string seed, 
-      int depth, 
-      int minWeightMagnitude, 
-      int security, 
-      string remainderAddress, 
-      IReadOnlyCollection<Transfer> transfers, 
-      List<Input> inputs, 
-      bool validateInputs, 
-      bool validateInputAddresses)
-    {
-      throw new NotImplementedException();
     }
 
     #endregion
 
     #region Methods
-
-    /// <summary>
-    /// The normalize addresses.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List{String}"/>.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown if an address contains invalid characters.
-    /// </exception>
-    private static List<string> NormalizeAddresses(IEnumerable<string> addresses)
-    {
-      var normalizedAddresses = addresses.Select(a => new Address(a)).ToList();
-      return normalizedAddresses.Select(normalizedAddress => normalizedAddress.Value).ToList();
-    }
 
     /// <summary>
     /// The execute command.
@@ -208,8 +166,26 @@
       request.AddJsonBody(parameters);
 
       var response = this.Client.Execute<T>(request);
+      var nullResponse = response == null;
 
-      return response.Data;
+      if (!nullResponse && response.StatusCode == HttpStatusCode.OK)
+      {
+        return response.Data;
+      }
+
+      if (nullResponse)
+      {
+        throw new IriApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
+      }
+
+      if (response.ErrorException != null)
+      {
+        throw new IriApiException(
+          string.Format("Command {0} failed! See inner exception for details.", parameters.First(p => p.Key == "command").Value), 
+          response.ErrorException);
+      }
+
+      throw new IriApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
     }
 
     /// <summary>

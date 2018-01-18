@@ -5,6 +5,7 @@
 
   using Tangle.Net.Source.DataTransfer;
   using Tangle.Net.Source.Entity;
+  using Tangle.Net.Source.Repository.Responses;
 
   /// <summary>
   /// The TangleRepository interface.
@@ -23,9 +24,9 @@
     /// The threshold.
     /// </param>
     /// <returns>
-    /// The <see cref="AddressBalances"/>.
+    /// The <see cref="AddressWithBalances"/>.
     /// </returns>
-    AddressBalances GetBalances(IEnumerable<string> addresses, int threshold);
+    AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100);
 
     /// <summary>
     /// The get neighbors.
@@ -50,9 +51,9 @@
     /// The addresses.
     /// </param>
     /// <returns>
-    /// The <see cref="Transactions"/>.
+    /// The <see cref="GetTransactionsResponse"/>.
     /// </returns>
-    Transactions GetTransactionsByAddresses(IEnumerable<string> addresses);
+    TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses);
 
     /// <summary>
     /// The get transactions to approve.
@@ -64,50 +65,6 @@
     /// The <see cref="TransactionsToApprove"/>.
     /// </returns>
     TransactionsToApprove GetTransactionsToApprove(int depth = 27);
-
-    /// <summary>
-    /// The send transfers.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <param name="security">
-    /// The security.
-    /// </param>
-    /// <param name="remainderAddress">
-    /// The remainder address.
-    /// </param>
-    /// <param name="transfers">
-    /// The transfers.
-    /// </param>
-    /// <param name="inputs">
-    /// The inputs.
-    /// </param>
-    /// <param name="validateInputs">
-    /// The validate inputs.
-    /// </param>
-    /// <param name="validateInputAddresses">
-    /// The validate input addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    List<Tuple<Transaction, bool>> SendTransfers(
-      string seed, 
-      int depth, 
-      int minWeightMagnitude, 
-      int security, 
-      string remainderAddress, 
-      IReadOnlyCollection<Transfer> transfers, 
-      List<Input> inputs, 
-      bool validateInputs, 
-      bool validateInputAddresses);
 
     #endregion
   }

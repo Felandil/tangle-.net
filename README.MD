@@ -10,6 +10,17 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 As a C# developer it was very frustrating that the current IOTA C# lib is pretty much outdated. Therefore this project was born.
 The project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
 
+## Supportet Operations
+
+| Operation					| Supported (Yet) |
+| ------------------------- | --------------- | 
+| getNeighbors				| Yes		      |
+| getNodeInfo               | Yes             |   
+| getTransactionsToApprove  | Yes             |
+| getBalances				| Yes    		  |
+| findTransactions			| Partially       |
+
+
 ## Development Cycle
 
 If you want to contribute at the moment, please feel free to bombard me with testcases via Discord (@Felandil). 

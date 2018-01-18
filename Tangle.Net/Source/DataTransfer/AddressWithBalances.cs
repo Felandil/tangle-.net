@@ -2,17 +2,19 @@
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Source.Entity;
+
   /// <summary>
   /// The address balances.
   /// </summary>
-  public class AddressBalances
+  public class AddressWithBalances
   {
     #region Public Properties
 
     /// <summary>
     /// Gets or sets the balances.
     /// </summary>
-    public List<long> Balances { get; set; }
+    public List<Address> Addresses { get; set; }
 
     /// <summary>
     /// Gets or sets the duration.
@@ -27,7 +29,7 @@
     /// <summary>
     /// Gets or sets the references.
     /// </summary>
-    public List<string> References { get; set; }
+    public List<TryteString> References { get; set; }
 
     #endregion
   }

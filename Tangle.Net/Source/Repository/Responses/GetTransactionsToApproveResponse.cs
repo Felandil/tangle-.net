@@ -1,18 +1,16 @@
-﻿namespace Tangle.Net.Source.DataTransfer
+﻿namespace Tangle.Net.Source.Repository.Responses
 {
-  using Tangle.Net.Source.Entity;
-
   /// <summary>
-  /// The transactions to approve.
+  /// The get transactions to approve response.
   /// </summary>
-  public class TransactionsToApprove
+  public class GetTransactionsToApproveResponse
   {
     #region Public Properties
 
     /// <summary>
     /// Gets or sets the branch transaction.
     /// </summary>
-    public Hash BranchTransaction { get; set; }
+    public string BranchTransaction { get; set; }
 
     /// <summary>
     /// Gets or sets the duration.
@@ -22,7 +20,7 @@
     /// <summary>
     /// Gets or sets the trunk transaction.
     /// </summary>
-    public Hash TrunkTransaction { get; set; }
+    public string TrunkTransaction { get; set; }
 
     #endregion
   }
