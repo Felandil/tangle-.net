@@ -129,9 +129,9 @@
     <None Include="Tests\Cryptography\generate_trytes_and_multi_squeeze.csv" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\crypto\crypto.Net45.csproj">
+    <ProjectReference Include="..\Bouncy.Castle\Bouncy.Castle.csproj">
       <Project>{45473847-8af8-4baf-b768-442c6875b8cf}</Project>
-      <Name>crypto.Net45</Name>
+      <Name>Bouncy.Castle</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

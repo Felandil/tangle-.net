@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net", "Tangle.Net\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Console", "Tangle.Net.Console\Tangle.Net.Console.csproj", "{8859F79E-5075-4A03-BDCF-5AF6DB883BDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crypto.Net45", "crypto\crypto.Net45.csproj", "{45473847-8AF8-4BAF-B768-442C6875B8CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouncy.Castle", "Bouncy.Castle\Bouncy.Castle.csproj", "{45473847-8AF8-4BAF-B768-442C6875B8CF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0E74CD6-F9DB-43C3-9730-67D7AE690C11}"
 	ProjectSection(SolutionItems) = preProject
