@@ -148,7 +148,7 @@
 
       foreach (var parameter in parameters)
       {
-        command.Add(parameter.Key, parameter.Value.Select(value => value.Value).ToString());
+        command.Add(parameter.Key, parameter.Value.Select(value => value.Value).ToList());
       }
 
       var result = this.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
