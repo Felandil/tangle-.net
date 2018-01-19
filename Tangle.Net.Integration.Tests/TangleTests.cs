@@ -7,8 +7,10 @@
 
   using RestSharp;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository;
+  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The tangle tests.
@@ -21,7 +23,7 @@
     /// <summary>
     /// The repository.
     /// </summary>
-    private IIotaRepository repository;
+    private RestIotaRepository repository;
 
     #endregion
 
@@ -34,6 +36,37 @@
     public void Setup()
     {
       this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+    }
+
+    /// <summary>
+    /// The test attach to tangle.
+    /// </summary>
+    [TestMethod]
+    public void TestAttachToTangle()
+    {
+      var seed = Seed.Random();
+      var bundle = new Bundle();
+      bundle.AddTransaction(
+        new Transfer
+          {
+            Address =
+              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 }, 
+            Message = TryteString.FromString("Hello world!"), 
+            Tag = new Tag("CSHARP"), 
+            Timestamp = Timestamp.UnixSecondsTimestamp
+          });
+
+      bundle.Finalize();
+      bundle.Sign(new KeyGenerator(seed));
+
+      var transactionsToApprove = this.repository.GetTransactionsToApprove();
+      var result = this.repository.AttachToTangle(
+        transactionsToApprove.BranchTransaction, 
+        transactionsToApprove.TrunkTransaction, 
+        bundle.Transactions);
+      var resultTransactions = result.Select(t => Transaction.FromTrytes(t)).ToList();
+
+      Assert.IsTrue(resultTransactions.Any());
     }
 
     /// <summary>
@@ -94,6 +127,24 @@
     }
 
     /// <summary>
+    /// The test get balances.
+    /// </summary>
+    [TestMethod]
+    public void TestGetBalances()
+    {
+      var balances =
+        this.repository.GetBalances(
+          new List<Address>
+            {
+              new Address("GVZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9"), 
+              new Address("HBBYKAKTILIPVUKFOTSLHGENPTXYBNKXZFQFR9VQFWNBMTQNRVOUKPVPRNBSZVVILMAFBKOTBLGLWLOHQ999999999")
+            });
+
+      Assert.IsTrue(balances.Addresses.Any());
+      Assert.AreEqual(99500000, balances.Addresses[0].Balance);
+    }
+
+    /// <summary>
     /// The test get inclusion states.
     /// </summary>
     [TestMethod]
@@ -118,6 +169,18 @@
     {
       var tips = this.repository.GetTips();
       Assert.IsTrue(tips.Hashes.Any());
+    }
+
+    /// <summary>
+    /// The test get transactions to approve.
+    /// </summary>
+    [TestMethod]
+    public void TestGetTransactionsToApprove()
+    {
+      var transactionsToApprove = this.repository.GetTransactionsToApprove();
+
+      Assert.IsNotNull(transactionsToApprove.BranchTransaction);
+      Assert.IsNotNull(transactionsToApprove.TrunkTransaction);
     }
 
     /// <summary>

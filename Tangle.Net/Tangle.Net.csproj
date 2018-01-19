@@ -110,6 +110,7 @@
     <Compile Include="Source\Repository\RestIotaRepository.cs" />
     <Compile Include="Source\Repository\Commands.cs" />
     <Compile Include="Source\Utils\Extensions.cs" />
+    <Compile Include="Source\Utils\Timestamp.cs" />
     <Compile Include="Tests\Cryptography\AddressGeneratorTest.cs" />
     <Compile Include="Tests\Cryptography\ConverterTest.cs" />
     <Compile Include="Tests\Cryptography\KerlTest.cs" />

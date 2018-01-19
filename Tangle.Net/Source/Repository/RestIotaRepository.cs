@@ -99,7 +99,7 @@
               { "trunkTransaction", trunkTransaction.ToString() }, 
               { "branchTransaction", branchTransaction.ToString() }, 
               { "minWeightMagnitude", minWeightMagnitude }, 
-              { "trytes", transactions.Select(transaction => transaction.ToTrytes()).ToList() }
+              { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).ToList() }
             });
 
       return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
