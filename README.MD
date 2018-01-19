@@ -16,8 +16,8 @@ The project was set up a little different from most (except the python one) IOTA
 | -------------------------- | --------------- | 
 | getNeighbors				 | Yes		       |
 | getNodeInfo                | Yes             |
-| addNeighbors               | Yes, untested   |
-| removeNeighbors            | Yes, untested   |
+| addNeighbors               | Yes			   |
+| removeNeighbors            | Yes			   |
 | getTips                    | Yes             |
 | findTransactions			 | Yes	           |
 | getTrytes				     | Yes			   |

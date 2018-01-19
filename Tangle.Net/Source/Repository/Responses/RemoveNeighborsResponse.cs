@@ -10,7 +10,7 @@
     /// <summary>
     /// Gets or sets the added neighbors.
     /// </summary>
-    public int AddedNeighbors { get; set; }
+    public int RemovedNeighbors { get; set; }
 
     /// <summary>
     /// Gets or sets the duration.
