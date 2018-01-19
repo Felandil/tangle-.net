@@ -48,7 +48,7 @@
     /// <returns>
     /// The <see cref="RemoveNeighborsResponse"/>.
     /// </returns>
-    RemoveNeighborsResponse RemoveNeighbors(List<Neighbor> neighbors);
+    RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors);
 
     #endregion
   }

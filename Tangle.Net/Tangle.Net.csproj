@@ -93,6 +93,7 @@
     <Compile Include="Source\Entity\Fragment.cs" />
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
+    <Compile Include="Source\Repository\IIotaExtendedRepository.cs" />
     <Compile Include="Source\Repository\IIotaNodeRepository.cs" />
     <Compile Include="Source\Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />

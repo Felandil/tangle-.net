@@ -393,7 +393,7 @@
     /// <returns>
     /// The <see cref="RemoveNeighborsResponse"/>.
     /// </returns>
-    public RemoveNeighborsResponse RemoveNeighbors(List<Neighbor> neighbors)
+    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
     {
       return
         this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
