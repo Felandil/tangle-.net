@@ -23,7 +23,7 @@
     /// <summary>
     /// The repository.
     /// </summary>
-    private IIotaRepository repository;
+    private RestIotaRepository repository;
 
     #endregion
 

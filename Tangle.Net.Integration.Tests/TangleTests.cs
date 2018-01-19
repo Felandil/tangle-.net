@@ -35,14 +35,14 @@
     [TestInitialize]
     public void Setup()
     {
-      this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+      this.repository = new RestIotaRepository(new RestClient("http://iri1.iota.fm:80"));
     }
 
     /// <summary>
     /// The test attach to tangle.
     /// </summary>
     [TestMethod]
-    public void TestAttachToTangle()
+    public void TestTransactionWorkFlow()
     {
       var seed = Seed.Random();
       var bundle = new Bundle();
@@ -61,12 +61,16 @@
 
       var transactionsToApprove = this.repository.GetTransactionsToApprove();
       var result = this.repository.AttachToTangle(
-        transactionsToApprove.BranchTransaction, 
-        transactionsToApprove.TrunkTransaction, 
-        bundle.Transactions);
+        transactionsToApprove.BranchTransaction,
+        transactionsToApprove.TrunkTransaction,
+        bundle.Transactions,
+        13);
       var resultTransactions = result.Select(t => Transaction.FromTrytes(t)).ToList();
 
       Assert.IsTrue(resultTransactions.Any());
+
+      this.repository.BroadcastTransactions(result);
+      this.repository.StoreTransactions(result);
     }
 
     /// <summary>
@@ -172,29 +176,23 @@
     }
 
     /// <summary>
-    /// The test get transactions to approve.
-    /// </summary>
-    [TestMethod]
-    public void TestGetTransactionsToApprove()
-    {
-      var transactionsToApprove = this.repository.GetTransactionsToApprove();
-
-      Assert.IsNotNull(transactionsToApprove.BranchTransaction);
-      Assert.IsNotNull(transactionsToApprove.TrunkTransaction);
-    }
-
-    /// <summary>
     /// The test get trytes.
     /// </summary>
     [TestMethod]
     public void TestGetTrytes()
     {
       var transactionTrytes =
-        this.repository.GetTrytes(new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+        this.repository.GetTrytes(new List<Hash> { new Hash("NHQZUPEIVHWVQLZIRSGPYMVOPWOWZTGZOYSUGBSOQSQNKZARGMXADKSDSMUSUZNFIQGURGEMQYGFZ9999") });
 
       var transaction = Transaction.FromTrytes(transactionTrytes[0]);
 
-      Assert.AreEqual("GVZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9", transaction.Address.Value);
+      Assert.AreEqual("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZ", transaction.Address.Value);
+
+      var bundle = new Bundle();
+      bundle.Transactions.Add(transaction);
+      var messages = bundle.GetMessages();
+
+      Assert.AreEqual("Hello world!", messages[0]);
     }
 
     #endregion

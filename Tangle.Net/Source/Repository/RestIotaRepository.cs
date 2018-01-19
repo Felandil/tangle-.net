@@ -12,9 +12,9 @@
   using Tangle.Net.Source.Repository.Responses;
 
   /// <summary>
-  /// The rest tangle repository.
+  /// The rest iota repository.
   /// </summary>
-  public class RestIotaRepository : IIotaRepository
+  public class RestIotaRepository : IIotaCoreRepository, IIotaNodeRepository
   {
     #region Fields
 
@@ -350,7 +350,7 @@
     /// The get trytes.
     /// </summary>
     /// <param name="hashes">
-    ///   The hashes.
+    /// The hashes.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.

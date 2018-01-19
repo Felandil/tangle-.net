@@ -93,6 +93,7 @@
     <Compile Include="Source\Entity\Fragment.cs" />
     <Compile Include="Source\Entity\Tag.cs" />
     <Compile Include="Source\Entity\Transaction.cs" />
+    <Compile Include="Source\Repository\IIotaNodeRepository.cs" />
     <Compile Include="Source\Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetInclusionStatesResponse.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="Source\Entity\TransactionTrytes.cs" />
     <Compile Include="Source\Entity\Transfer.cs" />
     <Compile Include="Source\Entity\TryteString.cs" />
-    <Compile Include="Source\Repository\IIotaRepository.cs" />
+    <Compile Include="Source\Repository\IIotaCoreRepository.cs" />
     <Compile Include="Source\Repository\IriApiException.cs" />
     <Compile Include="Source\Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsToApproveResponse.cs" />
@@ -147,6 +148,7 @@
       <Name>Bouncy.Castle</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

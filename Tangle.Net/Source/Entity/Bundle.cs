@@ -303,7 +303,6 @@
         }
         else
         {
-          transaction.Fragment = new Fragment();
           i += 1;
         }
 

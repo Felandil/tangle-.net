@@ -24,10 +24,10 @@ The project was set up a little different from most (except the python one) IOTA
 | getInclusionStates         | Yes, untested   |
 | getBalances				 | Yes    		   |
 | getTransactionsToApprove   | Yes             |
-| attachToTangle			 | Yes, untested   |
-| interruptAttachingToTangle | Yes, untested   |
-| broadcastTransactions      | Yes, untested   |
-| storeTransactions          | Yes, untested   |
+| attachToTangle			 | Yes             |
+| interruptAttachingToTangle | Yes             |
+| broadcastTransactions      | Yes			   |
+| storeTransactions          | Yes			   |
 
 Tests to follow.
 
