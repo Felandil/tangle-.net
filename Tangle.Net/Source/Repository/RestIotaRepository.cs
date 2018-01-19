@@ -14,7 +14,7 @@
   /// <summary>
   /// The rest iota repository.
   /// </summary>
-  public class RestIotaRepository : IIotaCoreRepository, IIotaNodeRepository
+  public class RestIotaRepository : IIotaCoreRepository, IIotaNodeRepository, IIotaExtendedRepository
   {
     #region Fields
 
@@ -103,6 +103,18 @@
             });
 
       return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
+    }
+
+    /// <summary>
+    /// The broadcast and store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
+    {
+      this.BroadcastTransactions(transactions);
+      this.StoreTransactions(transactions);
     }
 
     /// <summary>

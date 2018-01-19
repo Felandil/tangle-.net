@@ -10,26 +10,38 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 As a C# developer it was very frustrating that the current IOTA C# lib is pretty much outdated. Therefore this project was born.
 The project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
 
-## Supportet Operations
+## Supported Operations
 
-| Operation					 | Supported (Yet) |
-| -------------------------- | --------------- | 
-| getNeighbors				 | Yes		       |
-| getNodeInfo                | Yes             |
-| addNeighbors               | Yes			   |
-| removeNeighbors            | Yes			   |
-| getTips                    | Yes             |
-| findTransactions			 | Yes	           |
-| getTrytes				     | Yes			   |
-| getInclusionStates         | Yes, untested   |
-| getBalances				 | Yes    		   |
-| getTransactionsToApprove   | Yes             |
-| attachToTangle			 | Yes             |
-| interruptAttachingToTangle | Yes             |
-| broadcastTransactions      | Yes			   |
-| storeTransactions          | Yes			   |
+| Operation (Core)				 | Supported       | 
+| ------------------------------ | --------------- | 
+| getNeighbors					 | Yes		       |
+| getNodeInfo					 | Yes             |
+| addNeighbors					 | Yes			   |
+| removeNeighbors				 | Yes			   |
+| getTips						 | Yes             |
+| findTransactions				 | Yes	           |
+| getTrytes						 | Yes			   |
+| getInclusionStates			 | Yes, untested   |
+| getBalances					 | Yes    		   |
+| getTransactionsToApprove		 | Yes             |
+| attachToTangle				 | Yes             |
+| interruptAttachingToTangle	 | Yes             |
+| broadcastTransactions			 | Yes			   |
+| storeTransactions				 | Yes			   |
 
-Tests to follow.
+| Operation (Extended)			 | Supported       | 
+| ------------------------------ | --------------- | 
+| broadcastAndStoreTransactions	 | Yes		       |
+| getAccountData				 | No		       |
+| getBundles					 | No		       |
+| getInputs						 | No		       |
+| getLatestInclusion			 | No		       |
+| getNewAddresses				 | No		       |
+| getTransfers					 | No		       |
+| prepareTransfers				 | No		       |
+| replayBundle					 | No		       |
+| sendTransfer					 | No		       |
+| sendTrytes					 | No		       |
 
 
 ## Development Cycle
