@@ -350,12 +350,12 @@
     /// The get trytes.
     /// </summary>
     /// <param name="hashes">
-    /// The hashes.
+    ///   The hashes.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    public IEnumerable<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
     {
       var result =
         this.ExecuteParameterizedCommand<GetTrytesResponse>(

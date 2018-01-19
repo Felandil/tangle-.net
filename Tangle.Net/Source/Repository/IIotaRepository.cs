@@ -178,12 +178,12 @@
     /// The get trytes.
     /// </summary>
     /// <param name="hashes">
-    /// The hashes.
+    ///   The hashes.
     /// </param>
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    IEnumerable<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
+    List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
 
     /// <summary>
     /// The interrupt attaching to tangle.
