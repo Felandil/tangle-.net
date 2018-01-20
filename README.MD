@@ -12,51 +12,27 @@ The project was set up a little different from most (except the python one) IOTA
 
 ## Supported Operations
 
-| Operation (Core)				 | Supported       | 
-| ------------------------------ | --------------- | 
-| getNeighbors					 | Yes		       |
-| getNodeInfo					 | Yes             |
-| addNeighbors					 | Yes			   |
-| removeNeighbors				 | Yes			   |
-| getTips						 | Yes             |
-| findTransactions				 | Yes	           |
-| getTrytes						 | Yes			   |
-| getInclusionStates			 | Yes, untested   |
-| getBalances					 | Yes    		   |
-| getTransactionsToApprove		 | Yes             |
-| attachToTangle				 | Yes             |
+| Operation (Core)				 | Supported       | | Operation (Extended)			  | Supported       | 
+| ------------------------------ | --------------- | | ------------------------------ | --------------- | 
+| getNeighbors					 | Yes		       | | broadcastAndStoreTransaction   | Yes		        |
+| getNodeInfo					 | Yes             | | getAccountData				  | No		        |
+| addNeighbors					 | Yes			   | | getBundles					  | No		        |
+| removeNeighbors				 | Yes			   | | getInputs					  | No		        |
+| getTips						 | Yes             | | getLatestInclusion			  | No		        |
+| findTransactions				 | Yes	           | | getNewAddresses				  | No		        |
+| getTrytes						 | Yes			   | | getTransfers					  | No		        |
+| getInclusionStates			 | Yes, untested   | | prepareTransfers				  | No		        |
+| getBalances					 | Yes    		   | | replayBundle					  | No		        |
+| getTransactionsToApprove		 | Yes             | | sendTransfer					  | No		        |
+| attachToTangle				 | Yes             | | sendTrytes					  | No		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
 
-| Operation (Extended)			 | Supported       | 
-| ------------------------------ | --------------- | 
-| broadcastAndStoreTransactions	 | Yes		       |
-| getAccountData				 | No		       |
-| getBundles					 | No		       |
-| getInputs						 | No		       |
-| getLatestInclusion			 | No		       |
-| getNewAddresses				 | No		       |
-| getTransfers					 | No		       |
-| prepareTransfers				 | No		       |
-| replayBundle					 | No		       |
-| sendTransfer					 | No		       |
-| sendTrytes					 | No		       |
 
+## Contributing
 
-## Development Cycle
-
-If you want to contribute at the moment, please feel free to bombard me with testcases via Discord (@Felandil). 
-As soon as the library reaches a stable status (or one which I am happy with) you can also contribute Code if you want to. 
-
-Current development focuses on getting things from the python lib (I found it to be much cleaner than the JAVA one) into this.
-
-Cycle is
-1) Get Tests in as good as possible
-2) Make Tests pass
-3) Refactor until happy
-
-As a result it can happen that some parts of the library look like spaghetti, please be forgiving :)
+If you want to contribute, please feel free to grab an issue. To get your code into the repository please fork it and create a pull request with your changes.
 
 ## Encryption
 
