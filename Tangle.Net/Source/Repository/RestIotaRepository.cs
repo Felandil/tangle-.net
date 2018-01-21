@@ -7,6 +7,7 @@
 
   using RestSharp;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository.DataTransfer;
   using Tangle.Net.Source.Repository.Responses;
@@ -309,6 +310,52 @@
     public NeighborList GetNeighbors()
     {
       return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
+    }
+
+    /// <summary>
+    /// The get new addresses.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="count">
+    /// The count.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel)
+    {
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+      var result = new List<Address>();
+
+      var foundNewAddress = false;
+      var foundAddressCount = 0;
+
+      while (!foundNewAddress || foundAddressCount != count)
+      {
+        var address = addressGenerator.GetAddress(index);
+        var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
+
+        if (transactionsOnAddress.Hashes.Count != 0)
+        {
+          continue;
+        }
+
+        foundNewAddress = true;
+        foundAddressCount++;
+        index++;
+
+        result.Add(address);
+      }
+
+      return result;
     }
 
     /// <summary>

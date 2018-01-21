@@ -35,42 +35,7 @@
     [TestInitialize]
     public void Setup()
     {
-      this.repository = new RestIotaRepository(new RestClient("http://iri1.iota.fm:80"));
-    }
-
-    /// <summary>
-    /// The test attach to tangle.
-    /// </summary>
-    [TestMethod]
-    public void TestTransactionWorkFlow()
-    {
-      var seed = Seed.Random();
-      var bundle = new Bundle();
-      bundle.AddTransaction(
-        new Transfer
-          {
-            Address =
-              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 }, 
-            Message = TryteString.FromString("Hello world!"), 
-            Tag = new Tag("CSHARP"), 
-            Timestamp = Timestamp.UnixSecondsTimestamp
-          });
-
-      bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
-
-      var transactionsToApprove = this.repository.GetTransactionsToApprove();
-      var result = this.repository.AttachToTangle(
-        transactionsToApprove.BranchTransaction,
-        transactionsToApprove.TrunkTransaction,
-        bundle.Transactions,
-        13);
-      var resultTransactions = result.Select(t => Transaction.FromTrytes(t)).ToList();
-
-      Assert.IsTrue(resultTransactions.Any());
-
-      this.repository.BroadcastTransactions(result);
-      this.repository.StoreTransactions(result);
+      this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
     }
 
     /// <summary>
@@ -166,6 +131,16 @@
     }
 
     /// <summary>
+    /// The test get new addresses.
+    /// </summary>
+    [TestMethod]
+    public void TestGetNewAddresses()
+    {
+      var newAddresses = this.repository.GetNewAddresses(Seed.Random(), 0, 2, SecurityLevel.Medium);
+      Assert.AreEqual(2, newAddresses.Count);
+    }
+
+    /// <summary>
     /// The test get tips.
     /// </summary>
     [TestMethod]
@@ -193,6 +168,41 @@
       var messages = bundle.GetMessages();
 
       Assert.AreEqual("Hello world!", messages[0]);
+    }
+
+    /// <summary>
+    /// The test attach to tangle.
+    /// </summary>
+    [TestMethod]
+    public void TestTransactionWorkFlow()
+    {
+      var seed = Seed.Random();
+      var bundle = new Bundle();
+      bundle.AddTransaction(
+        new Transfer
+          {
+            Address =
+              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 }, 
+            Message = TryteString.FromString("Hello world!"), 
+            Tag = new Tag("CSHARP"), 
+            Timestamp = Timestamp.UnixSecondsTimestamp
+          });
+
+      bundle.Finalize();
+      bundle.Sign(new KeyGenerator(seed));
+
+      var transactionsToApprove = this.repository.GetTransactionsToApprove();
+      var result = this.repository.AttachToTangle(
+        transactionsToApprove.BranchTransaction, 
+        transactionsToApprove.TrunkTransaction, 
+        bundle.Transactions, 
+        13);
+      var resultTransactions = result.Select(t => Transaction.FromTrytes(t)).ToList();
+
+      Assert.IsTrue(resultTransactions.Any());
+
+      this.repository.BroadcastTransactions(result);
+      this.repository.StoreTransactions(result);
     }
 
     #endregion

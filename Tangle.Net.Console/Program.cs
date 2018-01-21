@@ -10,6 +10,7 @@
   using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository;
+  using Tangle.Net.Source.Utils;
 
   /// <summary>
   /// The program.
@@ -28,6 +29,12 @@
     {
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
 
+      var newAddresses = repository.GetNewAddresses(Seed.Random(), 0, 5, SecurityLevel.Medium);
+
+      var transactions =
+        repository.FindTransactionsByAddresses(
+          new List<Address> { new Address("HHZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9") });
+
       var tips = repository.GetTips();
       var inclusionsStates =
         repository.GetInclusionStates(
@@ -40,10 +47,6 @@
       var transactionData = transactionTrytes.Select(t => Transaction.FromTrytes(t)).ToList();
 
       var transactionsToApprove = repository.GetTransactionsToApprove();
-
-      var transactions =
-        repository.FindTransactionsByAddresses(
-          new List<Address> { new Address("GVZSJANZQULQICZFXJHHAFJTWEITWKQYJKU9TYFA9AFJLVIYOUCFQRYTLKRGCVY9KPOCCHK99TTKQGXA9") });
 
       var balances =
         repository.GetBalances(

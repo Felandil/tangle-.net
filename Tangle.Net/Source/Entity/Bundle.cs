@@ -170,7 +170,7 @@
     {
       if (this.Hash != null)
       {
-        throw new InvalidOperationException("BundleHash is already finalized!");
+        throw new InvalidOperationException("Bundle is already finalized!");
       }
 
       if (this.Transactions.Count == 0)
@@ -286,7 +286,7 @@
     {
       if (this.Hash == null)
       {
-        throw new InvalidOperationException("BundleHash must be finalized in order to sign it!");
+        throw new InvalidOperationException("Bundle must be finalized in order to sign it!");
       }
 
       var i = 0;
@@ -326,7 +326,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    private List<List<Transaction>> GroupTransactions()
+    private IEnumerable<List<Transaction>> GroupTransactions()
     {
       return this.Transactions.GroupBy(t => t.Address.Value).Select(group => group.Select(transaction => transaction).ToList()).ToList();
     }

@@ -7,7 +7,7 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 # Build Status 
 
-[<img src="https://felandilprojects.visualstudio.com/_apis/public/build/definitions/8112d254-cde8-46da-add3-75cab5fb802c/1/badge"/>]
+<img src="https://felandilprojects.visualstudio.com/_apis/public/build/definitions/8112d254-cde8-46da-add3-75cab5fb802c/1/badge"/>
 
 ## Motivation
 
@@ -23,7 +23,7 @@ The project was set up a little different from most (except the python one) IOTA
 | addNeighbors					 | Yes			   | getBundles					      | No		        |
 | removeNeighbors				 | Yes			   | getInputs					      | No		        |
 | getTips						 | Yes             | getLatestInclusion			      | No		        |
-| findTransactions				 | Yes	           | getNewAddresses				  | No		        |
+| findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
 | getTrytes						 | Yes			   | getTransfers					  | No		        |
 | getInclusionStates			 | Yes, untested   | prepareTransfers				  | No		        |
 | getBalances					 | Yes    		   | replayBundle					  | No		        |
