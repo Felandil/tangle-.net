@@ -98,6 +98,7 @@
     <Compile Include="Source\Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetInclusionStatesResponse.cs" />
+    <Compile Include="Source\Repository\Responses\GetInputsResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTipsResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTransactionsResponse.cs" />
     <Compile Include="Source\Entity\TransactionTrytes.cs" />

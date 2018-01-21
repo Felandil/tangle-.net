@@ -122,7 +122,7 @@
 
       if (transfer.Address.Balance < 0)
       {
-        throw new ArgumentException("Use AddInputs add transfers for spending tokens.");
+        throw new ArgumentException("Use AddInputs to add addresses for spending tokens.");
       }
 
       if (transfer.Message != null && transfer.Message.TrytesLength > Fragment.Length)
@@ -175,7 +175,7 @@
 
       if (this.Transactions.Count == 0)
       {
-        throw new ArgumentException("At least one transaction must be added before finalizing bundle.");
+        throw new ArgumentException("At least one transaction must be added before finalizing a bundle.");
       }
 
       var balance = this.Balance;

@@ -119,6 +119,104 @@
     }
 
     /// <summary>
+    /// The find used addresses.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start)
+    {
+      var result = new List<Address>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var currentIndex = start;
+      while (true)
+      {
+        var address = addressGenerator.GetAddress(currentIndex);
+        var transactions = this.FindTransactionsByAddresses(new List<Address> { address });
+
+        if (transactions.Hashes.Count > 0)
+        {
+          result.Add(address);
+        }
+        else
+        {
+          break;
+        }
+
+        currentIndex++;
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    /// The get inputs.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="threshold">
+    /// The threshold.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="startIndex">
+    /// The start index.
+    /// </param>
+    /// <param name="stopIndex">
+    /// The stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetInputsResponse"/>.
+    /// </returns>
+    public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
+    {
+      var resultAddresses = new List<Address>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var usedAddresses = stopIndex == 0
+                             ? this.FindUsedAddresses(seed, securityLevel, startIndex)
+                             : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
+
+
+      var currentBalance = 0L;
+      foreach (var usedAddress in usedAddresses)
+      {
+        var balance = this.GetBalances(new List<Address> { usedAddress });
+        var addressBalance = balance.Addresses[0].Balance;
+
+        if (addressBalance > 0)
+        {
+          resultAddresses.Add(usedAddress);
+          currentBalance += addressBalance;
+        }
+
+        if (currentBalance > threshold)
+        {
+          break;
+        }
+      }
+
+      if (currentBalance < threshold)
+      {
+        throw new Exception("Accumulated balance" + currentBalance + "is lower than given threshold!");
+      }
+
+      return new GetInputsResponse { Addresses = resultAddresses, Balance = resultAddresses.Sum(a => a.Balance) };
+    }
+
+    /// <summary>
     /// The broadcast transactions.
     /// </summary>
     /// <param name="transactions">

@@ -3,6 +3,7 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Source.Entity;
+  using Tangle.Net.Source.Repository.Responses;
 
   /// <summary>
   /// The IotaExtendedRepository interface.
@@ -18,6 +19,46 @@
     /// The transactions.
     /// </param>
     void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions);
+
+    /// <summary>
+    /// The find used addresses.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start);
+
+    /// <summary>
+    /// The get inputs.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="threshold">
+    /// The threshold.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
+    /// <param name="startIndex">
+    /// The start index.
+    /// </param>
+    /// <param name="stopIndex">
+    /// The stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetInputsResponse"/>.
+    /// </returns>
+    GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0);
 
     /// <summary>
     /// The get new addresses.

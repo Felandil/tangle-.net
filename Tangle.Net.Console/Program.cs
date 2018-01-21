@@ -29,6 +29,8 @@
     {
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
 
+      var inputs = repository.GetInputs(new Seed("SOMESEEDHERE"), 99900000, SecurityLevel.Medium, 0);
+
       var newAddresses = repository.GetNewAddresses(Seed.Random(), 0, 5, SecurityLevel.Medium);
 
       var transactions =
