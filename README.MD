@@ -5,6 +5,10 @@ C# .NET 4.6 Port of the IOTA lib (https://github.com/iotaledger/), build to fit 
 More information:
 http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
+# Build Status 
+
+[<img src="https://felandilprojects.visualstudio.com/_apis/public/build/definitions/8112d254-cde8-46da-add3-75cab5fb802c/1/badge"/>]
+
 ## Motivation
 
 As a C# developer it was very frustrating that the current IOTA C# lib is pretty much outdated. Therefore this project was born.
