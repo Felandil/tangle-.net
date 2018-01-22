@@ -21,14 +21,14 @@ The project was set up a little different from most (except the python one) IOTA
 | getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
 | getNodeInfo					 | Yes             | getAccountData				      | No		        |
 | addNeighbors					 | Yes			   | getBundles					      | No		        |
-| removeNeighbors				 | Yes			   | getInputs					      | No		        |
-| getTips						 | Yes             | getLatestInclusion			      | No		        |
+| removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
+| getTips						 | Yes             | getLatestInclusion			      | Yes (untested)  |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
 | getTrytes						 | Yes			   | getTransfers					  | No		        |
 | getInclusionStates			 | Yes, untested   | prepareTransfers				  | No		        |
 | getBalances					 | Yes    		   | replayBundle					  | No		        |
 | getTransactionsToApprove		 | Yes             | sendTransfer					  | No		        |
-| attachToTangle				 | Yes             | sendTrytes						  | No		        |
+| attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |

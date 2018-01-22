@@ -174,7 +174,7 @@
     /// The test attach to tangle.
     /// </summary>
     [TestMethod]
-    public void TestTransactionWorkFlow()
+    public void TestSendTrytes()
     {
       var seed = Seed.Random();
       var bundle = new Bundle();
@@ -191,18 +191,9 @@
       bundle.Finalize();
       bundle.Sign(new KeyGenerator(seed));
 
-      var transactionsToApprove = this.repository.GetTransactionsToApprove();
-      var result = this.repository.AttachToTangle(
-        transactionsToApprove.BranchTransaction, 
-        transactionsToApprove.TrunkTransaction, 
-        bundle.Transactions, 
-        13);
-      var resultTransactions = result.Select(t => Transaction.FromTrytes(t)).ToList();
+      var resultTransactions = this.repository.SendTrytes(bundle.Transactions);
 
       Assert.IsTrue(resultTransactions.Any());
-
-      this.repository.BroadcastTransactions(result);
-      this.repository.StoreTransactions(result);
     }
 
     #endregion

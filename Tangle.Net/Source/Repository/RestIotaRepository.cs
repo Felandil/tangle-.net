@@ -53,22 +53,6 @@
     #region Public Methods and Operators
 
     /// <summary>
-    /// The add neighbor.
-    /// </summary>
-    /// <param name="neighbors">
-    /// The neighbors.
-    /// </param>
-    /// <returns>
-    /// The <see cref="AddNeighborsResponse"/>.
-    /// </returns>
-    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
-    {
-      return
-        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
-          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
-    }
-
-    /// <summary>
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
@@ -104,119 +88,6 @@
             });
 
       return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
-    }
-
-    /// <summary>
-    /// The broadcast and store transactions.
-    /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
-    {
-      this.BroadcastTransactions(transactions);
-      this.StoreTransactions(transactions);
-    }
-
-    /// <summary>
-    /// The find used addresses.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="start">
-    /// The start.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start)
-    {
-      var result = new List<Address>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
-
-      var currentIndex = start;
-      while (true)
-      {
-        var address = addressGenerator.GetAddress(currentIndex);
-        var transactions = this.FindTransactionsByAddresses(new List<Address> { address });
-
-        if (transactions.Hashes.Count > 0)
-        {
-          result.Add(address);
-        }
-        else
-        {
-          break;
-        }
-
-        currentIndex++;
-      }
-
-      return result;
-    }
-
-    /// <summary>
-    /// The get inputs.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="threshold">
-    /// The threshold.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="startIndex">
-    /// The start index.
-    /// </param>
-    /// <param name="stopIndex">
-    /// The stop index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="GetInputsResponse"/>.
-    /// </returns>
-    public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
-    {
-      if (startIndex > stopIndex)
-      {
-        throw new ArgumentException("Invalid bounds! StartIndex must not be lower than StopIndex.");
-      }
-
-      var resultAddresses = new List<Address>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
-
-      var usedAddresses = stopIndex == 0
-                             ? this.FindUsedAddresses(seed, securityLevel, startIndex)
-                             : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
-
-      var usedAddressesWithBalance = this.GetBalances(usedAddresses);
-
-      var currentBalance = 0L;
-      foreach (var usedAddressWithBalance in usedAddressesWithBalance.Addresses)
-      {
-        if (usedAddressWithBalance.Balance > 0)
-        {
-          resultAddresses.Add(usedAddressWithBalance);
-          currentBalance += usedAddressWithBalance.Balance;
-        }
-
-        if (currentBalance > threshold)
-        {
-          break;
-        }
-      }
-
-      if (currentBalance < threshold)
-      {
-        throw new Exception("Accumulated balance" + currentBalance + "is lower than given threshold!");
-      }
-
-      return new GetInputsResponse { Addresses = resultAddresses, Balance = resultAddresses.Sum(a => a.Balance) };
     }
 
     /// <summary>
@@ -403,74 +274,6 @@
     }
 
     /// <summary>
-    /// The get neighbors.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="NeighborList"/>.
-    /// </returns>
-    public NeighborList GetNeighbors()
-    {
-      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
-    }
-
-    /// <summary>
-    /// The get new addresses.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel)
-    {
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
-      var result = new List<Address>();
-
-      var foundNewAddress = false;
-      var foundAddressCount = 0;
-
-      while (!foundNewAddress || foundAddressCount != count)
-      {
-        var address = addressGenerator.GetAddress(index);
-        var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
-
-        if (transactionsOnAddress.Hashes.Count != 0)
-        {
-          continue;
-        }
-
-        foundNewAddress = true;
-        foundAddressCount++;
-        index++;
-
-        result.Add(address);
-      }
-
-      return result;
-    }
-
-    /// <summary>
-    /// The get node info.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="NodeInfo"/>.
-    /// </returns>
-    public NodeInfo GetNodeInfo()
-    {
-      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
-    }
-
-    /// <summary>
     /// The get tips.
     /// </summary>
     /// <returns>
@@ -533,6 +336,260 @@
     }
 
     /// <summary>
+    /// The store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
+    {
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+    }
+
+    /// <summary>
+    /// The broadcast and store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
+    {
+      this.BroadcastTransactions(transactions);
+      this.StoreTransactions(transactions);
+    }
+
+    /// <summary>
+    /// The find used addresses.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start)
+    {
+      var result = new List<Address>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var currentIndex = start;
+      while (true)
+      {
+        var address = addressGenerator.GetAddress(currentIndex);
+        var transactions = this.FindTransactionsByAddresses(new List<Address> { address });
+
+        if (transactions.Hashes.Count > 0)
+        {
+          result.Add(address);
+        }
+        else
+        {
+          break;
+        }
+
+        currentIndex++;
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    /// The get inputs.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="threshold">
+    /// The threshold.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="startIndex">
+    /// The start index.
+    /// </param>
+    /// <param name="stopIndex">
+    /// The stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetInputsResponse"/>.
+    /// </returns>
+    public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
+    {
+      if (startIndex > stopIndex)
+      {
+        throw new ArgumentException("Invalid bounds! StartIndex must not be lower than StopIndex.");
+      }
+
+      var resultAddresses = new List<Address>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var usedAddresses = stopIndex == 0
+                            ? this.FindUsedAddresses(seed, securityLevel, startIndex)
+                            : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
+
+      var usedAddressesWithBalance = this.GetBalances(usedAddresses);
+
+      var currentBalance = 0L;
+      foreach (var usedAddressWithBalance in usedAddressesWithBalance.Addresses)
+      {
+        if (usedAddressWithBalance.Balance > 0)
+        {
+          resultAddresses.Add(usedAddressWithBalance);
+          currentBalance += usedAddressWithBalance.Balance;
+        }
+
+        if (currentBalance > threshold)
+        {
+          break;
+        }
+      }
+
+      if (currentBalance < threshold)
+      {
+        throw new Exception("Accumulated balance" + currentBalance + "is lower than given threshold!");
+      }
+
+      return new GetInputsResponse { Addresses = resultAddresses, Balance = resultAddresses.Sum(a => a.Balance) };
+    }
+
+    /// <summary>
+    /// The get new addresses.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="count">
+    /// The count.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel)
+    {
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+      var result = new List<Address>();
+
+      var foundNewAddress = false;
+      var foundAddressCount = 0;
+
+      while (!foundNewAddress || foundAddressCount != count)
+      {
+        var address = addressGenerator.GetAddress(index);
+        var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
+
+        if (transactionsOnAddress.Hashes.Count != 0)
+        {
+          continue;
+        }
+
+        foundNewAddress = true;
+        foundAddressCount++;
+        index++;
+
+        result.Add(address);
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    /// The send trytes.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18)
+    {
+      var transactionsToApprove = this.GetTransactionsToApprove(depth);
+      var attachResultTrytes = this.AttachToTangle(
+        transactionsToApprove.BranchTransaction, 
+        transactionsToApprove.TrunkTransaction, 
+        transactions, 
+        minWeightMagnitude);
+
+      this.BroadcastAndStoreTransactions(attachResultTrytes);
+
+      return attachResultTrytes;
+    }
+
+    /// <summary>
+    /// The get latest inclusion.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    public InclusionStates GetLatestInclusion(List<Hash> hashes)
+    {
+      var nodeInfo = this.GetNodeInfo();
+      return this.GetInclusionStates(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
+    }
+
+    /// <summary>
+    /// The add neighbor.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="AddNeighborsResponse"/>.
+    /// </returns>
+    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
+    {
+      return
+        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
+          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+    }
+
+    /// <summary>
+    /// The get neighbors.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="NeighborList"/>.
+    /// </returns>
+    public NeighborList GetNeighbors()
+    {
+      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
+    }
+
+    /// <summary>
+    /// The get node info.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="NodeInfo"/>.
+    /// </returns>
+    public NodeInfo GetNodeInfo()
+    {
+      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
+    }
+
+    /// <summary>
     /// The remove neighbors.
     /// </summary>
     /// <param name="neighbors">
@@ -546,19 +603,6 @@
       return
         this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
           new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
-    }
-
-    /// <summary>
-    /// The store transactions.
-    /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
-    {
-      this.Client.Execute(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     #endregion

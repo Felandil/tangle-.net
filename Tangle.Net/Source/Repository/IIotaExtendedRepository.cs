@@ -3,6 +3,7 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Source.Entity;
+  using Tangle.Net.Source.Repository.DataTransfer;
   using Tangle.Net.Source.Repository.Responses;
 
   /// <summary>
@@ -79,6 +80,34 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel);
+
+    /// <summary>
+    /// The send trytes.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
+
+    /// <summary>
+    /// The get latest inclusion.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    InclusionStates GetLatestInclusion(List<Hash> hashes);
 
     #endregion
   }
