@@ -10,6 +10,7 @@
 
   using RestSharp;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Entity;
   using Tangle.Net.Source.Repository;
   using Tangle.Net.Source.Repository.DataTransfer;
@@ -22,6 +23,18 @@
   public class RestIotaRepositoryTest
   {
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The test get inputs has invalid bound should throw exception.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestGetInputsHasInvalidBoundShouldThrowException()
+    {
+      var restClientMock = new Mock<IRestClient>();
+      var repository = new RestIotaRepository(restClientMock.Object);
+      repository.GetInputs(Seed.Random(), 100, SecurityLevel.Medium, 10, 5);
+    }
 
     /// <summary>
     /// The test find transactions does not contain parameters should throw exception.

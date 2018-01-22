@@ -182,6 +182,11 @@
     /// </returns>
     public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
     {
+      if (startIndex > stopIndex)
+      {
+        throw new ArgumentException("Invalid bounds! StartIndex must not be lower than StopIndex.");
+      }
+
       var resultAddresses = new List<Address>();
       var addressGenerator = new AddressGenerator(seed, securityLevel);
 
@@ -189,17 +194,15 @@
                              ? this.FindUsedAddresses(seed, securityLevel, startIndex)
                              : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
 
+      var usedAddressesWithBalance = this.GetBalances(usedAddresses);
 
       var currentBalance = 0L;
-      foreach (var usedAddress in usedAddresses)
+      foreach (var usedAddressWithBalance in usedAddressesWithBalance.Addresses)
       {
-        var balance = this.GetBalances(new List<Address> { usedAddress });
-        var addressBalance = balance.Addresses[0].Balance;
-
-        if (addressBalance > 0)
+        if (usedAddressWithBalance.Balance > 0)
         {
-          resultAddresses.Add(usedAddress);
-          currentBalance += addressBalance;
+          resultAddresses.Add(usedAddressWithBalance);
+          currentBalance += usedAddressWithBalance.Balance;
         }
 
         if (currentBalance > threshold)
