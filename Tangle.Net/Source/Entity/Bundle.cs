@@ -69,6 +69,31 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The from transaction trytes.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <param name="hash">
+    /// The hash.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Bundle"/>.
+    /// </returns>
+    public static Bundle FromTransactionTrytes(IEnumerable<TransactionTrytes> transactions, Hash hash = null)
+    {
+      var bundle = new Bundle();
+      foreach (var transactionTrytese in transactions)
+      {
+        bundle.Transactions.Add(Transaction.FromTrytes(transactionTrytese, hash));
+      }
+
+      bundle.Transactions.Sort((current, previous) => current.CurrentIndex.CompareTo(previous.CurrentIndex));
+
+      return bundle;
+    }
+
+    /// <summary>
     /// The add input.
     /// </summary>
     /// <param name="addresses">
@@ -196,40 +221,7 @@
         throw new InvalidOperationException("Insufficient value submitted.");
       }
 
-      Hash bundleHash;
-      var valid = false;
-      var kerl = new Kerl();
-
-      do
-      {
-        kerl.Reset();
-        for (var i = 0; i < this.Transactions.Count; i++)
-        {
-          this.Transactions[i].CurrentIndex = i;
-          this.Transactions[i].LastIndex = this.Transactions.Count - 1;
-
-          var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].SignatureValidationTrytes());
-          kerl.Absorb(transactionTrits);
-        }
-
-        var hashTrits = new int[Kerl.HashLength];
-        kerl.Squeeze(hashTrits);
-        bundleHash = new Hash(Converter.TritsToTrytes(hashTrits));
-        var normalizedBundleValue = Hash.Normalize(bundleHash);
-
-        if (Array.IndexOf(normalizedBundleValue, 13) != -1)
-        {
-          var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag.Value);
-          Converter.Increment(obsoleteTagTrits, 81);
-          this.Transactions[0].ObsoleteTag = new Tag(Converter.TritsToTrytes(obsoleteTagTrits));
-        }
-        else
-        {
-          valid = true;
-        }
-      }
-      while (!valid);
-
+      var bundleHash = this.ComputeHash();
       foreach (var transaction in this.Transactions)
       {
         transaction.BundleHash = bundleHash;
@@ -316,9 +308,94 @@
       }
     }
 
+    /// <summary>
+    /// The validate.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="ValidationSummary"/>.
+    /// </returns>
+    public ValidationSummary Validate()
+    {
+      var validationErrors = new List<string>();
+
+      if (this.Balance != 0)
+      {
+        validationErrors.Add("Bundle balance is not even.");
+      }
+
+      var transactionsCount = this.Transactions.Count;
+      for (var i = 0; i < transactionsCount; i++)
+      {
+        var transaction = this.Transactions[i];
+        if (transaction.BundleHash.Value != this.Hash.Value)
+        {
+          validationErrors.Add(
+            string.Format("Transaction {0} has an invalid bundle hash (check that all transactions have the same bundle hash).", i));
+        }
+
+        if (transaction.CurrentIndex != i)
+        {
+          validationErrors.Add(string.Format("Transaction {0} has an invalid current index. Expected: {0}. Got {1}.", i, transaction.CurrentIndex));
+        }
+
+        if (transaction.LastIndex != transactionsCount - 1)
+        {
+          validationErrors.Add(
+            string.Format("Transaction {0} has an invalid last index. Expected: {1}. Got {2}.", i, transactionsCount - 1, transaction.LastIndex));
+        }
+      }
+
+      return new ValidationSummary { IsValid = !validationErrors.Any(), Errors = validationErrors };
+    }
+
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// The compute hash.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Hash"/>.
+    /// </returns>
+    private Hash ComputeHash()
+    {
+      Hash bundleHash;
+      var valid = false;
+      var kerl = new Kerl();
+
+      do
+      {
+        kerl.Reset();
+        for (var i = 0; i < this.Transactions.Count; i++)
+        {
+          this.Transactions[i].CurrentIndex = i;
+          this.Transactions[i].LastIndex = this.Transactions.Count - 1;
+
+          var transactionTrits = Converter.TrytesToTrits(this.Transactions[i].SignatureValidationTrytes());
+          kerl.Absorb(transactionTrits);
+        }
+
+        var hashTrits = new int[Kerl.HashLength];
+        kerl.Squeeze(hashTrits);
+        bundleHash = new Hash(Converter.TritsToTrytes(hashTrits));
+        var normalizedBundleValue = Hash.Normalize(bundleHash);
+
+        if (Array.IndexOf(normalizedBundleValue, 13) != -1)
+        {
+          var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag.Value);
+          Converter.Increment(obsoleteTagTrits, 81);
+          this.Transactions[0].ObsoleteTag = new Tag(Converter.TritsToTrytes(obsoleteTagTrits));
+        }
+        else
+        {
+          valid = true;
+        }
+      }
+      while (!valid);
+
+      return bundleHash;
+    }
 
     /// <summary>
     /// The group transactions.

@@ -25,7 +25,7 @@ The project was set up a little different from most (except the python one) IOTA
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
 | getTrytes						 | Yes			   | getTransfers					  | No		        |
-| getInclusionStates			 | Yes, untested   | prepareTransfers				  | No		        |
+| getInclusionStates			 | Yes             | prepareTransfers				  | No		        |
 | getBalances					 | Yes    		   | replayBundle					  | No		        |
 | getTransactionsToApprove		 | Yes             | sendTransfer					  | No		        |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |

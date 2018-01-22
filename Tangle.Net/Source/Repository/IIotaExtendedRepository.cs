@@ -39,6 +39,17 @@
     List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start);
 
     /// <summary>
+    /// The get bundle.
+    /// </summary>
+    /// <param name="transactionHash">
+    /// The transaction hash.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Bundle"/>.
+    /// </returns>
+    Bundle GetBundle(Hash transactionHash);
+
+    /// <summary>
     /// The get inputs.
     /// </summary>
     /// <param name="seed">
@@ -60,6 +71,17 @@
     /// The <see cref="GetInputsResponse"/>.
     /// </returns>
     GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0);
+
+    /// <summary>
+    /// The get latest inclusion.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    InclusionStates GetLatestInclusion(List<Hash> hashes);
 
     /// <summary>
     /// The get new addresses.
@@ -97,17 +119,6 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
-
-    /// <summary>
-    /// The get latest inclusion.
-    /// </summary>
-    /// <param name="hashes">
-    /// The hashes.
-    /// </param>
-    /// <returns>
-    /// The <see cref="InclusionStates"/>.
-    /// </returns>
-    InclusionStates GetLatestInclusion(List<Hash> hashes);
 
     #endregion
   }

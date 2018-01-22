@@ -74,6 +74,7 @@
     <Compile Include="Source\Cryptography\PrivateKey.cs" />
     <Compile Include="Source\Cryptography\SecurityLevel.cs" />
     <Compile Include="Source\Cryptography\SignatureFragmentGenerator.cs" />
+    <Compile Include="Source\Entity\ValidationSummary.cs" />
     <Compile Include="Source\Repository\DataTransfer\InclusionStates.cs" />
     <Compile Include="Source\Repository\DataTransfer\TipHashList.cs" />
     <Compile Include="Source\Repository\DataTransfer\TransactionHashList.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Tests\Cryptography\SignatureFragmentGeneratorTest.cs" />
     <Compile Include="Tests\Entity\AddressTest.cs" />
     <Compile Include="Tests\Entity\BundleTest.cs" />
+    <Compile Include="Tests\Entity\BundleValidationTests.cs" />
     <Compile Include="Tests\Entity\ChecksumTest.cs" />
     <Compile Include="Tests\Entity\DigestTest.cs" />
     <Compile Include="Tests\Entity\HashTest.cs" />

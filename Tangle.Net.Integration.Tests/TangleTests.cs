@@ -126,6 +126,17 @@
     }
 
     /// <summary>
+    /// The test get bundle.
+    /// </summary>
+    [TestMethod]
+    public void TestGetBundle()
+    {
+      var bundle = this.repository.GetBundle(new Hash("J9GYFNZBGUGDDODHXUXXVI9AVFSAWVCVQXXSOXXVQATVLYDNMRKNTKYLVXDWENTSBN9XXGCARD9B99999"));
+
+      Assert.AreEqual(15, bundle.Transactions.Count);
+    }
+
+    /// <summary>
     /// The test get inclusion states.
     /// </summary>
     [TestMethod]
