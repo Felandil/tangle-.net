@@ -39,6 +39,18 @@
     }
 
     /// <summary>
+    /// The test get latest inclusion.
+    /// </summary>
+    [TestMethod]
+    public void TestGetLatestInclusion()
+    {
+      var inclusionState = this.repository.GetLatestInclusion(
+          new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+
+      Assert.IsTrue(inclusionState.States.First(k => k.Key.Value == "HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999").Value);
+    }
+
+    /// <summary>
     /// The test find transactions.
     /// </summary>
     [TestMethod]

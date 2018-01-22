@@ -29,6 +29,10 @@
     {
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
 
+      var latestInclusion =
+        repository.GetLatestInclusion(
+          new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+
       var inputs = repository.GetInputs(new Seed("SOMESEEDHERE"), 99900000, SecurityLevel.Medium, 0);
 
       var newAddresses = repository.GetNewAddresses(Seed.Random(), 0, 5, SecurityLevel.Medium);

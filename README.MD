@@ -22,7 +22,7 @@ The project was set up a little different from most (except the python one) IOTA
 | getNodeInfo					 | Yes             | getAccountData				      | No		        |
 | addNeighbors					 | Yes			   | getBundles					      | No		        |
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
-| getTips						 | Yes             | getLatestInclusion			      | Yes (untested)  |
+| getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
 | getTrytes						 | Yes			   | getTransfers					  | No		        |
 | getInclusionStates			 | Yes, untested   | prepareTransfers				  | No		        |
