@@ -19,7 +19,7 @@ The project was set up a little different from most (except the python one) IOTA
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
 | getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
-| getNodeInfo					 | Yes             | getAccountData				      | No		        |
+| getNodeInfo					 | Yes             | getAccountData				      | Yes		        |
 | addNeighbors					 | Yes			   | getBundle					      | Yes		        |
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |

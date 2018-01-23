@@ -99,6 +99,8 @@
     <Compile Include="Source\Repository\InvalidBundleException.cs" />
     <Compile Include="Source\Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Source\Repository\Responses\AttachToTangleResponse.cs" />
+    <Compile Include="Source\Repository\Responses\FindUsedAddressesResponse.cs" />
+    <Compile Include="Source\Repository\Responses\GetAccountDataResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetInclusionStatesResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetInputsResponse.cs" />
     <Compile Include="Source\Repository\Responses\GetTipsResponse.cs" />

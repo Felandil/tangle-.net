@@ -46,9 +46,25 @@
     public int CurrentIndex { get; set; }
 
     /// <summary>
+    /// Gets or sets the signature fragments.
+    /// </summary>
+    public Fragment Fragment { get; set; }
+
+    /// <summary>
     /// Gets or sets the hash.
     /// </summary>
     public Hash Hash { get; set; }
+
+    /// <summary>
+    /// Gets a value indicating whether is tail.
+    /// </summary>
+    public bool IsTail
+    {
+      get
+      {
+        return this.CurrentIndex == 0;
+      }
+    }
 
     /// <summary>
     /// Gets or sets the last index.
@@ -64,11 +80,6 @@
     /// Gets or sets the obsolete tag.
     /// </summary>
     public Tag ObsoleteTag { get; set; }
-
-    /// <summary>
-    /// Gets or sets the signature fragments.
-    /// </summary>
-    public Fragment Fragment { get; set; }
 
     /// <summary>
     /// Gets or sets the tag.
@@ -161,9 +172,9 @@
     {
       return
         new TransactionTrytes(
-          this.Fragment.Value + this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value
-          + this.Timestamp.ToTrytes(27).Value + this.CurrentIndex.ToTrytes(27).Value + this.LastIndex.ToTrytes(27).Value + this.BundleHash.Value
-          + this.TrunkTransaction.Value + this.BranchTransaction.Value + this.Tag.Value + this.AttachmentTimestamp.ToTrytes(27).Value
+          this.Fragment.Value + this.Address.Value + this.Value.ToTrytes(81).Value + this.ObsoleteTag.Value + this.Timestamp.ToTrytes(27).Value
+          + this.CurrentIndex.ToTrytes(27).Value + this.LastIndex.ToTrytes(27).Value + this.BundleHash.Value + this.TrunkTransaction.Value
+          + this.BranchTransaction.Value + this.Tag.Value + this.AttachmentTimestamp.ToTrytes(27).Value
           + this.AttachmentTimestampLowerBound.ToTrytes(27).Value + this.AttachmentTimestampUpperBound.ToTrytes(27).Value + this.Nonce.Value);
     }
 

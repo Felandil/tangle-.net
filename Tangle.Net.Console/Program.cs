@@ -29,6 +29,8 @@
     {
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
 
+      var accountData = repository.GetAccountData(new Seed("SOMESEEDHERE"), true, SecurityLevel.Medium, 0);
+
       var latestInclusion =
         repository.GetLatestInclusion(
           new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });

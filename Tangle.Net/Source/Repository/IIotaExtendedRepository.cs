@@ -36,7 +36,30 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start);
+    FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start);
+
+    /// <summary>
+    /// The get account data.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="inclusionState">
+    /// The inclusion State.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="addressStartIndex">
+    /// The address start index.
+    /// </param>
+    /// <param name="addressStopIndex">
+    /// The address stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetAccountDataResponse"/>.
+    /// </returns>
+    GetAccountDataResponse GetAccountData(Seed seed, bool inclusionState, int securityLevel, int addressStartIndex, int addressStopIndex = 0);
 
     /// <summary>
     /// The get bundle.
@@ -62,10 +85,10 @@
     /// The security Level.
     /// </param>
     /// <param name="startIndex">
-    /// The start index.
+    /// The start addressStartIndex.
     /// </param>
     /// <param name="stopIndex">
-    /// The stop index.
+    /// The stop addressStartIndex.
     /// </param>
     /// <returns>
     /// The <see cref="GetInputsResponse"/>.
@@ -89,8 +112,8 @@
     /// <param name="seed">
     /// The seed.
     /// </param>
-    /// <param name="index">
-    /// The index.
+    /// <param name="addressStartIndex">
+    /// The addressStartIndex.
     /// </param>
     /// <param name="count">
     /// The count.
@@ -101,7 +124,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel);
+    List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel);
 
     /// <summary>
     /// The send trytes.

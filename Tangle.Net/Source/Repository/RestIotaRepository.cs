@@ -247,9 +247,10 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public List<Address> FindUsedAddresses(Seed seed, int securityLevel, int start)
+    public FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start)
     {
-      var result = new List<Address>();
+      var usedAddresses = new List<Address>();
+      var associatedTransactionHashes = new List<Hash>();
       var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var currentIndex = start;
@@ -260,7 +261,8 @@
 
         if (transactions.Hashes.Count > 0)
         {
-          result.Add(address);
+          usedAddresses.Add(address);
+          associatedTransactionHashes.AddRange(transactions.Hashes);
         }
         else
         {
@@ -270,7 +272,86 @@
         currentIndex++;
       }
 
-      return result;
+      return new FindUsedAddressesResponse
+               {
+                 AssociatedTransactionHashes = associatedTransactionHashes, 
+                 UsedAddresses = usedAddresses.OrderBy(a => a.KeyIndex).ToList()
+               };
+    }
+
+    /// <summary>
+    /// The get account data.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="inclusionState">
+    /// The inclusion state.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="addressStartIndex">
+    /// The address start index.
+    /// </param>
+    /// <param name="addressStopIndex">
+    /// The address stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="GetAccountDataResponse"/>.
+    /// </returns>
+    public GetAccountDataResponse GetAccountData(Seed seed, bool inclusionState, int securityLevel, int addressStartIndex, int addressStopIndex = 0)
+    {
+      var usedAddressesWithTransactions = this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
+      var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddressesWithTransactions.UsedAddresses.Last().KeyIndex + 1);
+      var addressesWithBalance = new List<Address>();
+      var associatedBundles = new List<Bundle>();
+
+      if (usedAddressesWithTransactions.AssociatedTransactionHashes.Count > 0)
+      {
+        addressesWithBalance = this.GetBalances(usedAddressesWithTransactions.UsedAddresses).Addresses;
+        var transactionTrytes = this.GetTrytes(usedAddressesWithTransactions.AssociatedTransactionHashes);
+        var tailTransactions = new List<Hash>();
+        var nonTailTransactions = new List<Transaction>();
+
+        foreach (var transactionTryte in transactionTrytes)
+        {
+          var transaction = Transaction.FromTrytes(transactionTryte);
+          if (transaction.IsTail)
+          {
+            tailTransactions.Add(transaction.Hash);
+          }
+          else
+          {
+            nonTailTransactions.Add(transaction);
+          }
+        }
+
+        var allBundleTransactions = this.FindTransactionsByBundles(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList()).Hashes;
+        var allBundleTransactionTrytes = this.GetTrytes(allBundleTransactions);
+
+        foreach (var allBundleTransactionTryte in allBundleTransactionTrytes)
+        {
+          var transaction = Transaction.FromTrytes(allBundleTransactionTryte);
+          if (transaction.IsTail)
+          {
+            tailTransactions.Add(transaction.Hash);
+          }
+        }
+
+        foreach (var tailTransaction in tailTransactions)
+        {
+          associatedBundles.Add(this.GetBundle(tailTransaction));
+        }
+      }
+
+      return new GetAccountDataResponse
+               {
+                 Balance = addressesWithBalance.Sum(a => a.Balance), 
+                 UsedAddresses = usedAddressesWithTransactions.UsedAddresses, 
+                 AssociatedBundles = associatedBundles, 
+                 LatestUnusedAddress = latestUnusedAddress
+               };
     }
 
     /// <summary>
@@ -378,10 +459,10 @@
     /// The security level.
     /// </param>
     /// <param name="startIndex">
-    /// The start index.
+    /// The start addressStartIndex.
     /// </param>
     /// <param name="stopIndex">
-    /// The stop index.
+    /// The stop addressStartIndex.
     /// </param>
     /// <returns>
     /// The <see cref="GetInputsResponse"/>.
@@ -397,7 +478,7 @@
       var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var usedAddresses = stopIndex == 0
-                            ? this.FindUsedAddresses(seed, securityLevel, startIndex)
+                            ? this.FindUsedAddressesWithTransactions(seed, securityLevel, startIndex).UsedAddresses
                             : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
 
       var usedAddressesWithBalance = this.GetBalances(usedAddresses);
@@ -457,8 +538,8 @@
     /// <param name="seed">
     /// The seed.
     /// </param>
-    /// <param name="index">
-    /// The index.
+    /// <param name="addressStartIndex">
+    /// The addressStartIndex.
     /// </param>
     /// <param name="count">
     /// The count.
@@ -469,7 +550,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public List<Address> GetNewAddresses(Seed seed, int index, int count, int securityLevel)
+    public List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
       var addressGenerator = new AddressGenerator(seed, securityLevel);
       var result = new List<Address>();
@@ -479,7 +560,7 @@
 
       while (!foundNewAddress || foundAddressCount != count)
       {
-        var address = addressGenerator.GetAddress(index);
+        var address = addressGenerator.GetAddress(addressStartIndex);
         var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
 
         if (transactionsOnAddress.Hashes.Count != 0)
@@ -489,7 +570,7 @@
 
         foundNewAddress = true;
         foundAddressCount++;
-        index++;
+        addressStartIndex++;
 
         result.Add(address);
       }
