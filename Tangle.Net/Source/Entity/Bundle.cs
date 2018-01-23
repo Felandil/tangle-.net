@@ -323,66 +323,14 @@
         validationErrors.Add("Bundle balance is not even.");
       }
 
-      var transactionsCount = this.Transactions.Count;
-      for (var i = 0; i < transactionsCount; i++)
-      {
-        var transaction = this.Transactions[i];
-        if (transaction.BundleHash.Value != this.Hash.Value)
-        {
-          validationErrors.Add(
-            string.Format("Transaction {0} has an invalid bundle hash (check that all transactions have the same bundle hash).", i));
-        }
-
-        if (transaction.CurrentIndex != i)
-        {
-          validationErrors.Add(string.Format("Transaction {0} has an invalid current index. Expected: {0}. Got {1}.", i, transaction.CurrentIndex));
-        }
-
-        if (transaction.LastIndex != transactionsCount - 1)
-        {
-          validationErrors.Add(
-            string.Format("Transaction {0} has an invalid last index. Expected: {1}. Got {2}.", i, transactionsCount - 1, transaction.LastIndex));
-        }
-      }
+      validationErrors.AddRange(this.ValidateTransactions());
 
       if (validationErrors.Any())
       {
         return new ValidationSummary { IsValid = false, Errors = validationErrors };
       }
 
-      var transactionGroups = this.GroupTransactions();
-      foreach (var transactionGroup in transactionGroups)
-      {
-        for (int i = 0; i < transactionGroup.Count; i++)
-        {
-          if (i > 0 && transactionGroup[i].Value != 0)
-          {
-            validationErrors.Add(
-            string.Format("Transaction {0} has invalid value. Expected: 0. Got {1}.", transactionGroup[i].CurrentIndex, transactionGroup[i].Value));
-          }
-        }
-      }
-
-      if (validationErrors.Any())
-      {
-        return new ValidationSummary { IsValid = false, Errors = validationErrors };
-      }
-
-      foreach (var transactionGroup in transactionGroups)
-      {
-        if (transactionGroup[0].Value >= 0)
-        {
-          continue;
-        }
-
-        var hasValidSignature = Fragment.ValidateFragments(transactionGroup.Select(t => t.Fragment).ToList(), transactionGroup[0].BundleHash, transactionGroup[0].Address);
-
-        if (!hasValidSignature)
-        {
-          validationErrors.Add(
-            string.Format("Transaction {0} has invalid signature (using {1} fragments).", transactionGroup[0].CurrentIndex, transactionGroup.Count));
-        }
-      }
+      validationErrors.AddRange(this.ValidateTransactionGroups());
 
       return new ValidationSummary { IsValid = !validationErrors.Any(), Errors = validationErrors };
     }
@@ -445,6 +393,73 @@
     private List<List<Transaction>> GroupTransactions()
     {
       return this.Transactions.GroupBy(t => t.Address.Value).Select(group => group.Select(transaction => transaction).ToList()).ToList();
+    }
+
+    /// <summary>
+    /// The validate transaction groups.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="ValidationSummary"/>.
+    /// </returns>
+    private IEnumerable<string> ValidateTransactionGroups()
+    {
+      var validationErrors = new List<string>();
+      var transactionGroups = this.GroupTransactions();
+      foreach (var transactionGroup in transactionGroups)
+      {
+        validationErrors.AddRange(
+          transactionGroup.Where((t, i) => i > 0 && t.Value != 0)
+            .Select(t => string.Format("Transaction {0} has invalid value. Expected: 0. Got {1}.", t.CurrentIndex, t.Value)));
+      }
+
+      if (validationErrors.Any())
+      {
+        return validationErrors;
+      }
+
+      validationErrors.AddRange(
+        from transactionGroup in transactionGroups
+        where transactionGroup[0].Value < 0
+        let hasValidSignature =
+          Fragment.ValidateFragments(transactionGroup.Select(t => t.Fragment).ToList(), transactionGroup[0].BundleHash, transactionGroup[0].Address)
+        where !hasValidSignature
+        select string.Format("Transaction {0} has invalid signature (using {1} fragments).", transactionGroup[0].CurrentIndex, transactionGroup.Count));
+
+      return validationErrors;
+    }
+
+    /// <summary>
+    /// The validate transactions.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="IEnumerable"/>.
+    /// </returns>
+    private IEnumerable<string> ValidateTransactions()
+    {
+      var validationErrors = new List<string>();
+      var transactionsCount = this.Transactions.Count;
+      for (var i = 0; i < transactionsCount; i++)
+      {
+        var transaction = this.Transactions[i];
+        if (transaction.BundleHash.Value != this.Hash.Value)
+        {
+          validationErrors.Add(
+            string.Format("Transaction {0} has an invalid bundle hash (check that all transactions have the same bundle hash).", i));
+        }
+
+        if (transaction.CurrentIndex != i)
+        {
+          validationErrors.Add(string.Format("Transaction {0} has an invalid current index. Expected: {0}. Got {1}.", i, transaction.CurrentIndex));
+        }
+
+        if (transaction.LastIndex != transactionsCount - 1)
+        {
+          validationErrors.Add(
+            string.Format("Transaction {0} has an invalid last index. Expected: {1}. Got {2}.", i, transactionsCount - 1, transaction.LastIndex));
+        }
+      }
+
+      return validationErrors;
     }
 
     #endregion
