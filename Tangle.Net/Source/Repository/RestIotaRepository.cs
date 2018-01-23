@@ -321,7 +321,16 @@
     /// </returns>
     public Bundle GetBundle(Hash transactionHash)
     {
-      return new Bundle { Transactions = this.TraverseBundle(transactionHash) };
+      var bundle = new Bundle { Transactions = this.TraverseBundle(transactionHash) };
+
+      var validationResult = bundle.Validate();
+
+      if (!validationResult.IsValid)
+      {
+        throw new InvalidBundleException("The bundle is not valid. See ValidationErrors for details.", validationResult.Errors);
+      }
+
+      return bundle;
     }
 
     /// <summary>
@@ -665,17 +674,17 @@
 
       if (nullResponse)
       {
-        throw new IriApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
+        throw new IotaApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
       }
 
       if (response.ErrorException != null)
       {
-        throw new IriApiException(
+        throw new IotaApiException(
           string.Format("Command {0} failed! See inner exception for details.", parameters.First(p => p.Key == "command").Value), 
           response.ErrorException);
       }
 
-      throw new IriApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
+      throw new IotaApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
     }
 
     /// <summary>
@@ -707,8 +716,6 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    /// </exception>
     private List<Transaction> TraverseBundle(Hash transactionHash, Hash bundleHash = null)
     {
       var transactionTrytes = this.GetTrytes(new List<Hash> { transactionHash });

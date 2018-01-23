@@ -5,23 +5,23 @@
   /// <summary>
   /// The iri api exception.
   /// </summary>
-  public class IriApiException : ApplicationException
+  public class IotaApiException : ApplicationException
   {
     #region Constructors and Destructors
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="IriApiException"/> class.
+    /// Initializes a new instance of the <see cref="IotaApiException"/> class.
     /// </summary>
     /// <param name="message">
     /// The message.
     /// </param>
-    public IriApiException(string message)
+    public IotaApiException(string message)
       : base(message)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="IriApiException"/> class.
+    /// Initializes a new instance of the <see cref="IotaApiException"/> class.
     /// </summary>
     /// <param name="message">
     /// The message.
@@ -29,7 +29,7 @@
     /// <param name="innerException">
     /// The inner exception.
     /// </param>
-    public IriApiException(string message, Exception innerException)
+    public IotaApiException(string message, Exception innerException)
       : base(message, innerException)
     {
     }

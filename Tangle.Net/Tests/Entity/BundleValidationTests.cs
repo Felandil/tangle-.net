@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Tests.Entity
 {
   using System.Collections.Generic;
+  using System.Linq;
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -50,26 +51,6 @@
               new TransactionTrytes(
                 "J9GAQBCDCDSCEAADCDFDBDXCBDVCQAGAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDEAPCHDEA9DPCGDHDSAJ9GAOBFDSASASAEAQBCDCDSCEAADCDFDBDXCBDVCQAEAYBEANBTCTCDDEACCWCCDIDVCWCHDQAGAEAGDPCXCSCEAVBCDCDBDEDIDPCKD9DEABDTCFDJDCDIDGD9DMDSAJ9EAEAGANBCDEAMDCDIDEAWCPCJDTCSASASAEATCFDQAEAHDWCPCHDEAXCGDSASASAGAJ9GASASASAEAPCBDEAPCBDGDKDTCFDEAUCCDFDEAMDCDIDIBGAEAXCBDHDTCFDFDIDDDHDTCSCEANBTCTCDDEACCWCCDIDVCWCHDEAADPCYCTCGDHDXCRCPC9D9DMDSAEAGAHCTCGDSAEASBEAWCPCJDTCSAGAJ9CCWCTCEAHDKDCDEAADTCBDEAGDWCXCJDTCFDTCSCEAKDXCHDWCEATCLDDDTCRCHDPCBDRCMDSAEACCWCTCXCFDEAKDPCXCHDXCBDVCEAWCPCSCEABDCDHDEAQCTCTCBDEAXCBDEAJDPCXCBDSAJ9GACCWCTCFDTCEAFDTCPC9D9DMDEAXCGDEACDBDTCIBGAEAQCFDTCPCHDWCTCSCEAZBWCCDIDRCWCVCSAJ9GACCWCTCFDTCEAFDTCPC9D9DMDEAXCGDEACDBDTCQAGAEARCCDBDUCXCFDADTCSCEANBTCTCDDEACCWCCDIDVCWCHDSAJ9GACCCDEAOBJDTCFDMDHDWCXCBDVCIBEACCCDEAHDWCTCEAVCFDTCPCHDEA9CIDTCGDHDXCCDBDEACDUCEAVBXCUCTCQAEAHDWCTCEADCBDXCJDTCFDGDTCEAPCBDSCEAOBJDTCFDMDHDWCXCBDVCIBGAJ9GAHCTCGDSAGAJ9LBCDHDWCEACDUCEAHDWCTCEAADTCBDEAWCPCSCEAQCTCTCBDEAHDFDPCXCBDTCSCEAUCCDFDEAHDWCXCGDEAADCDADTCBDHDEBEAHDWCTCXCFDEA9DXCJDTCGDEAWCPCSCEAQCTCTCBDEAPCJ9EAEADDFDTCDDPCFDPCHDXCCDBDEAUCCDFDEAXCHDEBEAHDWCTCMDEAWCPCSCEAQCTCTCBDEAGDTC9DTCRCHDTCSCEAPCHDEAQCXCFDHDWCEAPCGDEAHDWCCDGDTCEAKDWCCDEAKDCDID9DSCJ9EAEAKDXCHDBDTCGDGDEAHDWCTCEAPCBDGDKDTCFDEBEAQCIDHDEATCJDTCBDEAGDCDEAHDWCTCMDEAUCCDIDBDSCEAHDWCTCADGDTC9DJDTCGDEAVCPCGDDDXCBDVCEAPCBDSCEAGDEDIDXCFDADXCBDVCJ9EAEA9DXCZCTCEATCLDRCXCHDTCSCEARCWCXC9DSCFDTCBDSAJ9GAKBBDSCEAMDCDIDLAFDTCEAFDTCPCSCMDEAHDCDEAVCXCJDTCEAXCHDEAHDCDEAIDGDIBGAEAIDFDVCTCSCEAVBCDCDBDEDIDPCKD9DSAJ9GASBEAPCADSAGAJ9GAXBCDKDIBGAJ9GAXBCDKDQAGAEAGDPCXCSCEANBTCTCDDEACCWCCDIDVCWCHDSAJ9CCWCTCMDEAQCCDHDWCEA9DXCRCZCTCSCEAHDWCTCXCFDEASCFDMDEA9DXCDDGDSAJ9GACCWCCDIDVCWCEASBEASCCDBDLAHDEAHDWCXCBDZCQAGAEAPCSCSCTCSCEANBTCTCDDEACCWCCDIDVCWCHDQAEAGAHDWCPCHDEAMDCDIDLAFDTCEAVCCDXCBDVCEAHDCDEA9DXCZCTCEAXCHDSAGAJ9GANBCDTCGDBDLAHDEAADPCHDHDTCFDQAGAEAGDPCXCSCEAZBWCCDIDRCWCVCSAEAGAFCTCEAADIDGDHDEAZCBDCDKDEAXCHDFAEAXBCDKDFAGAJ9GAXBCDKDIBGAEATCBDEDIDXCFDTCSCEANBTCTCDDEACCWCCDIDVCWCHDSAJ9GAHCTCGDFAEAXBCDKDFAGAJ9GAKB9D9DEAFDXCVCWCHDQAGAEAGDPCXCSCEAHDWCTCEARCCDADDDIDHDTCFDEAPCBDSCEAGDTCHDHD9DTCSCEAXCBDHDCDEAGDXC9DTCBDRCTCEAPCVCPCXCBDSAJ9EAEACCWCTCEAHDKDCDEAADTCBTESTVALUE9DONTUSEINPRODUCTION99999ZDDJMOGAXHRGS9XCNSKQQNVB9BSYFCVANLJM9CLRLJSQKFOOB9999999999999999999999999PYOTA9UNIT9TESTS99999999999NYBKIVD99999999999G99999999EIYHEUACZZAVPQFGIPKDUBFPJVOFTWHADBEXIXINYPAKPUMGZKEKVZQVQREIZHYPEBNZUAJQXHAGDYRG9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"), 
             });
-    }
-
-    /// <summary>
-    /// The test missing signature fragment underflow.
-    /// </summary>
-    [TestMethod]
-    public void TestMissingSignatureFragmentUnderflow()
-    {
-      this.bundle.Transactions[0].Value += this.bundle.Transactions[7].Value;
-      this.bundle.Transactions.RemoveRange(this.bundle.Transactions.Count - 2, 2);
-
-      foreach (var transaction in this.bundle.Transactions)
-      {
-        transaction.LastIndex -= 2;
-      }
-
-      var validationSummary = this.bundle.Validate();
-
-      Assert.IsFalse(validationSummary.IsValid);
-      Assert.AreEqual("Transaction 4 has invalid signature (using 2 fragments).", validationSummary.Errors[0]);
     }
 
     /// <summary>
@@ -154,6 +135,78 @@
       var validationSummary = this.bundle.Validate();
       Assert.IsFalse(validationSummary.IsValid);
       Assert.AreEqual("Transaction 5 has an invalid last index. Expected: 7. Got 4.", validationSummary.Errors[0]);
+    }
+
+    /// <summary>
+    /// The test missing signature fragment underflow.
+    /// </summary>
+    [TestMethod]
+    public void TestMissingSignatureFragmentUnderflow()
+    {
+      this.bundle.Transactions[0].Value += this.bundle.Transactions[7].Value;
+      this.bundle.Transactions.RemoveRange(this.bundle.Transactions.Count - 2, 2);
+
+      foreach (var transaction in this.bundle.Transactions)
+      {
+        transaction.LastIndex -= 2;
+      }
+
+      var validationSummary = this.bundle.Validate();
+
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual("Transaction 4 has invalid signature (using 2 fragments).", validationSummary.Errors[0]);
+    }
+
+    /// <summary>
+    /// The test multiple errors in bundle.
+    /// </summary>
+    [TestMethod]
+    public void TestMultipleErrorsInBundle()
+    {
+      this.bundle.Transactions.RemoveAt(4);
+      var validationSummary = this.bundle.Validate();
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual(11, validationSummary.Errors.Count);
+    }
+
+    /// <summary>
+    /// The test one signature fragment is invalid.
+    /// </summary>
+    [TestMethod]
+    public void TestOneSignatureFragmentIsInvalid()
+    {
+      this.bundle.Transactions[5].Fragment = new Fragment();
+
+      var validationSummary = this.bundle.Validate();
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual("Transaction 4 has invalid signature (using 3 fragments).", validationSummary.Errors[0]);
+    }
+
+    /// <summary>
+    /// The test one transaction has a wrong value.
+    /// </summary>
+    [TestMethod]
+    public void TestOneTransactionHasAWrongValue()
+    {
+      this.bundle.Transactions[5].Value = -1;
+      this.bundle.Transactions.Last().Value += 1;
+
+      var validationSummary = this.bundle.Validate();
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual("Transaction 5 has invalid value. Expected: 0. Got -1.", validationSummary.Errors[0]);
+    }
+
+    /// <summary>
+    /// The test signature fragment has wrong address.
+    /// </summary>
+    [TestMethod]
+    public void TestSignatureFragmentHasWrongAddress()
+    {
+      this.bundle.Transactions[2].Address = new Address("QHEDFWZULBZFEOMNLRNIDQKDNNIELAOXOVMYEI9PGNFDPEEZCWVYLKZGSLCQNOFUSENIXRHWWTZFBXMPS");
+
+      var validationSummary = this.bundle.Validate();
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual("Transaction 2 has invalid signature (using 1 fragments).", validationSummary.Errors[0]);
     }
 
     #endregion

@@ -353,6 +353,23 @@
       var transactionGroups = this.GroupTransactions();
       foreach (var transactionGroup in transactionGroups)
       {
+        for (int i = 0; i < transactionGroup.Count; i++)
+        {
+          if (i > 0 && transactionGroup[i].Value != 0)
+          {
+            validationErrors.Add(
+            string.Format("Transaction {0} has invalid value. Expected: 0. Got {1}.", transactionGroup[i].CurrentIndex, transactionGroup[i].Value));
+          }
+        }
+      }
+
+      if (validationErrors.Any())
+      {
+        return new ValidationSummary { IsValid = false, Errors = validationErrors };
+      }
+
+      foreach (var transactionGroup in transactionGroups)
+      {
         if (transactionGroup[0].Value >= 0)
         {
           continue;
@@ -425,7 +442,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    private IEnumerable<List<Transaction>> GroupTransactions()
+    private List<List<Transaction>> GroupTransactions()
     {
       return this.Transactions.GroupBy(t => t.Address.Value).Select(group => group.Select(transaction => transaction).ToList()).ToList();
     }

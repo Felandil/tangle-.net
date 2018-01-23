@@ -340,7 +340,7 @@
     /// The test get transactions to approve throws exception should wrap exception.
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(IriApiException))]
+    [ExpectedException(typeof(IotaApiException))]
     public void TestGetTransactionsToApproveDoesNotReturnHttpStatusOkShouldWrapInException()
     {
       var restClientMock = new Mock<IRestClient>();

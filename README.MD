@@ -20,7 +20,7 @@ The project was set up a little different from most (except the python one) IOTA
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
 | getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
 | getNodeInfo					 | Yes             | getAccountData				      | No		        |
-| addNeighbors					 | Yes			   | getBundles					      | No		        |
+| addNeighbors					 | Yes			   | getBundle					      | Yes		        |
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |

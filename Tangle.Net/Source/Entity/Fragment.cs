@@ -84,6 +84,21 @@
       return new Fragment(AsciiToTrytes.FromString(input));
     }
 
+    /// <summary>
+    /// The validate fragments.
+    /// </summary>
+    /// <param name="fragments">
+    /// The fragments.
+    /// </param>
+    /// <param name="hash">
+    /// The hash.
+    /// </param>
+    /// <param name="publicKey">
+    /// The public key.
+    /// </param>
+    /// <returns>
+    /// The <see cref="bool"/>.
+    /// </returns>
     public static bool ValidateFragments(List<Fragment> fragments, Hash hash, TryteString publicKey)
     {
       var checksum = new List<int>();
