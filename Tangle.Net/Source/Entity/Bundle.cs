@@ -345,6 +345,11 @@
         }
       }
 
+      if (validationErrors.Any())
+      {
+        return new ValidationSummary { IsValid = false, Errors = validationErrors };
+      }
+
       var transactionGroups = this.GroupTransactions();
       foreach (var transactionGroup in transactionGroups)
       {

@@ -99,10 +99,11 @@
         for (var j = 0; j < fragmentChunks.Count; j++)
         {
           buffer = fragmentChunks[j].ToTrits();
+          var innerSponge = new Kerl();
 
-          for (var k = normalizedHashChunk[j] + 13; k-- > 0;)
+          for (var k = 0; k < normalizedHashChunk[j] + 13; k++)
           {
-            var innerSponge = new Kerl();
+            innerSponge.Reset();
             innerSponge.Absorb(buffer);
             innerSponge.Squeeze(buffer);
           }
@@ -112,7 +113,6 @@
 
         outerSponge.Squeeze(buffer);
         checksum.AddRange(buffer);
-        i++;
       }
 
       var actualPublicKey = new int[Kerl.HashLength];
