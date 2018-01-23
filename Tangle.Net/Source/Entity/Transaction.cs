@@ -129,12 +129,13 @@
         hash = new Hash(Converter.TritsToTrytes(hashTrits));
       }
 
+      var valueTrits = trytes.GetChunk(2268, 27).ToTrits();
       return new Transaction
                {
                  Address = trytes.GetChunk<Address>(2187, Address.Length), 
                  Hash = hash, 
                  Fragment = trytes.GetChunk<Fragment>(0, 2187), 
-                 Value = Converter.TritsToInt(trytes.GetChunk(2268, 27).ToTrits()), 
+                 Value = Converter.ConvertTritsToBigInt(valueTrits, 0, valueTrits.Length).LongValue, 
                  ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length), 
                  Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()), 
                  CurrentIndex = Converter.TritsToInt(trytes.GetChunk(2331, 9).ToTrits()), 
