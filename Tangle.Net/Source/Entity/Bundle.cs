@@ -345,6 +345,23 @@
         }
       }
 
+      var transactionGroups = this.GroupTransactions();
+      foreach (var transactionGroup in transactionGroups)
+      {
+        if (transactionGroup[0].Value >= 0)
+        {
+          continue;
+        }
+
+        var hasValidSignature = Fragment.ValidateFragments(transactionGroup.Select(t => t.Fragment).ToList(), transactionGroup[0].BundleHash, transactionGroup[0].Address);
+
+        if (!hasValidSignature)
+        {
+          validationErrors.Add(
+            string.Format("Transaction {0} has invalid signature (using {1} fragments).", transactionGroup[0].CurrentIndex, transactionGroup.Count));
+        }
+      }
+
       return new ValidationSummary { IsValid = !validationErrors.Any(), Errors = validationErrors };
     }
 

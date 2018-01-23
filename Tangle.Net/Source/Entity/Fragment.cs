@@ -1,8 +1,10 @@
 ﻿namespace Tangle.Net.Source.Entity
 {
   using System;
+  using System.Collections.Generic;
   using System.Linq;
 
+  using Tangle.Net.Source.Cryptography;
   using Tangle.Net.Source.Utils;
 
   /// <summary>
@@ -80,6 +82,46 @@
     public static new Fragment FromString(string input)
     {
       return new Fragment(AsciiToTrytes.FromString(input));
+    }
+
+    public static bool ValidateFragments(List<Fragment> fragments, Hash hash, TryteString publicKey)
+    {
+      var checksum = new List<int>();
+      var normalizedHash = Hash.Normalize(hash);
+
+      for (var i = 0; i < fragments.Count; i++)
+      {
+        var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray();
+        var buffer = new int[Kerl.HashLength];
+
+        var outerSponge = new Kerl();
+        var fragmentChunks = fragments[i].GetChunks(Hash.Length);
+        for (var j = 0; j < fragmentChunks.Count; j++)
+        {
+          buffer = fragmentChunks[j].ToTrits();
+
+          for (var k = normalizedHashChunk[j] + 13; k-- > 0;)
+          {
+            var innerSponge = new Kerl();
+            innerSponge.Absorb(buffer);
+            innerSponge.Squeeze(buffer);
+          }
+
+          outerSponge.Absorb(buffer);
+        }
+
+        outerSponge.Squeeze(buffer);
+        checksum.AddRange(buffer);
+        i++;
+      }
+
+      var actualPublicKey = new int[Kerl.HashLength];
+      var kerl = new Kerl();
+      kerl.Absorb(checksum.ToArray());
+      kerl.Squeeze(actualPublicKey);
+
+      var actualPublicKeyTrytes = Converter.TritsToTrytes(actualPublicKey);
+      return actualPublicKeyTrytes == publicKey.Value;
     }
 
     #endregion

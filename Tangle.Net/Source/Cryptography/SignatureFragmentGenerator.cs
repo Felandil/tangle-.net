@@ -60,7 +60,7 @@
       var chunks = this.PrivateKey.GetChunks(PrivateKey.ChunkLength);
       foreach (var chunk in chunks)
       {
-        var normalizedHashChunk = normalizedHash.Skip(i * 27).Take(27).ToArray(); // TODO - replace magic numbers
+        var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray(); // TODO - replace magic numbers
         var signatureFragmentTrits = chunk.ToTrits();
         var finalizedSignatureFragmentTrits = new List<int>();
         var kerl = new Kerl();

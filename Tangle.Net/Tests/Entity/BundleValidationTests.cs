@@ -53,6 +53,26 @@
     }
 
     /// <summary>
+    /// The test missing signature fragment underflow.
+    /// </summary>
+    [TestMethod]
+    public void TestMissingSignatureFragmentUnderflow()
+    {
+      this.bundle.Transactions[0].Value += this.bundle.Transactions[7].Value;
+      this.bundle.Transactions.RemoveRange(this.bundle.Transactions.Count - 2, 2);
+
+      foreach (var transaction in this.bundle.Transactions)
+      {
+        transaction.LastIndex -= 2;
+      }
+
+      var validationSummary = this.bundle.Validate();
+
+      Assert.IsFalse(validationSummary.IsValid);
+      Assert.AreEqual("Transaction 4 has invalid signature (using 2 fragments).", validationSummary.Errors[0]);
+    }
+
+    /// <summary>
     /// The test bundle balance is negative should add error and return false.
     /// </summary>
     [TestMethod]
