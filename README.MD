@@ -24,10 +24,10 @@ The project was set up a little different from most (except the python one) IOTA
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | Yes (untested)        |
-| getInclusionStates			 | Yes             | prepareTransfers				  | No		        |
-| getBalances					 | Yes    		   | replayBundle					  | No		        |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | No		        |
+| getTrytes						 | Yes			   | getTransfers					  | Yes (untested)  |
+| getInclusionStates			 | Yes             | prepareTransfers				  | Yes (untested)  |
+| getBalances					 | Yes    		   | replayBundle					  | Yes (untested)  |
+| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes (untested)  |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |

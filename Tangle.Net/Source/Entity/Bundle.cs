@@ -51,6 +51,11 @@
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether is confirmed.
+    /// </summary>
+    public bool IsConfirmed { get; set; }
+
+    /// <summary>
     /// Gets or sets the transactions.
     /// </summary>
     public List<Transaction> Transactions { get; set; }
@@ -63,11 +68,6 @@
     /// Gets or sets the remainder address.
     /// </summary>
     private Address RemainderAddress { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether is confirmed.
-    /// </summary>
-    public bool IsConfirmed { get; set; }
 
     #endregion
 
@@ -311,6 +311,24 @@
         transaction.TrunkTransaction = new Hash();
         transaction.BranchTransaction = new Hash();
       }
+    }
+
+    /// <summary>
+    /// The to trytes.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<TransactionTrytes> ToTrytes()
+    {
+      var transactionTrytes = new List<TransactionTrytes>();
+
+      foreach (var transaction in this.Transactions)
+      {
+        transactionTrytes.Add(transaction.ToTrytes());
+      }
+
+      return transactionTrytes;
     }
 
     /// <summary>

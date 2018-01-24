@@ -141,23 +141,6 @@
     List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel);
 
     /// <summary>
-    /// The send trytes.
-    /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
-
-    /// <summary>
     /// The get transfers.
     /// </summary>
     /// <param name="seed">
@@ -179,6 +162,99 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<Bundle> GetTransfers(Seed seed, int securityLevel, bool includeInclusionStates, int addressStartIndex, int addressStopIndex = 0);
+
+    /// <summary>
+    /// The prepare transfer.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="bundle">
+    /// The bundle.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
+    /// <param name="inputAddresses">
+    /// The input addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Bundle"/>.
+    /// </returns>
+    Bundle PrepareTransfer(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null);
+
+    /// <summary>
+    /// The replay bundle.
+    /// </summary>
+    /// <param name="transactionHash">
+    /// The transaction hash.
+    /// </param>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 27, int minWeightMagnitude = 18);
+
+    /// <summary>
+    /// The send transfer.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="bundle">
+    /// The bundle.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <param name="remainderAddress">
+    /// The remainder address.
+    /// </param>
+    /// <param name="inputAddresses">
+    /// The input addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Bundle"/>.
+    /// </returns>
+    Bundle SendTransfer(
+      Seed seed, 
+      Bundle bundle, 
+      int securityLevel, 
+      int depth, 
+      int minWeightMagnitude, 
+      Address remainderAddress = null, 
+      List<Address> inputAddresses = null);
+
+    /// <summary>
+    /// The send trytes.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
 
     #endregion
   }
