@@ -17,8 +17,11 @@ The project was set up a little different from most (except the python one) IOTA
 ## Supported Operations
 
 Next Up: 
+
 	**Local PoW**
+
 To Come:
+
 	* Node authentication
 	* MAM support
 
