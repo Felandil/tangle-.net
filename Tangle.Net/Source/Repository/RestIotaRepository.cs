@@ -53,22 +53,6 @@
     #region Public Methods and Operators
 
     /// <summary>
-    /// The add neighbor.
-    /// </summary>
-    /// <param name="neighbors">
-    /// The neighbors.
-    /// </param>
-    /// <returns>
-    /// The <see cref="AddNeighborsResponse"/>.
-    /// </returns>
-    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
-    {
-      return
-        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
-          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
-    }
-
-    /// <summary>
     /// The attach to tangle.
     /// </summary>
     /// <param name="branchTransaction">
@@ -104,18 +88,6 @@
             });
 
       return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
-    }
-
-    /// <summary>
-    /// The broadcast and store transactions.
-    /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
-    {
-      this.BroadcastTransactions(transactions);
-      this.StoreTransactions(transactions);
     }
 
     /// <summary>
@@ -233,6 +205,162 @@
     }
 
     /// <summary>
+    /// The get balances.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <param name="threshold">
+    /// The threshold.
+    /// </param>
+    /// <returns>
+    /// The <see cref="AddressWithBalances"/>.
+    /// </returns>
+    public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetBalanceResponse>(
+          new Dictionary<string, object>
+            {
+              { "command", Commands.GetBalances }, 
+              { "addresses", addresses.Select(a => a.Value).ToList() }, 
+              { "threshold", threshold }
+            });
+
+      for (var i = 0; i < addresses.Count(); i++)
+      {
+        addresses[i].Balance = result.Balances[i];
+      }
+
+      return new AddressWithBalances
+               {
+                 Addresses = addresses, 
+                 Duration = result.Duration, 
+                 MilestoneIndex = result.MilestoneIndex, 
+                 References = result.References.ConvertAll(reference => new TryteString(reference))
+               };
+    }
+
+    /// <summary>
+    /// The get inclusion states.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transactions hashes.
+    /// </param>
+    /// <param name="tips">
+    /// The tips.
+    /// </param>
+    /// <returns>
+    /// The <see cref="InclusionStates"/>.
+    /// </returns>
+    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
+          new Dictionary<string, object>
+            {
+              { "command", Commands.GetInclusionStates }, 
+              { "transactions", transactionHashes.Select(t => t.Value).ToList() }, 
+              { "tips", tips.Select(t => t.Value).ToList() }
+            });
+
+      var inclusionStates = new Dictionary<Hash, bool>();
+      for (var i = 0; i < transactionHashes.Count(); i++)
+      {
+        inclusionStates.Add(transactionHashes[i], result.States[i]);
+      }
+
+      return new InclusionStates { States = inclusionStates, Duration = result.Duration };
+    }
+
+    /// <summary>
+    /// The get tips.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="TipHashList"/>.
+    /// </returns>
+    public TipHashList GetTips()
+    {
+      var response = this.ExecuteParameterlessCommand<GetTipsResponse>(Commands.GetTips);
+
+      return new TipHashList { Duration = response.Duration, Hashes = response.Hashes.Select(h => new Hash(h)).ToList() };
+    }
+
+    /// <summary>
+    /// The get transactions to approve.
+    /// </summary>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TransactionsToApprove"/>.
+    /// </returns>
+    public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
+          new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
+
+      return new TransactionsToApprove
+               {
+                 BranchTransaction = new Hash(result.BranchTransaction), 
+                 TrunkTransaction = new Hash(result.TrunkTransaction), 
+                 Duration = result.Duration
+               };
+    }
+
+    /// <summary>
+    /// The get trytes.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    {
+      var result =
+        this.ExecuteParameterizedCommand<GetTrytesResponse>(
+          new Dictionary<string, object> { { "command", Commands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+
+      return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
+    }
+
+    /// <summary>
+    /// The interrupt attaching to tangle.
+    /// </summary>
+    public void InterruptAttachingToTangle()
+    {
+      this.Client.Execute(CreateRequest(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } }));
+    }
+
+    /// <summary>
+    /// The store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
+    {
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+    }
+
+    /// <summary>
+    /// The broadcast and store transactions.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
+    {
+      this.BroadcastTransactions(transactions);
+      this.StoreTransactions(transactions);
+    }
+
+    /// <summary>
     /// The find used addresses.
     /// </summary>
     /// <param name="seed">
@@ -285,7 +413,7 @@
     /// <param name="seed">
     /// The seed.
     /// </param>
-    /// <param name="inclusionState">
+    /// <param name="includeInclusionStates">
     /// The inclusion state.
     /// </param>
     /// <param name="securityLevel">
@@ -300,7 +428,12 @@
     /// <returns>
     /// The <see cref="GetAccountDataResponse"/>.
     /// </returns>
-    public GetAccountDataResponse GetAccountData(Seed seed, bool inclusionState, int securityLevel, int addressStartIndex, int addressStopIndex = 0)
+    public GetAccountDataResponse GetAccountData(
+      Seed seed, 
+      bool includeInclusionStates, 
+      int securityLevel, 
+      int addressStartIndex, 
+      int addressStopIndex = 0)
     {
       var usedAddressesWithTransactions = this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
       var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddressesWithTransactions.UsedAddresses.Last().KeyIndex + 1);
@@ -310,39 +443,7 @@
       if (usedAddressesWithTransactions.AssociatedTransactionHashes.Count > 0)
       {
         addressesWithBalance = this.GetBalances(usedAddressesWithTransactions.UsedAddresses).Addresses;
-        var transactionTrytes = this.GetTrytes(usedAddressesWithTransactions.AssociatedTransactionHashes);
-        var tailTransactions = new List<Hash>();
-        var nonTailTransactions = new List<Transaction>();
-
-        foreach (var transactionTryte in transactionTrytes)
-        {
-          var transaction = Transaction.FromTrytes(transactionTryte);
-          if (transaction.IsTail)
-          {
-            tailTransactions.Add(transaction.Hash);
-          }
-          else
-          {
-            nonTailTransactions.Add(transaction);
-          }
-        }
-
-        var allBundleTransactions = this.FindTransactionsByBundles(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList()).Hashes;
-        var allBundleTransactionTrytes = this.GetTrytes(allBundleTransactions);
-
-        foreach (var allBundleTransactionTryte in allBundleTransactionTrytes)
-        {
-          var transaction = Transaction.FromTrytes(allBundleTransactionTryte);
-          if (transaction.IsTail)
-          {
-            tailTransactions.Add(transaction.Hash);
-          }
-        }
-
-        foreach (var tailTransaction in tailTransactions)
-        {
-          associatedBundles.Add(this.GetBundle(tailTransaction));
-        }
+        associatedBundles = this.GetBundles(usedAddressesWithTransactions.AssociatedTransactionHashes, includeInclusionStates);
       }
 
       return new GetAccountDataResponse
@@ -351,43 +452,6 @@
                  UsedAddresses = usedAddressesWithTransactions.UsedAddresses, 
                  AssociatedBundles = associatedBundles, 
                  LatestUnusedAddress = latestUnusedAddress
-               };
-    }
-
-    /// <summary>
-    /// The get balances.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <param name="threshold">
-    /// The threshold.
-    /// </param>
-    /// <returns>
-    /// The <see cref="AddressWithBalances"/>.
-    /// </returns>
-    public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
-    {
-      var result =
-        this.ExecuteParameterizedCommand<GetBalanceResponse>(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.GetBalances }, 
-              { "addresses", addresses.Select(a => a.Value).ToList() }, 
-              { "threshold", threshold }
-            });
-
-      for (var i = 0; i < addresses.Count(); i++)
-      {
-        addresses[i].Balance = result.Balances[i];
-      }
-
-      return new AddressWithBalances
-               {
-                 Addresses = addresses, 
-                 Duration = result.Duration, 
-                 MilestoneIndex = result.MilestoneIndex, 
-                 References = result.References.ConvertAll(reference => new TryteString(reference))
                };
     }
 
@@ -412,38 +476,6 @@
       }
 
       return bundle;
-    }
-
-    /// <summary>
-    /// The get inclusion states.
-    /// </summary>
-    /// <param name="transactionHashes">
-    /// The transactions hashes.
-    /// </param>
-    /// <param name="tips">
-    /// The tips.
-    /// </param>
-    /// <returns>
-    /// The <see cref="InclusionStates"/>.
-    /// </returns>
-    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
-    {
-      var result =
-        this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.GetInclusionStates }, 
-              { "transactions", transactionHashes.Select(t => t.Value).ToList() }, 
-              { "tips", tips.Select(t => t.Value).ToList() }
-            });
-
-      var inclusionStates = new Dictionary<Hash, bool>();
-      for (var i = 0; i < transactionHashes.Count(); i++)
-      {
-        inclusionStates.Add(transactionHashes[i], result.States[i]);
-      }
-
-      return new InclusionStates { States = inclusionStates, Duration = result.Duration };
     }
 
     /// <summary>
@@ -522,17 +554,6 @@
     }
 
     /// <summary>
-    /// The get neighbors.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="NeighborList"/>.
-    /// </returns>
-    public NeighborList GetNeighbors()
-    {
-      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
-    }
-
-    /// <summary>
     /// The get new addresses.
     /// </summary>
     /// <param name="seed">
@@ -579,95 +600,6 @@
     }
 
     /// <summary>
-    /// The get node info.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="NodeInfo"/>.
-    /// </returns>
-    public NodeInfo GetNodeInfo()
-    {
-      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
-    }
-
-    /// <summary>
-    /// The get tips.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="TipHashList"/>.
-    /// </returns>
-    public TipHashList GetTips()
-    {
-      var response = this.ExecuteParameterlessCommand<GetTipsResponse>(Commands.GetTips);
-
-      return new TipHashList { Duration = response.Duration, Hashes = response.Hashes.Select(h => new Hash(h)).ToList() };
-    }
-
-    /// <summary>
-    /// The get transactions to approve.
-    /// </summary>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TransactionsToApprove"/>.
-    /// </returns>
-    public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
-    {
-      var result =
-        this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
-          new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
-
-      return new TransactionsToApprove
-               {
-                 BranchTransaction = new Hash(result.BranchTransaction), 
-                 TrunkTransaction = new Hash(result.TrunkTransaction), 
-                 Duration = result.Duration
-               };
-    }
-
-    /// <summary>
-    /// The get trytes.
-    /// </summary>
-    /// <param name="hashes">
-    /// The hashes.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TryteString"/>.
-    /// </returns>
-    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
-    {
-      var result =
-        this.ExecuteParameterizedCommand<GetTrytesResponse>(
-          new Dictionary<string, object> { { "command", Commands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
-
-      return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
-    }
-
-    /// <summary>
-    /// The interrupt attaching to tangle.
-    /// </summary>
-    public void InterruptAttachingToTangle()
-    {
-      this.Client.Execute(CreateRequest(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } }));
-    }
-
-    /// <summary>
-    /// The remove neighbors.
-    /// </summary>
-    /// <param name="neighbors">
-    /// The neighbors.
-    /// </param>
-    /// <returns>
-    /// The <see cref="RemoveNeighborsResponse"/>.
-    /// </returns>
-    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
-    {
-      return
-        this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
-          new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
-    }
-
-    /// <summary>
     /// The send trytes.
     /// </summary>
     /// <param name="transactions">
@@ -697,16 +629,151 @@
     }
 
     /// <summary>
-    /// The store transactions.
+    /// The get transfers.
     /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
+    /// <param name="seed">
+    /// The seed.
     /// </param>
-    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="includeInclusionStates">
+    /// The include inclusion states.
+    /// </param>
+    /// <param name="addressStartIndex">
+    /// The address start index.
+    /// </param>
+    /// <param name="addressStopIndex">
+    /// The address stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Bundle> GetTransfers(Seed seed, int securityLevel, bool includeInclusionStates, int addressStartIndex, int addressStopIndex = 0)
     {
-      this.Client.Execute(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+      var transactions = addressStopIndex == 0
+                           ? this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex).AssociatedTransactionHashes
+                           : this.FindTransactionsByAddresses(addressGenerator.GetAddresses(0, addressStartIndex - addressStopIndex + 1)).Hashes;
+
+      return this.GetBundles(transactions, includeInclusionStates);
+    }
+
+    /// <summary>
+    /// The add neighbor.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="AddNeighborsResponse"/>.
+    /// </returns>
+    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
+    {
+      return
+        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
+          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+    }
+
+    /// <summary>
+    /// The get neighbors.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="NeighborList"/>.
+    /// </returns>
+    public NeighborList GetNeighbors()
+    {
+      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
+    }
+
+    /// <summary>
+    /// The get node info.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="NodeInfo"/>.
+    /// </returns>
+    public NodeInfo GetNodeInfo()
+    {
+      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
+    }
+
+    /// <summary>
+    /// The remove neighbors.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="RemoveNeighborsResponse"/>.
+    /// </returns>
+    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
+    {
+      return
+        this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
+          new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+    }
+
+    /// <summary>
+    /// The get bundles.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transaction hashes.
+    /// </param>
+    /// <param name="includeInclusionStates">
+    /// The include inclusion states.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Bundle> GetBundles(IEnumerable<Hash> transactionHashes, bool includeInclusionStates)
+    {
+      var associatedBundles = new List<Bundle>();
+      var tailTransactions = new List<Hash>();
+      var nonTailTransactions = new List<Transaction>();
+
+      var transactionTrytes = this.GetTrytes(transactionHashes);
+
+      foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte)))
+      {
+        if (transaction.IsTail)
+        {
+          tailTransactions.Add(transaction.Hash);
+        }
+        else
+        {
+          nonTailTransactions.Add(transaction);
+        }
+      }
+
+      var allBundleTransactions = this.FindTransactionsByBundles(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList()).Hashes;
+      var allBundleTransactionTrytes = this.GetTrytes(allBundleTransactions);
+
+      tailTransactions.AddRange(
+        from bundleTransactionTryte in allBundleTransactionTrytes
+        select Transaction.FromTrytes(bundleTransactionTryte)
+        into transaction
+        where transaction.IsTail
+        select transaction.Hash);
+
+      var inclusionStates = new InclusionStates();
+      if (includeInclusionStates)
+      {
+        inclusionStates = this.GetLatestInclusion(tailTransactions);
+      }
+
+      foreach (var tailTransaction in tailTransactions)
+      {
+        var bundle = this.GetBundle(tailTransaction);
+
+        if (includeInclusionStates)
+        {
+          bundle.IsConfirmed = inclusionStates.States.FirstOrDefault(transactionHash => transactionHash.Key.Value == tailTransaction.Value).Value;
+        }
+
+        associatedBundles.Add(bundle);
+      }
+
+      return associatedBundles;
     }
 
     #endregion

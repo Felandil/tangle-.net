@@ -1,9 +1,7 @@
 ﻿namespace Tangle.Net.Source.Cryptography
 {
   using System.Collections.Generic;
-  using System.IO;
   using System.Linq;
-  using System.Threading;
   using System.Threading.Tasks;
 
   using Tangle.Net.Source.Entity;

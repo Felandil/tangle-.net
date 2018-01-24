@@ -64,6 +64,11 @@
     /// </summary>
     private Address RemainderAddress { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether is confirmed.
+    /// </summary>
+    public bool IsConfirmed { get; set; }
+
     #endregion
 
     #region Public Methods and Operators

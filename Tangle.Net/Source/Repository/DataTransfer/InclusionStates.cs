@@ -9,6 +9,14 @@
   /// </summary>
   public class InclusionStates
   {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InclusionStates"/> class.
+    /// </summary>
+    public InclusionStates()
+    {
+      this.States = new Dictionary<Hash, bool>();
+    }
+
     #region Public Properties
 
     /// <summary>

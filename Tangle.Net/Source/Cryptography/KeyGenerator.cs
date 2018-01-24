@@ -4,7 +4,6 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Source.Entity;
-  using Tangle.Net.Tests.Cryptography;
 
   /// <summary>
   /// The key generator.

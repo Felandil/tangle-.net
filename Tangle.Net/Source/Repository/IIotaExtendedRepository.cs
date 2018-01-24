@@ -44,7 +44,7 @@
     /// <param name="seed">
     /// The seed.
     /// </param>
-    /// <param name="inclusionState">
+    /// <param name="includeInclusionStates">
     /// The inclusion State.
     /// </param>
     /// <param name="securityLevel">
@@ -59,7 +59,7 @@
     /// <returns>
     /// The <see cref="GetAccountDataResponse"/>.
     /// </returns>
-    GetAccountDataResponse GetAccountData(Seed seed, bool inclusionState, int securityLevel, int addressStartIndex, int addressStopIndex = 0);
+    GetAccountDataResponse GetAccountData(Seed seed, bool includeInclusionStates, int securityLevel, int addressStartIndex, int addressStopIndex = 0);
 
     /// <summary>
     /// The get bundle.
@@ -71,6 +71,20 @@
     /// The <see cref="Bundle"/>.
     /// </returns>
     Bundle GetBundle(Hash transactionHash);
+
+    /// <summary>
+    /// The get bundles.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transaction hashes.
+    /// </param>
+    /// <param name="includeInclusionStates">
+    /// The include inclusion states.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<Bundle> GetBundles(IEnumerable<Hash> transactionHashes, bool includeInclusionStates);
 
     /// <summary>
     /// The get inputs.
@@ -142,6 +156,29 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
+
+    /// <summary>
+    /// The get transfers.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="includeInclusionStates">
+    /// The include inclusion states.
+    /// </param>
+    /// <param name="addressStartIndex">
+    /// The address start index.
+    /// </param>
+    /// <param name="addressStopIndex">
+    /// The address stop index.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<Bundle> GetTransfers(Seed seed, int securityLevel, bool includeInclusionStates, int addressStartIndex, int addressStopIndex = 0);
 
     #endregion
   }

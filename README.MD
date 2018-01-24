@@ -24,7 +24,7 @@ The project was set up a little different from most (except the python one) IOTA
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | No		        |
+| getTrytes						 | Yes			   | getTransfers					  | Yes (untested)        |
 | getInclusionStates			 | Yes             | prepareTransfers				  | No		        |
 | getBalances					 | Yes    		   | replayBundle					  | No		        |
 | getTransactionsToApprove		 | Yes             | sendTransfer					  | No		        |
