@@ -143,14 +143,14 @@
     /// <param name="transfer">
     /// The transfer.
     /// </param>
-    public void AddTransaction(Transfer transfer)
+    public void AddTransfer(Transfer transfer)
     {
       if (this.Hash != null)
       {
         throw new InvalidOperationException("BundleHash is already finalized!");
       }
 
-      if (transfer.Address.Balance < 0)
+      if (transfer.ValueToTransfer < 0)
       {
         throw new ArgumentException("Use AddInputs to add addresses for spending tokens.");
       }
@@ -169,7 +169,7 @@
                 Fragment = fragment, 
                 ObsoleteTag = transfer.Tag, 
                 Timestamp = transfer.Timestamp, 
-                Value = i == 0 ? transfer.Address.Balance : 0, 
+                Value = i == 0 ? transfer.ValueToTransfer : 0, 
                 Tag = transfer.Tag
               });
 
@@ -186,8 +186,8 @@
               Address = transfer.Address, 
               Fragment = new Fragment(transfer.Message == null ? string.Empty : transfer.Message.Value), 
               ObsoleteTag = transfer.Tag, 
-              Timestamp = transfer.Timestamp, 
-              Value = transfer.Address.Balance, 
+              Timestamp = transfer.Timestamp,
+              Value = transfer.ValueToTransfer, 
               Tag = transfer.Tag
             });
       }

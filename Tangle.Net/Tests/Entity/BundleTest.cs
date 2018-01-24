@@ -317,10 +317,10 @@
     public void TestAddInputsCoversTheExactAmountSpentShouldCreateCorrectTransactionCount()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 29 } });
-      this.bundle.AddTransaction(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y") { Balance = 13 } });
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 29});
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999OGVEEFBCYAM9ZEAADBGBHH9BPBOHFEGCFAM9DESCCHODZ9Y"), ValueToTransfer = 13});
 
       this.bundle.AddInput(
         new List<Address>
@@ -354,8 +354,8 @@
     public void TestAddInputsWithSecurityLevelHigherThanOneShouldAddMultipleTransactionsToHoldSignature()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 84});
 
       this.bundle.AddInput(
         new List<Address>
@@ -389,16 +389,14 @@
       var transfer = new Transfer
                        {
                          Address =
-                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
-                             {
-                               Balance = 42
-                             }, 
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
                          Message = new TryteString(), 
-                         Tag = Tag.Empty
+                         Tag = Tag.Empty,
+                         ValueToTransfer = 42
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
 
       this.bundle.AddInput(
         new List<Address>
@@ -445,7 +443,7 @@
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
 
       this.bundle.AddInput(
         new List<Address>
@@ -482,16 +480,14 @@
       var transfer = new Transfer
                        {
                          Address =
-                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
-                             {
-                               Balance = 42
-                             }, 
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
                          Message = new TryteString("ASDF"), 
-                         Tag = Tag.Empty
+                         Tag = Tag.Empty,
+                         ValueToTransfer = 42
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
 
       this.bundle.AddInput(
         new List<Address>
@@ -522,8 +518,8 @@
     public void TestBundleIsFinalizedShouldApplySigningFragmentAndNoExtraTransactionsForSecurityLevelOne()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 42});
 
       this.bundle.AddInput(
         new List<Address>
@@ -576,8 +572,8 @@
     public void TestBundleIsFinalizedShouldApplySigningFragmentAndWithExtraTransactionsForSecurityLevelAboveOne()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 42 });
 
       this.bundle.AddInput(
         new List<Address>
@@ -628,10 +624,10 @@
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
       this.bundle.Finalize();
 
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
     }
 
     /// <summary>
@@ -642,7 +638,7 @@
     public void TestBundleIsFinalizedShouldThrowExceptionOnAddInput()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
+      this.bundle.AddTransfer(
         new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
 
       this.bundle.Finalize();
@@ -667,7 +663,7 @@
     public void TestBundleIsFinalizedShouldThrowExceptionOnAddRemainder()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
+      this.bundle.AddTransfer(
         new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
 
       this.bundle.Finalize();
@@ -683,7 +679,7 @@
     public void TestBundleIsFinalizedShouldThrowExceptionOnFinalize()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
+      this.bundle.AddTransfer(
         new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 84 } });
 
       this.bundle.Finalize();
@@ -698,7 +694,7 @@
     public void TestBundleIsNotFinalizedShouldNotBeSignable()
     {
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(
+      this.bundle.AddTransfer(
         new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
 
       this.bundle.Sign(new KeyGeneratorStub());
@@ -735,7 +731,7 @@
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
       this.bundle.Finalize();
 
       Assert.AreEqual(1, this.bundle.Transactions.Count);
@@ -753,23 +749,21 @@
       var transfer = new Transfer
                        {
                          Address =
-                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
-                             {
-                               Balance = 42
-                             }, 
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
                          Message = TryteString.FromString(GetSuperLongMessage()), 
-                         Tag = Tag.Empty
+                         Tag = Tag.Empty,
+                         ValueToTransfer = 42
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
 
       Assert.AreEqual(2, this.bundle.Transactions.Count);
 
       var transactionOne = this.bundle.Transactions[0];
       Assert.AreEqual(transfer.Address, transactionOne.Address);
       Assert.AreEqual(transfer.Tag, transactionOne.Tag);
-      Assert.AreEqual(transfer.Address.Balance, transactionOne.Value);
+      Assert.AreEqual(transfer.ValueToTransfer, transactionOne.Value);
 
       var transactionTwo = this.bundle.Transactions[1];
       Assert.AreEqual(transfer.Address, transactionTwo.Address);
@@ -795,7 +789,7 @@
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
 
       Assert.AreEqual(1, this.bundle.Transactions.Count);
     }
@@ -810,16 +804,14 @@
       var transfer = new Transfer
                        {
                          Address =
-                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB")
-                             {
-                               Balance = -42
-                             }, 
+                           new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
                          Message = TryteString.FromString(GetSuperLongMessage()), 
-                         Tag = Tag.Empty
+                         Tag = Tag.Empty,
+                         ValueToTransfer = -42
                        };
 
       this.bundle = new Bundle();
-      this.bundle.AddTransaction(transfer);
+      this.bundle.AddTransfer(transfer);
     }
 
     #endregion

@@ -16,6 +16,12 @@ The project was set up a little different from most (except the python one) IOTA
 
 ## Supported Operations
 
+Next Up: 
+	**Local PoW**
+To Come:
+	* Node authentication
+	* MAM support
+
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
 | getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
@@ -24,10 +30,10 @@ The project was set up a little different from most (except the python one) IOTA
 | removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
 | getTips						 | Yes             | getLatestInclusion			      | Yes             |
 | findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | Yes (untested)  |
-| getInclusionStates			 | Yes             | prepareTransfers				  | Yes (untested)  |
-| getBalances					 | Yes    		   | replayBundle					  | Yes (untested)  |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes (untested)  |
+| getTrytes						 | Yes			   | getTransfers					  | Yes			    |
+| getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
+| getBalances					 | Yes    		   | replayBundle					  | Yes			    |
+| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |

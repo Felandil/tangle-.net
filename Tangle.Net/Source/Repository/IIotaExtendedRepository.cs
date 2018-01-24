@@ -234,8 +234,8 @@
       Seed seed, 
       Bundle bundle, 
       int securityLevel, 
-      int depth, 
-      int minWeightMagnitude, 
+      int depth = 27, 
+      int minWeightMagnitude = 18, 
       Address remainderAddress = null, 
       List<Address> inputAddresses = null);
 

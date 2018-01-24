@@ -39,6 +39,11 @@
     /// </summary>
     public long Timestamp { get; set; }
 
+    /// <summary>
+    /// Gets or sets the value to transfer.
+    /// </summary>
+    public long ValueToTransfer { get; set; }
+
     #endregion
   }
 }

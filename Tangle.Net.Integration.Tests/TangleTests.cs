@@ -13,7 +13,8 @@
   using Tangle.Net.Source.Utils;
 
   /// <summary>
-  /// The tangle tests.
+  /// Please note that in order to run these tests you sometimes have to enter a valid seed that contains transfers! 
+  /// Please do never commit that seed under any circumstances (at least if it contains funds).
   /// </summary>
   [TestClass]
   public class TangleTests
@@ -24,6 +25,11 @@
     /// The repository.
     /// </summary>
     private RestIotaRepository repository;
+
+    /// <summary>
+    /// The seed.
+    /// </summary>
+    private Seed seed;
 
     #endregion
 
@@ -36,18 +42,19 @@
     public void Setup()
     {
       this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+      this.seed = new Seed("SOMESEEDHERE");
     }
 
     /// <summary>
-    /// The test get latest inclusion.
+    /// The test bundle replay.
     /// </summary>
     [TestMethod]
-    public void TestGetLatestInclusion()
+    public void TestBundleReplay()
     {
-      var inclusionState = this.repository.GetLatestInclusion(
-          new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+      // insert a transaction hash to replay here
+      var transactionTrytes = this.repository.ReplayBundle(new Hash(string.Empty));
 
-      Assert.IsTrue(inclusionState.States.First(k => k.Key.Value == "HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999").Value);
+      Assert.IsTrue(transactionTrytes.Any());
     }
 
     /// <summary>
@@ -108,6 +115,20 @@
     }
 
     /// <summary>
+    /// The test get account data.
+    /// </summary>
+    [TestMethod]
+    public void TestGetAccountData()
+    {
+      var accountData = this.repository.GetAccountData(this.seed, true, SecurityLevel.Medium, 0);
+
+      Assert.IsTrue(accountData.AssociatedBundles.Any());
+      Assert.IsTrue(accountData.Balance > 0);
+      Assert.IsTrue(accountData.LatestUnusedAddress != null);
+      Assert.IsTrue(accountData.UsedAddresses.Any());
+    }
+
+    /// <summary>
     /// The test get balances.
     /// </summary>
     [TestMethod]
@@ -154,6 +175,20 @@
     }
 
     /// <summary>
+    /// The test get latest inclusion.
+    /// </summary>
+    [TestMethod]
+    public void TestGetLatestInclusion()
+    {
+      var inclusionState =
+        this.repository.GetLatestInclusion(
+          new List<Hash> { new Hash("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999") });
+
+      Assert.IsTrue(
+        inclusionState.States.First(k => k.Key.Value == "HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999").Value);
+    }
+
+    /// <summary>
     /// The test get new addresses.
     /// </summary>
     [TestMethod]
@@ -171,6 +206,16 @@
     {
       var tips = this.repository.GetTips();
       Assert.IsTrue(tips.Hashes.Any());
+    }
+
+    /// <summary>
+    /// The test get transfers.
+    /// </summary>
+    [TestMethod]
+    public void TestGetTransfers()
+    {
+      var transferBundles = this.repository.GetTransfers(this.seed, SecurityLevel.Medium, false, 0);
+      Assert.IsTrue(transferBundles.Any());
     }
 
     /// <summary>
@@ -194,6 +239,28 @@
     }
 
     /// <summary>
+    /// The test send transfer.
+    /// </summary>
+    [TestMethod]
+    public void TestSendTransfer()
+    {
+      var bundle = new Bundle();
+      bundle.AddTransfer(
+        new Transfer
+          {
+            Address = new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC"), 
+            Tag = new Tag("CSHARP"), 
+            Timestamp = Timestamp.UnixSecondsTimestamp, 
+            ValueToTransfer = 100
+          });
+
+      bundle = this.repository.SendTransfer(this.seed, bundle, SecurityLevel.Medium);
+
+      Assert.Equals(0, bundle.Balance);
+      Assert.Equals(2, bundle.Transactions.Count);
+    }
+
+    /// <summary>
     /// The test attach to tangle.
     /// </summary>
     [TestMethod]
@@ -201,7 +268,7 @@
     {
       var seed = Seed.Random();
       var bundle = new Bundle();
-      bundle.AddTransaction(
+      bundle.AddTransfer(
         new Transfer
           {
             Address =
