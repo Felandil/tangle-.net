@@ -302,8 +302,12 @@
         {
           i += 1;
         }
+      }
 
+      foreach (var transaction in this.Transactions)
+      {
         // alternative to AddTrytes from js library
+        transaction.Fragment = transaction.Fragment ?? new Fragment(); 
         transaction.AttachmentTimestamp = 999999999;
         transaction.AttachmentTimestampLowerBound = 999999999;
         transaction.AttachmentTimestampUpperBound = 999999999;
