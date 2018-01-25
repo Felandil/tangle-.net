@@ -36,7 +36,7 @@ To Come:
 | getTrytes						 | Yes			   | getTransfers					  | Yes			    |
 | getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
 | getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
+| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes (untested)  |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |

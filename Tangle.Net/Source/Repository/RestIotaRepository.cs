@@ -599,6 +599,8 @@
         var address = addressGenerator.GetAddress(addressStartIndex);
         var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
 
+        addressStartIndex++;
+
         if (transactionsOnAddress.Hashes.Count != 0)
         {
           continue;
@@ -606,7 +608,6 @@
 
         foundNewAddress = true;
         foundAddressCount++;
-        addressStartIndex++;
 
         result.Add(address);
       }
@@ -776,8 +777,8 @@
         bundle.AddRemainder(remainderAddress);
       }
 
-      bundle.Sign(new KeyGenerator(seed));
       bundle.Finalize();
+      bundle.Sign(new KeyGenerator(seed));
 
       return bundle;
     }
