@@ -11,12 +11,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouncy.Castle", "Bouncy.Cas
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0E74CD6-F9DB-43C3-9730-67D7AE690C11}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		DOCUMENTATION.MD = DOCUMENTATION.MD
 		LICENSE = LICENSE
 		README.MD = README.MD
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Integration.Tests", "Tangle.Net.Integration.Tests\Tangle.Net.Integration.Tests.csproj", "{11923503-6D6E-4330-AD2C-BEB30919FEC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Unit.Tests", "Tangle.Net.Unit.Tests\Tangle.Net.Unit.Tests.csproj", "{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +43,10 @@ Global
 		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

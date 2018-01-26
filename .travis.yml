@@ -6,4 +6,3 @@ mono:
 solution: Tangle.Net.sln
 script:
   - xbuild /p:Configuration=Release Tangle.Net.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tangle.Net\bin\Release\Tangle.Net.dll

@@ -8,8 +8,8 @@
 
   using RestSharp;
 
-  using Tangle.Net.Source.Repository;
-  using Tangle.Net.Source.Repository.DataTransfer;
+  using Tangle.Net.Repository;
+  using Tangle.Net.Repository.DataTransfer;
 
   /// <summary>
   /// The node tests.

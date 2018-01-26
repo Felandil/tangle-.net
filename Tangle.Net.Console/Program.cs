@@ -7,10 +7,9 @@
 
   using RestSharp;
 
-  using Tangle.Net.Source.Cryptography;
-  using Tangle.Net.Source.Entity;
-  using Tangle.Net.Source.Repository;
-  using Tangle.Net.Source.Utils;
+  using Tangle.Net.Cryptography;
+  using Tangle.Net.Entity;
+  using Tangle.Net.Repository;
 
   /// <summary>
   /// The program.
