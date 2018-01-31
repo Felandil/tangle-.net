@@ -36,7 +36,7 @@
     {
       if (seed.Length != Length)
       {
-        throw new ArgumentException("Seed must be of length 81");
+        throw new ArgumentException("Seed must be of length " + Length);
       }
     }
 
@@ -52,43 +52,16 @@
     /// </returns>
     public static Seed Random()
     {
-      string seed;
+      char[] seedChars;
 
       using (var rnd = new RNGCryptoServiceProvider())
       {
-        seed = new string(Enumerable.Repeat(AsciiToTrytes.TryteAlphabet, Length).Select(s => s[GetCryptoInt(rnd, s.Length)]).ToArray());
+        byte[] cryptoBytes = new byte[Length];
+        rnd.GetBytes(cryptoBytes);
+        seedChars = cryptoBytes.Select(x => AsciiToTrytes.TryteAlphabet[x % AsciiToTrytes.TryteAlphabet.Length]).ToArray();
       }
 
-      return new Seed(seed);
-    }
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// Return cryptographically strong random Int value
-    /// </summary>
-    /// <param name="rnd">
-    /// The rnd.
-    /// </param>
-    /// <param name="max">
-    /// The max.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    private static int GetCryptoInt(RandomNumberGenerator rnd, int max)
-    {
-      var r = new byte[4];
-      int value;
-      do
-      {
-        rnd.GetBytes(r);
-        value = BitConverter.ToInt32(r, 0) & int.MaxValue;
-      }
-      while (value >= max * (int.MaxValue / max));
-      return value % max;
+      return new Seed(new string(seedChars));
     }
 
     #endregion
