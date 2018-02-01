@@ -9,6 +9,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
 
@@ -34,9 +35,13 @@
     /// <param name="client">
     /// The client.
     /// </param>
-    public RestIotaRepository(IRestClient client)
+    /// <param name="powService">
+    /// The pow service.
+    /// </param>
+    public RestIotaRepository(IRestClient client, PoWService powService = null)
     {
       this.Client = client;
+      this.PoWService = powService;
     }
 
     #endregion
@@ -47,6 +52,11 @@
     /// Gets or sets the client.
     /// </summary>
     private IRestClient Client { get; set; }
+
+    /// <summary>
+    /// Gets or sets the po w service.
+    /// </summary>
+    private PoWService PoWService { get; set; }
 
     #endregion
 
@@ -92,6 +102,11 @@
       IEnumerable<Transaction> transactions, 
       int minWeightMagnitude = 18)
     {
+      if (this.PoWService != null)
+      {
+        return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
+      }
+
       var result =
         this.ExecuteParameterizedCommand<AttachToTangleResponse>(
           new Dictionary<string, object>
@@ -126,9 +141,10 @@
     /// </param>
     public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      this.Client.Execute(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response =
+        this.Client.Execute(
+          CreateRequest(
+            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     /// <summary>
@@ -851,8 +867,8 @@
     public Bundle SendTransfer(
       Seed seed, 
       Bundle bundle, 
-      int securityLevel,
-      int depth = 27,
+      int securityLevel, 
+      int depth = 27, 
       int minWeightMagnitude = 18, 
       Address remainderAddress = null, 
       List<Address> inputAddresses = null)
@@ -881,6 +897,7 @@
     public List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18)
     {
       var transactionsToApprove = this.GetTransactionsToApprove(depth);
+
       var attachResultTrytes = this.AttachToTangle(
         transactionsToApprove.BranchTransaction, 
         transactionsToApprove.TrunkTransaction, 
@@ -900,9 +917,10 @@
     /// </param>
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      this.Client.Execute(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response =
+        this.Client.Execute(
+          CreateRequest(
+            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     #endregion

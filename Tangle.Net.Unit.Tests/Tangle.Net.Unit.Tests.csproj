@@ -84,6 +84,8 @@
     <Compile Include="Entity\TransactionTests.cs" />
     <Compile Include="Entity\TransactionTrytesTest.cs" />
     <Compile Include="Entity\TryteStringTest.cs" />
+    <Compile Include="ProofOfWork\PoWDiverStub.cs" />
+    <Compile Include="ProofOfWork\PoWServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="Utils\AsciiToTrytesTest.cs" />
