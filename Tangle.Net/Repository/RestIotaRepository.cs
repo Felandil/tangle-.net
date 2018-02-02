@@ -6,6 +6,7 @@
   using System.Net;
 
   using RestSharp;
+  using RestSharp.Authenticators;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
@@ -38,10 +39,21 @@
     /// <param name="powService">
     /// The pow service.
     /// </param>
-    public RestIotaRepository(IRestClient client, PoWService powService = null)
+    /// <param name="username">
+    /// The username.
+    /// </param>
+    /// <param name="password">
+    /// The password.
+    /// </param>
+    public RestIotaRepository(IRestClient client, PoWService powService = null, string username = null, string password = null)
     {
       this.Client = client;
       this.PoWService = powService;
+
+      if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+      {
+        this.Client.Authenticator = new HttpBasicAuthenticator(username, password);
+      }
     }
 
     #endregion
@@ -104,7 +116,8 @@
     {
       if (this.PoWService != null)
       {
-        return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
+        return
+          this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
       }
 
       var result =
@@ -141,10 +154,9 @@
     /// </param>
     public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response =
-        this.Client.Execute(
-          CreateRequest(
-            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     /// <summary>
@@ -756,8 +768,6 @@
     /// <returns>
     /// The <see cref="Bundle"/>.
     /// </returns>
-    /// <exception cref="IotaApiException">
-    /// </exception>
     public Bundle PrepareTransfer(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null)
     {
       // user wants to spend IOTA, so we need to find input addresses (if not provided) with valid balances
@@ -917,10 +927,9 @@
     /// </param>
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response =
-        this.Client.Execute(
-          CreateRequest(
-            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      this.Client.Execute(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
     }
 
     #endregion

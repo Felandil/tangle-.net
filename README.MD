@@ -18,12 +18,8 @@ The project was set up a little different from most (except the python one) IOTA
 
 Next Up: 
 
-	**Local PoW**
+	**MAM support**
 
-To Come:
-
-	* Node authentication
-	* MAM support
 
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
@@ -36,11 +32,13 @@ To Come:
 | getTrytes						 | Yes			   | getTransfers					  | Yes			    |
 | getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
 | getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes (untested)  |
+| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
+
+In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
 
 
 ## Contributing
