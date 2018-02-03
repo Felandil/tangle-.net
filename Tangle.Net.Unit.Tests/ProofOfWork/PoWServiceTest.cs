@@ -217,7 +217,7 @@
         Assert.AreEqual(0, transaction.AttachmentTimestampLowerBound);
         Assert.AreEqual(PoWService.MaxTimestampValue, transaction.AttachmentTimestampUpperBound);
         var currentTime = Timestamp.UnixSecondsTimestamp * 1000;
-        Assert.IsTrue(transaction.AttachmentTimestamp > currentTime - 1000 && transaction.AttachmentTimestamp < currentTime + 1000);
+        Assert.IsTrue(transaction.AttachmentTimestamp > currentTime - 10000 && transaction.AttachmentTimestamp < currentTime + 10000);
       }
     }
 

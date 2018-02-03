@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Tangle.Net</id>
+    <version>1.0.1.0</version>
+    <title>IOTA Library C# Port</title>
+    <authors>Felandil</authors>
+    <owners>Felandil</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>IOTA Library C# Port</description>
+    <tags>iota csharp</tags>
+  </metadata>
+</package>

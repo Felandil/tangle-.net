@@ -51,12 +51,11 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## NuGet
 
-Even though I like package managers, I decided to not make the project available via NuGet, since sensitive data (your seed) plays a crucial role.
+https://www.nuget.org/packages/Tangle.Net/1.0.1
 
-Here is why:
-https://hackernoon.com/im-harvesting-credit-card-numbers-and-passwords-from-your-site-here-s-how-9a8cb347c5b5
-
-If you want to use the package for your own development I suggest to to check it out as a submodule and compile it within your project.
+```javascript
+Install-Package Tangle.Net -Version 1.0.1
+```
 
 ## Note
 
