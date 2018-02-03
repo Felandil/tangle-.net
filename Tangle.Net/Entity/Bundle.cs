@@ -119,10 +119,10 @@
           this.Transactions.Add(
             new Transaction
               {
-                Address = address,
-                Value = i == 0 ? -address.Balance : 0,
-                Tag = Tag.Empty,
-                ObsoleteTag = Tag.Empty,
+                Address = address, 
+                Value = i == 0 ? -address.Balance : 0, 
+                Tag = Tag.Empty, 
+                ObsoleteTag = Tag.Empty, 
                 Timestamp = Timestamp.UnixSecondsTimestamp
               });
         }
@@ -194,7 +194,7 @@
               Address = transfer.Address, 
               Fragment = new Fragment(transfer.Message == null ? string.Empty : transfer.Message.Value), 
               ObsoleteTag = transfer.Tag, 
-              Timestamp = transfer.Timestamp,
+              Timestamp = transfer.Timestamp, 
               Value = transfer.ValueToTransfer, 
               Tag = transfer.Tag
             });
@@ -224,10 +224,10 @@
           this.Transactions.Add(
             new Transaction
               {
-                Address = this.RemainderAddress,
-                Tag = Tag.Empty,
-                Value = -balance,
-                ObsoleteTag = Tag.Empty,
+                Address = this.RemainderAddress, 
+                Tag = Tag.Empty, 
+                Value = -balance, 
+                ObsoleteTag = Tag.Empty, 
                 Timestamp = Timestamp.UnixSecondsTimestamp
               });
         }
@@ -320,10 +320,18 @@
         }
       }
 
+      this.Sign();
+    }
+
+    /// <summary>
+    /// The sign.
+    /// </summary>
+    public void Sign()
+    {
       foreach (var transaction in this.Transactions)
       {
         // alternative to AddTrytes from js library
-        transaction.Fragment = transaction.Fragment ?? new Fragment(); 
+        transaction.Fragment = transaction.Fragment ?? new Fragment();
         transaction.AttachmentTimestamp = 999999999;
         transaction.AttachmentTimestampLowerBound = 999999999;
         transaction.AttachmentTimestampUpperBound = 999999999;

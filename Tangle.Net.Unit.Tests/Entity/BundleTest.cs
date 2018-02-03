@@ -565,6 +565,27 @@
     }
 
     /// <summary>
+    /// The test bundle has no value to transfer should be signable without key generator.
+    /// </summary>
+    [TestMethod]
+    public void TestBundleHasNoValueToTransferShouldBeSignableWithoutKeyGenerator()
+    {
+      this.bundle = new Bundle();
+      this.bundle.AddTransfer(
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), Message = TryteString.FromString("Hello world!") });
+
+      this.bundle.Finalize();
+      this.bundle.Sign();
+
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestamp == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestampLowerBound == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].AttachmentTimestampUpperBound == 999999999);
+      Assert.IsTrue(this.bundle.Transactions[0].Nonce.Value == new Tag().Value);
+      Assert.IsTrue(this.bundle.Transactions[0].BranchTransaction.Value == new Hash().Value);
+      Assert.IsTrue(this.bundle.Transactions[0].TrunkTransaction.Value == new Hash().Value);
+    }
+
+    /// <summary>
     /// The test bundle is finalized should apply signing fragment and with extra transactions for security level above one.
     /// </summary>
     [TestMethod]
