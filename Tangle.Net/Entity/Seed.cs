@@ -56,7 +56,7 @@
 
       using (var rnd = new RNGCryptoServiceProvider())
       {
-        byte[] cryptoBytes = new byte[Length];
+        var cryptoBytes = new byte[Length];
         rnd.GetBytes(cryptoBytes);
         seedChars = cryptoBytes.Select(x => AsciiToTrytes.TryteAlphabet[x % AsciiToTrytes.TryteAlphabet.Length]).ToArray();
       }

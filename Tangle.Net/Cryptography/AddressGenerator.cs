@@ -91,14 +91,10 @@
       var result = new List<Address>();
 
       // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
-      startIndex--;
       Parallel.For(
         startIndex,
-        startIndex + count - 1,
-        i =>
-          {
-            result.Add(this.GetAddress(i));
-          });
+        startIndex + count,
+        i => result.Add(this.GetAddress(i)));
 
       // sort by index to ensure correct order
       return result.OrderBy(a => a.KeyIndex).ToList();

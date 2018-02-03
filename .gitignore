@@ -4,6 +4,8 @@
 # connection strings ignore
 connections.config
 
+*.nupkg
+
 # react ignore patterns
 .DS_Store
 *.log
