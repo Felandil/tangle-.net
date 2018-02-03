@@ -225,7 +225,7 @@
     public void TestGetTrytes()
     {
       var transactionTrytes =
-        this.repository.GetTrytes(new List<Hash> { new Hash("NHQZUPEIVHWVQLZIRSGPYMVOPWOWZTGZOYSUGBSOQSQNKZARGMXADKSDSMUSUZNFIQGURGEMQYGFZ9999") });
+        this.repository.GetTrytes(new List<Hash> { new Hash("FSU9ITMJNHYUHJXGNUPARTFVUTOUNMJKTEHTBUREYUPTGQPOXAGIPNBCOAXZHBPT9HOXDMMEKEL999999") });
 
       var transaction = Transaction.FromTrytes(transactionTrytes[0]);
 
@@ -251,13 +251,13 @@
             Address = new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC"), 
             Tag = new Tag("CSHARP"), 
             Timestamp = Timestamp.UnixSecondsTimestamp, 
-            ValueToTransfer = 100
+            ValueToTransfer = 1
           });
 
       bundle = this.repository.SendTransfer(this.seed, bundle, SecurityLevel.Medium);
 
-      Assert.Equals(0, bundle.Balance);
-      Assert.Equals(2, bundle.Transactions.Count);
+      Assert.AreEqual(0, bundle.Balance);
+      Assert.AreEqual(2, bundle.Transactions.Count);
     }
 
     /// <summary>

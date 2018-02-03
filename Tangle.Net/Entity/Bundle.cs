@@ -5,6 +5,7 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The bundle.
@@ -116,7 +117,14 @@
         for (var i = 0; i < address.SecurityLevel; i++)
         {
           this.Transactions.Add(
-            new Transaction { Address = address, Value = i == 0 ? -address.Balance : 0, Tag = Tag.Empty, ObsoleteTag = Tag.Empty });
+            new Transaction
+              {
+                Address = address,
+                Value = i == 0 ? -address.Balance : 0,
+                Tag = Tag.Empty,
+                ObsoleteTag = Tag.Empty,
+                Timestamp = Timestamp.UnixSecondsTimestamp
+              });
         }
       }
     }
@@ -213,7 +221,15 @@
       {
         if (this.RemainderAddress != null && !string.IsNullOrEmpty(this.RemainderAddress.Value))
         {
-          this.Transactions.Add(new Transaction { Address = this.RemainderAddress, Tag = Tag.Empty, Value = -balance, ObsoleteTag = Tag.Empty });
+          this.Transactions.Add(
+            new Transaction
+              {
+                Address = this.RemainderAddress,
+                Tag = Tag.Empty,
+                Value = -balance,
+                ObsoleteTag = Tag.Empty,
+                Timestamp = Timestamp.UnixSecondsTimestamp
+              });
         }
         else
         {

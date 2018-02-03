@@ -18,12 +18,8 @@ The project was set up a little different from most (except the python one) IOTA
 
 Next Up: 
 
-	**Local PoW**
+	**MAM support**
 
-To Come:
-
-	* Node authentication
-	* MAM support
 
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
@@ -36,11 +32,13 @@ To Come:
 | getTrytes						 | Yes			   | getTransfers					  | Yes			    |
 | getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
 | getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes (untested)  |
+| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
 | attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
+
+In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
 
 
 ## Contributing
@@ -53,12 +51,11 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## NuGet
 
-Even though I like package managers, I decided to not make the project available via NuGet, since sensitive data (your seed) plays a crucial role.
+https://www.nuget.org/packages/Tangle.Net/1.0.1
 
-Here is why:
-https://hackernoon.com/im-harvesting-credit-card-numbers-and-passwords-from-your-site-here-s-how-9a8cb347c5b5
-
-If you want to use the package for your own development I suggest to to check it out as a submodule and compile it within your project.
+```javascript
+Install-Package Tangle.Net -Version 1.0.1
+```
 
 ## Note
 

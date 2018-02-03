@@ -130,24 +130,28 @@
       }
 
       var valueTrits = trytes.GetChunk(2268, 27).ToTrits();
+      var attachementTimestamp = trytes.GetChunk(2619, 9).ToTrits();
+      var attachementTimestampLower = trytes.GetChunk(2628, 9).ToTrits();
+      var attachementTimestampUpper = trytes.GetChunk(2637, 9).ToTrits();
+      var timestamp = trytes.GetChunk(2322, 9).ToTrits();
       return new Transaction
                {
                  Address = trytes.GetChunk<Address>(2187, Address.Length), 
                  Hash = hash, 
                  Fragment = trytes.GetChunk<Fragment>(0, 2187), 
                  Value = Converter.ConvertTritsToBigInt(valueTrits, 0, valueTrits.Length).LongValue, 
-                 ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length), 
-                 Timestamp = Converter.TritsToInt(trytes.GetChunk(2322, 9).ToTrits()), 
+                 ObsoleteTag = trytes.GetChunk<Tag>(2295, Tag.Length),
+                 Timestamp = Converter.ConvertTritsToBigInt(timestamp, 0, 27).LongValue, 
                  CurrentIndex = Converter.TritsToInt(trytes.GetChunk(2331, 9).ToTrits()), 
                  LastIndex = Converter.TritsToInt(trytes.GetChunk(2340, 9).ToTrits()), 
                  BundleHash = trytes.GetChunk<Hash>(2349, Hash.Length), 
                  TrunkTransaction = trytes.GetChunk<Hash>(2430, Hash.Length), 
                  BranchTransaction = trytes.GetChunk<Hash>(2511, Hash.Length), 
                  Tag = trytes.GetChunk<Tag>(2592, Tag.Length), 
-                 Nonce = trytes.GetChunk<Tag>(2646, Tag.Length), 
-                 AttachmentTimestamp = Converter.TritsToInt(trytes.GetChunk(2619, 9).ToTrits()), 
-                 AttachmentTimestampLowerBound = Converter.TritsToInt(trytes.GetChunk(2628, 9).ToTrits()), 
-                 AttachmentTimestampUpperBound = Converter.TritsToInt(trytes.GetChunk(2637, 9).ToTrits()), 
+                 Nonce = trytes.GetChunk<Tag>(2646, Tag.Length),
+                 AttachmentTimestamp = Converter.ConvertTritsToBigInt(attachementTimestamp, 0, attachementTimestamp.Length).LongValue,
+                 AttachmentTimestampLowerBound = Converter.ConvertTritsToBigInt(attachementTimestampLower, 0, attachementTimestampLower.Length).LongValue,
+                 AttachmentTimestampUpperBound = Converter.ConvertTritsToBigInt(attachementTimestampUpper, 0, attachementTimestampUpper.Length).LongValue, 
                };
     }
 

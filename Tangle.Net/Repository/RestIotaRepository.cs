@@ -6,9 +6,11 @@
   using System.Net;
 
   using RestSharp;
+  using RestSharp.Authenticators;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
 
@@ -34,9 +36,24 @@
     /// <param name="client">
     /// The client.
     /// </param>
-    public RestIotaRepository(IRestClient client)
+    /// <param name="powService">
+    /// The pow service.
+    /// </param>
+    /// <param name="username">
+    /// The username.
+    /// </param>
+    /// <param name="password">
+    /// The password.
+    /// </param>
+    public RestIotaRepository(IRestClient client, PoWService powService = null, string username = null, string password = null)
     {
       this.Client = client;
+      this.PoWService = powService;
+
+      if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+      {
+        this.Client.Authenticator = new HttpBasicAuthenticator(username, password);
+      }
     }
 
     #endregion
@@ -47,6 +64,11 @@
     /// Gets or sets the client.
     /// </summary>
     private IRestClient Client { get; set; }
+
+    /// <summary>
+    /// Gets or sets the po w service.
+    /// </summary>
+    private PoWService PoWService { get; set; }
 
     #endregion
 
@@ -92,6 +114,12 @@
       IEnumerable<Transaction> transactions, 
       int minWeightMagnitude = 18)
     {
+      if (this.PoWService != null)
+      {
+        return
+          this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
+      }
+
       var result =
         this.ExecuteParameterizedCommand<AttachToTangleResponse>(
           new Dictionary<string, object>
@@ -740,8 +768,6 @@
     /// <returns>
     /// The <see cref="Bundle"/>.
     /// </returns>
-    /// <exception cref="IotaApiException">
-    /// </exception>
     public Bundle PrepareTransfer(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null)
     {
       // user wants to spend IOTA, so we need to find input addresses (if not provided) with valid balances
@@ -851,8 +877,8 @@
     public Bundle SendTransfer(
       Seed seed, 
       Bundle bundle, 
-      int securityLevel,
-      int depth = 27,
+      int securityLevel, 
+      int depth = 27, 
       int minWeightMagnitude = 18, 
       Address remainderAddress = null, 
       List<Address> inputAddresses = null)
@@ -881,6 +907,7 @@
     public List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18)
     {
       var transactionsToApprove = this.GetTransactionsToApprove(depth);
+
       var attachResultTrytes = this.AttachToTangle(
         transactionsToApprove.BranchTransaction, 
         transactionsToApprove.TrunkTransaction, 
