@@ -1,7 +1,5 @@
 ﻿namespace Tangle.Net.Utils
 {
-  using System.Collections.Generic;
-  using System.Linq;
   using System.Text.RegularExpressions;
 
   using Tangle.Net.Entity;
@@ -12,34 +10,6 @@
   public static class InputValidator
   {
     #region Public Methods and Operators
-
-    /// <summary>
-    /// The is hash.
-    /// </summary>
-    /// <param name="hash">
-    /// The hash.
-    /// </param>
-    /// <returns>
-    /// The <see cref="bool"/>.
-    /// </returns>
-    public static bool IsHash(string hash)
-    {
-      return IsTrytes(hash, Hash.Length);
-    }
-
-    /// <summary>
-    /// The is transfers array.
-    /// </summary>
-    /// <param name="transfers">
-    /// The transfers.
-    /// </param>
-    /// <returns>
-    /// The <see cref="bool"/>.
-    /// </returns>
-    public static bool IsTransfersArray(IEnumerable<Transfer> transfers)
-    {
-      return transfers.All(transfer => IsAddress(transfer.Address.Value));
-    }
 
     /// <summary>
     /// The is trytes.

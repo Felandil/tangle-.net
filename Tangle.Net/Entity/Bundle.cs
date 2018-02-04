@@ -279,12 +279,13 @@
 
         if (!string.IsNullOrEmpty(message.Value))
         {
-          messages.Add(message.ToString());
+          messages.Add(message.ToUtf8String());
         }
       }
 
       return messages;
     }
+
 
     /// <summary>
     /// The sign.

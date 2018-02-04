@@ -75,7 +75,6 @@
     <Compile Include="Entity\Checksum.cs" />
     <Compile Include="Entity\Digest.cs" />
     <Compile Include="Entity\Hash.cs" />
-    <Compile Include="Entity\Input.cs" />
     <Compile Include="Repository\DataTransfer\Neighbor.cs" />
     <Compile Include="Repository\DataTransfer\NeighborList.cs" />
     <Compile Include="Repository\DataTransfer\NodeInfo.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="Repository\Commands.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Timestamp.cs" />
-    <Compile Include="Utils\AsciiToTrytes.cs" />
     <Compile Include="Utils\InputValidator.cs" />
   </ItemGroup>
   <ItemGroup>

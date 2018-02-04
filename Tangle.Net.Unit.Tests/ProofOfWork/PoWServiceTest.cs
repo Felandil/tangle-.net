@@ -75,7 +75,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("Hello, world!"), 
+            Fragment = Fragment.FromAsciiString("Hello, world!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999D99HEAM9XADCPFJDFANCIHR9OBDHTAGGE9TGCI9EO9ZCRBN"), 
             CurrentIndex = 2, 
             LastIndex = 7, 
@@ -142,7 +142,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Fragment = Fragment.FromAsciiString("This is a signature, not a message!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
             CurrentIndex = 5, 
             LastIndex = 7, 
@@ -163,7 +163,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Fragment = Fragment.FromAsciiString("This is a signature, not a message!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
             CurrentIndex = 6, 
             LastIndex = 7, 
@@ -184,7 +184,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("I can haz change?"), // Yes PyOTA you can!
+            Fragment = Fragment.FromAsciiString("I can haz change?"), // Yes PyOTA you can!
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999FFYALHN9ACYCP99GZBSDK9CECFI9RAIH9BRCCAHAIAWEFAN"), 
             CurrentIndex = 7, 
             LastIndex = 7, 

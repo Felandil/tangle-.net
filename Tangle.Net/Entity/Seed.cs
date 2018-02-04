@@ -4,8 +4,6 @@
   using System.Linq;
   using System.Security.Cryptography;
 
-  using Tangle.Net.Utils;
-
   /// <summary>
   /// The seed.
   /// </summary>
@@ -58,7 +56,7 @@
       {
         var cryptoBytes = new byte[Length];
         rnd.GetBytes(cryptoBytes);
-        seedChars = cryptoBytes.Select(x => AsciiToTrytes.TryteAlphabet[x % AsciiToTrytes.TryteAlphabet.Length]).ToArray();
+        seedChars = cryptoBytes.Select(x => TryteString.TryteAlphabet[x % TryteString.TryteAlphabet.Length]).ToArray();
       }
 
       return new Seed(new string(seedChars));

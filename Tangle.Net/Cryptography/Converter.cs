@@ -6,6 +6,8 @@
 
   using Org.BouncyCastle.Math;
 
+  using Tangle.Net.Utils;
+
   /// <summary>
   /// The converter.
   /// </summary>
@@ -374,7 +376,7 @@
       var trits = new List<int>();
       foreach (var tryte in trytes)
       {
-        trits.AddRange(TrytesLookup.First(tryteLookup => tryteLookup.Key == tryte).Value);
+        trits.AddRange(TrytesLookup[tryte]);
       }
 
       return trits.ToArray();

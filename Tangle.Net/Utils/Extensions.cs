@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Utils
 {
+  using System.Collections.Generic;
   using System.Globalization;
 
   using Org.BouncyCastle.Math;
@@ -49,6 +50,20 @@
       return
         new TryteString(
           Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value.ToString(CultureInfo.InvariantCulture)), padding)));
+    }
+
+    /// <summary>
+    /// The to trytes.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public static TryteString ToTrytes(this IEnumerable<byte> value)
+    {
+      return new TryteString(TryteString.BytesToTrytes(value));
     }
 
     #endregion

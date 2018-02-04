@@ -5,7 +5,6 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
-  using Tangle.Net.Utils;
 
   /// <summary>
   /// The signature fragment.
@@ -79,9 +78,23 @@
     /// <returns>
     /// The <see cref="Fragment"/>.
     /// </returns>
-    public static new Fragment FromString(string input)
+    public static new Fragment FromAsciiString(string input)
     {
-      return new Fragment(AsciiToTrytes.FromString(input));
+      return new Fragment(FromAsciiToTryteString(input));
+    }
+
+    /// <summary>
+    /// The from utf 8 string.
+    /// </summary>
+    /// <param name="input">
+    /// The input.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Fragment"/>.
+    /// </returns>
+    public static new Fragment FromUtf8String(string input)
+    {
+      return new Fragment(TryteString.FromUtf8String(input).Value);
     }
 
     /// <summary>

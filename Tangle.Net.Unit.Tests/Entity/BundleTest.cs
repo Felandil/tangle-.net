@@ -77,7 +77,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("Hello, world!"), 
+            Fragment = Fragment.FromUtf8String("Hello, world!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999D99HEAM9XADCPFJDFANCIHR9OBDHTAGGE9TGCI9EO9ZCRBN"), 
             CurrentIndex = 2, 
             LastIndex = 7, 
@@ -146,7 +146,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Fragment = Fragment.FromAsciiString("This is a signature, not a message!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
             CurrentIndex = 5, 
             LastIndex = 7, 
@@ -169,7 +169,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("This is a signature, not a message!"), 
+            Fragment = Fragment.FromAsciiString("This is a signature, not a message!"), 
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999WGSBUAHDVHYHOBHGP9VCGIZHNCAAQFJGE9YHEHEFTDAGXHY"), 
             CurrentIndex = 6, 
             LastIndex = 7, 
@@ -190,7 +190,7 @@
       this.bundle.Transactions.Add(
         new Transaction
           {
-            Fragment = Fragment.FromString("I can haz change?"), // Yes PyOTA you can!
+            Fragment = Fragment.FromAsciiString("I can haz change?"), // Yes PyOTA you can!
             Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999FFYALHN9ACYCP99GZBSDK9CECFI9RAIH9BRCCAHAIAWEFAN"), 
             CurrentIndex = 7, 
             LastIndex = 7, 
@@ -572,7 +572,7 @@
     {
       this.bundle = new Bundle();
       this.bundle.AddTransfer(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), Message = TryteString.FromString("Hello world!") });
+        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), Message = TryteString.FromAsciiString("Hello world!") });
 
       this.bundle.Finalize();
       this.bundle.Sign();
@@ -639,7 +639,7 @@
                              {
                                Balance = 42
                              }, 
-                         Message = TryteString.FromString(GetSuperLongMessage()), 
+                         Message = TryteString.FromAsciiString(GetSuperLongMessage()), 
                          Tag = Tag.Empty
                        };
 
@@ -731,7 +731,7 @@
       Assert.AreEqual(4, messages.Count);
 
       Assert.AreEqual(GetSuperLongMessage(), messages[0]);
-      // Assert.AreEqual("祝你好运\x15", messages[1]); Ignore non UTF8 characters.
+      Assert.AreEqual("祝你好运�\x15", messages[1]);
       Assert.AreEqual("Hello, world!", messages[2]);
       Assert.AreEqual("I can haz change?", messages[3]);
     }
@@ -770,7 +770,7 @@
                        {
                          Address =
                            new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
-                         Message = TryteString.FromString(GetSuperLongMessage()), 
+                         Message = TryteString.FromAsciiString(GetSuperLongMessage()), 
                          Tag = Tag.Empty,
                          ValueToTransfer = 42
                        };
@@ -804,7 +804,7 @@
                              {
                                Balance = 42
                              }, 
-                         Message = TryteString.FromString("Hello World!"), 
+                         Message = TryteString.FromAsciiString("Hello World!"), 
                          Tag = Tag.Empty
                        };
 
@@ -825,7 +825,7 @@
                        {
                          Address =
                            new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"), 
-                         Message = TryteString.FromString(GetSuperLongMessage()), 
+                         Message = TryteString.FromAsciiString(GetSuperLongMessage()), 
                          Tag = Tag.Empty,
                          ValueToTransfer = -42
                        };

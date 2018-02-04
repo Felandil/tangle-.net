@@ -4,6 +4,7 @@
   using System.Collections;
   using System.Collections.Generic;
   using System.Linq;
+  using System.Text;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Utils;
@@ -13,6 +14,15 @@
   /// </summary>
   public class TryteString
   {
+    #region Constants
+
+    /// <summary>
+    /// The tryte alphabet.
+    /// </summary>
+    public const string TryteAlphabet = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    #endregion
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -75,9 +85,23 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    public static TryteString FromString(string input)
+    public static TryteString FromAsciiString(string input)
     {
-      return new TryteString(AsciiToTrytes.FromString(input));
+      return new TryteString(FromAsciiToTryteString(input));
+    }
+
+    /// <summary>
+    /// The from utf 8 string.
+    /// </summary>
+    /// <param name="input">
+    /// The input.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public static TryteString FromUtf8String(string input)
+    {
+      return new TryteString(BytesToTrytes(Encoding.UTF8.GetBytes(input)));
     }
 
     /// <summary>
@@ -144,18 +168,46 @@
     /// <returns>
     /// The <see cref="string"/>.
     /// </returns>
-    public override string ToString()
+    public string ToAsciiString()
+    {
+      return Encoding.ASCII.GetString(this.ToBytes());
+    }
+
+    /// <summary>
+    /// The to bytes.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="byte[]"/>.
+    /// </returns>
+    public byte[] ToBytes()
     {
       var messageTrytes = this.Value;
-      if (this.Value.Last() != '9')
+
+      if (messageTrytes.Last() == '9')
       {
-        return AsciiToTrytes.FromString(messageTrytes);
+        messageTrytes = messageTrytes.TrimEnd(new[] { '9' });
+        messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
       }
 
-      messageTrytes = messageTrytes.TrimEnd(new[] { '9' });
-      messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
+      var byteResult = new List<byte>();
+      for (var i = 0; i < messageTrytes.Length; i += 2)
+      {
+        var byteValue = TryteAlphabet.IndexOf(this.Value[i]) + (TryteAlphabet.IndexOf(this.Value[i + 1]) * 27);
+        byteResult.Add((byte)byteValue);
+      }
 
-      return AsciiToTrytes.FromTrytes(messageTrytes);
+      return byteResult.ToArray();
+    }
+
+    /// <summary>
+    /// The to string.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public override string ToString()
+    {
+      return this.Value;
     }
 
     /// <summary>
@@ -169,9 +221,58 @@
       return Converter.TrytesToTrits(this.Value);
     }
 
+    /// <summary>
+    /// The to utf 8 string.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public string ToUtf8String()
+    {
+      return Encoding.UTF8.GetString(this.ToBytes());
+    }
+
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// The bytes to trytes.
+    /// </summary>
+    /// <param name="byteValues">
+    /// The byte values.
+    /// </param>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    internal static string BytesToTrytes(IEnumerable<byte> byteValues)
+    {
+      return (from asciiValue in byteValues
+              let firstValue = asciiValue % 27
+              let secondValue = (asciiValue - firstValue) / 27
+              select string.Format("{0}{1}", TryteAlphabet[firstValue], TryteAlphabet[secondValue])).Aggregate(
+                string.Empty, 
+                (current, trytesValue) => current + trytesValue);
+    }
+
+    /// <summary>
+    /// The from ascii to tryte string.
+    /// </summary>
+    /// <param name="input">
+    /// The input.
+    /// </param>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    protected static string FromAsciiToTryteString(string input)
+    {
+      if (input.Any(c => c > 255))
+      {
+        throw new ArgumentException("Detected non ASCII string input.");
+      }
+
+      return BytesToTrytes(Encoding.ASCII.GetBytes(input));
+    }
 
     /// <summary>
     /// The pad value.

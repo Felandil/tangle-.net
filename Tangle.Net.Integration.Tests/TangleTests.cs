@@ -273,7 +273,7 @@
           {
             Address =
               new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 }, 
-            Message = TryteString.FromString("Hello world!"), 
+            Message = TryteString.FromAsciiString("Hello world!"), 
             Tag = new Tag("CSHARP"), 
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
