@@ -2,13 +2,16 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Diagnostics;
   using System.Linq;
 
   using RestSharp;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The program.
@@ -25,7 +28,38 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
+      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
+
+      var transactionStackCounter = 10;
+
+      for (var i = 1; i <= transactionStackCounter; i++)
+      {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var transfers = new List<Transfer>();
+        for (var j = 1; j <= i; j++)
+        {
+          transfers.Add(new Transfer
+          {
+            Address =
+              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 },
+            Message = TryteString.FromAsciiString("Hello world! With " + i + " transactions."),
+            Tag = new Tag("CSHARP"),
+            Timestamp = Timestamp.UnixSecondsTimestamp
+          });
+        }
+
+        var bundle = new Bundle();
+
+        transfers.ForEach(bundle.AddTransfer);
+
+        bundle.Finalize();
+        bundle.Sign();
+
+        var resultTransactions = repository.SendTrytes(bundle.Transactions, 27, 14);
+        Console.WriteLine("Finished sending bundle with {0} transactions. Time elapsed: {1} seconds.", i, stopwatch.ElapsedMilliseconds / 1000);
+      }
+
 
       var accountData = repository.GetAccountData(new Seed("SOMESEEDHERE"), true, SecurityLevel.Medium, 0);
 

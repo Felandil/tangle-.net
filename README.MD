@@ -51,11 +51,8 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## NuGet
 
-https://www.nuget.org/packages/Tangle.Net/1.0.1
+https://www.nuget.org/packages/Tangle.Net
 
-```javascript
-Install-Package Tangle.Net -Version 1.0.1
-```
 
 ## Note
 

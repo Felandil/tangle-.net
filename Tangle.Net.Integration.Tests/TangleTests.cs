@@ -42,7 +42,7 @@
     [TestInitialize]
     public void Setup()
     {
-      this.repository = new RestIotaRepository(new RestClient("http://nodes.iota.fm:80"), new PoWService(new CpuPowDiver()));
+      this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
       this.seed = new Seed(new Hash().Value);
     }
 
