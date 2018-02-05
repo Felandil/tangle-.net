@@ -166,7 +166,7 @@
     /// </param>
     private static void Increment(ulong[] midCurlStateCopyLow, ulong[] midCurlStateCopyHigh, int fromIndex, int toIndex)
     {
-      for (int i = fromIndex; i < toIndex; i++)
+      for (var i = fromIndex; i < toIndex; i++)
       {
         if (midCurlStateCopyLow[i] == LowBits)
         {
@@ -212,10 +212,10 @@
         Array.Copy(curlStateLow, 0, curlScratchpadLow, 0, Curl.StateLength);
         Array.Copy(curlStateHigh, 0, curlScratchpadHigh, 0, Curl.StateLength);
 
-        for (int curlStateIndex = 0; curlStateIndex < Curl.StateLength; curlStateIndex++)
+        for (var curlStateIndex = 0; curlStateIndex < Curl.StateLength; curlStateIndex++)
         {
-          ulong alpha = curlScratchpadLow[curlScratchpadIndex];
-          ulong beta = curlScratchpadHigh[curlScratchpadIndex];
+          var alpha = curlScratchpadLow[curlScratchpadIndex];
+          var beta = curlScratchpadHigh[curlScratchpadIndex];
           if (curlScratchpadIndex < 365)
           {
             curlScratchpadIndex += 364;
@@ -253,26 +253,30 @@
         throw new Exception("Invalid transaction trits length: " + transactionTrits.Length);
       }
 
-      if (minWeightMagnitude < 0 || minWeightMagnitude > Curl.StateLength)
+      if (minWeightMagnitude < 0 || minWeightMagnitude > Curl.HashLength)
       {
         throw new Exception("Invalid min weight magnitude: " + minWeightMagnitude);
       }
 
-      this.state = State.Running;
+      lock (this.syncObj)
+      {
+        this.state = State.Running; 
+      }
 
       ulong[] midCurlStateLow = new ulong[Curl.StateLength], midCurlStateHigh = new ulong[Curl.StateLength];
       {
-        for (int i = Curl.StateLength; i < Curl.StateLength; i++)
+        for (var i = Curl.HashLength; i < Curl.StateLength; i++)
         {
           midCurlStateLow[i] = HighBits;
           midCurlStateHigh[i] = HighBits;
         }
 
-        int offset = 0;
-        ulong[] curlScratchpadLow = new ulong[Curl.StateLength], curlScratchpadHigh = new ulong[Curl.StateLength];
-        for (int i = (TransactionLength - Curl.StateLength) / Curl.StateLength; i-- > 0;)
+        var offset = 0;
+        var curlScratchpadLow = new ulong[Curl.StateLength]; 
+        var curlScratchpadHigh = new ulong[Curl.StateLength];
+        for (var i = (TransactionLength - Curl.HashLength) / Curl.HashLength; i-- > 0; )
         {
-          for (int j = 0; j < Curl.StateLength; j++)
+          for (var j = 0; j < Curl.HashLength; j++)
           {
             switch (transactionTrits[offset++])
             {
@@ -343,7 +347,7 @@
 
       while (numberOfThreads-- > 0)
       {
-        int threadIndex = numberOfThreads;
+        var threadIndex = numberOfThreads;
         var task = Task.Factory.StartNew(
           () =>
             {
@@ -352,7 +356,7 @@
               Array.Copy(midCurlStateHigh, 0, midCurlStateCopyHigh, 0, Curl.StateLength);
               for (var i = threadIndex; i-- > 0;)
               {
-                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + (Curl.StateLength / 9), 162 + ((Curl.StateLength / 9) * 2));
+                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + (Curl.HashLength / 9), 162 + ((Curl.HashLength / 9) * 2));
               }
 
               ulong[] curlStateLow = new ulong[Curl.StateLength], curlStateHigh = new ulong[Curl.StateLength];
@@ -360,7 +364,7 @@
               ulong outMask = 1;
               while (this.state == State.Running)
               {
-                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + ((Curl.StateLength / 9) * 2), Curl.StateLength);
+                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + ((Curl.HashLength / 9) * 2), Curl.HashLength);
 
                 Array.Copy(midCurlStateCopyLow, 0, curlStateLow, 0, Curl.StateLength);
                 Array.Copy(midCurlStateCopyHigh, 0, curlStateHigh, 0, Curl.StateLength);
@@ -369,7 +373,7 @@
                 var mask = HighBits;
                 for (var i = minWeightMagnitude; i-- > 0;)
                 {
-                  mask &= ~(curlStateLow[Curl.StateLength - 1 - i] ^ curlStateHigh[Curl.StateLength - 1 - i]);
+                  mask &= ~(curlStateLow[Curl.HashLength - 1 - i] ^ curlStateHigh[Curl.HashLength - 1 - i]);
                   if (mask == 0)
                   {
                     break;
@@ -391,9 +395,9 @@
                       outMask <<= 1;
                     }
 
-                    for (var i = 0; i < Curl.StateLength; i++)
+                    for (var i = 0; i < Curl.HashLength; i++)
                     {
-                      transactionTrits[TransactionLength - Curl.StateLength + i] = (midCurlStateCopyLow[i] & outMask) == 0
+                      transactionTrits[TransactionLength - Curl.HashLength + i] = (midCurlStateCopyLow[i] & outMask) == 0
                                                                                      ? 1
                                                                                      : (midCurlStateCopyHigh[i] & outMask) == 0 ? -1 : 0;
                     }

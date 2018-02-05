@@ -9,6 +9,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
   using Tangle.Net.Utils;
 
@@ -41,8 +42,8 @@
     [TestInitialize]
     public void Setup()
     {
-      this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"));
-      this.seed = new Seed("SOMESEEDHERE");
+      this.repository = new RestIotaRepository(new RestClient("http://nodes.iota.fm:80"), new PoWService(new CpuPowDiver()));
+      this.seed = new Seed(new Hash().Value);
     }
 
     /// <summary>
@@ -266,7 +267,6 @@
     [TestMethod]
     public void TestSendTrytes()
     {
-      var seed = Seed.Random();
       var bundle = new Bundle();
       bundle.AddTransfer(
         new Transfer
@@ -279,10 +279,9 @@
           });
 
       bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
+      bundle.Sign();
 
-      var resultTransactions = this.repository.SendTrytes(bundle.Transactions);
-
+      var resultTransactions = this.repository.SendTrytes(bundle.Transactions, 27, 14);
       Assert.IsTrue(resultTransactions.Any());
     }
 

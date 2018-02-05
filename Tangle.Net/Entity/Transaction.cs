@@ -121,7 +121,7 @@
     {
       if (hash == null)
       {
-        var hashTrits = new int[Kerl.HashLength];
+        var hashTrits = new int[AbstractCurl.HashLength];
         var kerl = new Curl();
         kerl.Absorb(trytes.ToTrits());
         kerl.Squeeze(hashTrits);

@@ -154,9 +154,12 @@
     /// </param>
     public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      this.Client.Execute(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response =
+        this.Client.Execute<object>(
+          CreateRequest(
+            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+
+      ValidateResponse(response, Commands.BroadcastTransactions);
     }
 
     /// <summary>
@@ -927,9 +930,11 @@
     /// </param>
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      this.Client.Execute(
+      var response = this.Client.Execute<object>(
         CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+          new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+
+      ValidateResponse(response, Commands.StoreTransactions);
     }
 
     #endregion
@@ -955,6 +960,42 @@
     }
 
     /// <summary>
+    /// The validate response.
+    /// </summary>
+    /// <param name="response">
+    /// The response.
+    /// </param>
+    /// <param name="commandName">
+    /// The command name.
+    /// </param>
+    /// <typeparam name="T">
+    /// </typeparam>
+    /// <returns>
+    /// The <see cref="T"/>.
+    /// </returns>
+    private static T ValidateResponse<T>(IRestResponse<T> response, object commandName) where T : new()
+    {
+      var nullResponse = response == null;
+
+      if (!nullResponse && response.StatusCode == HttpStatusCode.OK)
+      {
+        return response.Data;
+      }
+
+      if (nullResponse)
+      {
+        throw new IotaApiException(string.Format("Command {0} failed!", commandName));
+      }
+
+      if (response.ErrorException != null)
+      {
+        throw new IotaApiException(string.Format("Command {0} failed! See inner exception for details.", commandName), response.ErrorException);
+      }
+
+      throw new IotaApiException(string.Format("Command {0} failed!", commandName));
+    }
+
+    /// <summary>
     /// The execute command.
     /// </summary>
     /// <param name="parameters">
@@ -969,26 +1010,7 @@
     private T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters) where T : new()
     {
       var response = this.Client.Execute<T>(CreateRequest(parameters));
-      var nullResponse = response == null;
-
-      if (!nullResponse && response.StatusCode == HttpStatusCode.OK)
-      {
-        return response.Data;
-      }
-
-      if (nullResponse)
-      {
-        throw new IotaApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
-      }
-
-      if (response.ErrorException != null)
-      {
-        throw new IotaApiException(
-          string.Format("Command {0} failed! See inner exception for details.", parameters.First(p => p.Key == "command").Value), 
-          response.ErrorException);
-      }
-
-      throw new IotaApiException(string.Format("Command {0} failed!", parameters.First(p => p.Key == "command").Value));
+      return ValidateResponse(response, parameters.First(p => p.Key == "command").Value);
     }
 
     /// <summary>
