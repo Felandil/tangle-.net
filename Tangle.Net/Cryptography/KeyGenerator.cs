@@ -74,7 +74,7 @@
         throw new ArgumentException("Indices must not be negative");
       }
 
-      var subseed = Converter.AddTrits(this.SeedTrits, Converter.IntToTrits(index, 3));
+      var subseed = Converter.AddTrits(this.SeedTrits, Converter.IntToTrits(index, 27));
 
       var kerl = new Kerl();
       kerl.Absorb(subseed);

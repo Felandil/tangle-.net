@@ -28,6 +28,12 @@
     /// </param>
     private static void Main(string[] args)
     {
+      var seed = Seed.Random();
+      var addressGenerator = new AddressGenerator(seed);
+
+      var addresses = addressGenerator.GetAddresses(0, 100);
+
+
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
 
       var transactionStackCounter = 10;
