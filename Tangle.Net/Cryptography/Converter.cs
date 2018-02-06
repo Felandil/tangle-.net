@@ -6,8 +6,6 @@
 
   using Org.BouncyCastle.Math;
 
-  using Tangle.Net.Utils;
-
   /// <summary>
   /// The converter.
   /// </summary>
@@ -320,6 +318,33 @@
     }
 
     /// <summary>
+    /// The sum.
+    /// </summary>
+    /// <param name="left">
+    /// The left.
+    /// </param>
+    /// <param name="right">
+    /// The right.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    public static int Sum(int left, int right)
+    {
+      var sum = left + right;
+
+      switch (sum)
+      {
+        case 2:
+          return -1;
+        case -2:
+          return 1;
+        default:
+          return sum;
+      }
+    }
+
+    /// <summary>
     /// The trits to int.
     /// </summary>
     /// <param name="trits">
@@ -456,33 +481,6 @@
       var s_out = Sum(s_a, carry);
 
       return new[] { s_out, c_out };
-    }
-
-    /// <summary>
-    /// The sum.
-    /// </summary>
-    /// <param name="left">
-    /// The left.
-    /// </param>
-    /// <param name="right">
-    /// The right.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    private static int Sum(int left, int right)
-    {
-      var sum = left + right;
-
-      switch (sum)
-      {
-        case 2:
-          return -1;
-        case -2:
-          return 1;
-        default:
-          return sum;
-      }
     }
 
     #endregion

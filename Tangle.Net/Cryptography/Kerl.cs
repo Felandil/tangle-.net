@@ -35,11 +35,6 @@
     /// </summary>
     private readonly KeccakDigest digest;
 
-    /// <summary>
-    /// The trit state.
-    /// </summary>
-    private int[] tritState;
-
     #endregion
 
     #region Constructors and Destructors
@@ -49,7 +44,7 @@
     /// </summary>
     public Kerl()
     {
-      this.tritState = new int[HashLength];
+      this.State = new int[HashLength];
       this.byteState = new byte[ByteHashLength];
       this.digest = new KeccakDigest(BitHashLength);
     }
@@ -71,10 +66,10 @@
 
       while (offset < trits.Length)
       {
-        Array.Copy(trits, offset, this.tritState, 0, HashLength);
-        this.tritState[HashLength - 1] = 0;
+        Array.Copy(trits, offset, this.State, 0, HashLength);
+        this.State[HashLength - 1] = 0;
 
-        var bytes = Converter.ConvertTritsToBytes(this.tritState);
+        var bytes = Converter.ConvertTritsToBytes(this.State);
         this.digest.BlockUpdate(bytes, 0, bytes.Length);
 
         offset += HashLength;
@@ -103,9 +98,9 @@
       while (offset < trits.Length)
       {
         this.digest.DoFinal(this.byteState, 0);
-        this.tritState = Converter.ConvertBytesToTrits(this.byteState);
-        this.tritState[HashLength - 1] = 0;
-        Array.Copy(this.tritState, 0, trits, offset, HashLength);
+        this.State = Converter.ConvertBytesToTrits(this.byteState);
+        this.State[HashLength - 1] = 0;
+        Array.Copy(this.State, 0, trits, offset, HashLength);
 
         this.digest.Reset();
 

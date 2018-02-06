@@ -26,16 +26,11 @@
     /// <summary>
     /// The truth table.
     /// </summary>
-    public static readonly int[] TruthTable = { 1, 0, -1, 1, -1, 0, -1, 1, 0 };
+    public static readonly int[] TruthTable = { 1, 0, -1, 2, 1, -1, 0, 2, -1, 1, 0 };
 
     #endregion
 
     #region Fields
-
-    /// <summary>
-    /// The state.
-    /// </summary>
-    private int[] state;
 
     #endregion
 
@@ -64,7 +59,7 @@
       var offset = 0;
       while (offset < trits.Length)
       {
-        Array.Copy(trits, offset, this.state, 0, trits.Length < HashLength ? trits.Length : HashLength);
+        Array.Copy(trits, offset, this.State, 0, trits.Length < HashLength ? trits.Length : HashLength);
 
         this.Transform();
 
@@ -77,7 +72,7 @@
     /// </summary>
     public override sealed void Reset()
     {
-      this.state = new int[StateLength];
+      this.State = new int[StateLength];
     }
 
     /// <summary>
@@ -92,7 +87,7 @@
       var offset = 0;
       do
       {
-        Array.Copy(this.state, 0, trits, offset, length < HashLength ? length : HashLength);
+        Array.Copy(this.State, 0, trits, offset, length < HashLength ? length : HashLength);
         this.Transform();
         offset += HashLength;
       }
@@ -113,11 +108,11 @@
 
       for (var round = 0; round < NumberOfRounds; round++)
       {
-        Array.Copy(this.state, 0, stateCopy, 0, StateLength);
+        Array.Copy(this.State, 0, stateCopy, 0, StateLength);
 
         for (var i = 0; i < StateLength; i++)
         {
-          this.state[i] = TruthTable[stateCopy[index] + (stateCopy[index += index < 365 ? 364 : -365] * 3) + 4];
+          this.State[i] = TruthTable[stateCopy[index] + (stateCopy[index += index < 365 ? 364 : -365] << 2) + 5];
         }
       }
     }

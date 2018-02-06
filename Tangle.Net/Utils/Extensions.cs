@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Globalization;
+  using System.Linq;
 
   using Org.BouncyCastle.Math;
 
@@ -14,6 +15,30 @@
   public static class Extensions
   {
     #region Public Methods and Operators
+
+    /// <summary>
+    /// The get chunks.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <param name="chunkSize">
+    /// The chunk size.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public static List<int[]> GetChunks(this int[] value, int chunkSize)
+    {
+      var chunks = new List<int[]>();
+
+      for (var i = 0; i * chunkSize < value.Count(); i++)
+      {
+        chunks.Add(value.Skip(i * chunkSize).Take(chunkSize).ToArray());
+      }
+
+      return chunks;
+    }
 
     /// <summary>
     /// The to trytes.

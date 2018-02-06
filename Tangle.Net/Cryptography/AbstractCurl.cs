@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Cryptography
 {
+  using System.Linq;
+
   /// <summary>
   /// The Curl interface.
   /// </summary>
@@ -14,6 +16,15 @@
 
     #endregion
 
+    #region Fields
+
+    /// <summary>
+    /// The trit state.
+    /// </summary>
+    protected int[] State;
+
+    #endregion
+
     #region Public Methods and Operators
 
     /// <summary>
@@ -23,6 +34,20 @@
     /// The trits.
     /// </param>
     public abstract void Absorb(int[] trits);
+
+    /// <summary>
+    /// The rate.
+    /// </summary>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    public int[] Rate(int length)
+    {
+      return this.State.Take(length).ToArray();
+    }
 
     /// <summary>
     /// The reset.

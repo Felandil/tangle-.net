@@ -45,7 +45,7 @@
     /// The seed.
     /// </param>
     /// <param name="includeInclusionStates">
-    /// The inclusion State.
+    /// The inclusion state.
     /// </param>
     /// <param name="securityLevel">
     /// The security level.

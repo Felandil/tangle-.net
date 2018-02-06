@@ -53,7 +53,7 @@
     <Compile Include="Cryptography\AddressGenerator.cs" />
     <Compile Include="Cryptography\Converter.cs" />
     <Compile Include="Cryptography\Curl.cs" />
-    <Compile Include="Cryptography\ICurl.cs" />
+    <Compile Include="Cryptography\AbstractCurl.cs" />
     <Compile Include="Cryptography\IKeyGenerator.cs" />
     <Compile Include="Cryptography\IPrivateKey.cs" />
     <Compile Include="Cryptography\Kerl.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="Entity\Transaction.cs" />
     <Compile Include="Repository\IIotaExtendedRepository.cs" />
     <Compile Include="Repository\IIotaNodeRepository.cs" />
+    <Compile Include="Repository\IIotaRepository.cs" />
     <Compile Include="Repository\InvalidBundleException.cs" />
     <Compile Include="Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\AttachToTangleResponse.cs" />

@@ -17,7 +17,7 @@
   /// <summary>
   /// The rest iota repository.
   /// </summary>
-  public class RestIotaRepository : IIotaCoreRepository, IIotaNodeRepository, IIotaExtendedRepository
+  public class RestIotaRepository : IIotaRepository
   {
     #region Fields
 
