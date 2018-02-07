@@ -41,6 +41,9 @@
   <ItemGroup>
     <Compile Include="CurlMask.cs" />
     <Compile Include="IMask.cs" />
+    <Compile Include="Merkle\CurlMerkleNodeFactory.cs" />
+    <Compile Include="Merkle\IMerkleNodeFactory.cs" />
+    <Compile Include="Merkle\MerkleNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

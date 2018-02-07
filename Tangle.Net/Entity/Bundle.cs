@@ -423,7 +423,7 @@
         if (Array.IndexOf(normalizedBundleValue, 13) != -1)
         {
           var obsoleteTagTrits = Converter.TrytesToTrits(this.Transactions[0].ObsoleteTag.Value);
-          Converter.Increment(obsoleteTagTrits, 81);
+          Converter.Increment(obsoleteTagTrits, Hash.Length);
           this.Transactions[0].ObsoleteTag = new Tag(Converter.TritsToTrytes(obsoleteTagTrits));
         }
         else
