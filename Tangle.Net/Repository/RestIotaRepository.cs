@@ -197,7 +197,7 @@
 
       var result = this.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
 
-      return new TransactionHashList { Hashes = result.Hashes.ConvertAll(hash => new Hash(hash)) };
+      return new TransactionHashList { Hashes = result != null ? result.Hashes.ConvertAll(hash => new Hash(hash)) : null };
     }
 
     /// <summary>
@@ -339,20 +339,21 @@
       int addressStopIndex = 0)
     {
       var usedAddressesWithTransactions = this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
-      var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddressesWithTransactions.UsedAddresses.Last().KeyIndex + 1);
+      var usedAddresses = usedAddressesWithTransactions.UsedAddresses;
+      var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddresses.Count != 0 ? usedAddresses.Last().KeyIndex + 1 : 0);
       var addressesWithBalance = new List<Address>();
       var associatedBundles = new List<Bundle>();
 
       if (usedAddressesWithTransactions.AssociatedTransactionHashes.Count > 0)
       {
-        addressesWithBalance = this.GetBalances(usedAddressesWithTransactions.UsedAddresses).Addresses;
+        addressesWithBalance = this.GetBalances(usedAddresses).Addresses;
         associatedBundles = this.GetBundles(usedAddressesWithTransactions.AssociatedTransactionHashes, includeInclusionStates);
       }
 
       return new GetAccountDataResponse
                {
                  Balance = addressesWithBalance.Sum(a => a.Balance), 
-                 UsedAddresses = usedAddressesWithTransactions.UsedAddresses, 
+                 UsedAddresses = usedAddresses, 
                  AssociatedBundles = associatedBundles, 
                  LatestUnusedAddress = latestUnusedAddress
                };

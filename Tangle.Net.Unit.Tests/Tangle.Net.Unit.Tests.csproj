@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\AddressGeneratorStub.cs" />
     <Compile Include="Cryptography\AddressGeneratorTest.cs" />
     <Compile Include="Cryptography\ConverterTest.cs" />
     <Compile Include="Cryptography\KerlTest.cs" />

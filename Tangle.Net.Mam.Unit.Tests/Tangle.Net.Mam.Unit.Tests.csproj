@@ -44,13 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MaskTests.cs" />
-    <Compile Include="Merkle\MerkleNodeTests.cs" />
+    <Compile Include="Merkle\MerkleLeafFactoryTests.cs" />
+    <Compile Include="Merkle\MerkleNodeFactoryTests.cs" />
+    <Compile Include="Merkle\MerkleTreeFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tangle.Net.Mam\Tangle.Net.Mam.csproj">
       <Project>{183E56D2-D79B-45F7-8B92-CBEF8D2E9469}</Project>
       <Name>Tangle.Net.Mam</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tangle.Net.Unit.Tests\Tangle.Net.Unit.Tests.csproj">
+      <Project>{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}</Project>
+      <Name>Tangle.Net.Unit.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">
       <Project>{6678B808-1464-490E-BECD-842305000560}</Project>

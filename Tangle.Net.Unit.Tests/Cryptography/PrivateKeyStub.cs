@@ -8,7 +8,7 @@
   /// <summary>
   /// The private key stub.
   /// </summary>
-  internal class PrivateKeyStub : IPrivateKey
+  public class PrivateKeyStub : IPrivateKey
   {
     #region Public Properties
 

@@ -9,7 +9,7 @@
   /// <summary>
   /// The address generator.
   /// </summary>
-  public class AddressGenerator
+  public class AddressGenerator : IAddressGenerator
   {
     #region Constructors and Destructors
 
@@ -69,6 +69,7 @@
       var address = Address.FromTrits(addressTrits);
       address.KeyIndex = digest.KeyIndex;
       address.SecurityLevel = digest.SecurityLevel;
+      address.PrivateKey = privateKey;
 
       return address;
     }

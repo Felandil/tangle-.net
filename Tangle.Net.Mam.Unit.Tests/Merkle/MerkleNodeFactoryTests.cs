@@ -5,12 +5,13 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Unit.Tests.Cryptography;
 
   /// <summary>
   /// The merkle node tests.
   /// </summary>
   [TestClass]
-  public class MerkleNodeTests
+  public class MerkleNodeFactoryTests
   {
     #region Fields
 

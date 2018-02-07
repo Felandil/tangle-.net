@@ -78,6 +78,11 @@
     public int KeyIndex { get; set; }
 
     /// <summary>
+    /// Gets or sets the private key.
+    /// </summary>
+    public IPrivateKey PrivateKey { get; set; }
+
+    /// <summary>
     /// Gets or sets the security level.
     /// </summary>
     public int SecurityLevel { get; set; }

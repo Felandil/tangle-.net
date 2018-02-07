@@ -54,6 +54,7 @@
     <Compile Include="Cryptography\Converter.cs" />
     <Compile Include="Cryptography\Curl.cs" />
     <Compile Include="Cryptography\AbstractCurl.cs" />
+    <Compile Include="Cryptography\IAddressGenerator.cs" />
     <Compile Include="Cryptography\IKeyGenerator.cs" />
     <Compile Include="Cryptography\IPrivateKey.cs" />
     <Compile Include="Cryptography\Kerl.cs" />

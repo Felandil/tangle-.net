@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
+  using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -47,6 +48,11 @@
     public Hash Hash { get; set; }
 
     /// <summary>
+    /// Gets or sets the key.
+    /// </summary>
+    public IPrivateKey Key { get; set; }
+
+    /// <summary>
     /// Gets or sets the left node.
     /// </summary>
     public MerkleNode LeftNode { get; set; }
@@ -60,6 +66,11 @@
     /// Gets or sets the right node.
     /// </summary>
     public MerkleNode RightNode { get; set; }
+
+    /// <summary>
+    /// Gets or sets the size.
+    /// </summary>
+    public int Size { get; set; }
 
     #endregion
   }
