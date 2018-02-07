@@ -930,11 +930,35 @@
     /// </param>
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response = this.Client.Execute<object>(
-        CreateRequest(
-          new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response =
+        this.Client.Execute<object>(
+          CreateRequest(
+            new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
 
       ValidateResponse(response, Commands.StoreTransactions);
+    }
+
+    /// <summary>
+    /// The were addresses spent from.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public List<Address> WereAddressesSpentFrom(List<Address> addresses)
+    {
+      var response =
+        this.ExecuteParameterizedCommand<Dictionary<string, dynamic>>(
+          new Dictionary<string, object> { { "command", Commands.WereAddressesSpentFrom }, { "addresses", addresses.Select(a => a.Value).ToList() } });
+
+      for (var i = 0; i < addresses.Count; i++)
+      {
+        addresses[i].SpentFrom = response["states"][i];
+      }
+
+      return addresses;
     }
 
     #endregion

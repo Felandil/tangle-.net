@@ -171,6 +171,17 @@
     /// </param>
     void StoreTransactions(IEnumerable<TransactionTrytes> transactions);
 
+    /// <summary>
+    /// The where addresses spent from.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    List<Address> WereAddressesSpentFrom(List<Address> addresses);
+
     #endregion
   }
 }

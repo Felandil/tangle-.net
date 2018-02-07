@@ -77,6 +77,11 @@
     /// </summary>
     public const string StoreTransactions = "storeTransactions";
 
+    /// <summary>
+    /// The were addresses spent from.
+    /// </summary>
+    public const string WereAddressesSpentFrom = "wereAddressesSpentFrom";
+
     #endregion
   }
 }

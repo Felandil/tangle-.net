@@ -82,6 +82,11 @@
     /// </summary>
     public int SecurityLevel { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether spent from.
+    /// </summary>
+    public bool SpentFrom { get; set; }
+
     #endregion
 
     #region Public Methods and Operators

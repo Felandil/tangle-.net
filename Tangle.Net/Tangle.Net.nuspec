@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Tangle.Net</id>
-    <version>1.0.4.1</version>
+    <version>1.0.4.2</version>
     <title>IOTA Library C# Port</title>
     <authors>Felandil</authors>
     <owners>Felandil</owners>
