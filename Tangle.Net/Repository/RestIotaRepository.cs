@@ -180,12 +180,12 @@
 
       if (!parameters.Any(p => this.validFindTransactionParameters.Contains(p.Key)))
       {
-        throw new ArgumentException("A parameters seems to be invalid.");
+        throw new ArgumentException("A parameter seems to be invalid.");
       }
 
       if (parameters.Any(parameter => !parameter.Value.Any()))
       {
-        throw new ArgumentException("A parameters seems to not contain values!");
+        throw new ArgumentException("A parameter seems to not contain values!");
       }
 
       var command = new Dictionary<string, object> { { "command", Commands.FindTransactions } };
@@ -340,7 +340,7 @@
     {
       var usedAddressesWithTransactions = this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
       var usedAddresses = usedAddressesWithTransactions.UsedAddresses;
-      var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddresses.Count != 0 ? usedAddresses.Last().KeyIndex + 1 : 0);
+      var latestUnusedAddress = new AddressGenerator(seed, securityLevel).GetAddress(usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
       var addressesWithBalance = new List<Address>();
       var associatedBundles = new List<Bundle>();
 
@@ -451,15 +451,18 @@
         }
       }
 
-      var allBundleTransactions = this.FindTransactionsByBundles(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList()).Hashes;
-      var allBundleTransactionTrytes = this.GetTrytes(allBundleTransactions);
+      if (nonTailTransactions.Any())
+      {
+        var allBundleTransactions = this.FindTransactionsByBundles(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList()).Hashes;
+        var allBundleTransactionTrytes = this.GetTrytes(allBundleTransactions);
 
-      tailTransactions.AddRange(
-        from bundleTransactionTryte in allBundleTransactionTrytes
-        select Transaction.FromTrytes(bundleTransactionTryte)
-        into transaction
-        where transaction.IsTail
-        select transaction.Hash);
+        tailTransactions.AddRange(
+          from bundleTransactionTryte in allBundleTransactionTrytes
+          select Transaction.FromTrytes(bundleTransactionTryte)
+            into transaction
+            where transaction.IsTail
+            select transaction.Hash); 
+      }
 
       var inclusionStates = new InclusionStates();
       if (includeInclusionStates)
