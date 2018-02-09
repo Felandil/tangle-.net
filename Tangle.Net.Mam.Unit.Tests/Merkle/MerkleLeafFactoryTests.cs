@@ -1,12 +1,12 @@
-﻿namespace Tangle.Net.Mam.Unit.Tests.Merkle
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tangle.Net.Cryptography;
+using Tangle.Net.Entity;
+using Tangle.Net.Mam.Merkle;
+
+namespace Tangle.Net.Mam.Unit.Tests.Merkle
 {
-  using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-  using Tangle.Net.Mam.Merkle;
-  using Tangle.Net.Unit.Tests.Cryptography;
-
   /// <summary>
-  /// The merkle leaf factory tests.
+  ///   The merkle leaf factory tests.
   /// </summary>
   [TestClass]
   public class MerkleLeafFactoryTests
@@ -14,12 +14,14 @@
     #region Public Methods and Operators
 
     /// <summary>
-    /// The test leaf factory sets properties accordingly.
+    ///   The test leaf factory sets properties accordingly.
     /// </summary>
     [TestMethod]
     public void TestLeafFactorySetsPropertiesAccordingly()
     {
-      var addressGenerator = new AddressGeneratorStub();
+      var addressGenerator =
+        new AddressGenerator(
+          new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN"));
       var address = addressGenerator.GetAddress(0);
 
       var factory = new CurlMerkleLeafFactory(addressGenerator);

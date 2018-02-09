@@ -21,9 +21,9 @@
     [TestMethod]
     public void TestTreeHasOnlyMoreThanOneLeafShouldCreateNodes()
     {
-      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGeneratorStub()));
-      var random = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
-      var tree = factory.Create(random, 0, 10, SecurityLevel.Medium);
+      var seed = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
+      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var tree = factory.Create(seed, 0, 10, SecurityLevel.Medium);
 
       Assert.IsNotNull(tree.Root);
       Assert.AreEqual(10, tree.Size);
