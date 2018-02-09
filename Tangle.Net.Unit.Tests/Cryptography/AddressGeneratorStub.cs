@@ -23,7 +23,7 @@
     /// </returns>
     public Address GetAddress(int index)
     {
-      return new Address { PrivateKey = new PrivateKeyStub() };
+      return new Address(Seed.Random().Value) { PrivateKey = new PrivateKeyStub() };
     }
 
     /// <summary>
@@ -40,7 +40,13 @@
     /// </returns>
     public List<Address> GetAddresses(int startIndex, int count)
     {
-      return new List<Address> { new Address { PrivateKey = new PrivateKeyStub() } };
+      var addresses = new List<Address>();
+      for (var i = startIndex; i < startIndex + count; i++)
+      {
+        addresses.Add(this.GetAddress(i));
+      }
+
+      return addresses;
     }
 
     #endregion

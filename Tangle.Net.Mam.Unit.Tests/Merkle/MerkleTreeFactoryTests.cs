@@ -16,6 +16,20 @@
     #region Public Methods and Operators
 
     /// <summary>
+    /// The test tree has only more than one leaf should create nodes.
+    /// </summary>
+    [TestMethod]
+    public void TestTreeHasOnlyMoreThanOneLeafShouldCreateNodes()
+    {
+      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGeneratorStub()));
+      var random = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
+      var tree = factory.Create(random, 0, 10, SecurityLevel.Medium);
+
+      Assert.IsNotNull(tree.Root);
+      Assert.AreEqual(10, tree.Size);
+    }
+
+    /// <summary>
     /// The test tree has only one leaf should set leaf as root node.
     /// </summary>
     [TestMethod]
@@ -25,8 +39,6 @@
       var tree = factory.Create(Seed.Random(), 0, 1, SecurityLevel.Medium);
 
       Assert.IsNotNull(tree.Root);
-      Assert.AreEqual(0, tree.Nodes.Count);
-      Assert.AreEqual(0, tree.Leaves.Count);
     }
 
     #endregion

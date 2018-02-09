@@ -23,9 +23,15 @@
     public int SecurityLevel { get; private set; }
 
     /// <summary>
-    /// Gets or sets the value.
+    /// Gets the value.
     /// </summary>
-    public string Value { get; set; }
+    public string Value
+    {
+      get
+      {
+        return Seed.Random().Value;
+      }
+    }
 
     #endregion
 

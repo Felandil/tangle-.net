@@ -36,6 +36,8 @@
 
       this.LeftNode = leftNode;
       this.RightNode = rightNode;
+
+      this.Size = leftNode.Size + (rightNode != null ? rightNode.Size : 0);
     }
 
     #endregion

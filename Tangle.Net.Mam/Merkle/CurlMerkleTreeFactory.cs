@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
+  using System.Collections.Generic;
+
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -62,24 +64,39 @@
     /// </returns>
     public MerkleTree Create(Seed seed, int startIndex, int count, int securityLevel)
     {
-      var tree = new MerkleTree();
       var leaves = this.LeafFactory.Create(startIndex, count);
+      return new MerkleTree { Root = this.BuildTree(leaves) };
+    }
 
-      if (leaves.Count == 1)
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// The build tree.
+    /// </summary>
+    /// <param name="leaves">
+    /// The leaves.
+    /// </param>
+    /// <returns>
+    /// The <see cref="MerkleNode"/>.
+    /// </returns>
+    private MerkleNode BuildTree(IReadOnlyList<MerkleNode> leaves)
+    {
+      var subnodes = new List<MerkleNode>();
+      for (var i = 0; i < leaves.Count; i += 2)
       {
-        tree.Root = leaves[0];
+        var right = (i + 1 < leaves.Count) ? leaves[i + 1] : null;
+        var parent = this.NodeFactory.Create(leaves[i], right);
+        subnodes.Add(parent);
       }
 
-      return tree;
+      if (subnodes.Count == 1)
+      {
+        return subnodes[0];
+      }
 
-      // const key = Crypto.signing.key(seed, index, security);
-      // const digests = Crypto.signing.digests(key);
-      // const address = Crypto.signing.address(digests);
-      ////var address = Crypto.converter.trytes(addressTrits);
-      // this.key = key;
-      // this.hash = new Hash(address);
-      // this.size = () => 1;
-      // this.get = () => this;
+      return this.BuildTree(subnodes);
     }
 
     #endregion

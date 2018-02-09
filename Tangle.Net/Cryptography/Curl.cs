@@ -84,12 +84,10 @@
     public override void Squeeze(int[] trits)
     {
       var length = trits.Length;
-      var offset = 0;
       do
       {
-        Array.Copy(this.State, 0, trits, offset, length < HashLength ? length : HashLength);
+        Array.Copy(this.State, 0, trits, 0, length < HashLength ? length : HashLength);
         this.Transform();
-        offset += HashLength;
       }
       while ((length -= HashLength) > 0);
     }
