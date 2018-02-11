@@ -88,17 +88,12 @@
     /// </returns>
     public List<Address> GetAddresses(int startIndex, int count)
     {
-
-      var result = new List<Address>();
-
       // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
-      Parallel.For(
-        startIndex,
-        startIndex + count,
-        i => result.Add(this.GetAddress(i)));
-
-      // sort by index to ensure correct order
-      return result.OrderBy(a => a.KeyIndex).ToList();
+      return Enumerable.Range(startIndex, startIndex + count)
+       .AsParallel()
+       .Select(i => this.GetAddress(i))
+       .OrderBy(x => x.KeyIndex)
+       .ToList();
     }
 
     #endregion
