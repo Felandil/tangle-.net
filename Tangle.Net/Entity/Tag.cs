@@ -16,6 +16,14 @@
 
     #endregion
 
+    #region Fields
+    /// <summary>
+    /// Gets the empty.
+    /// </summary>
+    public static readonly Tag Empty = new Tag();
+    #endregion
+
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -48,19 +56,5 @@
 
     #endregion
 
-    #region Public Properties
-
-    /// <summary>
-    /// Gets the empty.
-    /// </summary>
-    public static Tag Empty
-    {
-      get
-      {
-        return new Tag();
-      }
-    }
-
-    #endregion
   }
 }
