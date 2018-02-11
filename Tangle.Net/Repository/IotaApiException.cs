@@ -5,7 +5,7 @@
   /// <summary>
   /// The iri api exception.
   /// </summary>
-  public class IotaApiException : ApplicationException
+  public class IotaApiException : Exception
   {
     #region Constructors and Destructors
 

@@ -47,6 +47,7 @@
     <Compile Include="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="Merkle\MerkleNodeFactoryTests.cs" />
     <Compile Include="Merkle\MerkleTreeFactoryTests.cs" />
+    <Compile Include="Merkle\MerkleTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
