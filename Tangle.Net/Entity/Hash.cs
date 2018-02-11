@@ -20,6 +20,13 @@
 
     #endregion
 
+    #region Fields
+    /// <summary>
+    /// Gets the empty.
+    /// </summary>
+    public static readonly Hash Empty = new Hash(new string('9', Length));
+    #endregion
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -48,21 +55,6 @@
     public Hash()
       : this(string.Empty)
     {
-    }
-
-    #endregion
-
-    #region Public Properties
-
-    /// <summary>
-    /// Gets the empty.
-    /// </summary>
-    public static Hash Empty
-    {
-      get
-      {
-        return new Hash("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
-      }
     }
 
     #endregion
