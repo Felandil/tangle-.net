@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net", "Tangle.Net\Tangle.Net.csproj", "{6678B808-1464-490E-BECD-842305000560}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam", "Tangle.Net.Mam\Tangle.Net.Mam.csproj", "{183E56D2-D79B-45F7-8B92-CBEF8D2E9469}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam.Unit.Tests", "Tangle.Net.Mam.Unit.Tests\Tangle.Net.Mam.Unit.Tests.csproj", "{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Standard", "Tangle.Net.Standard\Tangle.Net.Standard.csproj", "{14995D96-3F01-425F-929D-9F0422670E92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,8 +55,15 @@ Global
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14995D96-3F01-425F-929D-9F0422670E92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14995D96-3F01-425F-929D-9F0422670E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14995D96-3F01-425F-929D-9F0422670E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14995D96-3F01-425F-929D-9F0422670E92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26CDB312-32D3-4DF5-8975-5137F5535B63}
 	EndGlobalSection
 EndGlobal

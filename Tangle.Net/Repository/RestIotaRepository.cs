@@ -74,62 +74,35 @@
 
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The add neighbor.
-    /// </summary>
-    /// <param name="neighbors">
-    /// The neighbors.
-    /// </param>
-    /// <returns>
-    /// The <see cref="AddNeighborsResponse"/>.
-    /// </returns>
+    /// <inheritdoc />
     public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
     {
-      return
-        this.ExecuteParameterizedCommand<AddNeighborsResponse>(
-          new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+      return this.ExecuteParameterizedCommand<AddNeighborsResponse>(
+        new Dictionary<string, object> { { "command", Commands.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
     }
 
-    /// <summary>
-    /// The attach to tangle.
-    /// </summary>
-    /// <param name="branchTransaction">
-    /// The branch transactions.
-    /// </param>
-    /// <param name="trunkTransaction">
-    /// The trunk transactions.
-    /// </param>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TryteString"/>.
-    /// </returns>
+    /// <inheritdoc />
     public List<TransactionTrytes> AttachToTangle(
-      Hash branchTransaction, 
-      Hash trunkTransaction, 
-      IEnumerable<Transaction> transactions, 
+      Hash branchTransaction,
+      Hash trunkTransaction,
+      IEnumerable<Transaction> transactions,
       int minWeightMagnitude = 18)
     {
       if (this.PoWService != null)
       {
-        return
-          this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
+        return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes())
+          .ToList();
       }
 
-      var result =
-        this.ExecuteParameterizedCommand<AttachToTangleResponse>(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.AttachToTangle }, 
-              { "trunkTransaction", trunkTransaction.ToString() }, 
-              { "branchTransaction", branchTransaction.ToString() }, 
-              { "minWeightMagnitude", minWeightMagnitude }, 
-              { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).ToList() }
-            });
+      var result = this.ExecuteParameterizedCommand<AttachToTangleResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.AttachToTangle },
+            { "trunkTransaction", trunkTransaction.ToString() },
+            { "branchTransaction", branchTransaction.ToString() },
+            { "minWeightMagnitude", minWeightMagnitude },
+            { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).ToList() }
+          });
 
       return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
     }
@@ -154,10 +127,13 @@
     /// </param>
     public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response =
-        this.Client.Execute<object>(
-          CreateRequest(
-            new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response = this.Client.Execute<object>(
+        CreateRequest(
+          new Dictionary<string, object>
+            {
+              { "command", Commands.BroadcastTransactions },
+              { "trytes", transactions.Select(t => t.Value).ToList() }
+            }));
 
       ValidateResponse(response, Commands.BroadcastTransactions);
     }
@@ -211,9 +187,8 @@
     /// </returns>
     public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
     {
-      return
-        this.FindTransactions(
-          new Dictionary<string, IEnumerable<TryteString>> { { "addresses", addresses.Select(a => new TryteString(a.Value)).ToList() } });
+      return this.FindTransactions(
+        new Dictionary<string, IEnumerable<TryteString>> { { "addresses", addresses.Select(a => new TryteString(a.Value)).ToList() } });
     }
 
     /// <summary>
@@ -227,9 +202,8 @@
     /// </returns>
     public TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes)
     {
-      return
-        this.FindTransactions(
-          new Dictionary<string, IEnumerable<TryteString>> { { "approvees", approveeHashes.Select(a => new TryteString(a.Value)).ToList() } });
+      return this.FindTransactions(
+        new Dictionary<string, IEnumerable<TryteString>> { { "approvees", approveeHashes.Select(a => new TryteString(a.Value)).ToList() } });
     }
 
     /// <summary>
@@ -243,9 +217,8 @@
     /// </returns>
     public TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes)
     {
-      return
-        this.FindTransactions(
-          new Dictionary<string, IEnumerable<TryteString>> { { "bundles", bundleHashes.Select(a => new TryteString(a.Value)).ToList() } });
+      return this.FindTransactions(
+        new Dictionary<string, IEnumerable<TryteString>> { { "bundles", bundleHashes.Select(a => new TryteString(a.Value)).ToList() } });
     }
 
     /// <summary>
@@ -259,8 +232,8 @@
     /// </returns>
     public TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags)
     {
-      return
-        this.FindTransactions(new Dictionary<string, IEnumerable<TryteString>> { { "tags", tags.Select(a => new TryteString(a.Value)).ToList() } });
+      return this.FindTransactions(
+        new Dictionary<string, IEnumerable<TryteString>> { { "tags", tags.Select(a => new TryteString(a.Value)).ToList() } });
     }
 
     /// <summary>
@@ -305,7 +278,7 @@
 
       return new FindUsedAddressesResponse
                {
-                 AssociatedTransactionHashes = associatedTransactionHashes, 
+                 AssociatedTransactionHashes = associatedTransactionHashes,
                  UsedAddresses = usedAddresses.OrderBy(a => a.KeyIndex).ToList()
                };
     }
@@ -332,10 +305,10 @@
     /// The <see cref="GetAccountDataResponse"/>.
     /// </returns>
     public GetAccountDataResponse GetAccountData(
-      Seed seed, 
-      bool includeInclusionStates, 
-      int securityLevel, 
-      int addressStartIndex, 
+      Seed seed,
+      bool includeInclusionStates,
+      int securityLevel,
+      int addressStartIndex,
       int addressStopIndex = 0)
     {
       var usedAddressesWithTransactions = this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
@@ -352,9 +325,9 @@
 
       return new GetAccountDataResponse
                {
-                 Balance = addressesWithBalance.Sum(a => a.Balance), 
-                 UsedAddresses = usedAddresses, 
-                 AssociatedBundles = associatedBundles, 
+                 Balance = addressesWithBalance.Sum(a => a.Balance),
+                 UsedAddresses = usedAddresses,
+                 AssociatedBundles = associatedBundles,
                  LatestUnusedAddress = latestUnusedAddress
                };
     }
@@ -373,14 +346,13 @@
     /// </returns>
     public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
     {
-      var result =
-        this.ExecuteParameterizedCommand<GetBalanceResponse>(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.GetBalances }, 
-              { "addresses", addresses.Select(a => a.Value).ToList() }, 
-              { "threshold", threshold }
-            });
+      var result = this.ExecuteParameterizedCommand<GetBalanceResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.GetBalances },
+            { "addresses", addresses.Select(a => a.Value).ToList() },
+            { "threshold", threshold }
+          });
 
       for (var i = 0; i < addresses.Count(); i++)
       {
@@ -389,9 +361,9 @@
 
       return new AddressWithBalances
                {
-                 Addresses = addresses, 
-                 Duration = result.Duration, 
-                 MilestoneIndex = result.MilestoneIndex, 
+                 Addresses = addresses,
+                 Duration = result.Duration,
+                 MilestoneIndex = result.MilestoneIndex,
                  References = result.References.ConvertAll(reference => new TryteString(reference))
                };
     }
@@ -459,9 +431,9 @@
         tailTransactions.AddRange(
           from bundleTransactionTryte in allBundleTransactionTrytes
           select Transaction.FromTrytes(bundleTransactionTryte)
-            into transaction
-            where transaction.IsTail
-            select transaction.Hash); 
+          into transaction
+          where transaction.IsTail
+          select transaction.Hash);
       }
 
       var inclusionStates = new InclusionStates();
@@ -499,14 +471,13 @@
     /// </returns>
     public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
     {
-      var result =
-        this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.GetInclusionStates }, 
-              { "transactions", transactionHashes.Select(t => t.Value).ToList() }, 
-              { "tips", tips.Select(t => t.Value).ToList() }
-            });
+      var result = this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.GetInclusionStates },
+            { "transactions", transactionHashes.Select(t => t.Value).ToList() },
+            { "tips", tips.Select(t => t.Value).ToList() }
+          });
 
       var inclusionStates = new Dictionary<Hash, bool>();
       for (var i = 0; i < transactionHashes.Count(); i++)
@@ -685,14 +656,13 @@
     /// </returns>
     public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
     {
-      var result =
-        this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
-          new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
+      var result = this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
+        new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
                {
-                 BranchTransaction = new Hash(result.BranchTransaction), 
-                 TrunkTransaction = new Hash(result.TrunkTransaction), 
+                 BranchTransaction = new Hash(result.BranchTransaction),
+                 TrunkTransaction = new Hash(result.TrunkTransaction),
                  Duration = result.Duration
                };
     }
@@ -739,9 +709,8 @@
     /// </returns>
     public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
     {
-      var result =
-        this.ExecuteParameterizedCommand<GetTrytesResponse>(
-          new Dictionary<string, object> { { "command", Commands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+      var result = this.ExecuteParameterizedCommand<GetTrytesResponse>(
+        new Dictionary<string, object> { { "command", Commands.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
 
       return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }
@@ -827,9 +796,8 @@
     /// </returns>
     public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
     {
-      return
-        this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
-          new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+      return this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
+        new Dictionary<string, object> { { "command", Commands.RemoveNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
     }
 
     /// <summary>
@@ -882,12 +850,12 @@
     /// The <see cref="Bundle"/>.
     /// </returns>
     public Bundle SendTransfer(
-      Seed seed, 
-      Bundle bundle, 
-      int securityLevel, 
-      int depth = 27, 
-      int minWeightMagnitude = 18, 
-      Address remainderAddress = null, 
+      Seed seed,
+      Bundle bundle,
+      int securityLevel,
+      int depth = 27,
+      int minWeightMagnitude = 18,
+      Address remainderAddress = null,
       List<Address> inputAddresses = null)
     {
       var preparedBundle = this.PrepareTransfer(seed, bundle, securityLevel, remainderAddress, inputAddresses);
@@ -916,9 +884,9 @@
       var transactionsToApprove = this.GetTransactionsToApprove(depth);
 
       var attachResultTrytes = this.AttachToTangle(
-        transactionsToApprove.BranchTransaction, 
-        transactionsToApprove.TrunkTransaction, 
-        transactions, 
+        transactionsToApprove.BranchTransaction,
+        transactionsToApprove.TrunkTransaction,
+        transactions,
         minWeightMagnitude);
 
       this.BroadcastAndStoreTransactions(attachResultTrytes);
@@ -934,10 +902,9 @@
     /// </param>
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response =
-        this.Client.Execute<object>(
-          CreateRequest(
-            new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
+      var response = this.Client.Execute<object>(
+        CreateRequest(
+          new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } }));
 
       ValidateResponse(response, Commands.StoreTransactions);
     }
@@ -953,13 +920,12 @@
     /// </returns>
     public List<Address> WereAddressesSpentFrom(List<Address> addresses)
     {
-      var response =
-        this.ExecuteParameterizedCommand<Dictionary<string, dynamic>>(
-          new Dictionary<string, object> { { "command", Commands.WereAddressesSpentFrom }, { "addresses", addresses.Select(a => a.Value).ToList() } });
+      var response = this.ExecuteParameterizedCommand<WhereAddressesSpentFromResponse>(
+        new Dictionary<string, object> { { "command", Commands.WereAddressesSpentFrom }, { "addresses", addresses.Select(a => a.Value).ToList() } });
 
       for (var i = 0; i < addresses.Count; i++)
       {
-        addresses[i].SpentFrom = response["states"][i];
+        addresses[i].SpentFrom = response.States[i];
       }
 
       return addresses;
@@ -1001,7 +967,8 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private static T ValidateResponse<T>(IRestResponse<T> response, object commandName) where T : new()
+    private static T ValidateResponse<T>(IRestResponse<T> response, object commandName)
+      where T : new()
     {
       var nullResponse = response == null;
 
@@ -1035,7 +1002,8 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters) where T : new()
+    private T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+      where T : new()
     {
       var response = this.Client.Execute<T>(CreateRequest(parameters));
       return ValidateResponse(response, parameters.First(p => p.Key == "command").Value);
@@ -1053,7 +1021,8 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private T ExecuteParameterlessCommand<T>(string commandName) where T : new()
+    private T ExecuteParameterlessCommand<T>(string commandName)
+      where T : new()
     {
       return this.ExecuteParameterizedCommand<T>(new Dictionary<string, object> { { "command", commandName } });
     }
