@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam", "Tangle.Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam.Unit.Tests", "Tangle.Net.Mam.Unit.Tests\Tangle.Net.Mam.Unit.Tests.csproj", "{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Standard", "Tangle.Net.Standard\Tangle.Net.Standard.csproj", "{14995D96-3F01-425F-929D-9F0422670E92}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +57,10 @@ Global
 		{14995D96-3F01-425F-929D-9F0422670E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14995D96-3F01-425F-929D-9F0422670E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14995D96-3F01-425F-929D-9F0422670E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{833A1478-9383-4E07-B042-8D25759AA594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{833A1478-9383-4E07-B042-8D25759AA594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{833A1478-9383-4E07-B042-8D25759AA594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{833A1478-9383-4E07-B042-8D25759AA594}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\AddressGeneratorStub.cs" Link="Cryptography\AddressGeneratorStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\AddressGeneratorTest.cs" Link="Cryptography\AddressGeneratorTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\ConverterTest.cs" Link="Cryptography\ConverterTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\KerlTest.cs" Link="Cryptography\KerlTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\KeyGeneratorStub.cs" Link="Cryptography\KeyGeneratorStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\KeyGeneratorTest.cs" Link="Cryptography\KeyGeneratorTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\PrivateKeyStub.cs" Link="Cryptography\PrivateKeyStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\PrivateKeyTest.cs" Link="Cryptography\PrivateKeyTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\SignatureFragmentGeneratorTest.cs" Link="Cryptography\SignatureFragmentGeneratorTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\AddressTest.cs" Link="Entity\AddressTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\BundleTest.cs" Link="Entity\BundleTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\BundleValidationTests.cs" Link="Entity\BundleValidationTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\ChecksumTest.cs" Link="Entity\ChecksumTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\DigestTest.cs" Link="Entity\DigestTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\HashTest.cs" Link="Entity\HashTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\SeedTest.cs" Link="Entity\SeedTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TagTest.cs" Link="Entity\TagTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTests.cs" Link="Entity\TransactionTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTrytesTest.cs" Link="Entity\TransactionTrytesTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TryteStringTest.cs" Link="Entity\TryteStringTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWDiverStub.cs" Link="ProofOfWork\PoWDiverStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWServiceTest.cs" Link="ProofOfWork\PoWServiceTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\RestIotaRepositoryTest.cs" Link="Repository\RestIotaRepositoryTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\ExtensionTests.cs" Link="Utils\ExtensionTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\InputValidatorTest.cs" Link="Utils\InputValidatorTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Moq" Version="4.8.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tangle.Net.Standard\Tangle.Net.Standard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entity\" />
+    <Folder Include="Utils\" />
+    <Folder Include="ProofOfWork\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\generate_trytes_and_multi_squeeze.csv" Link="Cryptography\generate_trytes_and_multi_squeeze.csv" />
+  </ItemGroup>
+
+</Project>

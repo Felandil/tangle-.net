@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>  
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\AbstractCurl.cs" Link="Cryptography\AbstractCurl.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\AddressGenerator.cs" Link="Cryptography\AddressGenerator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Converter.cs" Link="Cryptography\Converter.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Curl.cs" Link="Cryptography\Curl.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IAddressGenerator.cs" Link="Cryptography\IAddressGenerator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IKeyGenerator.cs" Link="Cryptography\IKeyGenerator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IPrivateKey.cs" Link="Cryptography\IPrivateKey.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Kerl.cs" Link="Cryptography\Kerl.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\KeyGenerator.cs" Link="Cryptography\KeyGenerator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\PrivateKey.cs" Link="Cryptography\PrivateKey.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\SecurityLevel.cs" Link="Cryptography\SecurityLevel.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\SignatureFragmentGenerator.cs" Link="Cryptography\SignatureFragmentGenerator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Address.cs" Link="Entity\Address.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Bundle.cs" Link="Entity\Bundle.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Checksum.cs" Link="Entity\Checksum.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Digest.cs" Link="Entity\Digest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Fragment.cs" Link="Entity\Fragment.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Hash.cs" Link="Entity\Hash.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Seed.cs" Link="Entity\Seed.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Tag.cs" Link="Entity\Tag.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Transaction.cs" Link="Entity\Transaction.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\TransactionTrytes.cs" Link="Entity\TransactionTrytes.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Transfer.cs" Link="Entity\Transfer.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\TryteString.cs" Link="Entity\TryteString.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\ValidationSummary.cs" Link="Entity\ValidationSummary.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPowDiver.cs" Link="ProofOfWork\CpuPowDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPoWDiver.cs" Link="ProofOfWork\IPoWDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\PoWService.cs" Link="ProofOfWork\PoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Commands.cs" Link="Repository\Commands.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\AddressWithBalances.cs" Link="Repository\DataTransfer\AddressWithBalances.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\InclusionStates.cs" Link="Repository\DataTransfer\InclusionStates.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\Neighbor.cs" Link="Repository\DataTransfer\Neighbor.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\NeighborList.cs" Link="Repository\DataTransfer\NeighborList.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\NodeInfo.cs" Link="Repository\DataTransfer\NodeInfo.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TipHashList.cs" Link="Repository\DataTransfer\TipHashList.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionHashList.cs" Link="Repository\DataTransfer\TransactionHashList.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionsToApprove.cs" Link="Repository\DataTransfer\TransactionsToApprove.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaCoreRepository.cs" Link="Repository\IIotaCoreRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaExtendedRepository.cs" Link="Repository\IIotaExtendedRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaNodeRepository.cs" Link="Repository\IIotaNodeRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaRepository.cs" Link="Repository\IIotaRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\InvalidBundleException.cs" Link="Repository\InvalidBundleException.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IotaApiException.cs" Link="Repository\IotaApiException.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AddNeighborsResponse.cs" Link="Repository\Responses\AddNeighborsResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AttachToTangleResponse.cs" Link="Repository\Responses\AttachToTangleResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\FindUsedAddressesResponse.cs" Link="Repository\Responses\FindUsedAddressesResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetAccountDataResponse.cs" Link="Repository\Responses\GetAccountDataResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetBalanceResponse.cs" Link="Repository\Responses\GetBalanceResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetInclusionStatesResponse.cs" Link="Repository\Responses\GetInclusionStatesResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetInputsResponse.cs" Link="Repository\Responses\GetInputsResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTipsResponse.cs" Link="Repository\Responses\GetTipsResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTransactionsResponse.cs" Link="Repository\Responses\GetTransactionsResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTransactionsToApproveResponse.cs" Link="Repository\Responses\GetTransactionsToApproveResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTrytesResponse.cs" Link="Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\RemoveNeighborsResponse.cs" Link="Repository\Responses\RemoveNeighborsResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\WhereAddressesSpentFromResponse.cs" Link="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaRepository.cs" Link="Repository\RestIotaRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Extensions.cs" Link="Utils\Extensions.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\InputValidator.cs" Link="Utils\InputValidator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Timestamp.cs" Link="Utils\Timestamp.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.4" />
+    <PackageReference Include="RestSharp" Version="106.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entity\" />
+    <Folder Include="Repository\DataTransfer\" />
+    <Folder Include="Repository\Responses\" />
+    <Folder Include="Utils\" />
+    <Folder Include="ProofOfWork\" />
+  </ItemGroup>
+
+</Project>
