@@ -54,8 +54,4 @@
     <Folder Include="Repository\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Cryptography\generate_trytes_and_multi_squeeze.csv" Link="Cryptography\generate_trytes_and_multi_squeeze.csv" />
-  </ItemGroup>
-
 </Project>

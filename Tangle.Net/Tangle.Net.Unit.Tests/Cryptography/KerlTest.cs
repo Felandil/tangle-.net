@@ -1,8 +1,8 @@
 ﻿namespace Tangle.Net.Unit.Tests.Cryptography
 {
   using System.IO;
-
-  using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Reflection;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
 
@@ -74,8 +74,13 @@
     [TestMethod]
     public void TestGenerateTrytesAndMultiSqueeze()
     {
+      var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      var isNetStandard = path.Contains("Standard");
+      var netStandardExtension = isNetStandard ? "../" : "";
+
+
       // CSV from Python lib. Thanks alot!
-      using (var reader = new StreamReader(@"../../Cryptography/generate_trytes_and_multi_squeeze.csv"))
+      using (var reader = new StreamReader(@"../" + netStandardExtension + "../Cryptography/generate_trytes_and_multi_squeeze.csv"))
       {
         var i = 0;
         while (!reader.EndOfStream)
