@@ -41,7 +41,7 @@
     /// <returns>
     /// The <see cref="Tuple"/>.
     /// </returns>
-    public Tuple<IPrivateKey, List<MerkleNode>> GetLeavesByKeyIndex(int index)
+    public MerkleSubTree GetSubtreeByIndex(int index)
     {
       var leaves = new List<MerkleNode>();
       var node = this.Root;
@@ -75,7 +75,11 @@
 
       leaves.Reverse();
 
-      return new Tuple<IPrivateKey, List<MerkleNode>>(key, leaves);
+      return new MerkleSubTree
+               {
+                 Key = key,
+                 Leaves = leaves
+               };
     }
 
     #endregion

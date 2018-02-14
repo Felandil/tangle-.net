@@ -49,6 +49,7 @@
     <Compile Include="Merkle\IMerkleNodeFactory.cs" />
     <Compile Include="Merkle\IMerkleTreeFactory.cs" />
     <Compile Include="Merkle\MerkleNode.cs" />
+    <Compile Include="Merkle\MerkleSubTree.cs" />
     <Compile Include="Merkle\MerkleTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
