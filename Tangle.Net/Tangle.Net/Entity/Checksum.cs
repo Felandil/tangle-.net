@@ -55,7 +55,7 @@
       var kerl = new Kerl();
       kerl.Absorb(addressTrits);
 
-      var checksumTrits = new int[Kerl.HashLength];
+      var checksumTrits = new int[AbstractCurl.HashLength];
       kerl.Squeeze(checksumTrits);
 
       var tritsToTrytes = Converter.TritsToTrytes(checksumTrits);

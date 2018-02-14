@@ -3,6 +3,7 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Entity;
 
   public class MerkleSubTree
   {
@@ -14,7 +15,7 @@
     public List<MerkleNode> Leaves { get; set; }
     public IPrivateKey Key { get; set; }
 
-    public override string ToString()
+    public TryteString ToTryteString()
     {
       var value = string.Empty;
       foreach (var merkleNode in this.Leaves)
@@ -22,7 +23,7 @@
         value += merkleNode.Hash.Value;
       }
 
-      return value;
+      return new TryteString(value);
     }
   }
 }

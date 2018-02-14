@@ -14,16 +14,10 @@
   /// </summary>
   public class TryteString
   {
-    #region Constants
-
     /// <summary>
     /// The tryte alphabet.
     /// </summary>
     public const string TryteAlphabet = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TryteString"/> class.
@@ -38,7 +32,8 @@
     {
       if (!InputValidator.IsTrytes(trytes))
       {
-        throw new ArgumentException("Given string does contain invalid characters. Use 'From string' if you meant to convert a string to tryteString");
+        throw new ArgumentException(
+          "Given string does contain invalid characters. Use 'From string' if you meant to convert a string to tryteString");
       }
 
       this.Value = trytes;
@@ -51,10 +46,6 @@
       : this(string.Empty)
     {
     }
-
-    #endregion
-
-    #region Public Properties
 
     /// <summary>
     /// Gets the chunkLength.
@@ -71,10 +62,6 @@
     /// Gets or sets the value.
     /// </summary>
     public string Value { get; protected set; }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <summary>
     /// The from string.
@@ -102,6 +89,34 @@
     public static TryteString FromUtf8String(string input)
     {
       return new TryteString(BytesToTrytes(Encoding.UTF8.GetBytes(input)));
+    }
+
+    /// <summary>
+    /// The get empty.
+    /// </summary>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public static TryteString GetEmpty(int length)
+    {
+      return new TryteString(new string('9', length));
+    }
+
+    /// <summary>
+    /// The concat.
+    /// </summary>
+    /// <param name="with">
+    /// The with.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public TryteString Concat(TryteString with)
+    {
+      return new TryteString(this.Value + with.Value);
     }
 
     /// <summary>
@@ -136,7 +151,8 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    public T GetChunk<T>(int offset, int length) where T : TryteString, new()
+    public T GetChunk<T>(int offset, int length)
+      where T : TryteString, new()
     {
       return (T)Activator.CreateInstance(typeof(T), this.Value.Substring(offset, length));
     }
@@ -192,7 +208,7 @@
       var byteResult = new List<byte>();
       for (var i = 0; i < messageTrytes.Length; i += 2)
       {
-        var byteValue = TryteAlphabet.IndexOf(this.Value[i]) + (TryteAlphabet.IndexOf(this.Value[i + 1]) * 27);
+        var byteValue = TryteAlphabet.IndexOf(this.Value[i]) + TryteAlphabet.IndexOf(this.Value[i + 1]) * 27;
         byteResult.Add((byte)byteValue);
       }
 
@@ -232,10 +248,6 @@
       return Encoding.UTF8.GetString(this.ToBytes());
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// The bytes to trytes.
     /// </summary>
@@ -251,8 +263,8 @@
               let firstValue = asciiValue % 27
               let secondValue = (asciiValue - firstValue) / 27
               select string.Format("{0}{1}", TryteAlphabet[firstValue], TryteAlphabet[secondValue])).Aggregate(
-                string.Empty, 
-                (current, trytesValue) => current + trytesValue);
+        string.Empty,
+        (current, trytesValue) => current + trytesValue);
     }
 
     /// <summary>
@@ -284,7 +296,5 @@
     {
       this.Value = this.Value.PadRight(length, '9');
     }
-
-    #endregion
   }
 }

@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="CurlMask.cs" />
     <Compile Include="IMask.cs" />
+    <Compile Include="Mam\CurlMamFactory.cs" />
+    <Compile Include="Mam\IMamFactory.cs" />
+    <Compile Include="Mam\MaskedAuthenticatedMessage.cs" />
     <Compile Include="Merkle\CurlMerkleLeafFactory.cs" />
     <Compile Include="Merkle\CurlMerkleNodeFactory.cs" />
     <Compile Include="Merkle\CurlMerkleTreeFactory.cs" />

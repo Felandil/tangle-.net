@@ -14,8 +14,6 @@
   /// </summary>
   public static class Extensions
   {
-    #region Public Methods and Operators
-
     /// <summary>
     /// The get chunks.
     /// </summary>
@@ -38,6 +36,20 @@
       }
 
       return chunks;
+    }
+
+    /// <summary>
+    /// The to trits.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    public static int[] ToTrits(this int value)
+    {
+      return Converter.IntToTrits(value, 27);
     }
 
     /// <summary>
@@ -72,9 +84,8 @@
     public static TryteString ToTrytes(this long value, int padding)
     {
       // TODO: this is ugly. create conversion method for long within converter
-      return
-        new TryteString(
-          Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value.ToString(CultureInfo.InvariantCulture)), padding)));
+      return new TryteString(
+        Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value.ToString(CultureInfo.InvariantCulture)), padding)));
     }
 
     /// <summary>
@@ -90,7 +101,5 @@
     {
       return new TryteString(TryteString.BytesToTrytes(value));
     }
-
-    #endregion
   }
 }
