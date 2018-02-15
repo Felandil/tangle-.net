@@ -23,9 +23,12 @@
     /// <param name="nextRoot">
     /// The next Root.
     /// </param>
+    /// <param name="channelKey">
+    /// The channel Key.
+    /// </param>
     /// <returns>
     /// The <see cref="MaskedAuthenticatedMessage"/>.
     /// </returns>
-    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot);
+    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey);
   }
 }

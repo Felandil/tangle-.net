@@ -1,11 +1,25 @@
 ﻿namespace Tangle.Net.Mam
 {
+  using Tangle.Net.Entity;
+
   /// <summary>
   /// The Mask interface.
   /// </summary>
   public interface IMask
   {
-    #region Public Methods and Operators
+    /// <summary>
+    /// The hash.
+    /// </summary>
+    /// <param name="key">
+    /// The key.
+    /// </param>
+    /// <param name="salt">
+    /// The seed.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Hash"/>.
+    /// </returns>
+    Hash Hash(TryteString key, TryteString salt = null);
 
     /// <summary>
     /// The mask.
@@ -34,7 +48,5 @@
     /// The <see cref="int[]"/>.
     /// </returns>
     int[] Unmask(int[] payload, int[] key);
-
-    #endregion
   }
 }

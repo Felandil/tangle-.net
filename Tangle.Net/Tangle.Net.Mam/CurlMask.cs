@@ -5,6 +5,7 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Entity;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -34,6 +35,24 @@
     #endregion
 
     #region Public Methods and Operators
+
+    /// <inheritdoc />
+    public Hash Hash(TryteString key, TryteString salt = null)
+    {
+      var keyTrits = new int[AbstractCurl.HashLength];
+
+      this.Curl.Reset();
+      this.Curl.Absorb(key.ToTrits());
+
+      if (salt != null)
+      {
+        this.Curl.Absorb(salt.ToTrits());
+      }
+
+      this.Curl.Squeeze(keyTrits);
+
+      return new Hash(Converter.TritsToTrytes(keyTrits));
+    }
 
     /// <summary>
     /// The mask.

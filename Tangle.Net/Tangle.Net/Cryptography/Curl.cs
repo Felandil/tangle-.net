@@ -59,7 +59,8 @@
       var offset = 0;
       while (offset < trits.Length)
       {
-        Array.Copy(trits, offset, this.State, 0, trits.Length < HashLength ? trits.Length : HashLength);
+        var length = trits.Length - offset;
+        Array.Copy(trits, offset, this.State, 0, length < HashLength ? length : HashLength);
 
         this.Transform();
 

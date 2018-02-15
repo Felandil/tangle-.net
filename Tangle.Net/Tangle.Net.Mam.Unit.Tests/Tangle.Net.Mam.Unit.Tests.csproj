@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mam\CurlMamFactoryTest.cs" />
     <Compile Include="MaskTests.cs" />
     <Compile Include="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="Merkle\MerkleNodeFactoryTests.cs" />

@@ -11,23 +11,15 @@
   /// </summary>
   public class Hash : TryteString
   {
-    #region Constants
-
     /// <summary>
     /// The length.
     /// </summary>
     public const int Length = AbstractCurl.HashLength / Converter.Radix;
 
-    #endregion
-
-    #region Fields
     /// <summary>
     /// Gets the empty.
     /// </summary>
     public static readonly Hash Empty = new Hash(new string('9', Length));
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> class.
@@ -56,10 +48,6 @@
       : this(string.Empty)
     {
     }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <summary>
     /// The normalize.
@@ -116,7 +104,5 @@
 
       return normalizedHash.ToArray();
     }
-
-    #endregion
   }
 }
