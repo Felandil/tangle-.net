@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6678B808-1464-490E-BECD-842305000560}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tangle.Net</RootNamespace>
+    <AssemblyName>Tangle.Net</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.2.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.2.1\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cryptography\AddressGenerator.cs" />
+    <Compile Include="Cryptography\Converter.cs" />
+    <Compile Include="Cryptography\Curl.cs" />
+    <Compile Include="Cryptography\AbstractCurl.cs" />
+    <Compile Include="Cryptography\IAddressGenerator.cs" />
+    <Compile Include="Cryptography\IKeyGenerator.cs" />
+    <Compile Include="Cryptography\IPrivateKey.cs" />
+    <Compile Include="Cryptography\Kerl.cs" />
+    <Compile Include="Cryptography\KeyGenerator.cs" />
+    <Compile Include="ProofOfWork\IPoWDiver.cs" />
+    <Compile Include="ProofOfWork\CpuPowDiver.cs" />
+    <Compile Include="Cryptography\PrivateKey.cs" />
+    <Compile Include="Cryptography\SecurityLevel.cs" />
+    <Compile Include="Cryptography\SignatureFragmentGenerator.cs" />
+    <Compile Include="Entity\ValidationSummary.cs" />
+    <Compile Include="ProofOfWork\PoWService.cs" />
+    <Compile Include="Repository\DataTransfer\InclusionStates.cs" />
+    <Compile Include="Repository\DataTransfer\TipHashList.cs" />
+    <Compile Include="Repository\DataTransfer\TransactionHashList.cs" />
+    <Compile Include="Repository\DataTransfer\TransactionsToApprove.cs" />
+    <Compile Include="Entity\Address.cs" />
+    <Compile Include="Repository\DataTransfer\AddressWithBalances.cs" />
+    <Compile Include="Entity\Bundle.cs" />
+    <Compile Include="Entity\Checksum.cs" />
+    <Compile Include="Entity\Digest.cs" />
+    <Compile Include="Entity\Hash.cs" />
+    <Compile Include="Repository\DataTransfer\Neighbor.cs" />
+    <Compile Include="Repository\DataTransfer\NeighborList.cs" />
+    <Compile Include="Repository\DataTransfer\NodeInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entity\Seed.cs" />
+    <Compile Include="Entity\Fragment.cs" />
+    <Compile Include="Entity\Tag.cs" />
+    <Compile Include="Entity\Transaction.cs" />
+    <Compile Include="Repository\IIotaExtendedRepository.cs" />
+    <Compile Include="Repository\IIotaNodeRepository.cs" />
+    <Compile Include="Repository\IIotaRepository.cs" />
+    <Compile Include="Repository\InvalidBundleException.cs" />
+    <Compile Include="Repository\Responses\AddNeighborsResponse.cs" />
+    <Compile Include="Repository\Responses\AttachToTangleResponse.cs" />
+    <Compile Include="Repository\Responses\FindUsedAddressesResponse.cs" />
+    <Compile Include="Repository\Responses\GetAccountDataResponse.cs" />
+    <Compile Include="Repository\Responses\GetInclusionStatesResponse.cs" />
+    <Compile Include="Repository\Responses\GetInputsResponse.cs" />
+    <Compile Include="Repository\Responses\GetTipsResponse.cs" />
+    <Compile Include="Repository\Responses\GetTransactionsResponse.cs" />
+    <Compile Include="Entity\TransactionTrytes.cs" />
+    <Compile Include="Entity\Transfer.cs" />
+    <Compile Include="Entity\TryteString.cs" />
+    <Compile Include="Repository\IIotaCoreRepository.cs" />
+    <Compile Include="Repository\IotaApiException.cs" />
+    <Compile Include="Repository\Responses\GetBalanceResponse.cs" />
+    <Compile Include="Repository\Responses\GetTransactionsToApproveResponse.cs" />
+    <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
+    <Compile Include="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="Repository\RestIotaRepository.cs" />
+    <Compile Include="Repository\Commands.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\Timestamp.cs" />
+    <Compile Include="Utils\InputValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
