@@ -340,7 +340,8 @@
 
       if (numberOfThreads <= 0)
       {
-        numberOfThreads = Environment.ProcessorCount - 1;
+        //Use up to a maximum of all processors but one, and a minimum of one processors
+        numberOfThreads = Math.Max(Environment.ProcessorCount - 1, 1);
       }
 
       var tasks = new List<Task>();
