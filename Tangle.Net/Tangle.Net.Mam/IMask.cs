@@ -28,25 +28,25 @@
     /// The payload.
     /// </param>
     /// <param name="key">
-    /// The auth id trits.
+    /// The key.
     /// </param>
     /// <returns>
-    /// The <see cref="int[]"/>.
+    /// The <see cref="TryteString"/>.
     /// </returns>
-    int[] Mask(int[] payload, int[] key);
+    TryteString Mask(TryteString payload, TryteString key);
 
     /// <summary>
     /// The unmask.
     /// </summary>
     /// <param name="payload">
-    /// The masked cipher.
+    /// The payload.
     /// </param>
     /// <param name="key">
-    /// The auth id trits.
+    /// The key.
     /// </param>
     /// <returns>
-    /// The <see cref="int[]"/>.
+    /// The <see cref="TryteString"/>.
     /// </returns>
-    int[] Unmask(int[] payload, int[] key);
+    TryteString Unmask(TryteString payload, TryteString key);
   }
 }

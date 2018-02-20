@@ -36,18 +36,12 @@
     [TestMethod]
     public void TestMaskUnmask()
     {
-      var payloadTrits = this.payload.ToTrits();
-      var authIdTrits = this.authId.ToTrits();
-
-      var cipher = new int[payloadTrits.Length];
-      Array.Copy(payloadTrits, cipher, payloadTrits.Length);
-
       var mask = new CurlMask();
 
-      var maskedCipher = mask.Mask(cipher, authIdTrits);
-      var unmaskedCipher = mask.Unmask(maskedCipher, authIdTrits);
+      var maskedCipher = mask.Mask(this.payload, this.authId);
+      var unmaskedCipher = mask.Unmask(maskedCipher, this.authId);
 
-      Assert.AreEqual(this.payload.Value, Converter.TritsToTrytes(unmaskedCipher));
+      Assert.AreEqual(this.payload.Value, unmaskedCipher.Value);
     }
   }
 }

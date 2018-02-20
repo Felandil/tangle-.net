@@ -39,6 +39,24 @@
     }
 
     /// <summary>
+    /// The merge.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <typeparam name="T">
+    /// </typeparam>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public static TryteString Merge<T>(this IEnumerable<T> value)
+      where T : TryteString
+    {
+      var merged = new TryteString();
+      return value.Aggregate(merged, (current, tryteString) => current.Concat(tryteString));
+    }
+
+    /// <summary>
     /// The to trits.
     /// </summary>
     /// <param name="value">

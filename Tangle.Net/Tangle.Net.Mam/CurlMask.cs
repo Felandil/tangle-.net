@@ -54,27 +54,16 @@
       return new Hash(Converter.TritsToTrytes(keyTrits));
     }
 
-    /// <summary>
-    /// The mask.
-    /// </summary>
-    /// <param name="payload">
-    /// The payload.
-    /// </param>
-    /// <param name="key">
-    /// The auth id trits.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int[]"/>.
-    /// </returns>
-    public int[] Mask(int[] payload, int[] key)
+    /// <inheritdoc />
+    public TryteString Mask(TryteString payload, TryteString key)
     {
       this.Curl.Reset();
-      this.Curl.Absorb(key);
+      this.Curl.Absorb(key.ToTrits());
 
       var keyChunk = new int[AbstractCurl.HashLength];
 
       var maskedPayload = new List<int>();
-      foreach (var chunk in payload.GetChunks(AbstractCurl.HashLength))
+      foreach (var chunk in payload.ToTrits().GetChunks(AbstractCurl.HashLength))
       {
         this.Curl.Squeeze(keyChunk);
         var length = chunk.Length;
@@ -87,30 +76,19 @@
         maskedPayload.AddRange(keyChunk.Take(length));
       }
 
-      return maskedPayload.ToArray();
+      return new TryteString(Converter.TritsToTrytes(maskedPayload.ToArray()));
     }
 
-    /// <summary>
-    /// The unmask.
-    /// </summary>
-    /// <param name="payload">
-    /// The payload.
-    /// </param>
-    /// <param name="key">
-    /// The key.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int[]"/>.
-    /// </returns>
-    public int[] Unmask(int[] payload, int[] key)
+    /// <inheritdoc />
+    public TryteString Unmask(TryteString payload, TryteString key)
     {
       this.Curl.Reset();
-      this.Curl.Absorb(key);
+      this.Curl.Absorb(key.ToTrits());
 
       var keyChunk = new int[AbstractCurl.HashLength];
 
       var unmasked = new List<int>();
-      foreach (var chunk in payload.GetChunks(AbstractCurl.HashLength))
+      foreach (var chunk in payload.ToTrits().GetChunks(AbstractCurl.HashLength))
       {
         this.Curl.Squeeze(keyChunk);
         var length = chunk.Length;
@@ -123,7 +101,7 @@
         unmasked.AddRange(keyChunk.Take(length));
       }
 
-      return unmasked.ToArray();
+      return new TryteString(Converter.TritsToTrytes(unmasked.ToArray()));
     }
 
     #endregion

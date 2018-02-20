@@ -55,7 +55,6 @@
 
       var signature = this.CreateSignature(messageTrytes, subtree.Key);
       var messageOut = signature.Concat(indexTrytes).Concat(preparedSubtree).Concat(messageTrytes).Concat(checksum);
-      var maskedMessage = this.Mask.Mask(messageOut.ToTrits(), channelKey.ToTrits());
       var address = this.GetMessageAddress(channelKey);
 
       var bundle = new Bundle();
@@ -63,7 +62,7 @@
         new Transfer
           {
             Address = address,
-            Message = new TryteString(Converter.TritsToTrytes(maskedMessage)),
+            Message = this.Mask.Mask(messageOut, channelKey),
             Tag = new Tag(salt.Value),
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
