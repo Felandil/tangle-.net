@@ -4,6 +4,7 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Entity;
 
   /// <summary>
   /// The merkle tree.
@@ -80,6 +81,49 @@
                  Key = key,
                  Leaves = leaves
                };
+    }
+
+    /// <summary>
+    /// The compute root.
+    /// </summary>
+    /// <param name="signingkey">
+    /// The signingkey.
+    /// </param>
+    /// <param name="nodeHashes">
+    /// The node hashes.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="curl">
+    /// The curl.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Hash"/>.
+    /// </returns>
+    public static Hash ComputeRoot(TryteString signingkey, List<Hash> nodeHashes, int index, AbstractCurl curl)
+    {
+      var hash = signingkey.ToTrits();
+
+      for (var i = 0; i < nodeHashes.Count; i++)
+      {
+        curl.Reset();
+        if ((index & i) == 0)
+        {
+          curl.Absorb(nodeHashes[i].ToTrits());
+          curl.Absorb(hash);
+        }
+        else
+        {
+          curl.Absorb(hash);
+          curl.Absorb(nodeHashes[i].ToTrits());
+        }
+
+        index >>= 1;
+        curl.Squeeze(hash);
+      }
+
+      return new Hash(Converter.TritsToTrytes(hash));
     }
 
     #endregion

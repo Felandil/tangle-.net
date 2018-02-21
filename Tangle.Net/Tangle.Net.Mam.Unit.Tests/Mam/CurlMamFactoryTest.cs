@@ -42,6 +42,9 @@
         new TryteString("AVGBMN9RNYJPVKRXVHPIUCZAPVEZWLPVVVDOBYXY9ASRCXWXJYIRUPYDAILAZZFPASDGCPVDAKKCUXSOC"));
 
       Assert.AreEqual("Hello everyone!", unmaskedAuthenticatedMessage.Message.ToUtf8String());
+      Assert.AreEqual(nextRootTree.Root.Hash.Value, unmaskedAuthenticatedMessage.NextRoot.Value);
+      Assert.AreEqual(mam.NextChannelKey.Value, unmaskedAuthenticatedMessage.NextChannelKey.Value);
+      //Assert.AreEqual(tree.Root.Hash.Value, unmaskedAuthenticatedMessage.Root.Value);
     }
   }
 }

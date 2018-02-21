@@ -26,6 +26,11 @@
       return new Address(Seed.Random().Value) { PrivateKey = new PrivateKeyStub() };
     }
 
+    public Address GetAddress(IPrivateKey privateKey)
+    {
+      throw new System.NotImplementedException();
+    }
+
     /// <summary>
     /// The get addresses.
     /// </summary>

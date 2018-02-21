@@ -10,18 +10,8 @@
   using Tangle.Net.Utils;
 
   /// <inheritdoc />
-  public class CurlMamFactory : IMamFactory
+  public class CurlMamFactory : AbstractMam, IMamFactory
   {
-    /// <summary>
-    /// Gets or sets the curl.
-    /// </summary>
-    private AbstractCurl Curl { get; set; }
-
-    /// <summary>
-    /// Gets or sets the mask.
-    /// </summary>
-    private IMask Mask { get; set; }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMamFactory"/> class.
     /// </summary>
@@ -33,8 +23,8 @@
     /// </param>
     public CurlMamFactory(AbstractCurl curl, IMask mask)
     {
-      this.Curl = curl;
       this.Mask = mask;
+      this.Curl = curl;
     }
 
     /// <inheritdoc />
@@ -132,45 +122,6 @@
 
       var fragments = signatureFragmentGenerator.Generate();
       return fragments.First();
-    }
-
-    /// <summary>
-    /// The get message hash.
-    /// </summary>
-    /// <param name="message">
-    /// The message.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Hash"/>.
-    /// </returns>
-    private Hash GetMessageHash(TryteString message)
-    {
-      var hash = new int[AbstractCurl.HashLength];
-
-      this.Curl.Reset();
-      this.Curl.Absorb(message.ToTrits());
-      this.Curl.Squeeze(hash);
-
-      return new Hash(Converter.TritsToTrytes(hash));
-    }
-
-    /// <summary>
-    /// The get channel key.
-    /// </summary>
-    /// <param name="lastChannelKey">
-    /// The lastChannelKey.
-    /// </param>
-    /// <param name="salt">
-    /// The salt.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Hash"/>.
-    /// </returns>
-    private Hash GetChannelKey(TryteString lastChannelKey, TryteString salt)
-    {
-      var lastChannelKeyTrits = lastChannelKey.ToTrits();
-      Converter.Increment(lastChannelKeyTrits, AbstractCurl.HashLength);
-      return this.Mask.Hash(new TryteString(Converter.TritsToTrytes(lastChannelKeyTrits)), salt);
     }
   }
 }

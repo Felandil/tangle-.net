@@ -11,6 +11,15 @@
   /// </summary>
   public class AddressGenerator : IAddressGenerator
   {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AddressGenerator"/> class.
+    /// </summary>
+    public AddressGenerator()
+    {
+      this.Seed = new Seed(Hash.Empty.Value);
+      this.SecurityLevel = Cryptography.SecurityLevel.Medium;
+    }
+
     #region Constructors and Destructors
 
     /// <summary>
@@ -59,6 +68,13 @@
     {
       var keyGenerator = new KeyGenerator(this.Seed);
       var privateKey = keyGenerator.GetKey(index, this.SecurityLevel);
+
+      return this.GetAddress(privateKey);
+    }
+
+    /// <inheritdoc />
+    public Address GetAddress(IPrivateKey privateKey)
+    {
       var digest = privateKey.Digest;
 
       var addressTrits = new int[Address.Length * Converter.Radix];

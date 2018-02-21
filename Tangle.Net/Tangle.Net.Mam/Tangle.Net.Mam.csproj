@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="CurlMask.cs" />
     <Compile Include="IMask.cs" />
+    <Compile Include="Mam\AbstractMam.cs" />
     <Compile Include="Mam\CurlMamFactory.cs" />
     <Compile Include="Mam\CurlMamParser.cs" />
     <Compile Include="Mam\IMamFactory.cs" />

@@ -23,6 +23,17 @@
     Address GetAddress(int index);
 
     /// <summary>
+    /// The get address.
+    /// </summary>
+    /// <param name="privateKey">
+    /// The private key.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Address"/>.
+    /// </returns>
+    Address GetAddress(IPrivateKey privateKey);
+
+    /// <summary>
     /// The get addresses.
     /// </summary>
     /// <param name="startIndex">
