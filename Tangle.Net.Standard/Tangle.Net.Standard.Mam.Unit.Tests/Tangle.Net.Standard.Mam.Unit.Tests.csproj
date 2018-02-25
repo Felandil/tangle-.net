@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\CurlMamFactoryTest.cs" Link="Mam\CurlMamFactoryTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\MaskTests.cs" Link="MaskTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleLeafFactoryTests.cs" Link="Merkle\MerkleLeafFactoryTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleNodeFactoryTests.cs" Link="Merkle\MerkleNodeFactoryTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleTreeFactoryTests.cs" Link="Merkle\MerkleTreeFactoryTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleTreeTests.cs" Link="Merkle\MerkleTreeTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mam\" />
+    <Folder Include="Merkle\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tangle.Net.Standard.Mam\Tangle.Net.Standard.Mam.csproj" />
+    <ProjectReference Include="..\Tangle.Net.Standard.Unit.Tests\Tangle.Net.Standard.Unit.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

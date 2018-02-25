@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Felandil</Authors>
+    <Company>Felandil</Company>
+    <Product>.NET Standard 2.0 IOTA Mam C# Port</Product>
+    <Description>.NET Standard 2.0 IOTA Mam C# Port</Description>
+    <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
+    <Version>0.5.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\CurlMask.cs" Link="CurlMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\IMask.cs" Link="IMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\AbstractMam.cs" Link="Mam\AbstractMam.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamFactory.cs" Link="Mam\CurlMamFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamParser.cs" Link="Mam\CurlMamParser.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamFactory.cs" Link="Mam\IMamFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamParser.cs" Link="Mam\IMamParser.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MaskedAuthenticatedMessage.cs" Link="Mam\MaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\UnmaskedAuthenticatedMessage.cs" Link="Mam\UnmaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleNodeFactory.cs" Link="Merkle\CurlMerkleNodeFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleTreeFactory.cs" Link="Merkle\CurlMerkleTreeFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleLeafFactory.cs" Link="Merkle\IMerkleLeafFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleNodeFactory.cs" Link="Merkle\IMerkleNodeFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleTreeFactory.cs" Link="Merkle\IMerkleTreeFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleNode.cs" Link="Merkle\MerkleNode.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleSubTree.cs" Link="Merkle\MerkleSubTree.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleTree.cs" Link="Merkle\MerkleTree.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Merkle\" />
+    <Folder Include="Mam\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tangle.Net.Standard" Version="1.0.5.1" />
+  </ItemGroup>
+
+</Project>

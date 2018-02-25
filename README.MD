@@ -18,7 +18,9 @@ The project was set up a little different from most (except the python one) IOTA
 
 Next Up: 
 
-	**MAM support**
+	**Async**
+	**Multisig**
+	**Mam Finalizing**
 
 
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
@@ -37,6 +39,7 @@ Next Up:
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
+| WereAddressesSpentFrom	     | Yes			   |
 
 In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
 
