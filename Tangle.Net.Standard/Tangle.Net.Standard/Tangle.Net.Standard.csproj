@@ -44,7 +44,12 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\ValidationSummary.cs" Link="Entity\ValidationSummary.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPowDiver.cs" Link="ProofOfWork\CpuPowDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPoWDiver.cs" Link="ProofOfWork\IPoWDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPoWService.cs" Link="ProofOfWork\IPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\PoWService.cs" Link="ProofOfWork\PoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\RestPoWService.cs" Link="ProofOfWork\RestPoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Commands.cs" Link="Repository\Commands.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\AddressWithBalances.cs" Link="Repository\DataTransfer\AddressWithBalances.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\InclusionStates.cs" Link="Repository\DataTransfer\InclusionStates.cs" />
@@ -59,7 +64,6 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaNodeRepository.cs" Link="Repository\IIotaNodeRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaRepository.cs" Link="Repository\IIotaRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\InvalidBundleException.cs" Link="Repository\InvalidBundleException.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IotaApiException.cs" Link="Repository\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AddNeighborsResponse.cs" Link="Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AttachToTangleResponse.cs" Link="Repository\Responses\AttachToTangleResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\FindUsedAddressesResponse.cs" Link="Repository\Responses\FindUsedAddressesResponse.cs" />
@@ -87,6 +91,7 @@
   <ItemGroup>
     <Folder Include="Entity\" />
     <Folder Include="Repository\DataTransfer\" />
+    <Folder Include="Repository\Client\" />
     <Folder Include="Repository\Responses\" />
     <Folder Include="Utils\" />
     <Folder Include="ProofOfWork\" />

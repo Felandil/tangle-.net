@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Linq;
+  using System.Threading.Tasks;
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -43,7 +44,7 @@
     public void Setup()
     {
       this.repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
-      this.seed = new Seed(new Hash().Value);
+      this.seed = new Seed(Hash.Empty.Value);
     }
 
     /// <summary>
@@ -153,9 +154,23 @@
     [TestMethod]
     public void TestGetBundle()
     {
-      var bundle = this.repository.GetBundle(new Hash("J9GYFNZBGUGDDODHXUXXVI9AVFSAWVCVQXXSOXXVQATVLYDNMRKNTKYLVXDWENTSBN9XXGCARD9B99999"));
+      var bundle = this.repository.GetBundle(new Hash("XZINXLCRCJMUURJGXVBUDJWQ9LOXYVALPOPTGBYXEPAOVOCKU9LJIHKHSDTMQEXQAHXZEMVUJYUJ99999"));
 
-      Assert.AreEqual(15, bundle.Transactions.Count);
+      Assert.AreEqual(4, bundle.Transactions.Count);
+    }
+
+    /// <summary>
+    /// The test get bundle async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestGetBundleAsync()
+    {
+      var bundle = await this.repository.GetBundleAsync(new Hash("XZINXLCRCJMUURJGXVBUDJWQ9LOXYVALPOPTGBYXEPAOVOCKU9LJIHKHSDTMQEXQAHXZEMVUJYUJ99999"));
+
+      Assert.AreEqual(4, bundle.Transactions.Count);
     }
 
     /// <summary>
@@ -282,6 +297,33 @@
       bundle.Sign();
 
       var resultTransactions = this.repository.SendTrytes(bundle.Transactions, 27, 14);
+      Assert.IsTrue(resultTransactions.Any());
+    }
+
+    /// <summary>
+    /// The test send trytes async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestSendTrytesAsync()
+    {
+      var bundle = new Bundle();
+      bundle.AddTransfer(
+        new Transfer
+          {
+            Address =
+              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 },
+            Message = TryteString.FromAsciiString("Hello async world!"),
+            Tag = new Tag("CSHARP"),
+            Timestamp = Timestamp.UnixSecondsTimestamp
+          });
+
+      bundle.Finalize();
+      bundle.Sign();
+
+      var resultTransactions = await this.repository.SendTrytesAsync(bundle.Transactions, 27, 14);
       Assert.IsTrue(resultTransactions.Any());
     }
 

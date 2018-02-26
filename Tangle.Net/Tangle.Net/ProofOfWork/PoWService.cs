@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Linq;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
   using Tangle.Net.Utils;
@@ -9,7 +10,7 @@
   /// <summary>
   /// The po w service.
   /// </summary>
-  public class PoWService
+  public class PoWService : IPoWService
   {
     #region Constants
 
@@ -38,9 +39,9 @@
     #region Public Properties
 
     /// <summary>
-    /// Gets or sets the pow diver.
+    /// Gets the pow diver.
     /// </summary>
-    public IPoWDiver PowDiver { get; set; }
+    private IPoWDiver PowDiver { get; }
 
     #endregion
 
@@ -102,6 +103,12 @@
       resultTransactions.Reverse();
 
       return resultTransactions;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    {
+      return await Task.Factory.StartNew(() => this.DoPoW(branchTransaction, trunkTransaction, transactions, minWeightMagnitude));
     }
 
     #endregion

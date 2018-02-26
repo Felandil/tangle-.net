@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Repository
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
@@ -24,6 +25,17 @@
     AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors);
 
     /// <summary>
+    /// The add neighbor async.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<AddNeighborsResponse> AddNeighborAsync(IEnumerable<Neighbor> neighbors);
+
+    /// <summary>
     /// The get neighbors.
     /// </summary>
     /// <returns>
@@ -32,12 +44,28 @@
     NeighborList GetNeighbors();
 
     /// <summary>
+    /// The get neighbors async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<NeighborList> GetNeighborsAsync();
+
+    /// <summary>
     /// The get node info.
     /// </summary>
     /// <returns>
     /// The <see cref="NodeInfo"/>.
     /// </returns>
     NodeInfo GetNodeInfo();
+
+    /// <summary>
+    /// The get node info async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<NodeInfo> GetNodeInfoAsync();
 
     /// <summary>
     /// The remove neighbors.
@@ -49,6 +77,17 @@
     /// The <see cref="RemoveNeighborsResponse"/>.
     /// </returns>
     RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors);
+
+    /// <summary>
+    /// The remove neighbors async.
+    /// </summary>
+    /// <param name="neighbors">
+    /// The neighbors.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors);
 
     #endregion
   }

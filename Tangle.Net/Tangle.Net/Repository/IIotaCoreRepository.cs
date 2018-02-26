@@ -5,7 +5,6 @@
 
   using Tangle.Net.Entity;
   using Tangle.Net.Repository.DataTransfer;
-  using Tangle.Net.Repository.Responses;
 
   /// <summary>
   /// The TangleRepository interface.
@@ -36,6 +35,30 @@
       Hash branchTransaction, 
       Hash trunkTransaction, 
       IEnumerable<Transaction> transactions, 
+      int minWeightMagnitude = 18);
+
+    /// <summary>
+    /// The attach to tangle async.
+    /// </summary>
+    /// <param name="branchTransaction">
+    /// The branch transaction.
+    /// </param>
+    /// <param name="trunkTransaction">
+    /// The trunk transaction.
+    /// </param>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min weight magnitude.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<List<TransactionTrytes>> AttachToTangleAsync(
+      Hash branchTransaction,
+      Hash trunkTransaction,
+      IEnumerable<Transaction> transactions,
       int minWeightMagnitude = 18);
 
     /// <summary>
@@ -156,6 +179,15 @@
     /// </returns>
     TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags);
 
+    /// <summary>
+    /// The find transactions by tags async.
+    /// </summary>
+    /// <param name="tags">
+    /// The tags.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
     Task<TransactionHashList> FindTransactionsByTagsAsync(IEnumerable<Tag> tags);
 
     /// <summary>
@@ -173,6 +205,20 @@
     AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100);
 
     /// <summary>
+    /// The get balances async.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <param name="threshold">
+    /// The threshold.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<AddressWithBalances> GetBalancesAsync(List<Address> addresses, int threshold = 100);
+
+    /// <summary>
     /// The get inclusion states.
     /// </summary>
     /// <param name="transactionHashes">
@@ -187,12 +233,34 @@
     InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips);
 
     /// <summary>
+    /// The get inclusion states async.
+    /// </summary>
+    /// <param name="transactionHashes">
+    /// The transaction hashes.
+    /// </param>
+    /// <param name="tips">
+    /// The tips.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<InclusionStates> GetInclusionStatesAsync(List<Hash> transactionHashes, IEnumerable<Hash> tips);
+
+    /// <summary>
     /// The get tips.
     /// </summary>
     /// <returns>
     /// The <see cref="TipHashList"/>.
     /// </returns>
     TipHashList GetTips();
+
+    /// <summary>
+    /// The get tips async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TipHashList> GetTipsAsync();
 
     /// <summary>
     /// The get transactions to approve.
@@ -206,6 +274,17 @@
     TransactionsToApprove GetTransactionsToApprove(int depth = 27);
 
     /// <summary>
+    /// The get transactions to approve async.
+    /// </summary>
+    /// <param name="depth">
+    /// The depth.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27);
+
+    /// <summary>
     /// The get trytes.
     /// </summary>
     /// <param name="hashes">
@@ -217,9 +296,28 @@
     List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
 
     /// <summary>
+    /// The get trytes async.
+    /// </summary>
+    /// <param name="hashes">
+    /// The hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<List<TransactionTrytes>> GetTrytesAsync(IEnumerable<Hash> hashes);
+
+    /// <summary>
     /// The interrupt attaching to tangle.
     /// </summary>
     void InterruptAttachingToTangle();
+
+    /// <summary>
+    /// The interrupt attaching to tangle async.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task InterruptAttachingToTangleAsync();
 
     /// <summary>
     /// The store transactions.
@@ -250,6 +348,17 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<Address> WereAddressesSpentFrom(List<Address> addresses);
+
+    /// <summary>
+    /// The were addresses spent from async.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses);
 
     #endregion
   }

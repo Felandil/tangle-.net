@@ -13,6 +13,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Repository;
+  using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
   using Tangle.Net.Utils;

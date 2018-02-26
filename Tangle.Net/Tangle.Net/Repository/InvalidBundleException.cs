@@ -3,6 +3,8 @@
   using System;
   using System.Collections.Generic;
 
+  using Tangle.Net.Repository.Client;
+
   /// <summary>
   /// The invalid bundle exception.
   /// </summary>

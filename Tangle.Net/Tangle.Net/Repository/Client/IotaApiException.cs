@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Repository
+﻿namespace Tangle.Net.Repository.Client
 {
   using System;
 

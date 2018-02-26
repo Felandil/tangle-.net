@@ -70,7 +70,11 @@
     <Compile Include="Cryptography\SecurityLevel.cs" />
     <Compile Include="Cryptography\SignatureFragmentGenerator.cs" />
     <Compile Include="Entity\ValidationSummary.cs" />
+    <Compile Include="ProofOfWork\IPoWService.cs" />
     <Compile Include="ProofOfWork\PoWService.cs" />
+    <Compile Include="ProofOfWork\RestPoWService.cs" />
+    <Compile Include="Repository\Client\IIotaClient.cs" />
+    <Compile Include="Repository\Client\RestIotaClient.cs" />
     <Compile Include="Repository\DataTransfer\InclusionStates.cs" />
     <Compile Include="Repository\DataTransfer\TipHashList.cs" />
     <Compile Include="Repository\DataTransfer\TransactionHashList.cs" />
@@ -105,7 +109,7 @@
     <Compile Include="Entity\Transfer.cs" />
     <Compile Include="Entity\TryteString.cs" />
     <Compile Include="Repository\IIotaCoreRepository.cs" />
-    <Compile Include="Repository\IotaApiException.cs" />
+    <Compile Include="Repository\Client\IotaApiException.cs" />
     <Compile Include="Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />

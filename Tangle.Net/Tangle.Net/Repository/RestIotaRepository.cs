@@ -12,6 +12,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork;
+  using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
 
@@ -42,33 +43,59 @@
     /// </param>
     public RestIotaRepository(
       IRestClient client,
-      PoWService powService = null,
+      IPoWService powService = null,
       string username = null,
       string password = null)
     {
-      this.Client = client;
-      this.PoWService = powService;
-
       if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
       {
-        this.Client.Authenticator = new HttpBasicAuthenticator(username, password);
+        client.Authenticator = new HttpBasicAuthenticator(username, password);
       }
+
+      this.Client = new RestIotaClient(client);
+      this.PoWService = powService ?? new RestPoWService(this.Client);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RestIotaRepository"/> class.
+    /// </summary>
+    /// <param name="client">
+    /// The client.
+    /// </param>
+    /// <param name="powService">
+    /// The pow service.
+    /// </param>
+    public RestIotaRepository(IIotaClient client, IPoWService powService)
+    {
+      this.Client = client;
+      this.PoWService = powService;
     }
 
     /// <summary>
     ///   Gets the client.
     /// </summary>
-    private IRestClient Client { get; }
+    private IIotaClient Client { get; }
 
     /// <summary>
     ///   Gets the po w service.
     /// </summary>
-    private PoWService PoWService { get; }
+    private IPoWService PoWService { get; }
 
     /// <inheritdoc />
     public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
     {
-      return this.ExecuteParameterizedCommand<AddNeighborsResponse>(
+      return this.Client.ExecuteParameterizedCommand<AddNeighborsResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.AddNeighbors },
+            { "uris", neighbors.Select(n => n.Address).ToList() }
+          });
+    }
+
+    /// <inheritdoc />
+    public async Task<AddNeighborsResponse> AddNeighborAsync(IEnumerable<Neighbor> neighbors)
+    {
+      return await this.Client.ExecuteParameterizedCommandAsync<AddNeighborsResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.AddNeighbors },
@@ -83,26 +110,13 @@
       IEnumerable<Transaction> transactions,
       int minWeightMagnitude = 18)
     {
-      if (this.PoWService != null)
-      {
-        return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude)
-          .Select(t => t.ToTrytes()).ToList();
-      }
+      return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
+    }
 
-      var result = this.ExecuteParameterizedCommand<AttachToTangleResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", Commands.AttachToTangle },
-            { "trunkTransaction", trunkTransaction.ToString() },
-            { "branchTransaction", branchTransaction.ToString() },
-            { "minWeightMagnitude", minWeightMagnitude },
-            {
-              "trytes",
-              transactions.Select(transaction => transaction.ToTrytes().Value).ToList()
-            }
-          });
-
-      return result.Trytes.Select(t => new TransactionTrytes(t)).ToList();
+    /// <inheritdoc />
+    public async Task<List<TransactionTrytes>> AttachToTangleAsync(Hash branchTransaction, Hash trunkTransaction, IEnumerable<Transaction> transactions, int minWeightMagnitude = 18)
+    {
+      return (await this.PoWService.DoPoWAsync(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude)).Select(t => t.ToTrytes()).ToList();
     }
 
     /// <inheritdoc />
@@ -122,36 +136,22 @@
     /// <inheritdoc />
     public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response = this.Client.Execute<object>(
-        CreateRequest(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.BroadcastTransactions },
-              { "trytes", transactions.Select(t => t.Value).ToList() }
-            }));
-
-      ValidateResponse(response, Commands.BroadcastTransactions);
+      this.Client.ExecuteParameterizedCommand(
+        new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
     public async Task BroadcastTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
     {
-      var response = await this.Client.ExecuteTaskAsync<object>(
-                       CreateRequest(
-                         new Dictionary<string, object>
-                           {
-                             { "command", Commands.BroadcastTransactions },
-                             { "trytes", transactions.Select(t => t.Value).ToList() }
-                           }));
-
-      ValidateResponse(response, Commands.BroadcastTransactions);
+      await this.Client.ExecuteParameterizedCommandAsync(
+        new Dictionary<string, object> { { "command", Commands.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
     public TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters)
     {
       var command = this.CreateFindTransactionsParameters(parameters);
-      var result = this.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
+      var result = this.Client.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
 
       return new TransactionHashList { Hashes = result?.Hashes.ConvertAll(hash => new Hash(hash)) };
     }
@@ -161,7 +161,7 @@
       Dictionary<string, IEnumerable<TryteString>> parameters)
     {
       var command = this.CreateFindTransactionsParameters(parameters);
-      var result = await this.ExecuteParameterizedCommandAsync<GetTransactionsResponse>(command);
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTransactionsResponse>(command);
 
       return new TransactionHashList { Hashes = result?.Hashes.ConvertAll(hash => new Hash(hash)) };
     }
@@ -273,7 +273,34 @@
     /// <inheritdoc />
     public FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start)
     {
-      return this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, start).Result;
+      var usedAddresses = new List<Address>();
+      var associatedTransactionHashes = new List<Hash>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var currentIndex = start;
+      while (true)
+      {
+        var address = addressGenerator.GetAddress(currentIndex);
+        var transactions = this.FindTransactionsByAddresses(new List<Address> { address });
+
+        if (transactions.Hashes.Count > 0)
+        {
+          usedAddresses.Add(address);
+          associatedTransactionHashes.AddRange(transactions.Hashes);
+        }
+        else
+        {
+          break;
+        }
+
+        currentIndex++;
+      }
+
+      return new FindUsedAddressesResponse
+               {
+                 AssociatedTransactionHashes = associatedTransactionHashes,
+                 UsedAddresses = usedAddresses.OrderBy(a => a.KeyIndex).ToList()
+               };
     }
 
     /// <inheritdoc />
@@ -309,27 +336,7 @@
                };
     }
 
-    /// <summary>
-    /// The get account data.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="includeInclusionStates">
-    /// The inclusion state.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="addressStartIndex">
-    /// The address start index.
-    /// </param>
-    /// <param name="addressStopIndex">
-    /// The address stop index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="GetAccountDataResponse"/>.
-    /// </returns>
+    /// <inheritdoc />
     public GetAccountDataResponse GetAccountData(
       Seed seed,
       bool includeInclusionStates,
@@ -363,21 +370,39 @@
                };
     }
 
-    /// <summary>
-    /// The get balances.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <param name="threshold">
-    /// The threshold.
-    /// </param>
-    /// <returns>
-    /// The <see cref="AddressWithBalances"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<GetAccountDataResponse> GetAccountDataAsync(Seed seed, bool includeInclusionStates, int securityLevel, int addressStartIndex, int addressStopIndex = 0)
+    {
+      var usedAddressesWithTransactions =
+        await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex);
+      var usedAddresses = usedAddressesWithTransactions.UsedAddresses;
+      var latestUnusedAddress =
+        new AddressGenerator(seed, securityLevel).GetAddress(
+          usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
+      var addressesWithBalance = new List<Address>();
+      var associatedBundles = new List<Bundle>();
+
+      if (usedAddressesWithTransactions.AssociatedTransactionHashes.Count > 0)
+      {
+        addressesWithBalance = (await this.GetBalancesAsync(usedAddresses)).Addresses;
+        associatedBundles = await this.GetBundlesAsync(
+          usedAddressesWithTransactions.AssociatedTransactionHashes,
+          includeInclusionStates);
+      }
+
+      return new GetAccountDataResponse
+               {
+                 Balance = addressesWithBalance.Sum(a => a.Balance),
+                 UsedAddresses = usedAddresses,
+                 AssociatedBundles = associatedBundles,
+                 LatestUnusedAddress = latestUnusedAddress
+               };
+    }
+
+    /// <inheritdoc />
     public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
     {
-      var result = this.ExecuteParameterizedCommand<GetBalanceResponse>(
+      var result = this.Client.ExecuteParameterizedCommand<GetBalanceResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.GetBalances },
@@ -400,15 +425,33 @@
                };
     }
 
-    /// <summary>
-    /// The get bundle.
-    /// </summary>
-    /// <param name="transactionHash">
-    /// The transaction hash.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Bundle"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<AddressWithBalances> GetBalancesAsync(List<Address> addresses, int threshold = 100)
+    {
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetBalanceResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.GetBalances },
+            { "addresses", addresses.Select(a => a.Value).ToList() },
+            { "threshold", threshold }
+          });
+
+      for (var i = 0; i < addresses.Count(); i++)
+      {
+        addresses[i].Balance = result.Balances[i];
+      }
+
+      return new AddressWithBalances
+               {
+                 Addresses = addresses,
+                 Duration = result.Duration,
+                 MilestoneIndex = result.MilestoneIndex,
+                 References =
+                   result.References.ConvertAll(reference => new TryteString(reference))
+               };
+    }
+
+    /// <inheritdoc />
     public Bundle GetBundle(Hash transactionHash)
     {
       var bundle = new Bundle { Transactions = this.TraverseBundle(transactionHash) };
@@ -425,18 +468,24 @@
       return bundle;
     }
 
-    /// <summary>
-    /// The get bundles.
-    /// </summary>
-    /// <param name="transactionHashes">
-    /// The transaction hashes.
-    /// </param>
-    /// <param name="includeInclusionStates">
-    /// The include inclusion states.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<Bundle> GetBundleAsync(Hash transactionHash)
+    {
+      var bundle = new Bundle { Transactions = await this.TraverseBundleAsync(transactionHash) };
+
+      var validationResult = bundle.Validate();
+
+      if (!validationResult.IsValid)
+      {
+        throw new InvalidBundleException(
+          "The bundle is not valid. See ValidationErrors for details.",
+          validationResult.Errors);
+      }
+
+      return bundle;
+    }
+
+    /// <inheritdoc />
     public List<Bundle> GetBundles(IEnumerable<Hash> transactionHashes, bool includeInclusionStates)
     {
       var associatedBundles = new List<Bundle>();
@@ -445,8 +494,7 @@
 
       var transactionTrytes = this.GetTrytes(transactionHashes);
 
-      foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte))
-      )
+      foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte)))
       {
         if (transaction.IsTail)
         {
@@ -494,21 +542,67 @@
       return associatedBundles;
     }
 
-    /// <summary>
-    /// The get inclusion states.
-    /// </summary>
-    /// <param name="transactionHashes">
-    /// The transactions hashes.
-    /// </param>
-    /// <param name="tips">
-    /// The tips.
-    /// </param>
-    /// <returns>
-    /// The <see cref="InclusionStates"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<List<Bundle>> GetBundlesAsync(IEnumerable<Hash> transactionHashes, bool includeInclusionStates)
+    {
+      var associatedBundles = new List<Bundle>();
+      var tailTransactions = new List<Hash>();
+      var nonTailTransactions = new List<Transaction>();
+
+      var transactionTrytes = await this.GetTrytesAsync(transactionHashes);
+
+      foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte)))
+      {
+        if (transaction.IsTail)
+        {
+          tailTransactions.Add(transaction.Hash);
+        }
+        else
+        {
+          nonTailTransactions.Add(transaction);
+        }
+      }
+
+      if (nonTailTransactions.Any())
+      {
+        var allBundleTransactions =
+          (await this.FindTransactionsByBundlesAsync(nonTailTransactions.Select(t => t.BundleHash).Distinct().ToList())).Hashes;
+        var allBundleTransactionTrytes = await this.GetTrytesAsync(allBundleTransactions);
+
+        tailTransactions.AddRange(
+          from bundleTransactionTryte in allBundleTransactionTrytes
+          select Transaction.FromTrytes(bundleTransactionTryte)
+          into transaction
+          where transaction.IsTail
+          select transaction.Hash);
+      }
+
+      var inclusionStates = new InclusionStates();
+      if (includeInclusionStates)
+      {
+        inclusionStates = await this.GetLatestInclusionAsync(tailTransactions);
+      }
+
+      foreach (var tailTransaction in tailTransactions)
+      {
+        var bundle = await this.GetBundleAsync(tailTransaction);
+
+        if (includeInclusionStates)
+        {
+          bundle.IsConfirmed = inclusionStates.States
+            .FirstOrDefault(transactionHash => transactionHash.Key.Value == tailTransaction.Value).Value;
+        }
+
+        associatedBundles.Add(bundle);
+      }
+
+      return associatedBundles;
+    }
+
+    /// <inheritdoc />
     public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
     {
-      var result = this.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
+      var result = this.Client.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.GetInclusionStates },
@@ -525,27 +619,27 @@
       return new InclusionStates { States = inclusionStates, Duration = result.Duration };
     }
 
-    /// <summary>
-    /// The get inputs.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="threshold">
-    /// The threshold.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="startIndex">
-    /// The start addressStartIndex.
-    /// </param>
-    /// <param name="stopIndex">
-    /// The stop addressStartIndex.
-    /// </param>
-    /// <returns>
-    /// The <see cref="GetInputsResponse"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<InclusionStates> GetInclusionStatesAsync(List<Hash> transactionHashes, IEnumerable<Hash> tips)
+    {
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetInclusionStatesResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.GetInclusionStates },
+            { "transactions", transactionHashes.Select(t => t.Value).ToList() },
+            { "tips", tips.Select(t => t.Value).ToList() }
+          });
+
+      var inclusionStates = new Dictionary<Hash, bool>();
+      for (var i = 0; i < transactionHashes.Count(); i++)
+      {
+        inclusionStates.Add(transactionHashes[i], result.States[i]);
+      }
+
+      return new InclusionStates { States = inclusionStates, Duration = result.Duration };
+    }
+
+    /// <inheritdoc />
     public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
     {
       if (startIndex > stopIndex)
@@ -585,50 +679,73 @@
       return new GetInputsResponse { Addresses = resultAddresses, Balance = resultAddresses.Sum(a => a.Balance) };
     }
 
-    /// <summary>
-    /// The get latest inclusion.
-    /// </summary>
-    /// <param name="hashes">
-    /// The hashes.
-    /// </param>
-    /// <returns>
-    /// The <see cref="InclusionStates"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<GetInputsResponse> GetInputsAsync(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
+    {
+      if (startIndex > stopIndex)
+      {
+        throw new ArgumentException("Invalid bounds! StartIndex must not be lower than StopIndex.");
+      }
+
+      var resultAddresses = new List<Address>();
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+
+      var usedAddresses = stopIndex == 0
+                            ? (await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, startIndex)).UsedAddresses
+                            : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
+
+      var usedAddressesWithBalance = await this.GetBalancesAsync(usedAddresses);
+
+      var currentBalance = 0L;
+      foreach (var usedAddressWithBalance in usedAddressesWithBalance.Addresses)
+      {
+        if (usedAddressWithBalance.Balance > 0)
+        {
+          resultAddresses.Add(usedAddressWithBalance);
+          currentBalance += usedAddressWithBalance.Balance;
+        }
+
+        if (currentBalance > threshold)
+        {
+          break;
+        }
+      }
+
+      if (currentBalance < threshold)
+      {
+        throw new Exception("Accumulated balance" + currentBalance + "is lower than given threshold!");
+      }
+
+      return new GetInputsResponse { Addresses = resultAddresses, Balance = resultAddresses.Sum(a => a.Balance) };
+    }
+
+    /// <inheritdoc />
     public InclusionStates GetLatestInclusion(List<Hash> hashes)
     {
       var nodeInfo = this.GetNodeInfo();
       return this.GetInclusionStates(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
     }
 
-    /// <summary>
-    ///   The get neighbors.
-    /// </summary>
-    /// <returns>
-    ///   The <see cref="NeighborList" />.
-    /// </returns>
-    public NeighborList GetNeighbors()
+    /// <inheritdoc />
+    public async Task<InclusionStates> GetLatestInclusionAsync(List<Hash> hashes)
     {
-      return this.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
+      var nodeInfo = await this.GetNodeInfoAsync();
+      return await this.GetInclusionStatesAsync(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
     }
 
-    /// <summary>
-    /// The get new addresses.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="addressStartIndex">
-    /// The addressStartIndex.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public NeighborList GetNeighbors()
+    {
+      return this.Client.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
+    }
+
+    /// <inheritdoc />
+    public async Task<NeighborList> GetNeighborsAsync()
+    {
+      return await this.Client.ExecuteParameterlessCommandAsync<NeighborList>(Commands.GetNeighbors);
+    }
+
+    /// <inheritdoc />
     public List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
       var addressGenerator = new AddressGenerator(seed, securityLevel);
@@ -658,26 +775,52 @@
       return result;
     }
 
-    /// <summary>
-    ///   The get node info.
-    /// </summary>
-    /// <returns>
-    ///   The <see cref="NodeInfo" />.
-    /// </returns>
-    public NodeInfo GetNodeInfo()
+    /// <inheritdoc />
+    public async Task<List<Address>> GetNewAddressesAsync(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
-      return this.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+      var result = new List<Address>();
+
+      var foundNewAddress = false;
+      var foundAddressCount = 0;
+
+      while (!foundNewAddress || foundAddressCount != count)
+      {
+        var address = addressGenerator.GetAddress(addressStartIndex);
+        var transactionsOnAddress = await this.FindTransactionsByAddressesAsync(new List<Address> { address });
+
+        addressStartIndex++;
+
+        if (transactionsOnAddress.Hashes.Count != 0)
+        {
+          continue;
+        }
+
+        foundNewAddress = true;
+        foundAddressCount++;
+
+        result.Add(address);
+      }
+
+      return result;
     }
 
-    /// <summary>
-    ///   The get tips.
-    /// </summary>
-    /// <returns>
-    ///   The <see cref="TipHashList" />.
-    /// </returns>
+    /// <inheritdoc />
+    public NodeInfo GetNodeInfo()
+    {
+      return this.Client.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
+    }
+
+    /// <inheritdoc />
+    public async Task<NodeInfo> GetNodeInfoAsync()
+    {
+      return await this.Client.ExecuteParameterlessCommandAsync<NodeInfo>(Commands.GetNodeInfo);
+    }
+
+    /// <inheritdoc />
     public TipHashList GetTips()
     {
-      var response = this.ExecuteParameterlessCommand<GetTipsResponse>(Commands.GetTips);
+      var response = this.Client.ExecuteParameterlessCommand<GetTipsResponse>(Commands.GetTips);
 
       return new TipHashList
                {
@@ -686,18 +829,22 @@
                };
     }
 
-    /// <summary>
-    /// The get transactions to approve.
-    /// </summary>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TransactionsToApprove"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<TipHashList> GetTipsAsync()
+    {
+      var response = await this.Client.ExecuteParameterlessCommandAsync<GetTipsResponse>(Commands.GetTips);
+
+      return new TipHashList
+               {
+                 Duration = response.Duration,
+                 Hashes = response.Hashes.Select(h => new Hash(h)).ToList()
+               };
+    }
+
+    /// <inheritdoc />
     public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
     {
-      var result = this.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
+      var result = this.Client.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
         new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
@@ -708,27 +855,21 @@
                };
     }
 
-    /// <summary>
-    /// The get transfers.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="includeInclusionStates">
-    /// The include inclusion states.
-    /// </param>
-    /// <param name="addressStartIndex">
-    /// The address start index.
-    /// </param>
-    /// <param name="addressStopIndex">
-    /// The address stop index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27)
+    {
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTransactionsToApproveResponse>(
+        new Dictionary<string, object> { { "command", Commands.GetTransactionsToApprove }, { "depth", depth } });
+
+      return new TransactionsToApprove
+               {
+                 BranchTransaction = new Hash(result.BranchTransaction),
+                 TrunkTransaction = new Hash(result.TrunkTransaction),
+                 Duration = result.Duration
+               };
+    }
+
+    /// <inheritdoc />
     public List<Bundle> GetTransfers(
       Seed seed,
       int securityLevel,
@@ -746,18 +887,22 @@
       return this.GetBundles(transactions, includeInclusionStates);
     }
 
-    /// <summary>
-    /// The get trytes.
-    /// </summary>
-    /// <param name="hashes">
-    /// The hashes.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TryteString"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<List<Bundle>> GetTransfersAsync(Seed seed, int securityLevel, bool includeInclusionStates, int addressStartIndex, int addressStopIndex = 0)
+    {
+      var addressGenerator = new AddressGenerator(seed, securityLevel);
+      var transactions = addressStopIndex == 0
+                           ? (await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex)).AssociatedTransactionHashes
+                           : (await this.FindTransactionsByAddressesAsync(addressGenerator.GetAddresses(0, addressStartIndex - addressStopIndex + 1)))
+                           .Hashes;
+
+      return await this.GetBundlesAsync(transactions, includeInclusionStates);
+    }
+
+    /// <inheritdoc />
     public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
     {
-      var result = this.ExecuteParameterizedCommand<GetTrytesResponse>(
+      var result = this.Client.ExecuteParameterizedCommand<GetTrytesResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.GetTrytes },
@@ -767,36 +912,32 @@
       return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }
 
-    /// <summary>
-    ///   The interrupt attaching to tangle.
-    /// </summary>
-    public void InterruptAttachingToTangle()
+    /// <inheritdoc />
+    public async Task<List<TransactionTrytes>> GetTrytesAsync(IEnumerable<Hash> hashes)
     {
-      this.Client.Execute(
-        CreateRequest(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } }));
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTrytesResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.GetTrytes },
+            { "hashes", hashes.Select(h => h.Value).ToList() }
+          });
+
+      return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }
 
-    /// <summary>
-    /// The prepare transfer.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="bundle">
-    /// The bundle.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="remainderAddress">
-    /// The remainder address.
-    /// </param>
-    /// <param name="inputAddresses">
-    /// The input addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Bundle"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public void InterruptAttachingToTangle()
+    {
+      this.Client.ExecuteParameterizedCommand(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } });
+    }
+
+    /// <inheritdoc />
+    public async Task InterruptAttachingToTangleAsync()
+    {
+      await this.Client.ExecuteParameterizedCommandAsync(new Dictionary<string, object> { { "command", Commands.InterruptAttachingToTangle } });
+    }
+
+    /// <inheritdoc />
     public Bundle PrepareTransfer(
       Seed seed,
       Bundle bundle,
@@ -807,21 +948,15 @@
       // user wants to spend IOTA, so we need to find input addresses (if not provided) with valid balances
       if (bundle.Balance > 0)
       {
-        if (inputAddresses == null)
-        {
-          inputAddresses = this.GetInputs(seed, bundle.Balance, securityLevel, 0).Addresses;
-        }
-        else
-        {
-          inputAddresses = this.GetBalances(inputAddresses).Addresses;
-        }
+        inputAddresses = inputAddresses == null
+                           ? this.GetInputs(seed, bundle.Balance, securityLevel, 0).Addresses
+                           : this.GetBalances(inputAddresses).Addresses;
 
         var availableAmount = inputAddresses.Sum(a => a.Balance);
 
         if (availableAmount < bundle.Balance)
         {
-          throw new IotaApiException(
-            string.Format("Insufficient balance! Found {0}. Need {1}", availableAmount, bundle.Balance));
+          throw new IotaApiException($"Insufficient balance! Found {availableAmount}. Need {bundle.Balance}");
         }
 
         bundle.AddInput(inputAddresses);
@@ -844,18 +979,47 @@
       return bundle;
     }
 
-    /// <summary>
-    /// The remove neighbors.
-    /// </summary>
-    /// <param name="neighbors">
-    /// The neighbors.
-    /// </param>
-    /// <returns>
-    /// The <see cref="RemoveNeighborsResponse"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<Bundle> PrepareTransferAsync(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null)
+    {
+      // user wants to spend IOTA, so we need to find input addresses (if not provided) with valid balances
+      if (bundle.Balance > 0)
+      {
+        inputAddresses = inputAddresses == null
+                           ? (await this.GetInputsAsync(seed, bundle.Balance, securityLevel, 0)).Addresses
+                           : (await this.GetBalancesAsync(inputAddresses)).Addresses;
+
+        var availableAmount = inputAddresses.Sum(a => a.Balance);
+
+        if (availableAmount < bundle.Balance)
+        {
+          throw new IotaApiException($"Insufficient balance! Found {availableAmount}. Need {bundle.Balance}");
+        }
+
+        bundle.AddInput(inputAddresses);
+      }
+
+      // the bundle balance currently spends less iota tokens than available. that means we have to send remaining funds to a remainder address in order to prevent key reuse
+      if (bundle.Balance < 0)
+      {
+        if (remainderAddress == null)
+        {
+          remainderAddress = (await this.GetNewAddressesAsync(seed, 0, 1, securityLevel))[0];
+        }
+
+        bundle.AddRemainder(remainderAddress);
+      }
+
+      bundle.Finalize();
+      bundle.Sign(new KeyGenerator(seed));
+
+      return bundle;
+    }
+
+    /// <inheritdoc />
     public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
     {
-      return this.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
+      return this.Client.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.RemoveNeighbors },
@@ -863,21 +1027,18 @@
           });
     }
 
-    /// <summary>
-    /// The replay bundle.
-    /// </summary>
-    /// <param name="transactionHash">
-    /// The transaction hash.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors)
+    {
+      return await this.Client.ExecuteParameterizedCommandAsync<RemoveNeighborsResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.RemoveNeighbors },
+            { "uris", neighbors.Select(n => n.Address).ToList() }
+          });
+    }
+
+    /// <inheritdoc />
     public List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 27, int minWeightMagnitude = 18)
     {
       var bundle = this.GetBundle(transactionHash);
@@ -885,33 +1046,15 @@
       return this.SendTrytes(bundle.Transactions, depth, minWeightMagnitude);
     }
 
-    /// <summary>
-    /// The send transfer.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="bundle">
-    /// The bundle.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <param name="remainderAddress">
-    /// The remainder address.
-    /// </param>
-    /// <param name="inputAddresses">
-    /// The input addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Bundle"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 27, int minWeightMagnitude = 18)
+    {
+      var bundle = await this.GetBundleAsync(transactionHash);
+
+      return await this.SendTrytesAsync(bundle.Transactions, depth, minWeightMagnitude);
+    }
+
+    /// <inheritdoc />
     public Bundle SendTransfer(
       Seed seed,
       Bundle bundle,
@@ -927,21 +1070,23 @@
       return Bundle.FromTransactionTrytes(resultTrytes);
     }
 
-    /// <summary>
-    /// The send trytes.
-    /// </summary>
-    /// <param name="transactions">
-    /// The transactions.
-    /// </param>
-    /// <param name="depth">
-    /// The depth.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
+    public async Task<Bundle> SendTransferAsync(
+      Seed seed,
+      Bundle bundle,
+      int securityLevel,
+      int depth = 27,
+      int minWeightMagnitude = 18,
+      Address remainderAddress = null,
+      List<Address> inputAddresses = null)
+    {
+      var preparedBundle = await this.PrepareTransferAsync(seed, bundle, securityLevel, remainderAddress, inputAddresses);
+      var resultTrytes = await this.SendTrytesAsync(preparedBundle.Transactions, depth, minWeightMagnitude);
+
+      return Bundle.FromTransactionTrytes(resultTrytes);
+    }
+
+    /// <inheritdoc />
     public List<TransactionTrytes> SendTrytes(
       IEnumerable<Transaction> transactions,
       int depth = 27,
@@ -961,45 +1106,39 @@
     }
 
     /// <inheritdoc />
+    public async Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18)
+    {
+      var transactionsToApprove = await this.GetTransactionsToApproveAsync(depth);
+
+      var attachResultTrytes = await this.AttachToTangleAsync(
+        transactionsToApprove.BranchTransaction,
+        transactionsToApprove.TrunkTransaction,
+        transactions,
+        minWeightMagnitude);
+
+      await this.BroadcastAndStoreTransactionsAsync(attachResultTrytes);
+
+      return attachResultTrytes;
+    }
+
+    /// <inheritdoc />
     public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
-      var response = this.Client.Execute<object>(
-        CreateRequest(
-          new Dictionary<string, object>
-            {
-              { "command", Commands.StoreTransactions },
-              { "trytes", transactions.Select(t => t.Value).ToList() }
-            }));
-
-      ValidateResponse(response, Commands.StoreTransactions);
+      this.Client.ExecuteParameterizedCommand(
+        new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
     public async Task StoreTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
     {
-      var response = await this.Client.ExecuteTaskAsync<object>(
-                       CreateRequest(
-                         new Dictionary<string, object>
-                           {
-                             { "command", Commands.StoreTransactions },
-                             { "trytes", transactions.Select(t => t.Value).ToList() }
-                           }));
-
-      ValidateResponse(response, Commands.StoreTransactions);
+      await this.Client.ExecuteParameterizedCommandAsync(
+        new Dictionary<string, object> { { "command", Commands.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
-    /// <summary>
-    /// The were addresses spent from.
-    /// </summary>
-    /// <param name="addresses">
-    /// The addresses.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
+    /// <inheritdoc />
     public List<Address> WereAddressesSpentFrom(List<Address> addresses)
     {
-      var response = this.ExecuteParameterizedCommand<WhereAddressesSpentFromResponse>(
+      var response = this.Client.ExecuteParameterizedCommand<WhereAddressesSpentFromResponse>(
         new Dictionary<string, object>
           {
             { "command", Commands.WereAddressesSpentFrom },
@@ -1014,61 +1153,22 @@
       return addresses;
     }
 
-    /// <summary>
-    /// The create request.
-    /// </summary>
-    /// <param name="parameters">
-    /// The parameters.
-    /// </param>
-    /// <returns>
-    /// The <see cref="RestRequest"/>.
-    /// </returns>
-    private static RestRequest CreateRequest(IEnumerable<KeyValuePair<string, object>> parameters)
+    /// <inheritdoc />
+    public async Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses)
     {
-      var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
-      request.AddHeader("X-IOTA-API-Version", "1");
-      request.AddJsonBody(parameters);
+      var response = await this.Client.ExecuteParameterizedCommandAsync<WhereAddressesSpentFromResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", Commands.WereAddressesSpentFrom },
+            { "addresses", addresses.Select(a => a.Value).ToList() }
+          });
 
-      return request;
-    }
-
-    /// <summary>
-    /// The validate response.
-    /// </summary>
-    /// <param name="response">
-    /// The response.
-    /// </param>
-    /// <param name="commandName">
-    /// The command name.
-    /// </param>
-    /// <typeparam name="T">
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="T"/>.
-    /// </returns>
-    private static T ValidateResponse<T>(IRestResponse<T> response, object commandName)
-      where T : new()
-    {
-      var nullResponse = response == null;
-
-      if (!nullResponse && response.StatusCode == HttpStatusCode.OK)
+      for (var i = 0; i < addresses.Count; i++)
       {
-        return response.Data;
+        addresses[i].SpentFrom = response.States[i];
       }
 
-      if (nullResponse)
-      {
-        throw new IotaApiException(string.Format("Command {0} failed!", commandName));
-      }
-
-      if (response.ErrorException != null)
-      {
-        throw new IotaApiException(
-          string.Format("Command {0} failed! See inner exception for details.", commandName),
-          response.ErrorException);
-      }
-
-      throw new IotaApiException(string.Format("Command {0} failed!", commandName));
+      return addresses;
     }
 
     /// <summary>
@@ -1106,62 +1206,6 @@
       }
 
       return command;
-    }
-
-    /// <summary>
-    /// The execute command.
-    /// </summary>
-    /// <param name="parameters">
-    /// The parameters.
-    /// </param>
-    /// <typeparam name="T">
-    /// The node property to return
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="T"/>.
-    /// </returns>
-    private T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
-      where T : new()
-    {
-      var response = this.Client.Execute<T>(CreateRequest(parameters));
-      return ValidateResponse(response, parameters.First(p => p.Key == "command").Value);
-    }
-
-    /// <summary>
-    /// The execute parameterized command async.
-    /// </summary>
-    /// <param name="parameters">
-    /// The parameters.
-    /// </param>
-    /// <typeparam name="T">
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="Task"/>.
-    /// </returns>
-    private async Task<T> ExecuteParameterizedCommandAsync<T>(
-      IReadOnlyCollection<KeyValuePair<string, object>> parameters)
-      where T : new()
-    {
-      var response = await this.Client.ExecuteTaskAsync<T>(CreateRequest(parameters));
-      return ValidateResponse(response, parameters.First(p => p.Key == "command").Value);
-    }
-
-    /// <summary>
-    /// The execute command.
-    /// </summary>
-    /// <param name="commandName">
-    /// The command name.
-    /// </param>
-    /// <typeparam name="T">
-    /// The node property to return
-    /// </typeparam>
-    /// <returns>
-    /// The <see cref="T"/>.
-    /// </returns>
-    private T ExecuteParameterlessCommand<T>(string commandName)
-      where T : new()
-    {
-      return this.ExecuteParameterizedCommand<T>(new Dictionary<string, object> { { "command", commandName } });
     }
 
     /// <summary>
@@ -1206,6 +1250,52 @@
 
       var result = new List<Transaction> { transaction };
       result.AddRange(this.TraverseBundle(transaction.TrunkTransaction, bundleHash));
+
+      return result;
+    }
+
+    /// <summary>
+    /// The traverse bundle async.
+    /// </summary>
+    /// <param name="transactionHash">
+    /// The transaction hash.
+    /// </param>
+    /// <param name="bundleHash">
+    /// The bundle hash.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    private async Task<List<Transaction>> TraverseBundleAsync(Hash transactionHash, Hash bundleHash = null)
+    {
+      var transactionTrytes = await this.GetTrytesAsync(new List<Hash> { transactionHash });
+      var transaction = Transaction.FromTrytes(transactionTrytes[0]);
+
+      if (bundleHash == null && transaction.CurrentIndex != 0)
+      {
+        throw new ArgumentException(
+          "Traverse bundle started with non tail transaction. Please provide tail transaction Hash.");
+      }
+
+      if (bundleHash != null)
+      {
+        if (bundleHash.Value != transaction.BundleHash.Value)
+        {
+          return new List<Transaction>();
+        }
+      }
+      else
+      {
+        bundleHash = transaction.BundleHash;
+      }
+
+      if (transaction.CurrentIndex == transaction.LastIndex)
+      {
+        return new List<Transaction> { transaction };
+      }
+
+      var result = new List<Transaction> { transaction };
+      result.AddRange(await this.TraverseBundleAsync(transaction.TrunkTransaction, bundleHash));
 
       return result;
     }
