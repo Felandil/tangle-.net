@@ -77,6 +77,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTrytesResponse.cs" Link="Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\RemoveNeighborsResponse.cs" Link="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\WhereAddressesSpentFromResponse.cs" Link="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaNodeRepository.cs" Link="Repository\RestIotaNodeRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaRepository.cs" Link="Repository\RestIotaRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Extensions.cs" Link="Utils\Extensions.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\InputValidator.cs" Link="Utils\InputValidator.cs" />

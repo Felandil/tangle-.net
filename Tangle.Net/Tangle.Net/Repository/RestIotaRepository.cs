@@ -16,10 +16,8 @@
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
 
-  /// <summary>
-  ///   The rest iota repository.
-  /// </summary>
-  public class RestIotaRepository : IIotaRepository
+  /// <inheritdoc />
+  public partial class RestIotaRepository : IIotaRepository
   {
     /// <summary>
     ///   The valid find transactions parameters.
@@ -80,28 +78,6 @@
     ///   Gets the po w service.
     /// </summary>
     private IPoWService PoWService { get; }
-
-    /// <inheritdoc />
-    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
-    {
-      return this.Client.ExecuteParameterizedCommand<AddNeighborsResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", Commands.AddNeighbors },
-            { "uris", neighbors.Select(n => n.Address).ToList() }
-          });
-    }
-
-    /// <inheritdoc />
-    public async Task<AddNeighborsResponse> AddNeighborAsync(IEnumerable<Neighbor> neighbors)
-    {
-      return await this.Client.ExecuteParameterizedCommandAsync<AddNeighborsResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", Commands.AddNeighbors },
-            { "uris", neighbors.Select(n => n.Address).ToList() }
-          });
-    }
 
     /// <inheritdoc />
     public List<TransactionTrytes> AttachToTangle(
@@ -734,18 +710,6 @@
     }
 
     /// <inheritdoc />
-    public NeighborList GetNeighbors()
-    {
-      return this.Client.ExecuteParameterlessCommand<NeighborList>(Commands.GetNeighbors);
-    }
-
-    /// <inheritdoc />
-    public async Task<NeighborList> GetNeighborsAsync()
-    {
-      return await this.Client.ExecuteParameterlessCommandAsync<NeighborList>(Commands.GetNeighbors);
-    }
-
-    /// <inheritdoc />
     public List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
       var addressGenerator = new AddressGenerator(seed, securityLevel);
@@ -803,18 +767,6 @@
       }
 
       return result;
-    }
-
-    /// <inheritdoc />
-    public NodeInfo GetNodeInfo()
-    {
-      return this.Client.ExecuteParameterlessCommand<NodeInfo>(Commands.GetNodeInfo);
-    }
-
-    /// <inheritdoc />
-    public async Task<NodeInfo> GetNodeInfoAsync()
-    {
-      return await this.Client.ExecuteParameterlessCommandAsync<NodeInfo>(Commands.GetNodeInfo);
     }
 
     /// <inheritdoc />
@@ -1014,28 +966,6 @@
       bundle.Sign(new KeyGenerator(seed));
 
       return bundle;
-    }
-
-    /// <inheritdoc />
-    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
-    {
-      return this.Client.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", Commands.RemoveNeighbors },
-            { "uris", neighbors.Select(n => n.Address).ToList() }
-          });
-    }
-
-    /// <inheritdoc />
-    public async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors)
-    {
-      return await this.Client.ExecuteParameterizedCommandAsync<RemoveNeighborsResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", Commands.RemoveNeighbors },
-            { "uris", neighbors.Select(n => n.Address).ToList() }
-          });
     }
 
     /// <inheritdoc />

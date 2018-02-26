@@ -115,6 +115,7 @@
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="Repository\RestIotaNodeRepository.cs" />
     <Compile Include="Repository\RestIotaRepository.cs" />
     <Compile Include="Repository\Commands.cs" />
     <Compile Include="Utils\Extensions.cs" />
