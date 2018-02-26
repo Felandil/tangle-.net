@@ -94,7 +94,17 @@
     {
       var restClientMock = new Mock<IRestClient>();
       var repository = new RestIotaRepository(restClientMock.Object);
-      repository.FindTransactions(new Dictionary<string, IEnumerable<TryteString>>());
+      try
+      {
+        repository.FindTransactions(new Dictionary<string, IEnumerable<TryteString>>());
+      }
+      catch (AggregateException exception)
+      {
+        if (exception.InnerException != null)
+        {
+          throw exception.InnerException;
+        }
+      }
     }
 
     /// <summary>
@@ -106,7 +116,19 @@
     {
       var restClientMock = new Mock<IRestClient>();
       var repository = new RestIotaRepository(restClientMock.Object);
-      repository.FindTransactions(new Dictionary<string, IEnumerable<TryteString>> { { "invalid", new List<TryteString>() } });
+
+      try
+      {
+        repository.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>> { { "invalid", new List<TryteString>() } });
+      }
+      catch (AggregateException exception)
+      {
+        if (exception.InnerException != null)
+        {
+          throw exception.InnerException;
+        }
+      }
     }
 
     /// <summary>
@@ -119,14 +141,25 @@
       var restClientMock = new Mock<IRestClient>();
 
       var repository = new RestIotaRepository(restClientMock.Object);
-      repository.FindTransactions(
-        new Dictionary<string, IEnumerable<TryteString>>
-          {
-            { "bundles", new List<TryteString>() }, 
-            { "addresses", new List<TryteString>() }, 
-            { "tags", new List<TryteString>() }, 
-            { "approvees", new List<TryteString>() }
-          });
+
+      try
+      {
+        repository.FindTransactions(
+          new Dictionary<string, IEnumerable<TryteString>>
+            {
+              { "bundles", new List<TryteString>() },
+              { "addresses", new List<TryteString>() },
+              { "tags", new List<TryteString>() },
+              { "approvees", new List<TryteString>() }
+            });
+      }
+      catch (AggregateException exception)
+      {
+        if (exception.InnerException != null)
+        {
+          throw exception.InnerException;
+        }
+      }
     }
 
     /// <summary>

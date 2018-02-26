@@ -150,7 +150,10 @@
     /// <inheritdoc />
     public TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters)
     {
-      return this.FindTransactionsAsync(parameters).Result;
+      var command = this.CreateFindTransactionsParameters(parameters);
+      var result = this.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
+
+      return new TransactionHashList { Hashes = result?.Hashes.ConvertAll(hash => new Hash(hash)) };
     }
 
     /// <inheritdoc />
@@ -166,7 +169,14 @@
     /// <inheritdoc />
     public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
     {
-      return this.FindTransactionsByAddressesAsync(addresses).Result;
+      return this.FindTransactions(
+               new Dictionary<string, IEnumerable<TryteString>>
+                 {
+                   {
+                     "addresses",
+                     addresses.Select(a => new TryteString(a.Value)).ToList()
+                   }
+                 });
     }
 
     /// <inheritdoc />
@@ -185,7 +195,15 @@
     /// <inheritdoc />
     public TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes)
     {
-      return this.FindTransactionsByApproveesAsync(approveeHashes).Result;
+      return this.FindTransactions(
+               new Dictionary<string, IEnumerable<TryteString>>
+                 {
+                   {
+                     "approvees",
+                     approveeHashes.Select(a => new TryteString(a.Value))
+                       .ToList()
+                   }
+                 });
     }
 
     /// <inheritdoc />
@@ -205,7 +223,14 @@
     /// <inheritdoc />
     public TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes)
     {
-      return this.FindTransactionsByBundlesAsync(bundleHashes).Result;
+      return this.FindTransactions(
+               new Dictionary<string, IEnumerable<TryteString>>
+                 {
+                   {
+                     "bundles",
+                     bundleHashes.Select(a => new TryteString(a.Value)).ToList()
+                   }
+                 });
     }
 
     /// <inheritdoc />
@@ -224,7 +249,13 @@
     /// <inheritdoc />
     public TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags)
     {
-      return this.FindTransactionsByTagsAsync(tags).Result;
+      return this.FindTransactions(
+               new Dictionary<string, IEnumerable<TryteString>>
+                 {
+                   {
+                     "tags", tags.Select(a => new TryteString(a.Value)).ToList()
+                   }
+                 });
     }
 
     /// <inheritdoc />
