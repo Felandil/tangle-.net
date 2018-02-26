@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Repository
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
   using Tangle.Net.Repository.DataTransfer;
@@ -46,6 +47,17 @@
     void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions);
 
     /// <summary>
+    /// The broadcast transactions async.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task BroadcastTransactionsAsync(IEnumerable<TransactionTrytes> transactions);
+
+    /// <summary>
     /// The find transactions.
     /// </summary>
     /// <param name="parameters">
@@ -55,6 +67,17 @@
     /// The <see cref="TransactionHashList"/>.
     /// </returns>
     TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters);
+
+    /// <summary>
+    /// The find transactions async.
+    /// </summary>
+    /// <param name="parameters">
+    /// The parameters.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TransactionHashList> FindTransactionsAsync(Dictionary<string, IEnumerable<TryteString>> parameters);
 
     /// <summary>
     /// The get transactions by addresses.
@@ -68,6 +91,17 @@
     TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses);
 
     /// <summary>
+    /// The find transactions by addresses async.
+    /// </summary>
+    /// <param name="addresses">
+    /// The addresses.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TransactionHashList> FindTransactionsByAddressesAsync(IEnumerable<Address> addresses);
+
+    /// <summary>
     /// The find transactions by approvees.
     /// </summary>
     /// <param name="approveeHashes">
@@ -77,6 +111,17 @@
     /// The <see cref="TransactionHashList"/>.
     /// </returns>
     TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes);
+
+    /// <summary>
+    /// The find transactions by approvees async.
+    /// </summary>
+    /// <param name="approveeHashes">
+    /// The approvee hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TransactionHashList> FindTransactionsByApproveesAsync(IEnumerable<Hash> approveeHashes);
 
     /// <summary>
     /// The find transactions by bundles.
@@ -90,6 +135,17 @@
     TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes);
 
     /// <summary>
+    /// The find transactions by bundles async.
+    /// </summary>
+    /// <param name="bundleHashes">
+    /// The bundle hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<TransactionHashList> FindTransactionsByBundlesAsync(IEnumerable<Hash> bundleHashes);
+
+    /// <summary>
     /// The find transactions by tags.
     /// </summary>
     /// <param name="tags">
@@ -99,6 +155,8 @@
     /// The <see cref="TransactionHashList"/>.
     /// </returns>
     TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags);
+
+    Task<TransactionHashList> FindTransactionsByTagsAsync(IEnumerable<Tag> tags);
 
     /// <summary>
     /// The get balances.
@@ -170,6 +228,17 @@
     /// The transactions.
     /// </param>
     void StoreTransactions(IEnumerable<TransactionTrytes> transactions);
+
+    /// <summary>
+    /// The store transactions async.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task StoreTransactionsAsync(IEnumerable<TransactionTrytes> transactions);
 
     /// <summary>
     /// The where addresses spent from.

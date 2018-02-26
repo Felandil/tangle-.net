@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Repository
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
   using Tangle.Net.Repository.DataTransfer;
@@ -22,6 +23,17 @@
     void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions);
 
     /// <summary>
+    /// The broadcast and store transactions async.
+    /// </summary>
+    /// <param name="transactions">
+    /// The transactions.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task BroadcastAndStoreTransactionsAsync(List<TransactionTrytes> transactions);
+
+    /// <summary>
     /// The find used addresses.
     /// </summary>
     /// <param name="seed">
@@ -37,6 +49,23 @@
     /// The <see cref="List"/>.
     /// </returns>
     FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start);
+
+    /// <summary>
+    /// The find used addresses with transactions async.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<FindUsedAddressesResponse> FindUsedAddressesWithTransactionsAsync(Seed seed, int securityLevel, int start);
 
     /// <summary>
     /// The get account data.
