@@ -415,7 +415,7 @@
           kerl.Absorb(transactionTrits);
         }
 
-        var hashTrits = new int[Kerl.HashLength];
+        var hashTrits = new int[AbstractCurl.HashLength];
         kerl.Squeeze(hashTrits);
         bundleHash = new Hash(Converter.TritsToTrytes(hashTrits));
         var normalizedBundleValue = Hash.Normalize(bundleHash);

@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Cryptography
 {
   using System;
+  using System.Threading.Tasks;
 
   /// <summary>
   /// The curl.
@@ -60,11 +61,15 @@
       while (offset < trits.Length)
       {
         var length = trits.Length - offset;
-        Array.Copy(trits, offset, this.State, 0, length < HashLength ? length : HashLength);
+
+        Parallel.For(
+          0,
+          length < AbstractCurl.HashLength ? length : AbstractCurl.HashLength,
+          (i) => { this.State[i] = trits[offset + i]; });
 
         this.Transform();
 
-        offset += HashLength;
+        offset += AbstractCurl.HashLength;
       }
     }
 
@@ -87,10 +92,14 @@
       var length = trits.Length;
       do
       {
-        Array.Copy(this.State, 0, trits, 0, length < HashLength ? length : HashLength);
+        Parallel.For(
+          0,
+          length < AbstractCurl.HashLength ? length : AbstractCurl.HashLength,
+          (i) => { trits[i] = this.State[i]; });
+
         this.Transform();
       }
-      while ((length -= HashLength) > 0);
+      while ((length -= AbstractCurl.HashLength) > 0);
     }
 
     #endregion
@@ -107,7 +116,13 @@
 
       for (var round = 0; round < NumberOfRounds; round++)
       {
-        Array.Copy(this.State, 0, stateCopy, 0, StateLength);
+        Parallel.For(
+          0,
+          StateLength,
+          (i) =>
+            {
+              stateCopy[i] = this.State[i];
+            });
 
         for (var i = 0; i < StateLength; i++)
         {

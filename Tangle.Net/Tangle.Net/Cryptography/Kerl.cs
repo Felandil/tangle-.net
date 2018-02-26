@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Cryptography
 {
   using System;
+  using System.Threading.Tasks;
 
   using Org.BouncyCastle.Crypto.Digests;
 
@@ -53,12 +54,7 @@
 
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The absorb.
-    /// </summary>
-    /// <param name="trits">
-    /// The trits.
-    /// </param>
+    /// <inheritdoc />
     public override void Absorb(int[] trits)
     {
       ValidateLength(trits.Length);
@@ -66,13 +62,20 @@
 
       while (offset < trits.Length)
       {
-        Array.Copy(trits, offset, this.State, 0, HashLength);
-        this.State[HashLength - 1] = 0;
+        Parallel.For(
+          0,
+          AbstractCurl.HashLength,
+          (i) =>
+            {
+              this.State[i] = trits[offset + i];
+            });
+
+        this.State[AbstractCurl.HashLength - 1] = 0;
 
         var bytes = Converter.ConvertTritsToBytes(this.State);
         this.digest.BlockUpdate(bytes, 0, bytes.Length);
 
-        offset += HashLength;
+        offset += AbstractCurl.HashLength;
       }
     }
 
@@ -100,14 +103,24 @@
         this.digest.DoFinal(this.byteState, 0);
         this.State = Converter.ConvertBytesToTrits(this.byteState);
         this.State[HashLength - 1] = 0;
-        Array.Copy(this.State, 0, trits, offset, HashLength);
+
+        Parallel.For(
+          0,
+          AbstractCurl.HashLength,
+          (i) =>
+            {
+              trits[offset + i] = this.State[i];
+            });
 
         this.digest.Reset();
 
-        for (var i = this.byteState.Length; i-- > 0;)
-        {
-          this.byteState[i] = (byte)(this.byteState[i] ^ 0xFF);
-        }
+        Parallel.For(
+          0,
+          this.byteState.Length,
+          (i) =>
+            {
+              this.byteState[i] = (byte)(this.byteState[i] ^ 0xFF);
+            });
 
         this.digest.BlockUpdate(this.byteState, 0, this.byteState.Length);
         offset += HashLength;

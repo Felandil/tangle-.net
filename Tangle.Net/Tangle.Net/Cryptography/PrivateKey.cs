@@ -83,7 +83,7 @@
           return this.digest;
         }
 
-        var buffer = new int[Kerl.HashLength];
+        var buffer = new int[AbstractCurl.HashLength];
         var digests = new List<int>();
         var privateKeyAsTrits = Converter.TrytesToTrits(this.Value);
 
@@ -93,7 +93,7 @@
 
           for (var j = 0; j < 27; j++)
           {
-            buffer = keyFragment.Skip(j * Kerl.HashLength).Take(Kerl.HashLength).ToArray();
+            buffer = keyFragment.Skip(j * AbstractCurl.HashLength).Take(AbstractCurl.HashLength).ToArray();
 
             for (var k = 0; k < 26; k++)
             {
@@ -102,9 +102,9 @@
               innerKerl.Squeeze(buffer);
             }
 
-            for (var k = 0; k < Kerl.HashLength; k++)
+            for (var k = 0; k < AbstractCurl.HashLength; k++)
             {
-              keyFragment[(j * Kerl.HashLength) + k] = buffer[k];
+              keyFragment[(j * AbstractCurl.HashLength) + k] = buffer[k];
             }
           }
 
@@ -112,9 +112,9 @@
           kerl.Absorb(keyFragment);
           kerl.Squeeze(buffer);
 
-          for (var j = 0; j < Kerl.HashLength; j++)
+          for (var j = 0; j < AbstractCurl.HashLength; j++)
           {
-            digests.Insert((i * Kerl.HashLength) + j, buffer[j]);
+            digests.Insert((i * AbstractCurl.HashLength) + j, buffer[j]);
           }
         }
 

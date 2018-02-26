@@ -2,6 +2,8 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
 
@@ -15,7 +17,7 @@
     /// <summary>
     /// The hashes per fragment.
     /// </summary>
-    public const int HashesPerFragment = PrivateKey.FragmentLength / Kerl.HashLength;
+    public const int HashesPerFragment = PrivateKey.FragmentLength / AbstractCurl.HashLength;
 
     #endregion
 

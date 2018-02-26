@@ -68,7 +68,7 @@
         var count = chunk.GetChunks(Hash.Length).Count;
         for (var j = 0; j < count; j++)
         {
-          var buffer = signatureFragmentTrits.Skip(j * Kerl.HashLength).Take(Kerl.HashLength).ToArray();
+          var buffer = signatureFragmentTrits.Skip(j * AbstractCurl.HashLength).Take(AbstractCurl.HashLength).ToArray();
 
           for (var k = 0; k < 13 - normalizedHashChunk[j]; k++)
           {

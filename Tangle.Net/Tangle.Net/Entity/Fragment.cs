@@ -120,7 +120,7 @@
       for (var i = 0; i < fragments.Count; i++)
       {
         var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray();
-        var buffer = new int[Kerl.HashLength];
+        var buffer = new int[AbstractCurl.HashLength];
 
         var outerSponge = new Kerl();
         var fragmentChunks = fragments[i].GetChunks(Hash.Length);
@@ -143,7 +143,7 @@
         checksum.AddRange(buffer);
       }
 
-      var actualPublicKey = new int[Kerl.HashLength];
+      var actualPublicKey = new int[AbstractCurl.HashLength];
       var kerl = new Kerl();
       kerl.Absorb(checksum.ToArray());
       kerl.Squeeze(actualPublicKey);
