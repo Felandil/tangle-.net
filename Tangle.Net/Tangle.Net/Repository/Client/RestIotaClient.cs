@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RestIotaClient.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The rest iota client.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Tangle.Net.Repository.Client
+﻿namespace Tangle.Net.Repository.Client
 {
   using System.Collections.Generic;
   using System.Linq;
