@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net", "Tangle.Net\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Console", "Tangle.Net.Console\Tangle.Net.Console.csproj", "{8859F79E-5075-4A03-BDCF-5AF6DB883BDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Integration.Tests", "Tangle.Net.Integration.Tests\Tangle.Net.Integration.Tests.csproj", "{11923503-6D6E-4330-AD2C-BEB30919FEC6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Unit.Tests", "Tangle.Net.Unit.Tests\Tangle.Net.Unit.Tests.csproj", "{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam", "Tangle.Net.Mam\Tangle.Net.Mam.csproj", "{183E56D2-D79B-45F7-8B92-CBEF8D2E9469}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Mam.Unit.Tests", "Tangle.Net.Mam.Unit.Tests\Tangle.Net.Mam.Unit.Tests.csproj", "{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Examples", "Tangle.Net.Examples\Tangle.Net.Examples.csproj", "{210988A2-0BDD-4EC4-9F1F-62151078418D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{8859F79E-5075-4A03-BDCF-5AF6DB883BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8859F79E-5075-4A03-BDCF-5AF6DB883BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8859F79E-5075-4A03-BDCF-5AF6DB883BDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11923503-6D6E-4330-AD2C-BEB30919FEC6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7CDBB2B-02A0-42CD-BEBB-FDE418EF0936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{210988A2-0BDD-4EC4-9F1F-62151078418D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210988A2-0BDD-4EC4-9F1F-62151078418D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210988A2-0BDD-4EC4-9F1F-62151078418D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210988A2-0BDD-4EC4-9F1F-62151078418D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
