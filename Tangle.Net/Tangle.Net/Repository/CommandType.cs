@@ -3,7 +3,7 @@
   /// <summary>
   /// The node commands.
   /// </summary>
-  public static class Commands
+  public static class CommandType
   {
     #region Constants
 

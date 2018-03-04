@@ -4,8 +4,6 @@
   using System.Linq;
   using System.Threading.Tasks;
 
-  using RestSharp;
-
   using Tangle.Net.Entity;
   using Tangle.Net.Repository;
   using Tangle.Net.Repository.Client;
@@ -38,7 +36,7 @@
       var result = this.Client.ExecuteParameterizedCommand<AttachToTangleResponse>(
         new Dictionary<string, object>
           {
-            { "command", Commands.AttachToTangle },
+            { "command", CommandType.AttachToTangle },
             { "trunkTransaction", trunkTransaction.ToString() },
             { "branchTransaction", branchTransaction.ToString() },
             { "minWeightMagnitude", minWeightMagnitude },
@@ -54,7 +52,7 @@
       var result = await this.Client.ExecuteParameterizedCommandAsync<AttachToTangleResponse>(
                      new Dictionary<string, object>
                        {
-                         { "command", Commands.AttachToTangle },
+                         { "command", CommandType.AttachToTangle },
                          { "trunkTransaction", trunkTransaction.ToString() },
                          { "branchTransaction", branchTransaction.ToString() },
                          { "minWeightMagnitude", minWeightMagnitude },

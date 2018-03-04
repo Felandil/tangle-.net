@@ -115,9 +115,10 @@
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="Repository\RestIotaCoreRepository.cs" />
     <Compile Include="Repository\RestIotaNodeRepository.cs" />
-    <Compile Include="Repository\RestIotaRepository.cs" />
-    <Compile Include="Repository\Commands.cs" />
+    <Compile Include="Repository\RestIotaExtendedRepository.cs" />
+    <Compile Include="Repository\CommandType.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Timestamp.cs" />
     <Compile Include="Utils\InputValidator.cs" />
@@ -130,6 +131,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

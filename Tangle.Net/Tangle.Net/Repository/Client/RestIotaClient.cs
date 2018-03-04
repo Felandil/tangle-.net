@@ -81,9 +81,9 @@
     /// <returns>
     /// The <see cref="object"/>.
     /// </returns>
-    private static object CommandNameFromParameters(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+    private static string CommandNameFromParameters(IEnumerable<KeyValuePair<string, object>> parameters)
     {
-      return parameters.First(p => p.Key == "command").Value;
+      return parameters.First(p => p.Key == "command").Value.ToString();
     }
 
     /// <summary>
@@ -119,7 +119,7 @@
     /// <returns>
     /// The <see cref="T"/>.
     /// </returns>
-    private static T ValidateResponse<T>(IRestResponse<T> response, object commandName)
+    private static T ValidateResponse<T>(IRestResponse<T> response, string commandName)
       where T : new()
     {
       var nullResponse = response == null;

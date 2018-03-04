@@ -50,7 +50,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Commands.cs" Link="Repository\Commands.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\CommandType.cs" Link="Repository\CommandType.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\AddressWithBalances.cs" Link="Repository\DataTransfer\AddressWithBalances.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\InclusionStates.cs" Link="Repository\DataTransfer\InclusionStates.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\Neighbor.cs" Link="Repository\DataTransfer\Neighbor.cs" />
@@ -77,8 +77,9 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTrytesResponse.cs" Link="Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\RemoveNeighborsResponse.cs" Link="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\WhereAddressesSpentFromResponse.cs" Link="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaCoreRepository.cs" Link="Repository\RestIotaCoreRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaExtendedRepository.cs" Link="Repository\RestIotaExtendedRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaNodeRepository.cs" Link="Repository\RestIotaNodeRepository.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaRepository.cs" Link="Repository\RestIotaRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Extensions.cs" Link="Utils\Extensions.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\InputValidator.cs" Link="Utils\InputValidator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Timestamp.cs" Link="Utils\Timestamp.cs" />
