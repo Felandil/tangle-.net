@@ -59,6 +59,10 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TipHashList.cs" Link="Repository\DataTransfer\TipHashList.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionHashList.cs" Link="Repository\DataTransfer\TransactionHashList.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionsToApprove.cs" Link="Repository\DataTransfer\TransactionsToApprove.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IHealthyNodeSelector.cs" Link="Repository\Factory\IHealthyNodeSelector.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IIotaRepositoryFactory.cs" Link="Repository\Factory\IIotaRepositoryFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IotaDanceHealthyNodeSelector.cs" Link="Repository\Factory\IotaDanceHealthyNodeSelector.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\RestIotaRepositoryFactory.cs" Link="Repository\Factory\RestIotaRepositoryFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaCoreRepository.cs" Link="Repository\IIotaCoreRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaExtendedRepository.cs" Link="Repository\IIotaExtendedRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaNodeRepository.cs" Link="Repository\IIotaNodeRepository.cs" />
@@ -94,6 +98,7 @@
     <Folder Include="Entity\" />
     <Folder Include="Repository\DataTransfer\" />
     <Folder Include="Repository\Client\" />
+    <Folder Include="Repository\Factory\" />
     <Folder Include="Repository\Responses\" />
     <Folder Include="Utils\" />
     <Folder Include="ProofOfWork\" />

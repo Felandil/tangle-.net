@@ -11,6 +11,7 @@
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
+  using Tangle.Net.Repository.Factory;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -28,6 +29,8 @@
     /// </param>
     private static void Main(string[] args)
     {
+      var factory = new RestIotaRepositoryFactory();
+      var repo = factory.CreateAsync(true).Result;
       var repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
       var acc = repository.GetAccountData(Seed.Random(), true, SecurityLevel.Medium, 0);
 

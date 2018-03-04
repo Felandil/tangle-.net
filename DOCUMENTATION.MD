@@ -1,8 +1,8 @@
 # IOTA C# Library Documentation
 
-This is a inoffical port of the IOTA Core library.
+This is a inoffical port of the IOTA Client library.
 
-It implements all standard API calls, as described in the API documentation (https://iota.readme.io/v1.2.0/reference) and the extended methods for signing, sending and receiving bundles.
+It implements all standard API calls, as described in the API documentation (https://iota.readme.io/v1.3.0/reference) and the extended methods for signing, sending and receiving bundles.
 
 ## Dependencies
 
@@ -14,10 +14,11 @@ The library is currently not available on nuGet. Therefore you will need to refe
 
 ## Getting Started
 
-The most simple way to start using the library is by instantiating the repository object as shown below. Note that you could also create instances of the repository via any dependency injection framework.
+The most simple way to start using the library is by instantiating the repository via factory. Note that you could also create instances of the repository via any dependency injection framework.
 
 ```javascript
-var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
+var factory = new RestIotaRepositoryFactory();
+var repository = await factory.CreateAsync();
 var nodeInfo = repository.GetNodeInfo();
 ```
 

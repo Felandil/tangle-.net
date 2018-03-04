@@ -10,6 +10,7 @@
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
   using Tangle.Net.Repository.Client;
+  using Tangle.Net.Repository.Factory;
 
   /// <summary>
   /// The program.
@@ -33,6 +34,9 @@
       // var powService = new RestPoWService(iotaClient); 
 
       var repository = new RestIotaRepository(iotaClient, powService); // compose the repository. all these steps would normally be done via DI container (ninject for example)
+
+      // var factory = new RestIotaRepositoryFactory(); In an async context it is also possible to create a repository via factory as shown here. 
+      // var repository = await factory.CreateAsync(); This automatically picks a healthy node.
 
       var example = new SendTrytesExample(repository); // get the example to execute. Change this to any example you want
 
