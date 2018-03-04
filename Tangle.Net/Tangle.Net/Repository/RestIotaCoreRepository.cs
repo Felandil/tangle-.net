@@ -270,20 +270,6 @@
     }
 
     /// <inheritdoc />
-    public InclusionStates GetLatestInclusion(List<Hash> hashes)
-    {
-      var nodeInfo = this.GetNodeInfo();
-      return this.GetInclusionStates(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
-    }
-
-    /// <inheritdoc />
-    public async Task<InclusionStates> GetLatestInclusionAsync(List<Hash> hashes)
-    {
-      var nodeInfo = await this.GetNodeInfoAsync();
-      return await this.GetInclusionStatesAsync(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
-    }
-
-    /// <inheritdoc />
     public TipHashList GetTips()
     {
       var response = this.Client.ExecuteParameterlessCommand<GetTipsResponse>(CommandType.GetTips);

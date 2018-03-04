@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Examples
 {
+  using System;
   using System.Configuration;
   using System.Web.Configuration;
 
@@ -35,7 +36,10 @@
 
       var example = new SendTrytesExample(repository); // get the example to execute. Change this to any example you want
 
-      example.Execute();
+      var result = example.Execute();
+
+      Console.WriteLine(result); // print the example result to console. Set a breakpoint here if you want to see the result in debug mode.
+      Console.ReadKey();
     }
   }
 }

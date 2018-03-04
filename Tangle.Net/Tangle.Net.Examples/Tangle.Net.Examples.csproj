@@ -50,7 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\BroadcastAndStoreTransactionsExample.cs" />
     <Compile Include="Examples\Example.cs" />
+    <Compile Include="Examples\FindUsedAddressesWithTransactionsExample.cs" />
+    <Compile Include="Examples\GetAccountDataExample.cs" />
+    <Compile Include="Examples\GetBundleExample.cs" />
+    <Compile Include="Examples\GetBundlesExample.cs" />
+    <Compile Include="Examples\GetInputsExample.cs" />
+    <Compile Include="Examples\GetLatestInclusionExample.cs" />
+    <Compile Include="Examples\GetNewAddressesExample.cs" />
+    <Compile Include="Examples\GetTransfersExample.cs" />
+    <Compile Include="Examples\PrepareTransferExample.cs" />
+    <Compile Include="Examples\ReplayBundleExample.cs" />
+    <Compile Include="Examples\SendTransferExample.cs" />
     <Compile Include="Examples\SendTrytesExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

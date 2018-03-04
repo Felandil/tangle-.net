@@ -1,13 +1,13 @@
 ﻿namespace Tangle.Net.Examples.Examples
 {
+  using System.Collections.Generic;
+
   using Tangle.Net.Entity;
   using Tangle.Net.Repository;
   using Tangle.Net.Utils;
 
-  /// <summary>
-  /// The send trytes example.
-  /// </summary>
-  public class SendTrytesExample : Example
+  /// <inheritdoc />
+  public class SendTrytesExample : Example<List<TransactionTrytes>>
   {
     /// <inheritdoc />
     public SendTrytesExample(IIotaRepository repository)
@@ -16,12 +16,12 @@
     }
 
     /// <inheritdoc />
+    /// Send Trytes can be used to send messages to any address without providing a seed. Call SenTrytesAsync in async context
+    /// 
     /// 1. Create a bundle and add a transfer without any value, but with a message
     /// 2. Finalize and sign the bundle
     /// 3. Send the bundle. Note that the minWeightMagnitude was set to 14 for faster PoW
-    /// 
-    /// Note: Send Trytes can be used to send messages to any address without providing a seed.
-    public override void Execute()
+    public override List<TransactionTrytes> Execute()
     {
       var bundle = new Bundle();
       bundle.AddTransfer(new Transfer
@@ -35,7 +35,7 @@
       bundle.Finalize();
       bundle.Sign();
 
-      this.Repository.SendTrytes(bundle.Transactions, 27, 14);
+      return this.Repository.SendTrytes(bundle.Transactions, 27, 14);
     }
   }
 }

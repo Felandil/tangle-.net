@@ -5,10 +5,13 @@
   /// <summary>
   /// The example.
   /// </summary>
-  public abstract class Example
+  /// <typeparam name="T">
+  /// The result type.
+  /// </typeparam>
+  public abstract class Example<T>
   {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Example"/> class.
+    /// Initializes a new instance of the <see cref="Example{T}"/> class. 
     /// </summary>
     /// <param name="repository">
     /// The repository.
@@ -26,6 +29,9 @@
     /// <summary>
     /// The execute.
     /// </summary>
-    public abstract void Execute();
+    /// <returns>
+    /// The result type <see cref="T"/>.
+    /// </returns>
+    public abstract T Execute();
   }
 }
