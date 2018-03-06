@@ -8,10 +8,6 @@ It implements all standard API calls, as described in the API documentation (htt
 
 The library currently uses RestSharp for all it's API calls and the official C# Bouncy Castle Port for encryption.
 
-## Usage
-
-The library is currently not available on nuGet. Therefore you will need to reference it as a submodule and build it together with your project.
-
 ## Getting Started
 
 The most simple way to start using the library is by instantiating the repository via factory. Note that you could also create instances of the repository via any dependency injection framework.
@@ -22,7 +18,7 @@ var repository = await factory.CreateAsync();
 var nodeInfo = repository.GetNodeInfo();
 ```
 
-Please note that the sandbox and HTTP Authentication against nodes is currently not supported.
+Please note that the sandbox is currently not supported.
 
 ## Entities
 

@@ -18,7 +18,6 @@ The project was set up a little different from most (except the python one) IOTA
 
 Next Up: 
 
-	**Async**
 	**Multisig**
 	**Mam Finalizing**
 
@@ -54,7 +53,8 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## NuGet
 
-https://www.nuget.org/packages/Tangle.Net
+.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net
+.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard/
 
 
 ## Note
