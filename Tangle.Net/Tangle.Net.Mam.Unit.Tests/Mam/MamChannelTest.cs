@@ -26,11 +26,11 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, treeFactory);
-      var channel = channelFactory.Create(MamMode.Public, seed);
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask()),  treeFactory, new InMemoryIotaRepository());
+      var channel = channelFactory.Create(Mode.Public, seed);
 
       Assert.AreEqual(seed.Value, channel.Seed.Value);
-      Assert.AreEqual(MamMode.Public, channel.Mode);
+      Assert.AreEqual(Mode.Public, channel.Mode);
       Assert.AreEqual(SecurityLevel.Medium, channel.SecurityLevel);
     }
 
@@ -44,12 +44,12 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, treeFactory);
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
-      var channel = channelFactory.Create(MamMode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
       Assert.AreEqual(seed.Value, channel.Seed.Value);
-      Assert.AreEqual(MamMode.Restricted, channel.Mode);
+      Assert.AreEqual(Mode.Restricted, channel.Mode);
       Assert.AreEqual(SecurityLevel.Medium, channel.SecurityLevel);
       Assert.AreEqual(channelKey.Value, channel.Key.Value);
       Assert.AreEqual(Hash.Empty.Value, channel.NextRoot.Value);
@@ -81,9 +81,9 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, treeFactory);
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
-      var channel = channelFactory.Create(MamMode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
       var message = channel.CreateMessage(new TryteString("IREALLYWANTTHISTOWORKINCSHARPASWELLPLEASEMAKEITHAPPEN"));
 

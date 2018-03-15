@@ -3,7 +3,7 @@
   /// <summary>
   /// The mam mode.
   /// </summary>
-  public enum MamMode
+  public enum Mode
   {
     /// <summary>
     /// The public.

@@ -1,18 +1,25 @@
-﻿using Tangle.Net.Entity;
-
-namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Mam
 {
+  using Tangle.Net.Entity;
+
+  /// <summary>
+  /// The unmasked authenticated message.
+  /// </summary>
   public class UnmaskedAuthenticatedMessage
   {
     /// <summary>
-    /// Gets or sets the next channel key.
+    /// Gets or sets the message.
     /// </summary>
-    public Hash NextChannelKey { get; set; }
-
     public TryteString Message { get; set; }
 
+    /// <summary>
+    /// Gets or sets the next root.
+    /// </summary>
     public Hash NextRoot { get; set; }
 
+    /// <summary>
+    /// Gets or sets the root.
+    /// </summary>
     public Hash Root { get; set; }
   }
 }

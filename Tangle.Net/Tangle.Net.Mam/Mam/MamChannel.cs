@@ -1,7 +1,12 @@
 ﻿namespace Tangle.Net.Mam.Mam
 {
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Threading.Tasks;
+
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Repository;
 
   /// <summary>
   /// The mam channel.
@@ -14,13 +19,21 @@
     /// <param name="mamFactory">
     /// The mam Factory.
     /// </param>
+    /// <param name="parser">
+    /// The parser.
+    /// </param>
     /// <param name="treeFactory">
     /// The tree Factory.
     /// </param>
-    internal MamChannel(IMamFactory mamFactory, IMerkleTreeFactory treeFactory)
+    /// <param name="repository">
+    /// The repository.
+    /// </param>
+    internal MamChannel(IMamFactory mamFactory, IMamParser parser, IMerkleTreeFactory treeFactory, IIotaRepository repository)
     {
       this.MamFactory = mamFactory;
+      this.Parser = parser;
       this.TreeFactory = treeFactory;
+      this.Repository = repository;
     }
 
     /// <summary>
@@ -31,7 +44,7 @@
     /// <summary>
     /// Gets the mode.
     /// </summary>
-    public MamMode Mode { get; private set; }
+    public Mode Mode { get; private set; }
 
     /// <summary>
     /// Gets the security level.
@@ -74,9 +87,19 @@
     private IMamFactory MamFactory { get; }
 
     /// <summary>
+    /// Gets the parser.
+    /// </summary>
+    private IMamParser Parser { get; }
+
+    /// <summary>
     /// Gets the tree factory.
     /// </summary>
     private IMerkleTreeFactory TreeFactory { get; }
+
+    /// <summary>
+    /// Gets the repository.
+    /// </summary>
+    private IIotaRepository Repository { get; }
 
     /// <summary>
     /// The create message.
@@ -108,6 +131,60 @@
       return maskedAutheticatedMessage;
     }
 
+
+    /// <summary>
+    /// The publish.
+    /// </summary>
+    /// <param name="message">
+    /// The message.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    public async Task PublishAsync(MaskedAuthenticatedMessage message)
+    {
+      await this.Repository.SendTrytesAsync(message.Payload.Transactions, 6, 14);
+    }
+
+    /// <summary>
+    /// The fetch.
+    /// </summary>
+    /// <param name="messageRoot">
+    /// The message root.
+    /// </param>
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
+    /// <param name="channelKey">
+    /// The channel key.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List"/>.
+    /// </returns>
+    public async Task<List<UnmaskedAuthenticatedMessage>> FetchAsync(Hash messageRoot, Mode mode, TryteString channelKey)
+    {
+      var result = new List<UnmaskedAuthenticatedMessage>();
+
+      while (true)
+      {
+        var address = new Address(mode != Mode.Private ? new CurlMask().Hash(messageRoot).Value : messageRoot.Value);
+        var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
+
+        if (!transactionHashList.Hashes.Any())
+        {
+          break;
+        }
+
+        var bundle = (await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false))[0];
+
+        var unmaskedMessage = this.Parser.Unmask(bundle, channelKey);
+        messageRoot = unmaskedMessage.NextRoot;
+        result.Add(unmaskedMessage);
+      }
+
+      return result;
+    }
+
     /// <summary>
     /// The init.
     /// </summary>
@@ -123,7 +200,7 @@
     /// <param name="channelKey">
     /// The channel key.
     /// </param>
-    internal void Init(MamMode mode, Seed seed, int securityLevel = Cryptography.SecurityLevel.Medium, TryteString channelKey = null)
+    internal void Init(Mode mode, Seed seed, int securityLevel = Cryptography.SecurityLevel.Medium, TryteString channelKey = null)
     {
       this.Mode = mode;
       this.Seed = seed;

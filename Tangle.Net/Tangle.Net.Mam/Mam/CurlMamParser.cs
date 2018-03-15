@@ -54,17 +54,14 @@
       }
 
       var chainedMessageTrytes = messageTrytes.Merge();
-      var privateKey = new PrivateKey(signature.Value, SecurityLevel.Low, index);
 
       var root = MerkleTree.ComputeRoot(channelKey, treeHashes, index, new Curl());
-      var nextChannelKey = this.GetChannelKey(channelKey, payload.Transactions[0].Tag);
 
       return new UnmaskedAuthenticatedMessage
                {
                  NextRoot = nextRoot,
                  Message = chainedMessageTrytes,
-                 Root = root,
-                 NextChannelKey = nextChannelKey
+                 Root = root
                };
     }
   }

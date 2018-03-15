@@ -25,8 +25,8 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamParser.cs" Link="Mam\IMamParser.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannel.cs" Link="Mam\MamChannel.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelFactory.cs" Link="Mam\MamChannelFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamMode.cs" Link="Mam\MamMode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MaskedAuthenticatedMessage.cs" Link="Mam\MaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\Mode.cs" Link="Mam\Mode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\UnmaskedAuthenticatedMessage.cs" Link="Mam\UnmaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleNodeFactory.cs" Link="Merkle\CurlMerkleNodeFactory.cs" />
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tangle.Net.Standard" Version="1.0.5.1" />
+    <PackageReference Include="Tangle.Net.Standard" Version="1.0.6" />
   </ItemGroup>
 
 </Project>
