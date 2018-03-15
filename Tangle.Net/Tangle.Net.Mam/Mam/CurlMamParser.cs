@@ -55,16 +55,15 @@
 
       var chainedMessageTrytes = messageTrytes.Merge();
       var privateKey = new PrivateKey(signature.Value, SecurityLevel.Low, index);
-      var address = new AddressGenerator().GetAddress(privateKey);
 
-      // var root = MerkleTree.ComputeRoot(address, treeHashes, index, new Curl());
+      var root = MerkleTree.ComputeRoot(channelKey, treeHashes, index, new Curl());
       var nextChannelKey = this.GetChannelKey(channelKey, payload.Transactions[0].Tag);
 
       return new UnmaskedAuthenticatedMessage
                {
                  NextRoot = nextRoot,
                  Message = chainedMessageTrytes,
-                 Root = Hash.Empty,
+                 Root = root,
                  NextChannelKey = nextChannelKey
                };
     }

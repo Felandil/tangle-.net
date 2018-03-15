@@ -8,13 +8,23 @@
   public class MaskedAuthenticatedMessage
   {
     /// <summary>
-    /// Gets or sets the next channel key.
+    /// Gets or sets the address.
     /// </summary>
-    public Hash NextChannelKey { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
     /// Gets or sets the payload.
     /// </summary>
     public Bundle Payload { get; set; }
+
+    /// <summary>
+    /// Gets or sets the next channel key.
+    /// </summary>
+    public Hash Root { get; set; }
+
+    /// <summary>
+    /// Gets or sets the next root.
+    /// </summary>
+    public Hash NextRoot { get; set; }
   }
 }

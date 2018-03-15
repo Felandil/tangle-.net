@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\CurlMamFactoryTest.cs" Link="Mam\CurlMamFactoryTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\MamChannelTest.cs" Link="Mam\MamChannelTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\MaskTests.cs" Link="MaskTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleLeafFactoryTests.cs" Link="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleNodeFactoryTests.cs" Link="Merkle\MerkleNodeFactoryTests.cs" />

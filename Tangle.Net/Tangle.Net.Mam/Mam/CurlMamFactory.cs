@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Mam
 {
   using System;
+  using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
   using System.Linq;
 
@@ -30,8 +31,9 @@
     /// <inheritdoc />
     public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey)
     {
-      var keyIndex = index % tree.Size;
-      var subtree = tree.GetSubtreeByIndex(keyIndex);
+      var address = this.GetMessageAddress(tree.Root.Hash);
+
+      var subtree = tree.GetSubtreeByIndex(index);
       var preparedSubtree = subtree.ToTryteString().Concat(Hash.Empty);
 
       var indexTrytes = index.ToTrytes(Hash.Length);
@@ -43,9 +45,15 @@
         messageTrytes.TrytesLength + indexTrytes.TrytesLength + preparedSubtree.TrytesLength + checksum.TrytesLength);
       messageTrytes = messageTrytes.Concat(TryteString.GetEmpty(bufferLength));
 
-      var signature = this.CreateSignature(messageTrytes, subtree.Key);
+      var signatureFragments = this.CreateSignature(messageTrytes, subtree.Key);
+
+      var signature = new TryteString();
+      foreach (var signatureFragment in signatureFragments)
+      {
+        signature = signature.Concat(signatureFragment);
+      }
+
       var messageOut = signature.Concat(indexTrytes).Concat(preparedSubtree).Concat(messageTrytes).Concat(checksum);
-      var address = this.GetMessageAddress(channelKey);
 
       var bundle = new Bundle();
       bundle.AddTransfer(
@@ -63,24 +71,24 @@
       return new MaskedAuthenticatedMessage
                {
                  Payload = bundle,
-                 NextChannelKey = this.GetChannelKey(channelKey, salt)
+                 Root = tree.Root.Hash,
+                 Address = address,
+                 NextRoot = nextRoot
                };
     }
 
     /// <summary>
     /// The get message address.
     /// </summary>
-    /// <param name="channelKey">
-    /// The channel key.
+    /// <param name="rootHash">
+    /// The root Hash.
     /// </param>
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
-    private Address GetMessageAddress(TryteString channelKey)
+    private Address GetMessageAddress(Hash rootHash)
     {
-      var addressHash = this.Mask.Hash(channelKey);
-      addressHash = this.Mask.Hash(addressHash);
-
+      var addressHash = this.Mask.Hash(rootHash);
       return new Address(addressHash.Value);
     }
 
@@ -115,13 +123,12 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    private Fragment CreateSignature(TryteString message, IPrivateKey privateKey)
+    private List<Fragment> CreateSignature(TryteString message, IPrivateKey privateKey)
     {
       var messageHash = this.GetMessageHash(message);
       var signatureFragmentGenerator = new SignatureFragmentGenerator(privateKey as PrivateKey, messageHash);
 
-      var fragments = signatureFragmentGenerator.Generate();
-      return fragments.First();
+      return signatureFragmentGenerator.Generate();
     }
   }
 }

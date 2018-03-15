@@ -23,6 +23,9 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamParser.cs" Link="Mam\CurlMamParser.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamFactory.cs" Link="Mam\IMamFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamParser.cs" Link="Mam\IMamParser.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannel.cs" Link="Mam\MamChannel.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelFactory.cs" Link="Mam\MamChannelFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamMode.cs" Link="Mam\MamMode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MaskedAuthenticatedMessage.cs" Link="Mam\MaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\UnmaskedAuthenticatedMessage.cs" Link="Mam\UnmaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
