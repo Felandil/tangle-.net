@@ -4,6 +4,8 @@
   using System.Linq;
   using System.Threading.Tasks;
 
+  using Newtonsoft.Json;
+
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Repository;
@@ -203,17 +205,52 @@
     /// <param name="channelKey">
     /// The channel key.
     /// </param>
-    internal void Init(Mode mode, Seed seed, int securityLevel = Cryptography.SecurityLevel.Medium, TryteString channelKey = null)
+    /// <param name="nextRoot">
+    /// The next Root.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="count">
+    /// The count.
+    /// </param>
+    /// <param name="nextCount">
+    /// The next Count.
+    /// </param>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    internal void Init(
+      Mode mode,
+      Seed seed,
+      int securityLevel = Cryptography.SecurityLevel.Medium,
+      TryteString channelKey = null,
+      Hash nextRoot = null,
+      int index = 0,
+      int count = 1,
+      int nextCount = 1,
+      int start = 0)
     {
       this.Mode = mode;
       this.Seed = seed;
       this.SecurityLevel = securityLevel;
       this.Key = channelKey;
-      this.NextRoot = Hash.Empty;
-      this.Index = 0;
-      this.Count = 1;
-      this.NextCount = 1;
-      this.Start = 0;
+      this.NextRoot = nextRoot ?? Hash.Empty;
+      this.Index = index;
+      this.Count = count;
+      this.NextCount = nextCount;
+      this.Start = start;
+    }
+
+    /// <summary>
+    /// The to json.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public string ToJson()
+    {
+      return JsonConvert.SerializeObject(this);
     }
   }
 }

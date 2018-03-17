@@ -4,6 +4,10 @@
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+  using Newtonsoft.Json;
+
+  using RestSharp.Serializers;
+
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Mam;
@@ -56,6 +60,40 @@
       Assert.AreEqual("Hello everyone the third!", unmaskedMessages[2].Message.ToUtf8String());
       Assert.AreEqual("Hello everyone the fourth!", unmaskedMessages[3].Message.ToUtf8String());
       Assert.AreEqual("Hello everyone the fifth!", unmaskedMessages[4].Message.ToUtf8String());
+    }
+
+    /// <summary>
+    /// The test mam channel recreation.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestMamChannelRecreation()
+    {
+      var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask()), treeFactory, new InMemoryIotaRepository());
+      var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+
+      var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
+      await channel.PublishAsync(message);
+
+      var serializedChannel = channel.ToJson();
+      var unserializedChannel = channelFactory.CreateFromJson(serializedChannel);
+
+      Assert.AreEqual(channel.Index, unserializedChannel.Index);
+      Assert.AreEqual(channel.Start, unserializedChannel.Start);
+      Assert.AreEqual(channel.NextCount, unserializedChannel.NextCount);
+      Assert.AreEqual(channel.Count, unserializedChannel.Count);
+      Assert.AreEqual(channel.NextRoot.Value, unserializedChannel.NextRoot.Value);
+      Assert.AreEqual(channel.Seed.Value, unserializedChannel.Seed.Value);
+      Assert.AreEqual(channel.SecurityLevel, unserializedChannel.SecurityLevel);
+      Assert.AreEqual(channel.Key.Value, unserializedChannel.Key.Value);
+      Assert.AreEqual(channel.Mode, unserializedChannel.Mode);
     }
   }
 }
