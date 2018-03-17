@@ -43,5 +43,17 @@
 
       Assert.AreEqual(this.payload.Value, unmaskedCipher.Value);
     }
+
+    /// <summary>
+    /// The test hashing.
+    /// </summary>
+    [TestMethod]
+    public void TestHashing()
+    {
+      var mask = new CurlMask();
+      var hash = mask.Hash(new TryteString("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN"));
+
+      Assert.AreEqual("MMUKJ9EXZHFXVLVQSUFPHAHXPFNMPOZRHAIIMANCQNQRHSPRIN9NTPQKLDRRGJGNRAJTTWKJJBPXYWDGB", hash.Value);
+    }
   }
 }

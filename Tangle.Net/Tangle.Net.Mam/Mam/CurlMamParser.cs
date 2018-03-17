@@ -25,13 +25,14 @@
     }
 
     /// <inheritdoc />
-    public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey)
+    public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel)
     {
       var maskedMessage = payload.Transactions.Select(t => t.Fragment).ToList().Merge();
       var unmaskedMessage = this.Mask.Unmask(maskedMessage, channelKey);
 
-      var signature = unmaskedMessage.GetChunk(0, Fragment.Length);
-      var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(Fragment.Length, unmaskedMessage.TrytesLength - Fragment.Length);
+      var signatureLength = securityLevel * Fragment.Length;
+      var signature = unmaskedMessage.GetChunk(0, signatureLength);
+      var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(signatureLength, unmaskedMessage.TrytesLength - signatureLength);
 
       var index = Converter.TritsToInt(unmaskedMessageWithoutSignature.GetChunk(0, 27).ToTrits());
       var messageHashes = unmaskedMessageWithoutSignature.GetChunk(27, unmaskedMessageWithoutSignature.TrytesLength - 27).GetChunks(Hash.Length);
@@ -55,7 +56,7 @@
 
       var chainedMessageTrytes = messageTrytes.Merge();
 
-      var root = MerkleTree.ComputeRoot(channelKey, treeHashes, index, new Curl());
+      var root = MerkleTree.ComputeRoot(payload.Transactions[0].Address, treeHashes, index, new Curl());
 
       return new UnmaskedAuthenticatedMessage
                {

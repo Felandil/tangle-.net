@@ -158,10 +158,13 @@
     /// <param name="channelKey">
     /// The channel key.
     /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public async Task<List<UnmaskedAuthenticatedMessage>> FetchAsync(Hash messageRoot, Mode mode, TryteString channelKey)
+    public async Task<List<UnmaskedAuthenticatedMessage>> FetchAsync(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel)
     {
       var result = new List<UnmaskedAuthenticatedMessage>();
 
@@ -177,7 +180,7 @@
 
         var bundle = (await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false))[0];
 
-        var unmaskedMessage = this.Parser.Unmask(bundle, channelKey);
+        var unmaskedMessage = this.Parser.Unmask(bundle, channelKey, securityLevel);
         messageRoot = unmaskedMessage.NextRoot;
         result.Add(unmaskedMessage);
       }

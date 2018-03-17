@@ -1,9 +1,27 @@
-﻿using Tangle.Net.Entity;
-
-namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Mam
 {
+  using Tangle.Net.Entity;
+
+  /// <summary>
+  /// The MamParser interface.
+  /// </summary>
   public interface IMamParser
   {
-    UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey);
+    /// <summary>
+    /// The unmask.
+    /// </summary>
+    /// <param name="payload">
+    /// The payload.
+    /// </param>
+    /// <param name="channelKey">
+    /// The channel key.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
+    /// <returns>
+    /// The <see cref="UnmaskedAuthenticatedMessage"/>.
+    /// </returns>
+    UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel);
   }
 }

@@ -21,15 +21,53 @@
     /// <summary>
     /// Gets the size.
     /// </summary>
-    public int Size
-    {
-      get
-      {
-        return this.Root.Size;
-      }
-    }
+    public int Size => this.Root.Size;
 
     #endregion
+
+    /// <summary>
+    /// The compute root.
+    /// </summary>
+    /// <param name="address">
+    /// The address.
+    /// </param>
+    /// <param name="nodeHashes">
+    /// The node hashes.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="curl">
+    /// The curl.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Hash"/>.
+    /// </returns>
+    public static Hash ComputeRoot(Address address, IEnumerable<Hash> nodeHashes, int index, AbstractCurl curl)
+    {
+      var rootHash = address.ToTrits();
+      var i = 1;
+
+      foreach (var nodeHash in nodeHashes)
+      {
+        curl.Reset();
+        if ((i & index) == 0)
+        {
+          curl.Absorb(rootHash);
+          curl.Absorb(nodeHash.ToTrits());        
+        }
+        else
+        {
+          curl.Absorb(nodeHash.ToTrits());
+          curl.Absorb(rootHash);
+        }
+
+        i <<= 1;
+        curl.Squeeze(rootHash);
+      }
+
+      return new Hash(Converter.TritsToTrytes(rootHash));
+    }
 
     #region Public Methods and Operators
 
@@ -81,49 +119,6 @@
                  Key = key,
                  Leaves = leaves
                };
-    }
-
-    /// <summary>
-    /// The compute root.
-    /// </summary>
-    /// <param name="signingkey">
-    /// The signingkey.
-    /// </param>
-    /// <param name="nodeHashes">
-    /// The node hashes.
-    /// </param>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="curl">
-    /// The curl.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Hash"/>.
-    /// </returns>
-    public static Hash ComputeRoot(TryteString signingkey, List<Hash> nodeHashes, int index, AbstractCurl curl)
-    {
-      var hash = signingkey.ToTrits();
-
-      for (var i = 0; i < nodeHashes.Count; i++)
-      {
-        curl.Reset();
-        if ((index & i) == 0)
-        {
-          curl.Absorb(nodeHashes[i].ToTrits());
-          curl.Absorb(hash);
-        }
-        else
-        {
-          curl.Absorb(hash);
-          curl.Absorb(nodeHashes[i].ToTrits());
-        }
-
-        index >>= 1;
-        curl.Squeeze(hash);
-      }
-
-      return new Hash(Converter.TritsToTrytes(hash));
     }
 
     #endregion
