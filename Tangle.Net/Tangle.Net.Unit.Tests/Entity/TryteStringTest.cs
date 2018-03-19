@@ -38,10 +38,19 @@
       var tryteString = bytes.ToTrytes();
       var bytesBack = tryteString.ToBytes();
 
-      for (int i = 0; i < bytes.Length; i++)
+      for (var i = 0; i < bytes.Length; i++)
       {
         Assert.AreEqual(bytes[i], bytesBack[i]);
       }
+
+      tryteString = TryteString.FromBytes(bytes);
+      bytesBack = tryteString.ToBytes();
+
+      for (var i = 0; i < bytes.Length; i++)
+      {
+        Assert.AreEqual(bytes[i], bytesBack[i]);
+      }
+
     }
 
     /// <summary>

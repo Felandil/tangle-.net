@@ -92,6 +92,20 @@
     }
 
     /// <summary>
+    /// The from bytes.
+    /// </summary>
+    /// <param name="bytes">
+    /// The bytes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public static TryteString FromBytes(IEnumerable<byte> bytes)
+    {
+      return new TryteString(BytesToTrytes(bytes));
+    }
+
+    /// <summary>
     /// The get empty.
     /// </summary>
     /// <param name="length">
@@ -262,7 +276,7 @@
       return (from asciiValue in byteValues
               let firstValue = asciiValue % 27
               let secondValue = (asciiValue - firstValue) / 27
-              select string.Format("{0}{1}", TryteAlphabet[firstValue], TryteAlphabet[secondValue])).Aggregate(
+              select $"{TryteAlphabet[firstValue]}{TryteAlphabet[secondValue]}").Aggregate(
         string.Empty,
         (current, trytesValue) => current + trytesValue);
     }
