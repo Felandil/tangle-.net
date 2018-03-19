@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Examples.Examples
+﻿namespace Tangle.Net.Examples.Examples.Api
 {
   using System.Collections.Generic;
   using System.Threading.Tasks;

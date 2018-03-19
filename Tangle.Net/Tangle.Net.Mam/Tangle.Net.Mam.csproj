@@ -65,9 +65,11 @@
     <Compile Include="Mam\IMamParser.cs" />
     <Compile Include="Mam\MamChannel.cs" />
     <Compile Include="Mam\MamChannelFactory.cs" />
-    <Compile Include="Mam\Mode.cs" />
-    <Compile Include="Mam\MaskedAuthenticatedMessage.cs" />
-    <Compile Include="Mam\UnmaskedAuthenticatedMessage.cs" />
+    <Compile Include="Mam\MamChannelSubscription.cs" />
+    <Compile Include="Mam\MamChannelSubscriptionFactory.cs" />
+    <Compile Include="Entity\Mode.cs" />
+    <Compile Include="Entity\MaskedAuthenticatedMessage.cs" />
+    <Compile Include="Entity\UnmaskedAuthenticatedMessage.cs" />
     <Compile Include="Merkle\CurlMerkleLeafFactory.cs" />
     <Compile Include="Merkle\CurlMerkleNodeFactory.cs" />
     <Compile Include="Merkle\CurlMerkleTreeFactory.cs" />

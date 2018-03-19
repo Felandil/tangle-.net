@@ -4,6 +4,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Repository;
 
@@ -18,19 +19,15 @@
     /// <param name="mamFactory">
     /// The mam factory.
     /// </param>
-    /// <param name="parser">
-    /// The parser.
-    /// </param>
     /// <param name="treeFactory">
     /// The tree Factory.
     /// </param>
     /// <param name="repository">
     /// The repository.
     /// </param>
-    public MamChannelFactory(IMamFactory mamFactory, IMamParser parser, IMerkleTreeFactory treeFactory, IIotaRepository repository)
+    public MamChannelFactory(IMamFactory mamFactory, IMerkleTreeFactory treeFactory, IIotaRepository repository)
     {
       this.MamFactory = mamFactory;
-      this.Parser = parser;
       this.TreeFactory = treeFactory;
       this.Repository = repository;
     }
@@ -39,11 +36,6 @@
     /// Gets the mam factory.
     /// </summary>
     private IMamFactory MamFactory { get; }
-
-    /// <summary>
-    /// Gets the parser.
-    /// </summary>
-    private IMamParser Parser { get; }
 
     /// <summary>
     /// Gets the tree factory.
@@ -99,7 +91,7 @@
       int nextCount = 1,
       int start = 0)
     {
-      var channel = new MamChannel(this.MamFactory, this.Parser, this.TreeFactory, this.Repository);
+      var channel = new MamChannel(this.MamFactory, this.TreeFactory, this.Repository);
       channel.Init(mode, seed, securityLevel, channelKey, nextRoot, index, count, nextCount, start);
 
       return channel;
@@ -118,7 +110,7 @@
     {
       var unserializedChannelData = JsonConvert.DeserializeObject<dynamic>(serializedChannel);
 
-      var channel = new MamChannel(this.MamFactory, this.Parser, this.TreeFactory, this.Repository);
+      var channel = new MamChannel(this.MamFactory, this.TreeFactory, this.Repository);
 
       channel.Init(
         (Mode)unserializedChannelData.Mode,

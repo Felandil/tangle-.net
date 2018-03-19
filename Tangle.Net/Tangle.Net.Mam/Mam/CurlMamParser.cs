@@ -5,6 +5,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Repository;
   using Tangle.Net.Utils;

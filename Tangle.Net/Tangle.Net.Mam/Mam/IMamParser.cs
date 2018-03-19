@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Mam
 {
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
 
   /// <summary>
   /// The MamParser interface.

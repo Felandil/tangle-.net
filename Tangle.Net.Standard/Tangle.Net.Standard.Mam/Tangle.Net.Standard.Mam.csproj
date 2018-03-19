@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\CurlMask.cs" Link="CurlMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MaskedAuthenticatedMessage.cs" Link="Entity\MaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\Mode.cs" Link="Entity\Mode.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\UnmaskedAuthenticatedMessage.cs" Link="Entity\UnmaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\IMask.cs" Link="IMask.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\AbstractMam.cs" Link="Mam\AbstractMam.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamFactory.cs" Link="Mam\CurlMamFactory.cs" />
@@ -25,9 +28,8 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamParser.cs" Link="Mam\IMamParser.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannel.cs" Link="Mam\MamChannel.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelFactory.cs" Link="Mam\MamChannelFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MaskedAuthenticatedMessage.cs" Link="Mam\MaskedAuthenticatedMessage.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\Mode.cs" Link="Mam\Mode.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\UnmaskedAuthenticatedMessage.cs" Link="Mam\UnmaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelSubscription.cs" Link="Mam\MamChannelSubscription.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelSubscriptionFactory.cs" Link="Mam\MamChannelSubscriptionFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleNodeFactory.cs" Link="Merkle\CurlMerkleNodeFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleTreeFactory.cs" Link="Merkle\CurlMerkleTreeFactory.cs" />
@@ -45,7 +47,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="Tangle.Net.Standard" Version="1.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.CSharp\v4.0_4.0.0.0__b03f5f7f11d50a3a\Microsoft.CSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

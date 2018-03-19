@@ -43,24 +43,5 @@
 
       return new Hash(Converter.TritsToTrytes(hash));
     }
-
-    /// <summary>
-    /// The get channel key.
-    /// </summary>
-    /// <param name="lastChannelKey">
-    /// The lastChannelKey.
-    /// </param>
-    /// <param name="salt">
-    /// The salt.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Hash"/>.
-    /// </returns>
-    protected Hash GetChannelKey(TryteString lastChannelKey, TryteString salt)
-    {
-      var lastChannelKeyTrits = lastChannelKey.ToTrits();
-      Converter.Increment(lastChannelKeyTrits, AbstractCurl.HashLength);
-      return this.Mask.Hash(new TryteString(Converter.TritsToTrytes(lastChannelKeyTrits)), salt);
-    }
   }
 }

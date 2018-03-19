@@ -50,20 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Examples\BroadcastAndStoreTransactionsExample.cs" />
-    <Compile Include="Examples\Example.cs" />
-    <Compile Include="Examples\FindUsedAddressesWithTransactionsExample.cs" />
-    <Compile Include="Examples\GetAccountDataExample.cs" />
-    <Compile Include="Examples\GetBundleExample.cs" />
-    <Compile Include="Examples\GetBundlesExample.cs" />
-    <Compile Include="Examples\GetInputsExample.cs" />
-    <Compile Include="Examples\GetLatestInclusionExample.cs" />
-    <Compile Include="Examples\GetNewAddressesExample.cs" />
-    <Compile Include="Examples\GetTransfersExample.cs" />
-    <Compile Include="Examples\PrepareTransferExample.cs" />
-    <Compile Include="Examples\ReplayBundleExample.cs" />
-    <Compile Include="Examples\SendTransferExample.cs" />
-    <Compile Include="Examples\SendTrytesExample.cs" />
+    <Compile Include="Examples\Api\BroadcastAndStoreTransactionsExample.cs" />
+    <Compile Include="Examples\Api\Example.cs" />
+    <Compile Include="Examples\Api\FindUsedAddressesWithTransactionsExample.cs" />
+    <Compile Include="Examples\Api\GetAccountDataExample.cs" />
+    <Compile Include="Examples\Api\GetBundleExample.cs" />
+    <Compile Include="Examples\Api\GetBundlesExample.cs" />
+    <Compile Include="Examples\Api\GetInputsExample.cs" />
+    <Compile Include="Examples\Api\GetLatestInclusionExample.cs" />
+    <Compile Include="Examples\Api\GetNewAddressesExample.cs" />
+    <Compile Include="Examples\Api\GetTransfersExample.cs" />
+    <Compile Include="Examples\Api\PrepareTransferExample.cs" />
+    <Compile Include="Examples\Api\ReplayBundleExample.cs" />
+    <Compile Include="Examples\Api\SendTransferExample.cs" />
+    <Compile Include="Examples\Api\SendTrytesExample.cs" />
+    <Compile Include="Examples\Mam\MamExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,6 +74,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Tangle.Net.Mam\Tangle.Net.Mam.csproj">
+      <Project>{183e56d2-d79b-45f7-8b92-cbef8d2e9469}</Project>
+      <Name>Tangle.Net.Mam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">
       <Project>{6678B808-1464-490E-BECD-842305000560}</Project>
       <Name>Tangle.Net</Name>

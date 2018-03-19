@@ -25,50 +25,6 @@
 
     #endregion
 
-    /// <summary>
-    /// The compute root.
-    /// </summary>
-    /// <param name="address">
-    /// The address.
-    /// </param>
-    /// <param name="nodeHashes">
-    /// The node hashes.
-    /// </param>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="curl">
-    /// The curl.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Hash"/>.
-    /// </returns>
-    public static Hash ComputeRoot(Address address, IEnumerable<Hash> nodeHashes, int index, AbstractCurl curl)
-    {
-      var rootHash = address.ToTrits();
-      var i = 1;
-
-      foreach (var nodeHash in nodeHashes)
-      {
-        curl.Reset();
-        if ((i & index) == 0)
-        {
-          curl.Absorb(rootHash);
-          curl.Absorb(nodeHash.ToTrits());        
-        }
-        else
-        {
-          curl.Absorb(nodeHash.ToTrits());
-          curl.Absorb(rootHash);
-        }
-
-        i <<= 1;
-        curl.Squeeze(rootHash);
-      }
-
-      return new Hash(Converter.TritsToTrytes(rootHash));
-    }
-
     #region Public Methods and Operators
 
     /// <summary>

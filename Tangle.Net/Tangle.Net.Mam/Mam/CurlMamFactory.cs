@@ -3,10 +3,10 @@
   using System;
   using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
-  using System.Linq;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Utils;
 

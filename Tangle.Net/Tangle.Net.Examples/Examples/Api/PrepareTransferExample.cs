@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Examples.Examples
+﻿namespace Tangle.Net.Examples.Examples.Api
 {
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;

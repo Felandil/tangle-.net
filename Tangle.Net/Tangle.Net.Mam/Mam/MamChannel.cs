@@ -1,13 +1,11 @@
 ﻿namespace Tangle.Net.Mam.Mam
 {
-  using System;
-  using System.Collections.Generic;
-  using System.Linq;
   using System.Threading.Tasks;
 
   using Newtonsoft.Json;
 
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Repository;
 
@@ -22,19 +20,15 @@
     /// <param name="mamFactory">
     /// The mam Factory.
     /// </param>
-    /// <param name="parser">
-    /// The parser.
-    /// </param>
     /// <param name="treeFactory">
     /// The tree Factory.
     /// </param>
     /// <param name="repository">
     /// The repository.
     /// </param>
-    internal MamChannel(IMamFactory mamFactory, IMamParser parser, IMerkleTreeFactory treeFactory, IIotaRepository repository)
+    internal MamChannel(IMamFactory mamFactory, IMerkleTreeFactory treeFactory, IIotaRepository repository)
     {
       this.MamFactory = mamFactory;
-      this.Parser = parser;
       this.TreeFactory = treeFactory;
       this.Repository = repository;
     }
@@ -88,11 +82,6 @@
     /// Gets the mam factory.
     /// </summary>
     private IMamFactory MamFactory { get; }
-
-    /// <summary>
-    /// Gets the parser.
-    /// </summary>
-    private IMamParser Parser { get; }
 
     /// <summary>
     /// Gets the tree factory.
@@ -150,58 +139,14 @@
     }
 
     /// <summary>
-    /// The fetch.
+    /// The to json.
     /// </summary>
-    /// <param name="messageRoot">
-    /// The message root.
-    /// </param>
-    /// <param name="mode">
-    /// The mode.
-    /// </param>
-    /// <param name="channelKey">
-    /// The channel key.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security Level.
-    /// </param>
     /// <returns>
-    /// The <see cref="List"/>.
+    /// The <see cref="string"/>.
     /// </returns>
-    public async Task<List<UnmaskedAuthenticatedMessage>> FetchAsync(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel)
+    public string ToJson()
     {
-      var result = new List<UnmaskedAuthenticatedMessage>();
-
-      while (true)
-      {
-        var address = new Address(mode != Mode.Private ? new CurlMask().Hash(messageRoot).Value : messageRoot.Value);
-        var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
-
-        if (!transactionHashList.Hashes.Any())
-        {
-          break;
-        }
-
-        var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
-
-        foreach (var bundle in bundles)
-        {
-          try
-          {
-            var unmaskedMessage = this.Parser.Unmask(bundle, channelKey, securityLevel);
-            messageRoot = unmaskedMessage.NextRoot;
-            result.Add(unmaskedMessage);
-          }
-          catch (Exception exception)
-          {
-            if (exception is InvalidBundleException)
-            {
-              // TODO: Add invalid bundle handler
-            }
-          }
-        }
-      }
-
-      return result;
+      return JsonConvert.SerializeObject(this);
     }
 
     /// <summary>
@@ -254,17 +199,6 @@
       this.Count = count;
       this.NextCount = nextCount;
       this.Start = start;
-    }
-
-    /// <summary>
-    /// The to json.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="string"/>.
-    /// </returns>
-    public string ToJson()
-    {
-      return JsonConvert.SerializeObject(this);
     }
   }
 }
