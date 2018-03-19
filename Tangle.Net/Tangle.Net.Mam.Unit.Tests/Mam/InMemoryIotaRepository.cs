@@ -271,7 +271,8 @@
         var bundlesToAdd = this.SentBundles.Where(b => b.Transactions.Any(t => t.Hash.Value == transactionHash.Value));
         requestedBundles.AddRange(bundlesToAdd);
       }
-      return requestedBundles;
+
+      return requestedBundles.GroupBy(b => b.Hash).Select(b => b.First()).ToList();
     }
 
     /// <inheritdoc />

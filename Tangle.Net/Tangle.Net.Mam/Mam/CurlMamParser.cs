@@ -6,6 +6,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Repository;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -22,10 +23,14 @@
     /// <param name="treeFactory">
     /// The tree Factory.
     /// </param>
-    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory)
+    /// <param name="curl">
+    /// The curl.
+    /// </param>
+    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory, AbstractCurl curl)
     {
       this.TreeFactory = treeFactory;
       this.Mask = mask;
+      this.Curl = curl;
     }
 
     /// <summary>
@@ -40,10 +45,13 @@
       var unmaskedMessage = this.Mask.Unmask(maskedMessage, channelKey);
 
       var signatureLength = securityLevel * Fragment.Length;
-      var signature = unmaskedMessage.GetChunk(0, signatureLength);
       var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(signatureLength, unmaskedMessage.TrytesLength - signatureLength);
 
+      var signature = unmaskedMessage.GetChunk(0, signatureLength);
+
       var index = Converter.TritsToInt(unmaskedMessageWithoutSignature.GetChunk(0, 27).ToTrits());
+      var signatureFragments = signature.GetChunks(Fragment.Length).Select(c => new Fragment(c.Value)).ToList();
+
       var messageHashes = unmaskedMessageWithoutSignature.GetChunk(27, unmaskedMessageWithoutSignature.TrytesLength - 27).GetChunks(Hash.Length);
       var nextRoot = Hash.Empty;
       var treeHashes = new List<Hash>();
@@ -64,6 +72,14 @@
       }
 
       var chainedMessageTrytes = messageTrytes.Merge();
+      chainedMessageTrytes = chainedMessageTrytes.GetChunk(0, chainedMessageTrytes.TrytesLength - Checksum.Length);
+
+      var messageHash = this.GetMessageHash(nextRoot.Concat(chainedMessageTrytes));
+      if (!Fragment.ValidateFragments(signatureFragments, messageHash, treeHashes[0]))
+      {
+        throw new InvalidBundleException("Mam Bundle signature failed verification", new List<string>());
+      }
+
 
       var recalculatedTree = this.TreeFactory.FromBranch(treeHashes.Select(t => new MerkleNode { Hash = t }).ToList());
 

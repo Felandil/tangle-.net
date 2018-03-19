@@ -26,7 +26,7 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory),  treeFactory, new InMemoryIotaRepository());
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()),  treeFactory, new InMemoryIotaRepository());
       var channel = channelFactory.Create(Mode.Public, seed);
 
       Assert.AreEqual(seed.Value, channel.Seed.Value);
@@ -44,7 +44,7 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory), treeFactory, new InMemoryIotaRepository());
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
       var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
@@ -81,7 +81,7 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory), treeFactory, new InMemoryIotaRepository());
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
       var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 

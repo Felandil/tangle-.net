@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Mam
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
   using System.Threading.Tasks;
@@ -180,11 +181,24 @@
           break;
         }
 
-        var bundle = (await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false))[0];
+        var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
 
-        var unmaskedMessage = this.Parser.Unmask(bundle, channelKey, securityLevel);
-        messageRoot = unmaskedMessage.NextRoot;
-        result.Add(unmaskedMessage);
+        foreach (var bundle in bundles)
+        {
+          try
+          {
+            var unmaskedMessage = this.Parser.Unmask(bundle, channelKey, securityLevel);
+            messageRoot = unmaskedMessage.NextRoot;
+            result.Add(unmaskedMessage);
+          }
+          catch (Exception exception)
+          {
+            if (exception is InvalidBundleException)
+            {
+              // TODO: Add invalid bundle handler
+            }
+          }
+        }
       }
 
       return result;

@@ -12,6 +12,7 @@
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Mam;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The curl mam factory test.
@@ -32,7 +33,7 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory), treeFactory, new InMemoryIotaRepository());
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
       var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
@@ -67,7 +68,7 @@
       var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
-      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory), treeFactory, new InMemoryIotaRepository());
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()), treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
       var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
@@ -86,6 +87,47 @@
       Assert.AreEqual(channel.SecurityLevel, unserializedChannel.SecurityLevel);
       Assert.AreEqual(channel.Key.Value, unserializedChannel.Key.Value);
       Assert.AreEqual(channel.Mode, unserializedChannel.Mode);
+    }
+
+    /// <summary>
+    /// The test invalid message on mam stream should be ignored.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestInvalidMessageOnMamStreamShouldBeIgnored()
+    {
+      var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+
+      var iotaRepository = new InMemoryIotaRepository();
+      var channelFactory = new MamChannelFactory(mamFactory, new CurlMamParser(new CurlMask(), treeFactory, new Curl()), treeFactory, iotaRepository);
+      var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+
+      var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
+      await channel.PublishAsync(message);
+
+      var bundle = new Bundle();
+      bundle.AddTransfer(new Transfer
+                           {
+                             Address = message.Address,
+                             Message = TryteString.FromUtf8String("I do not belong here and should be ignored!"),
+                             Tag = Tag.Empty,
+                             Timestamp = Timestamp.UnixSecondsTimestamp
+                           });
+
+      bundle.Finalize();
+      bundle.Sign();
+
+      await iotaRepository.SendTrytesAsync(bundle.Transactions, 27, 14);
+
+      var unmaskedMessages = await channel.FetchAsync(message.Root, Mode.Restricted, channelKey, SecurityLevel.Medium);
+
+      Assert.AreEqual(1, unmaskedMessages.Count);
+      Assert.AreEqual("Hello everyone!", unmaskedMessages[0].Message.ToUtf8String());
     }
   }
 }

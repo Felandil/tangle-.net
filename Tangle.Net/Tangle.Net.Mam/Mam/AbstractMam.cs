@@ -21,9 +21,6 @@
     /// <summary>
     /// The get message address.
     /// </summary>
-    /// <param name="channelKey">
-    /// The channel key.
-    /// </param>
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
