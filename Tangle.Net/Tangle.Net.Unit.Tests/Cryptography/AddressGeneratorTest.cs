@@ -37,15 +37,11 @@
     {
       var generator = new AddressGenerator(this.seedTwo);
 
-      var st = new Stopwatch();
-      st.Start();
       var addresses = generator.GetAddresses(0, 3);
       Assert.AreEqual("FNKCVJPUANHNWNBAHFBTCONMCUBC9KCZ9EKREBCJAFMABCTEPLGGXDJXVGPXDCFOUCRBWFJFLEAVOEUPY", addresses[0].Value);
       Assert.IsNotNull(addresses[0].PrivateKey);
       Assert.AreEqual("MSYILYYZLSJ99TDMGQHDOBWGHTBARCBGJZE9PIMQLTEXJXKTDREGVTPA9NDGGLQHTMGISGRAKSLYPGWMB", addresses[1].Value);
       Assert.AreEqual("IIREHGHXUHARKVZDMHGUUCHZLUEQQULLEUSJHIIBWFYZIZDUFTOVHAWCKRJXUZ9CSUVLTRYSUGBVRMTOW", addresses[2].Value);
-
-      var a = st.ElapsedMilliseconds / 1000;
 
       addresses = generator.GetAddresses(10, 3);
       Assert.AreEqual("BPXMVV9UPKBTVPJXPBHHOJYAFLALOYCGTSEDLZBHNFMGEHREBQTRIPZAPREANPMZJNZZNCDIUFOYYGGFY", addresses[0].Value);

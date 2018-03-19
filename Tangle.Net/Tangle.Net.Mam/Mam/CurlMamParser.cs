@@ -19,10 +19,19 @@
     /// <param name="mask">
     /// The mask.
     /// </param>
-    public CurlMamParser(IMask mask)
+    /// <param name="treeFactory">
+    /// The tree Factory.
+    /// </param>
+    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory)
     {
+      this.TreeFactory = treeFactory;
       this.Mask = mask;
     }
+
+    /// <summary>
+    /// Gets the tree factory.
+    /// </summary>
+    private IMerkleTreeFactory TreeFactory { get; }
 
     /// <inheritdoc />
     public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel)
@@ -56,13 +65,13 @@
 
       var chainedMessageTrytes = messageTrytes.Merge();
 
-      var root = MerkleTree.ComputeRoot(payload.Transactions[0].Address, treeHashes, index, new Curl());
+      var recalculatedTree = this.TreeFactory.FromBranch(treeHashes.Select(t => new MerkleNode { Hash = t }).ToList());
 
       return new UnmaskedAuthenticatedMessage
                {
                  NextRoot = nextRoot,
                  Message = chainedMessageTrytes,
-                 Root = root
+                 Root = recalculatedTree.Root.Hash
                };
     }
   }

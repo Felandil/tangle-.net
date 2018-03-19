@@ -44,28 +44,17 @@
 
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The create.
-    /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="startIndex">
-    /// The startIndex.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <returns>
-    /// The <see cref="MerkleTree"/>.
-    /// </returns>
+    /// <inheritdoc />
     public MerkleTree Create(Seed seed, int startIndex, int count, int securityLevel)
     {
       var leaves = this.LeafFactory.Create(startIndex, count);
       return new MerkleTree { Root = this.BuildTree(leaves) };
+    }
+
+    /// <inheritdoc />
+    public MerkleTree FromBranch(List<MerkleNode> branchLeaves)
+    {
+      return new MerkleTree { Root = this.NodeFactory.Create(branchLeaves[0], branchLeaves[0]) };
     }
 
     #endregion

@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
+  using System.Collections.Generic;
+
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -28,6 +30,17 @@
     /// The <see cref="MerkleTree"/>.
     /// </returns>
     MerkleTree Create(Seed seed, int startIndex, int count, int securityLevel);
+
+    /// <summary>
+    /// The from branch.
+    /// </summary>
+    /// <param name="branchLeaves">
+    /// The branch leaves.
+    /// </param>
+    /// <returns>
+    /// The <see cref="MerkleTree"/>.
+    /// </returns>
+    MerkleTree FromBranch(List<MerkleNode> branchLeaves);
 
     #endregion
   }
