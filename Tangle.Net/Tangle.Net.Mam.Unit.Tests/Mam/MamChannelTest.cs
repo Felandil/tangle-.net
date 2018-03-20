@@ -7,8 +7,8 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
-  using Tangle.Net.Mam.Mam;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.Utils;
 
   /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Services
 {
   using System;
   using System.Collections.Generic;
@@ -45,14 +45,7 @@
         messageTrytes.TrytesLength + indexTrytes.TrytesLength + preparedSubtree.TrytesLength + checksum.TrytesLength);
       messageTrytes = messageTrytes.Concat(TryteString.GetEmpty(bufferLength));
 
-      var signatureFragments = this.CreateSignature(messageTrytes, subtree.Key);
-
-      var signature = new TryteString();
-      foreach (var signatureFragment in signatureFragments)
-      {
-        signature = signature.Concat(signatureFragment);
-      }
-
+      var signature = this.CreateSignature(messageTrytes, subtree.Key).Merge();
       var messageOut = signature.Concat(indexTrytes).Concat(preparedSubtree).Concat(messageTrytes).Concat(checksum);
 
       var bundle = new Bundle();

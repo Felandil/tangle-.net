@@ -6,6 +6,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.Utils;
 
   /// <summary>

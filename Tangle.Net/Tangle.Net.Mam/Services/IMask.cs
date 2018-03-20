@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam
+﻿namespace Tangle.Net.Mam.Services
 {
   using Tangle.Net.Entity;
 

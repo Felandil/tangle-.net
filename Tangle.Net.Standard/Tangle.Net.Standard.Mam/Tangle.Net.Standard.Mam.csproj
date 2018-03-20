@@ -16,20 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\CurlMask.cs" Link="CurlMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MamChannel.cs" Link="Entity\MamChannel.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MamChannelSubscription.cs" Link="Entity\MamChannelSubscription.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MaskedAuthenticatedMessage.cs" Link="Entity\MaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\Mode.cs" Link="Entity\Mode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\UnmaskedAuthenticatedMessage.cs" Link="Entity\UnmaskedAuthenticatedMessage.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\IMask.cs" Link="IMask.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\AbstractMam.cs" Link="Mam\AbstractMam.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamFactory.cs" Link="Mam\CurlMamFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\CurlMamParser.cs" Link="Mam\CurlMamParser.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamFactory.cs" Link="Mam\IMamFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\IMamParser.cs" Link="Mam\IMamParser.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannel.cs" Link="Mam\MamChannel.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelFactory.cs" Link="Mam\MamChannelFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelSubscription.cs" Link="Mam\MamChannelSubscription.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Mam\MamChannelSubscriptionFactory.cs" Link="Mam\MamChannelSubscriptionFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleNodeFactory.cs" Link="Merkle\CurlMerkleNodeFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleTreeFactory.cs" Link="Merkle\CurlMerkleTreeFactory.cs" />
@@ -39,11 +30,20 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleNode.cs" Link="Merkle\MerkleNode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleSubTree.cs" Link="Merkle\MerkleSubTree.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleTree.cs" Link="Merkle\MerkleTree.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\AbstractMam.cs" Link="Services\AbstractMam.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMamFactory.cs" Link="Services\CurlMamFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMamParser.cs" Link="Services\CurlMamParser.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMask.cs" Link="Services\CurlMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\IMamFactory.cs" Link="Services\IMamFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\IMamParser.cs" Link="Services\IMamParser.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\IMask.cs" Link="Services\IMask.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\MamChannelFactory.cs" Link="Services\MamChannelFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\MamChannelSubscriptionFactory.cs" Link="Services\MamChannelSubscriptionFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Merkle\" />
-    <Folder Include="Mam\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

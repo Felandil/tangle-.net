@@ -1,12 +1,12 @@
-﻿namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Entity
 {
   using System.Threading.Tasks;
 
   using Newtonsoft.Json;
 
   using Tangle.Net.Entity;
-  using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.Repository;
 
   /// <summary>

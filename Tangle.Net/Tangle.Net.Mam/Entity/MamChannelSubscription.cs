@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Entity
 {
   using System;
   using System.Collections.Generic;
@@ -6,7 +6,7 @@
   using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
-  using Tangle.Net.Mam.Entity;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.Repository;
 
   /// <summary>
@@ -40,6 +40,11 @@
     private Hash MessageRoot { get; set; }
 
     /// <summary>
+    /// Gets or sets the next root.
+    /// </summary>
+    private Hash NextRoot { get; set; }
+
+    /// <summary>
     /// Gets or sets the mode.
     /// </summary>
     private Mode Mode { get; set; }
@@ -67,39 +72,19 @@
     /// </returns>
     public async Task<List<UnmaskedAuthenticatedMessage>> FetchAsync()
     {
-      var result = new List<UnmaskedAuthenticatedMessage>();
+      this.NextRoot = this.MessageRoot;
+      return await this.InternalFetch();
+    }
 
-      while (true)
-      {
-        var address = new Address(this.Mode != Mode.Private ? new CurlMask().Hash(this.MessageRoot).Value : this.MessageRoot.Value);
-        var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
-
-        if (!transactionHashList.Hashes.Any())
-        {
-          break;
-        }
-
-        var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
-
-        foreach (var bundle in bundles)
-        {
-          try
-          {
-            var unmaskedMessage = this.Parser.Unmask(bundle, this.ChannelKey, this.SecurityLevel);
-            this.MessageRoot = unmaskedMessage.NextRoot;
-            result.Add(unmaskedMessage);
-          }
-          catch (Exception exception)
-          {
-            if (exception is InvalidBundleException)
-            {
-              // TODO: Add invalid bundle handler
-            }
-          }
-        }
-      }
-
-      return result;
+    /// <summary>
+    /// The fetch next.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    public async Task<List<UnmaskedAuthenticatedMessage>> FetchNext()
+    {
+      return await this.InternalFetch();
     }
 
     /// <summary>
@@ -117,12 +102,64 @@
     /// <param name="securityLevel">
     /// The security level.
     /// </param>
-    internal void Init(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel)
+    /// <param name="nextRoot">
+    /// The next Root.
+    /// </param>
+    internal void Init(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel, Hash nextRoot = null)
     {
       this.MessageRoot = messageRoot;
       this.Mode = mode;
       this.ChannelKey = channelKey;
       this.SecurityLevel = securityLevel;
+      this.NextRoot = nextRoot;
+    }
+
+    /// <summary>
+    /// The internal fetch.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    private async Task<List<UnmaskedAuthenticatedMessage>> InternalFetch()
+    {
+      var result = new List<UnmaskedAuthenticatedMessage>();
+
+      while (true)
+      {
+        var address = new Address(
+          this.Mode != Mode.Private ? new CurlMask().Hash(this.NextRoot).Value : this.NextRoot.Value);
+        var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
+
+        if (!transactionHashList.Hashes.Any())
+        {
+          break;
+        }
+
+        var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
+        for (var i = 0; i < bundles.Count; i++)
+        {
+          try
+          {
+            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.ChannelKey, this.SecurityLevel);
+            this.NextRoot = unmaskedMessage.NextRoot;
+            result.Add(unmaskedMessage);
+          }
+          catch (Exception exception)
+          {
+            if (exception is InvalidBundleException)
+            {
+              // TODO: Add invalid bundle handler
+            }
+
+            if (i + 1 == bundles.Count)
+            {
+              return result;
+            }
+          }
+        }
+      }
+
+      return result;
     }
   }
 }

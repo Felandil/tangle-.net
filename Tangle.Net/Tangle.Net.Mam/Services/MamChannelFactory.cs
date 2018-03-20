@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Services
 {
   using Newtonsoft.Json;
 

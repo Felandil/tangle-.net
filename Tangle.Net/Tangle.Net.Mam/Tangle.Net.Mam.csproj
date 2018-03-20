@@ -52,21 +52,21 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Tangle.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Tangle.Net.1.0.6\lib\net461\Tangle.Net.dll</HintPath>
+      <HintPath>..\packages\Tangle.Net.1.0.6.1\lib\net461\Tangle.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CurlMask.cs" />
-    <Compile Include="IMask.cs" />
-    <Compile Include="Mam\AbstractMam.cs" />
-    <Compile Include="Mam\CurlMamFactory.cs" />
-    <Compile Include="Mam\CurlMamParser.cs" />
-    <Compile Include="Mam\IMamFactory.cs" />
-    <Compile Include="Mam\IMamParser.cs" />
-    <Compile Include="Mam\MamChannel.cs" />
-    <Compile Include="Mam\MamChannelFactory.cs" />
-    <Compile Include="Mam\MamChannelSubscription.cs" />
-    <Compile Include="Mam\MamChannelSubscriptionFactory.cs" />
+    <Compile Include="Services\CurlMask.cs" />
+    <Compile Include="Services\IMask.cs" />
+    <Compile Include="Services\AbstractMam.cs" />
+    <Compile Include="Services\CurlMamFactory.cs" />
+    <Compile Include="Services\CurlMamParser.cs" />
+    <Compile Include="Services\IMamFactory.cs" />
+    <Compile Include="Services\IMamParser.cs" />
+    <Compile Include="Entity\MamChannel.cs" />
+    <Compile Include="Services\MamChannelFactory.cs" />
+    <Compile Include="Entity\MamChannelSubscription.cs" />
+    <Compile Include="Services\MamChannelSubscriptionFactory.cs" />
     <Compile Include="Entity\Mode.cs" />
     <Compile Include="Entity\MaskedAuthenticatedMessage.cs" />
     <Compile Include="Entity\UnmaskedAuthenticatedMessage.cs" />

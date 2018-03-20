@@ -7,8 +7,8 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
-  using Tangle.Net.Mam.Mam;
   using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -54,6 +54,14 @@
       Assert.AreEqual(message.Root.Value, unmaskedMessages[0].Root.Value);
       Assert.AreEqual("Hello everyone the second!", unmaskedMessages[1].Message.ToUtf8String());
       Assert.AreEqual("Hello everyone the third!", unmaskedMessages[2].Message.ToUtf8String());
+
+      var messageFour = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the fourth!"));
+      await channel.PublishAsync(messageFour);
+
+      unmaskedMessages = await subscription.FetchNext();
+
+      Assert.AreEqual(1, unmaskedMessages.Count);
+      Assert.AreEqual("Hello everyone the fourth!", unmaskedMessages[0].Message.ToUtf8String());
     }
 
     /// <summary>

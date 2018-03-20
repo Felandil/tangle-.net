@@ -1,6 +1,5 @@
-﻿namespace Tangle.Net.Mam
+﻿namespace Tangle.Net.Mam.Services
 {
-  using System;
   using System.Collections.Generic;
   using System.Linq;
 

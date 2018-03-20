@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam.Mam
+﻿namespace Tangle.Net.Mam.Services
 {
   using System.Collections.Generic;
   using System.Linq;
@@ -48,9 +48,9 @@
       var signatureLength = securityLevel * Fragment.Length;
       var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(signatureLength, unmaskedMessage.TrytesLength - signatureLength);
 
-      var signature = unmaskedMessage.GetChunk(0, signatureLength);
-
       var index = Converter.TritsToInt(unmaskedMessageWithoutSignature.GetChunk(0, 27).ToTrits());
+
+      var signature = unmaskedMessage.GetChunk(0, signatureLength);
       var signatureFragments = signature.GetChunks(Fragment.Length).Select(c => new Fragment(c.Value)).ToList();
 
       var messageHashes = unmaskedMessageWithoutSignature.GetChunk(27, unmaskedMessageWithoutSignature.TrytesLength - 27).GetChunks(Hash.Length);
