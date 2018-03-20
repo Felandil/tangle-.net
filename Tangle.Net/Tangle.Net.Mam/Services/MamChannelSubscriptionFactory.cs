@@ -1,5 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
+  using Newtonsoft.Json;
+
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Repository;
@@ -56,6 +58,46 @@
     {
       var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser);
       channelSubscription.Init(root, mode, channelKey, securityLevel);
+
+      return channelSubscription;
+    }
+
+    /// <summary>
+    /// The create from json.
+    /// </summary>
+    /// <param name="serializedSubscription">
+    /// The serialized subscription.
+    /// </param>
+    /// <returns>
+    /// The <see cref="MamChannelSubscription"/>.
+    /// </returns>
+    public MamChannelSubscription CreateFromJson(string serializedSubscription)
+    {
+      var unserializedSubscriptionData = JsonConvert.DeserializeObject<dynamic>(serializedSubscription);
+
+      var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser);
+
+      var nextRootValue = (string)unserializedSubscriptionData.NextRoot.Value;
+
+      if (nextRootValue == null)
+      {
+        channelSubscription.Init(
+          new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
+          (Mode)unserializedSubscriptionData.Mode,
+          new Hash((string)unserializedSubscriptionData.Key.Value),
+          (int)unserializedSubscriptionData.SecurityLevel);
+      }
+      else
+      {
+        channelSubscription.Init(
+          new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
+          (Mode)unserializedSubscriptionData.Mode,
+          new Hash((string)unserializedSubscriptionData.Key.Value),
+          (int)unserializedSubscriptionData.SecurityLevel,
+          new Hash(nextRootValue));
+      }
+
+
 
       return channelSubscription;
     }

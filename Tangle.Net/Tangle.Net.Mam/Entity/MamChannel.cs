@@ -26,7 +26,7 @@
     /// <param name="repository">
     /// The repository.
     /// </param>
-    internal MamChannel(IMamFactory mamFactory, IMerkleTreeFactory treeFactory, IIotaRepository repository)
+    public MamChannel(IMamFactory mamFactory, IMerkleTreeFactory treeFactory, IIotaRepository repository)
     {
       this.MamFactory = mamFactory;
       this.TreeFactory = treeFactory;
@@ -179,7 +179,7 @@
     /// <param name="start">
     /// The start.
     /// </param>
-    internal void Init(
+    public void Init(
       Mode mode,
       Seed seed,
       int securityLevel = Cryptography.SecurityLevel.Medium,

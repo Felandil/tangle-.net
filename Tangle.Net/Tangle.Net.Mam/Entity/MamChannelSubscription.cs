@@ -5,6 +5,8 @@
   using System.Linq;
   using System.Threading.Tasks;
 
+  using Newtonsoft.Json;
+
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Services;
   using Tangle.Net.Repository;
@@ -23,31 +25,36 @@
     /// <param name="parser">
     /// The parser.
     /// </param>
-    internal MamChannelSubscription(IIotaRepository repository, IMamParser parser)
+    public MamChannelSubscription(IIotaRepository repository, IMamParser parser)
     {
       this.Repository = repository;
       this.Parser = parser;
     }
 
     /// <summary>
-    /// Gets or sets the channel key.
+    /// Getsthe channel key.
     /// </summary>
-    private TryteString ChannelKey { get; set; }
+    public TryteString Key { get; private set; }
 
     /// <summary>
-    /// Gets or sets the message root.
+    /// Gets the message root.
     /// </summary>
-    private Hash MessageRoot { get; set; }
+    public Hash MessageRoot { get; private set; }
 
     /// <summary>
-    /// Gets or sets the next root.
+    /// Gets the next root.
     /// </summary>
-    private Hash NextRoot { get; set; }
+    public Hash NextRoot { get; private set; }
 
     /// <summary>
-    /// Gets or sets the mode.
+    /// Gets the mode.
     /// </summary>
-    private Mode Mode { get; set; }
+    public Mode Mode { get; private set; }
+
+    /// <summary>
+    /// Gets the security level.
+    /// </summary>
+    public int SecurityLevel { get; private set; }
 
     /// <summary>
     /// Gets the parser.
@@ -58,11 +65,6 @@
     /// Gets the iota repository.
     /// </summary>
     private IIotaRepository Repository { get; }
-
-    /// <summary>
-    /// Gets or sets the security level.
-    /// </summary>
-    private int SecurityLevel { get; set; }
 
     /// <summary>
     /// The fetch.
@@ -105,13 +107,24 @@
     /// <param name="nextRoot">
     /// The next Root.
     /// </param>
-    internal void Init(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel, Hash nextRoot = null)
+    public void Init(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel, Hash nextRoot = null)
     {
       this.MessageRoot = messageRoot;
       this.Mode = mode;
-      this.ChannelKey = channelKey;
+      this.Key = channelKey;
       this.SecurityLevel = securityLevel;
       this.NextRoot = nextRoot;
+    }
+
+    /// <summary>
+    /// The to json.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public string ToJson()
+    {
+      return JsonConvert.SerializeObject(this);
     }
 
     /// <summary>
@@ -140,7 +153,7 @@
         {
           try
           {
-            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.ChannelKey, this.SecurityLevel);
+            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.Key, this.SecurityLevel);
             this.NextRoot = unmaskedMessage.NextRoot;
             result.Add(unmaskedMessage);
           }

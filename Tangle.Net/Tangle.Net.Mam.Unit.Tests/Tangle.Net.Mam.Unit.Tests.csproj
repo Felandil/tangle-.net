@@ -60,9 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mam\InMemoryIotaRepository.cs" />
-    <Compile Include="Mam\MamFlowTest.cs" />
-    <Compile Include="Mam\MamChannelTest.cs" />
+    <Compile Include="Entity\InMemoryIotaRepository.cs" />
+    <Compile Include="Entity\MamFlowTest.cs" />
+    <Compile Include="Entity\MamChannelTest.cs" />
+    <Compile Include="Entity\MamSubscriptionTest.cs" />
     <Compile Include="MaskTests.cs" />
     <Compile Include="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="Merkle\MerkleNodeFactoryTests.cs" />
