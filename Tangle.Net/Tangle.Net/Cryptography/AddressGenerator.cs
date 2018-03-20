@@ -105,7 +105,7 @@
     public List<Address> GetAddresses(int startIndex, int count)
     {
       // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
-      return Enumerable.Range(startIndex, startIndex + count)
+      return Enumerable.Range(startIndex, count)
        .AsParallel()
        .Select(this.GetAddress)
        .OrderBy(x => x.KeyIndex)

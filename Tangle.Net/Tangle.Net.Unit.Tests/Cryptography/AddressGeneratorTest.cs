@@ -37,16 +37,21 @@
     {
       var generator = new AddressGenerator(this.seedTwo);
 
-      var addresses = generator.GetAddresses(0, 3);
+      var addresses = generator.GetAddresses(1, 1);
+      Assert.AreEqual(1, addresses.Count);
+
+      addresses = generator.GetAddresses(0, 3);
       Assert.AreEqual("FNKCVJPUANHNWNBAHFBTCONMCUBC9KCZ9EKREBCJAFMABCTEPLGGXDJXVGPXDCFOUCRBWFJFLEAVOEUPY", addresses[0].Value);
       Assert.IsNotNull(addresses[0].PrivateKey);
       Assert.AreEqual("MSYILYYZLSJ99TDMGQHDOBWGHTBARCBGJZE9PIMQLTEXJXKTDREGVTPA9NDGGLQHTMGISGRAKSLYPGWMB", addresses[1].Value);
       Assert.AreEqual("IIREHGHXUHARKVZDMHGUUCHZLUEQQULLEUSJHIIBWFYZIZDUFTOVHAWCKRJXUZ9CSUVLTRYSUGBVRMTOW", addresses[2].Value);
+      Assert.AreEqual(3, addresses.Count);
 
       addresses = generator.GetAddresses(10, 3);
       Assert.AreEqual("BPXMVV9UPKBTVPJXPBHHOJYAFLALOYCGTSEDLZBHNFMGEHREBQTRIPZAPREANPMZJNZZNCDIUFOYYGGFY", addresses[0].Value);
       Assert.AreEqual("RUCZQJWKXVDIXTLHHOKGMHOV9AKVDBG9HUQHPWNZUNKJNFVMULUSLKFJGSTBSNJMRYSJOBVBQSKVXISZB", addresses[1].Value);
       Assert.AreEqual("FQAKF9XVCLTBESJKWCHFOCTVABYEEJP9RXUVAEUWENFUUQK9VCHFEORHCYDUJQHNUDWNRDUDZTUGKHSPD", addresses[2].Value);
+      Assert.AreEqual(3, addresses.Count);
     }
 
     /// <summary>
