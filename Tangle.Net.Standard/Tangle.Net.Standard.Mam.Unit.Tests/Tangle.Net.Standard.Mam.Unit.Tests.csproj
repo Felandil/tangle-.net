@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\InMemoryIotaRepository.cs" Link="Mam\InMemoryIotaRepository.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\MamChannelTest.cs" Link="Mam\MamChannelTest.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Mam\MamFlowTest.cs" Link="Mam\MamFlowTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\InMemoryIotaRepository.cs" Link="Entity\InMemoryIotaRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamChannelTest.cs" Link="Entity\MamChannelTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamFlowTest.cs" Link="Entity\MamFlowTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamSubscriptionTest.cs" Link="Entity\MamSubscriptionTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\MaskTests.cs" Link="MaskTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleLeafFactoryTests.cs" Link="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleNodeFactoryTests.cs" Link="Merkle\MerkleNodeFactoryTests.cs" />
@@ -24,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mam\" />
+    <Folder Include="Entity\" />
     <Folder Include="Merkle\" />
   </ItemGroup>
 
