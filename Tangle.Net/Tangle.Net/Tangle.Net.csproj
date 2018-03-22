@@ -61,7 +61,8 @@
     <Compile Include="Cryptography\AbstractCurl.cs" />
     <Compile Include="Cryptography\IAddressGenerator.cs" />
     <Compile Include="Cryptography\IKeyGenerator.cs" />
-    <Compile Include="Cryptography\IPrivateKey.cs" />
+    <Compile Include="Cryptography\AbstractPrivateKey.cs" />
+    <Compile Include="Cryptography\ISignatureFragmentGenerator.cs" />
     <Compile Include="Cryptography\Kerl.cs" />
     <Compile Include="Cryptography\KeyGenerator.cs" />
     <Compile Include="ProofOfWork\IPoWDiver.cs" />

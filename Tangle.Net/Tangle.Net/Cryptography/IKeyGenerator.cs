@@ -12,13 +12,33 @@
     /// <summary>
     /// The get key for.
     /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
     /// <param name="address">
     /// The address.
     /// </param>
     /// <returns>
     /// The <see cref="string"/>.
     /// </returns>
-    IPrivateKey GetKeyFor(Address address);
+    AbstractPrivateKey GetKeyFor(Seed seed,  Address address);
+
+    /// <summary>
+    /// The get key.
+    /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="index">
+    /// The index.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <returns>
+    /// The <see cref="IPrivateKey"/>.
+    /// </returns>
+    AbstractPrivateKey GetKey(Seed seed, int index, int securityLevel = SecurityLevel.Low);
 
     #endregion
   }

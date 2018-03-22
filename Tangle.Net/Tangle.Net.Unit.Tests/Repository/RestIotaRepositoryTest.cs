@@ -16,6 +16,7 @@
   using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
+  using Tangle.Net.Unit.Tests.Cryptography;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -48,14 +49,14 @@
         new Transfer
           {
             Address =
-              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0 }, 
+              new Address("YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC") { Balance = 0, PrivateKey = new PrivateKeyStub() }, 
             Message = TryteString.FromAsciiString("Hello world!"), 
             Tag = new Tag("CSHARP"), 
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
 
       bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
+      bundle.Sign();
 
       var branchTransaction = new Hash("QINJZUOQGRRIKZJIKWJRBHVLQPKKGKGRODPMJXZZVZKNNVIGTYELWSYWRESO9JNZYSJBVYANLFVIZ9999");
       var trunkTransaction = new Hash("CXTEVCPNIEMITBQAVKWAQNZMVCHOZPTNQHGHQPSQDXEGWKLHDXLZUDEVOBONAEJJTFDGDRAXDVBUZ9999");

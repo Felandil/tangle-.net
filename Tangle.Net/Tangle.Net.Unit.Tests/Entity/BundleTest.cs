@@ -518,7 +518,16 @@
     {
       this.bundle = new Bundle();
       this.bundle.AddTransfer(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 42});
+        new Transfer
+          {
+            Address =
+              new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ")
+                {
+                  PrivateKey =
+                    new PrivateKeyStub()
+                },
+            ValueToTransfer = 42
+          });
 
       this.bundle.AddInput(
         new List<Address>
@@ -527,18 +536,20 @@
               {
                 Balance = 40, 
                 KeyIndex = 1, 
-                SecurityLevel = 1
+                SecurityLevel = 1,
+                PrivateKey = new PrivateKeyStub()
               }, 
             new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
               {
                 Balance = 2, 
                 KeyIndex = 2, 
-                SecurityLevel = 1
+                SecurityLevel = 1,
+                PrivateKey = new PrivateKeyStub()
               }
           });
 
       this.bundle.Finalize();
-      this.bundle.Sign(new KeyGeneratorStub());
+      this.bundle.Sign();
 
       Assert.AreEqual(3, this.bundle.Transactions.Count);
 
@@ -593,7 +604,16 @@
     {
       this.bundle = new Bundle();
       this.bundle.AddTransfer(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ"), ValueToTransfer = 42 });
+        new Transfer
+          {
+            Address =
+              new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ")
+                {
+                  PrivateKey =
+                    new PrivateKeyStub()
+                },
+            ValueToTransfer = 42
+          });
 
       this.bundle.AddInput(
         new List<Address>
@@ -602,18 +622,20 @@
               {
                 Balance = 40, 
                 KeyIndex = 1, 
-                SecurityLevel = 2
+                SecurityLevel = 2,
+                PrivateKey = new PrivateKeyStub()
               }, 
             new Address("GOAAMRU9EALPO9GKBOWUVZVQEJMB9CSGIZJATHRBTRRJPNTSQRZTASRBTQCRFAIDOGTWSHIDGOUUULQIG")
               {
                 Balance = 2, 
                 KeyIndex = 2, 
-                SecurityLevel = 3
+                SecurityLevel = 3,
+                PrivateKey = new PrivateKeyStub()
               }
           });
 
       this.bundle.Finalize();
-      this.bundle.Sign(new KeyGeneratorStub());
+      this.bundle.Sign();
 
       Assert.AreEqual(6, this.bundle.Transactions.Count);
 
@@ -715,9 +737,18 @@
     {
       this.bundle = new Bundle();
       this.bundle.AddTransfer(
-        new Transfer { Address = new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ") { Balance = 42 } });
+        new Transfer
+          {
+            Address =
+              new Address("TESTVALUE9DONTUSEINPRODUCTION99999VELDTFQHDFTHIHFE9II9WFFDFHEATEI99GEDC9BAUH9EBGZ")
+                {
+                  Balance = 42,
+                  PrivateKey =
+                    new PrivateKeyStub()
+                }
+          });
 
-      this.bundle.Sign(new KeyGeneratorStub());
+      this.bundle.Sign();
     }
 
     /// <summary>

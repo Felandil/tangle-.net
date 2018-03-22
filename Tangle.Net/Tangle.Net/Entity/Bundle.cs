@@ -290,45 +290,36 @@
     /// <summary>
     /// The sign.
     /// </summary>
-    /// <param name="keyGenerator">
-    /// The key Generator.
-    /// </param>
     /// <exception cref="InvalidOperationException">
     /// Thrown when bundle is not finalized.
     /// </exception>
-    public void Sign(IKeyGenerator keyGenerator)
+    public void Sign()
     {
       if (this.Hash == null)
       {
         throw new InvalidOperationException("Bundle must be finalized in order to sign it!");
       }
 
-      var i = 0;
-      while (i < this.Transactions.Count)
+      if (this.Transactions.Any(t => t.Value < 0))
       {
-        var transaction = this.Transactions[i];
-
-        if (transaction.Value < 0)
+        var i = 0;
+        while (i < this.Transactions.Count)
         {
-          var privateKey = keyGenerator.GetKeyFor(transaction.Address);
-          privateKey.SignInputTransactions(this, i);
+          var transaction = this.Transactions[i];
 
-          i += transaction.Address.SecurityLevel;
-        }
-        else
-        {
-          i += 1;
+          if (transaction.Value < 0)
+          {
+            transaction.Address.PrivateKey.SignInputTransactions(this, i);
+            i += transaction.Address.SecurityLevel;
+          }
+          else
+          {
+            i += 1;
+          }
         }
       }
 
-      this.Sign();
-    }
 
-    /// <summary>
-    /// The sign.
-    /// </summary>
-    public void Sign()
-    {
       foreach (var transaction in this.Transactions)
       {
         // alternative to AddTrytes from js library

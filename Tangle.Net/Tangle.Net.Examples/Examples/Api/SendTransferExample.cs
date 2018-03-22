@@ -36,7 +36,7 @@
           });
 
       bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
+      bundle.Sign();
 
       return this.Repository.SendTransfer(seed, bundle, SecurityLevel.Medium, 27, 14);
     }

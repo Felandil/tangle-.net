@@ -9,72 +9,28 @@
   /// <summary>
   /// The private key.
   /// </summary>
-  public class PrivateKey : TryteString, IPrivateKey
+  public class PrivateKey : AbstractPrivateKey
   {
-    #region Constants
-
-    /// <summary>
-    /// The chunk length.
-    /// </summary>
-    public const int ChunkLength = 2187;
-
     /// <summary>
     /// The fragment length.
     /// </summary>
     public const int FragmentLength = 6561;
-
-    #endregion
-
-    #region Fields
 
     /// <summary>
     /// The digest.
     /// </summary>
     private Digest digest;
 
-    #endregion
-
-    #region Constructors and Destructors
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
-    /// </summary>
-    /// <param name="privateKey">
-    /// The private key.
-    /// </param>
-    public PrivateKey(string privateKey)
-      : base(privateKey)
+    /// <inheritdoc />
+    public PrivateKey(string privateKey, int securityLevel, int keyIndex, ISignatureFragmentGenerator signatureFragmentGenerator, AbstractCurl curl)
+      : base(privateKey, securityLevel, keyIndex)
     {
-      this.SecurityLevel = 1;
+      this.SignatureFragmentGenerator = signatureFragmentGenerator;
+      this.Curl = curl;
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
-    /// </summary>
-    /// <param name="privateKey">
-    /// The private key.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <param name="keyIndex">
-    /// The key Index.
-    /// </param>
-    public PrivateKey(string privateKey, int securityLevel, int keyIndex)
-      : base(privateKey)
-    {
-      this.SecurityLevel = securityLevel;
-      this.KeyIndex = keyIndex;
-    }
-
-    #endregion
-
-    #region Public Properties
-
-    /// <summary>
-    /// Gets the digest.
-    /// </summary>
-    public Digest Digest
+    /// <inheritdoc />
+    public override Digest Digest
     {
       get
       {
@@ -97,9 +53,9 @@
 
             for (var k = 0; k < 26; k++)
             {
-              var innerKerl = new Kerl();
-              innerKerl.Absorb(buffer);
-              innerKerl.Squeeze(buffer);
+              this.Curl.Reset();
+              this.Curl.Absorb(buffer);
+              this.Curl.Squeeze(buffer);
             }
 
             for (var k = 0; k < AbstractCurl.HashLength; k++)
@@ -108,9 +64,9 @@
             }
           }
 
-          var kerl = new Kerl();
-          kerl.Absorb(keyFragment);
-          kerl.Squeeze(buffer);
+          this.Curl.Reset();
+          this.Curl.Absorb(keyFragment);
+          this.Curl.Squeeze(buffer);
 
           for (var j = 0; j < AbstractCurl.HashLength; j++)
           {
@@ -125,37 +81,24 @@
     }
 
     /// <summary>
-    /// Gets or sets the key index.
+    /// Gets the signature fragment generator.
     /// </summary>
-    public int KeyIndex { get; set; }
+    private ISignatureFragmentGenerator SignatureFragmentGenerator { get; }
 
     /// <summary>
-    /// Gets the security level.
+    /// Gets the curl.
     /// </summary>
-    public int SecurityLevel { get; private set; }
+    private AbstractCurl Curl { get; }
 
-    #endregion
-
-    #region Public Methods and Operators
-
-    /// <summary>
-    /// The sign input transactions.
-    /// </summary>
-    /// <param name="bundle">
-    /// The bundle.
-    /// </param>
-    /// <param name="startIndex">
-    /// The start index.
-    /// </param>
-    public void SignInputTransactions(Bundle bundle, int startIndex)
+    /// <inheritdoc />
+    public override void SignInputTransactions(Bundle bundle, int startIndex)
     {
       if (bundle.Hash == null)
       {
         throw new ArgumentException("Bundle must contain valid Hash in order to be signed!");
       }
 
-      var signatureFragmentGenerator = new SignatureFragmentGenerator(this, bundle.Hash);
-      var signatureFragments = signatureFragmentGenerator.Generate();
+      var signatureFragments = this.SignatureFragmentGenerator.Generate(this, bundle.Hash);
 
       for (var i = 0; i < this.SecurityLevel; i++)
       {
@@ -163,7 +106,5 @@
         transaction.Fragment = signatureFragments[i];
       }
     }
-
-    #endregion
   }
 }

@@ -35,9 +35,9 @@
       var acc = repository.GetAccountData(Seed.Random(), true, SecurityLevel.Medium, 0);
 
       var seed = Seed.Random();
-      var addressGenerator = new AddressGenerator(seed);
+      var addressGenerator = new AddressGenerator(new Kerl(), new KeyGenerator(new Kerl()));
 
-      var addresses = addressGenerator.GetAddresses(0, 6);
+      var addresses = addressGenerator.GetAddresses(seed, SecurityLevel.Medium, 0, 6);
       var addressesWithSpentInformation = repository.WereAddressesSpentFrom(addresses);
 
       var transactionStackCounter = 10;

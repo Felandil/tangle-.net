@@ -80,7 +80,7 @@
     /// <summary>
     /// Gets or sets the private key.
     /// </summary>
-    public IPrivateKey PrivateKey { get; set; }
+    public AbstractPrivateKey PrivateKey { get; set; }
 
     /// <summary>
     /// Gets or sets the security level.

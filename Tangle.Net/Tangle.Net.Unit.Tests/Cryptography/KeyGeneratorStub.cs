@@ -10,20 +10,18 @@
   {
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The get key for.
-    /// </summary>
-    /// <param name="address">
-    /// The address.
-    /// </param>
-    /// <returns>
-    /// The <see cref="IPrivateKey"/>.
-    /// </returns>
-    public IPrivateKey GetKeyFor(Address address)
+    #endregion
+
+    /// <inheritdoc />
+    public AbstractPrivateKey GetKeyFor(Seed seed, Address address)
     {
       return new PrivateKeyStub();
     }
 
-    #endregion
+    /// <inheritdoc />
+    public AbstractPrivateKey GetKey(Seed seed, int index, int securityLevel = SecurityLevel.Low)
+    {
+      return null;
+    }
   }
 }

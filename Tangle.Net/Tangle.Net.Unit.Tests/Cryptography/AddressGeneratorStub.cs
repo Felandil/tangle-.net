@@ -12,43 +12,25 @@
   {
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The get address.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Address"/>.
-    /// </returns>
-    public Address GetAddress(int index)
+    /// <inheritdoc />
+    public Address GetAddress(Seed seed, int securityLevel, int index)
     {
       return new Address(Seed.Random().Value) { PrivateKey = new PrivateKeyStub() };
     }
 
-    public Address GetAddress(IPrivateKey privateKey)
+    /// <inheritdoc />
+    public Address GetAddress(AbstractPrivateKey privateKey)
     {
       throw new System.NotImplementedException();
     }
 
-    /// <summary>
-    /// The get addresses.
-    /// </summary>
-    /// <param name="startIndex">
-    /// The start index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Address> GetAddresses(int startIndex, int count)
+    /// <inheritdoc />
+    public List<Address> GetAddresses(Seed seed, int securityLevel, int startIndex, int count)
     {
       var addresses = new List<Address>();
       for (var i = startIndex; i < startIndex + count; i++)
       {
-        addresses.Add(this.GetAddress(i));
+        addresses.Add(this.GetAddress(seed, securityLevel, i));
       }
 
       return addresses;

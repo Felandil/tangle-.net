@@ -8,34 +8,23 @@
   /// <summary>
   /// The private key stub.
   /// </summary>
-  public class PrivateKeyStub : IPrivateKey
+  public class PrivateKeyStub : AbstractPrivateKey
   {
-    #region Public Properties
+    /// <inheritdoc />
+    public PrivateKeyStub()
+      : base(string.Empty, Net.Cryptography.SecurityLevel.Low, 0)
+    {
+    }
 
     /// <summary>
     /// Gets the digest.
     /// </summary>
-    public Digest Digest { get; private set; }
-
-    /// <summary>
-    /// Gets the security level.
-    /// </summary>
-    public int SecurityLevel { get; private set; }
+    public override Digest Digest { get; }
 
     /// <summary>
     /// Gets the value.
     /// </summary>
-    public string Value
-    {
-      get
-      {
-        return Seed.Random().Value;
-      }
-    }
-
-    #endregion
-
-    #region Public Methods and Operators
+    public new string Value => Seed.Random().Value;
 
     /// <summary>
     /// The sign input transactions.
@@ -46,14 +35,12 @@
     /// <param name="startIndex">
     /// The start index.
     /// </param>
-    public void SignInputTransactions(Bundle bundle, int startIndex)
+    public override void SignInputTransactions(Bundle bundle, int startIndex)
     {
       for (var i = startIndex; i < bundle.Transactions.Count(); i++)
       {
         bundle.Transactions[i].Fragment = new Fragment("SOMESIGNATUREFRAGMENTWILLBEGENERATEDHERE");
       }
     }
-
-    #endregion
   }
 }

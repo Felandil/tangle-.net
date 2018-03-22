@@ -8,62 +8,37 @@
   /// <summary>
   /// The signature fragment generator.
   /// </summary>
-  public class SignatureFragmentGenerator
+  public class SignatureFragmentGenerator : ISignatureFragmentGenerator
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SignatureFragmentGenerator"/> class.
     /// </summary>
-    /// <param name="privateKey">
-    /// The private key.
+    /// <param name="curl">
+    /// The curl.
     /// </param>
-    /// <param name="hash">
-    /// The hash.
-    /// </param>
-    public SignatureFragmentGenerator(PrivateKey privateKey, Hash hash)
+    public SignatureFragmentGenerator(AbstractCurl curl)
     {
-      this.PrivateKey = privateKey;
-      this.Hash = hash;
+      this.Curl = curl;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
-    /// Gets or sets the hash.
+    /// Gets the curl.
     /// </summary>
-    private Hash Hash { get; set; }
+    private AbstractCurl Curl { get; }
 
-    /// <summary>
-    /// Gets or sets the private key.
-    /// </summary>
-    private PrivateKey PrivateKey { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
-
-    /// <summary>
-    /// The generate.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Fragment> Generate()
+    /// <inheritdoc />
+    public List<Fragment> Generate(AbstractPrivateKey privateKey, Hash hash)
     {
       var result = new List<Fragment>();
-      var normalizedHash = Hash.Normalize(this.Hash);
+      var normalizedHash = Hash.Normalize(hash);
 
       var i = 0;
-      var chunks = this.PrivateKey.GetChunks(PrivateKey.ChunkLength);
+      var chunks = privateKey.GetChunks(AbstractPrivateKey.ChunkLength);
       foreach (var chunk in chunks)
       {
         var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray(); // TODO - replace magic numbers
         var signatureFragmentTrits = chunk.ToTrits();
         var finalizedSignatureFragmentTrits = new List<int>();
-        var kerl = new Kerl();
 
         var count = chunk.GetChunks(Hash.Length).Count;
         for (var j = 0; j < count; j++)
@@ -72,9 +47,9 @@
 
           for (var k = 0; k < 13 - normalizedHashChunk[j]; k++)
           {
-            kerl.Reset();
-            kerl.Absorb(buffer);
-            kerl.Squeeze(buffer);
+            this.Curl.Reset();
+            this.Curl.Absorb(buffer);
+            this.Curl.Squeeze(buffer);
           }
 
           finalizedSignatureFragmentTrits.AddRange(buffer);
@@ -87,7 +62,5 @@
 
       return result;
     }
-
-    #endregion
   }
 }

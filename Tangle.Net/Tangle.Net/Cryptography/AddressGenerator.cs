@@ -2,7 +2,6 @@
 {
   using System.Collections.Generic;
   using System.Linq;
-  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
 
@@ -16,8 +15,8 @@
     /// </summary>
     public AddressGenerator()
     {
-      this.Seed = new Seed(Hash.Empty.Value);
-      this.SecurityLevel = Cryptography.SecurityLevel.Medium;
+      this.Curl = new Kerl();
+      this.KeyGenerator = new KeyGenerator(new Kerl());
     }
 
     #region Constructors and Destructors
@@ -25,16 +24,16 @@
     /// <summary>
     /// Initializes a new instance of the <see cref="AddressGenerator"/> class.
     /// </summary>
-    /// <param name="seed">
-    /// The seed.
+    /// <param name="curl">
+    /// The curl.
     /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
+    /// <param name="keyGenerator">
+    /// The key Generator.
     /// </param>
-    public AddressGenerator(Seed seed, int securityLevel = Cryptography.SecurityLevel.Medium)
+    public AddressGenerator(AbstractCurl curl, IKeyGenerator keyGenerator)
     {
-      this.Seed = seed;
-      this.SecurityLevel = securityLevel;
+      this.Curl = curl;
+      this.KeyGenerator = keyGenerator;
     }
 
     #endregion
@@ -42,45 +41,36 @@
     #region Properties
 
     /// <summary>
-    /// Gets or sets the security level.
+    /// Gets the curl.
     /// </summary>
-    private int SecurityLevel { get; set; }
+    private AbstractCurl Curl { get; }
 
     /// <summary>
-    /// Gets or sets the seed.
+    /// Gets the key generator.
     /// </summary>
-    private Seed Seed { get; set; }
+    private IKeyGenerator KeyGenerator { get; }
 
     #endregion
 
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The get address.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Address"/>.
-    /// </returns>
-    public Address GetAddress(int index)
+    /// <inheritdoc />
+    public Address GetAddress(Seed seed, int securityLevel, int index)
     {
-      var keyGenerator = new KeyGenerator(this.Seed);
-      var privateKey = keyGenerator.GetKey(index, this.SecurityLevel);
-
+      var privateKey = this.KeyGenerator.GetKey(seed, index, securityLevel);
       return this.GetAddress(privateKey);
     }
 
     /// <inheritdoc />
-    public Address GetAddress(IPrivateKey privateKey)
+    public Address GetAddress(AbstractPrivateKey privateKey)
     {
       var digest = privateKey.Digest;
 
       var addressTrits = new int[Address.Length * Converter.Radix];
-      var kerl = new Kerl();
-      kerl.Absorb(digest.ToTrits());
-      kerl.Squeeze(addressTrits);
+      this.Curl.Reset();
+      this.Curl.Absorb(digest.ToTrits());
+      this.Curl.Squeeze(addressTrits);
+      this.Curl.Reset();
 
       var address = Address.FromTrits(addressTrits);
       address.KeyIndex = digest.KeyIndex;
@@ -90,24 +80,12 @@
       return address;
     }
 
-    /// <summary>
-    /// The get addresses.
-    /// </summary>
-    /// <param name="startIndex">
-    /// The start index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<Address> GetAddresses(int startIndex, int count)
+    /// <inheritdoc />
+    public List<Address> GetAddresses(Seed seed, int securityLevel, int startIndex, int count)
     {
       // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
       return Enumerable.Range(startIndex, count)
-       .AsParallel()
-       .Select(this.GetAddress)
+       .Select(i => this.GetAddress(seed, securityLevel, i))
        .OrderBy(x => x.KeyIndex)
        .ToList();
     }

@@ -18,12 +18,13 @@
 
   <ItemGroup>
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\AbstractCurl.cs" Link="Cryptography\AbstractCurl.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\AbstractPrivateKey.cs" Link="Cryptography\AbstractPrivateKey.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\AddressGenerator.cs" Link="Cryptography\AddressGenerator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Converter.cs" Link="Cryptography\Converter.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Curl.cs" Link="Cryptography\Curl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IAddressGenerator.cs" Link="Cryptography\IAddressGenerator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IKeyGenerator.cs" Link="Cryptography\IKeyGenerator.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\IPrivateKey.cs" Link="Cryptography\IPrivateKey.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\ISignatureFragmentGenerator.cs" Link="Cryptography\ISignatureFragmentGenerator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\Kerl.cs" Link="Cryptography\Kerl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\KeyGenerator.cs" Link="Cryptography\KeyGenerator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Cryptography\PrivateKey.cs" Link="Cryptography\PrivateKey.cs" />

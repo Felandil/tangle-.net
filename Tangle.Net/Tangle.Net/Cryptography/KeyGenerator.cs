@@ -2,8 +2,6 @@
 {
   using System;
   using System.Collections.Generic;
-  using System.Linq;
-  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
 
@@ -12,78 +10,42 @@
   /// </summary>
   public class KeyGenerator : IKeyGenerator
   {
-    #region Constants
-
     /// <summary>
     /// The hashes per fragment.
     /// </summary>
     public const int HashesPerFragment = PrivateKey.FragmentLength / AbstractCurl.HashLength;
 
-    #endregion
-
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="KeyGenerator"/> class.
     /// </summary>
-    /// <param name="seed">
-    /// The seed.
+    /// <param name="curl">
+    /// The curl.
     /// </param>
-    public KeyGenerator(Seed seed)
+    public KeyGenerator(AbstractCurl curl)
     {
-      this.Seed = seed;
-      this.SeedTrits = seed.ToTrits();
+      this.Curl = curl;
     }
 
-    #endregion
-
-    #region Public Properties
-
     /// <summary>
-    /// Gets or sets the seed trits.
+    /// Gets the curl.
     /// </summary>
-    private int[] SeedTrits { get; set; }
+    private AbstractCurl Curl { get; }
 
-    #endregion
-
-    #region Properties
-
-    /// <summary>
-    /// Gets or sets the seed.
-    /// </summary>
-    private Seed Seed { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
-
-    /// <summary>
-    /// The get key.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <returns>
-    /// The <see cref="IPrivateKey"/>.
-    /// </returns>
-    public IPrivateKey GetKey(int index, int securityLevel = SecurityLevel.Low)
+    /// <inheritdoc />
+    public AbstractPrivateKey GetKey(Seed seed, int index, int securityLevel = SecurityLevel.Low)
     {
       if (index < 0)
       {
         throw new ArgumentException("Indices must not be negative");
       }
 
-      var subseed = Converter.AddTrits(this.SeedTrits, Converter.IntToTrits(index, 27));
+      var subseed = Converter.AddTrits(seed.ToTrits(), Converter.IntToTrits(index, 27));
 
-      var kerl = new Kerl();
-      kerl.Absorb(subseed);
-
-      kerl.Squeeze(subseed);
-      kerl.Reset();
-      kerl.Absorb(subseed);
+      this.Curl.Reset();
+      this.Curl.Absorb(subseed);
+      this.Curl.Squeeze(subseed);
+      this.Curl.Reset();
+      this.Curl.Absorb(subseed);
 
       var keyTrits = new List<int>();
       var buffer = new int[subseed.Length];
@@ -92,62 +54,23 @@
       {
         for (var hashSequence = 0; hashSequence < HashesPerFragment; hashSequence++)
         {
-          kerl.Squeeze(buffer);
+          this.Curl.Squeeze(buffer);
           keyTrits.AddRange(buffer);
         }
       }
 
       var trytes = Converter.TritsToTrytes(keyTrits.ToArray());
-      return new PrivateKey(trytes, securityLevel, index);
+      return new PrivateKey(trytes, securityLevel, index, new SignatureFragmentGenerator(this.Curl), this.Curl);
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Note that this method will generate the wrong key if the input
     /// address was generated from a different key!
     /// </summary>
-    /// <param name="address">
-    /// The address.
-    /// </param>
-    /// <returns>
-    /// The <see cref="IPrivateKey"/>.
-    /// </returns>
-    public IPrivateKey GetKeyFor(Address address)
+    public AbstractPrivateKey GetKeyFor(Seed seed, Address address)
     {
-      return this.GetKey(address.KeyIndex, address.SecurityLevel);
+      return this.GetKey(seed, address.KeyIndex, address.SecurityLevel);
     }
-
-    /// <summary>
-    /// The get keys.
-    /// </summary>
-    /// <param name="index">
-    /// The index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<IPrivateKey> GetKeys(int index, int count, int securityLevel = SecurityLevel.Low)
-    {
-      if (count < 1)
-      {
-        throw new ArgumentException("Count must be > 0");
-      }
-
-      var keys = new List<IPrivateKey>();
-
-      for (var i = 0; i < count; i++)
-      {
-        keys.Add(this.GetKey(index + i, securityLevel));
-      }
-
-      return keys;
-    }
-
-    #endregion
   }
 }

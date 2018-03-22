@@ -57,10 +57,14 @@
     /// <param name="powService">
     /// The pow service.
     /// </param>
-    public RestIotaRepository(IIotaClient client, IPoWService powService)
+    /// <param name="addressGenerator">
+    /// The address Generator.
+    /// </param>
+    public RestIotaRepository(IIotaClient client, IPoWService powService, IAddressGenerator addressGenerator = null)
     {
       this.Client = client;
       this.PoWService = powService;
+      this.AddressGenerator = addressGenerator ?? new AddressGenerator();
     }
 
     /// <summary>
@@ -72,6 +76,11 @@
     ///   Gets the po w service.
     /// </summary>
     private IPoWService PoWService { get; }
+
+    /// <summary>
+    /// Gets the address generator.
+    /// </summary>
+    private IAddressGenerator AddressGenerator { get; }
 
     /// <inheritdoc />
     public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
@@ -92,12 +101,11 @@
     {
       var usedAddresses = new List<Address>();
       var associatedTransactionHashes = new List<Hash>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var currentIndex = start;
       while (true)
       {
-        var address = addressGenerator.GetAddress(currentIndex);
+        var address = this.AddressGenerator.GetAddress(seed, securityLevel, currentIndex);
         var transactions = this.FindTransactionsByAddresses(new List<Address> { address });
 
         if (transactions.Hashes.Count > 0)
@@ -125,12 +133,11 @@
     {
       var usedAddresses = new List<Address>();
       var associatedTransactionHashes = new List<Hash>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var currentIndex = start;
       while (true)
       {
-        var address = addressGenerator.GetAddress(currentIndex);
+        var address = this.AddressGenerator.GetAddress(seed, securityLevel, currentIndex);
         var transactions = await this.FindTransactionsByAddressesAsync(new List<Address> { address });
 
         if (transactions.Hashes.Count > 0)
@@ -164,9 +171,7 @@
       var usedAddressesWithTransactions =
         this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex);
       var usedAddresses = usedAddressesWithTransactions.UsedAddresses;
-      var latestUnusedAddress =
-        new AddressGenerator(seed, securityLevel).GetAddress(
-          usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
+      var latestUnusedAddress = this.AddressGenerator.GetAddress(seed, securityLevel, usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
       var addressesWithBalance = new List<Address>();
       var associatedBundles = new List<Bundle>();
 
@@ -193,9 +198,7 @@
       var usedAddressesWithTransactions =
         await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex);
       var usedAddresses = usedAddressesWithTransactions.UsedAddresses;
-      var latestUnusedAddress =
-        new AddressGenerator(seed, securityLevel).GetAddress(
-          usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
+      var latestUnusedAddress = this.AddressGenerator.GetAddress(seed, securityLevel, usedAddresses.Any() ? usedAddresses.Last().KeyIndex + 1 : 0);
       var addressesWithBalance = new List<Address>();
       var associatedBundles = new List<Bundle>();
 
@@ -373,11 +376,10 @@
       }
 
       var resultAddresses = new List<Address>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var usedAddresses = stopIndex == 0
                             ? this.FindUsedAddressesWithTransactions(seed, securityLevel, startIndex).UsedAddresses
-                            : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
+                            : this.AddressGenerator.GetAddresses(seed, securityLevel, 0, stopIndex - startIndex + 1);
 
       var usedAddressesWithBalance = this.GetBalances(usedAddresses);
 
@@ -413,11 +415,10 @@
       }
 
       var resultAddresses = new List<Address>();
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
 
       var usedAddresses = stopIndex == 0
                             ? (await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, startIndex)).UsedAddresses
-                            : addressGenerator.GetAddresses(0, stopIndex - startIndex + 1);
+                            : this.AddressGenerator.GetAddresses(seed, securityLevel, 0, stopIndex - startIndex + 1);
 
       var usedAddressesWithBalance = await this.GetBalancesAsync(usedAddresses);
 
@@ -462,7 +463,6 @@
     /// <inheritdoc />
     public List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
       var result = new List<Address>();
 
       var foundNewAddress = false;
@@ -470,7 +470,7 @@
 
       while (!foundNewAddress || foundAddressCount != count)
       {
-        var address = addressGenerator.GetAddress(addressStartIndex);
+        var address = this.AddressGenerator.GetAddress(seed, securityLevel, addressStartIndex);
         var transactionsOnAddress = this.FindTransactionsByAddresses(new List<Address> { address });
 
         addressStartIndex++;
@@ -492,7 +492,6 @@
     /// <inheritdoc />
     public async Task<List<Address>> GetNewAddressesAsync(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
       var result = new List<Address>();
 
       var foundNewAddress = false;
@@ -500,7 +499,7 @@
 
       while (!foundNewAddress || foundAddressCount != count)
       {
-        var address = addressGenerator.GetAddress(addressStartIndex);
+        var address = this.AddressGenerator.GetAddress(seed, securityLevel, addressStartIndex);
         var transactionsOnAddress = await this.FindTransactionsByAddressesAsync(new List<Address> { address });
 
         addressStartIndex++;
@@ -527,12 +526,10 @@
       int addressStartIndex,
       int addressStopIndex = 0)
     {
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
       var transactions = addressStopIndex == 0
-                           ? this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex)
-                             .AssociatedTransactionHashes
+                           ? this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex).AssociatedTransactionHashes
                            : this.FindTransactionsByAddresses(
-                             addressGenerator.GetAddresses(0, addressStartIndex - addressStopIndex + 1)).Hashes;
+                             this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStartIndex - addressStopIndex + 1)).Hashes;
 
       return this.GetBundles(transactions, includeInclusionStates);
     }
@@ -540,11 +537,10 @@
     /// <inheritdoc />
     public async Task<List<Bundle>> GetTransfersAsync(Seed seed, int securityLevel, bool includeInclusionStates, int addressStartIndex, int addressStopIndex = 0)
     {
-      var addressGenerator = new AddressGenerator(seed, securityLevel);
       var transactions = addressStopIndex == 0
                            ? (await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex)).AssociatedTransactionHashes
-                           : (await this.FindTransactionsByAddressesAsync(addressGenerator.GetAddresses(0, addressStartIndex - addressStopIndex + 1)))
-                           .Hashes;
+                           : (await this.FindTransactionsByAddressesAsync(
+                                this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStartIndex - addressStopIndex + 1))).Hashes;
 
       return await this.GetBundlesAsync(transactions, includeInclusionStates);
     }
@@ -586,7 +582,7 @@
       }
 
       bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
+      bundle.Sign();
 
       return bundle;
     }
@@ -623,7 +619,7 @@
       }
 
       bundle.Finalize();
-      bundle.Sign(new KeyGenerator(seed));
+      bundle.Sign();
 
       return bundle;
     }

@@ -14,13 +14,19 @@
     /// <summary>
     /// The get address.
     /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
     /// <param name="index">
     /// The index.
     /// </param>
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
-    Address GetAddress(int index);
+    Address GetAddress(Seed seed, int securityLevel, int index);
 
     /// <summary>
     /// The get address.
@@ -31,11 +37,17 @@
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
-    Address GetAddress(IPrivateKey privateKey);
+    Address GetAddress(AbstractPrivateKey privateKey);
 
     /// <summary>
     /// The get addresses.
     /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
     /// <param name="startIndex">
     /// The start index.
     /// </param>
@@ -45,7 +57,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<Address> GetAddresses(int startIndex, int count);
+    List<Address> GetAddresses(Seed seed, int securityLevel, int startIndex, int count);
 
     #endregion
   }
