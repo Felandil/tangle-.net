@@ -27,9 +27,12 @@
     /// <param name="channelKey">
     /// The channel Key.
     /// </param>
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
     /// <returns>
     /// The <see cref="MaskedAuthenticatedMessage"/>.
     /// </returns>
-    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey);
+    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode);
   }
 }

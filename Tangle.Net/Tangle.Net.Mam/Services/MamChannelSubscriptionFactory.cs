@@ -20,16 +20,25 @@
     /// <param name="parser">
     /// The parser.
     /// </param>
-    public MamChannelSubscriptionFactory(IIotaRepository repository, IMamParser parser)
+    /// <param name="mask">
+    /// The mask.
+    /// </param>
+    public MamChannelSubscriptionFactory(IIotaRepository repository, IMamParser parser, IMask mask)
     {
       this.Repository = repository;
       this.Parser = parser;
+      this.Mask = mask;
     }
 
     /// <summary>
     /// Gets the parser.
     /// </summary>
     private IMamParser Parser { get; }
+
+    /// <summary>
+    /// Gets the mask.
+    /// </summary>
+    private IMask Mask { get; }
 
     /// <summary>
     /// Gets the repository.
@@ -45,19 +54,19 @@
     /// <param name="mode">
     /// The mode.
     /// </param>
-    /// <param name="channelKey">
-    /// The channel key.
-    /// </param>
     /// <param name="securityLevel">
     /// The security level.
+    /// </param>
+    /// <param name="channelKey">
+    /// The channel key.
     /// </param>
     /// <returns>
     /// The <see cref="MamChannelSubscription"/>.
     /// </returns>
-    public MamChannelSubscription Create(Hash root, Mode mode, TryteString channelKey, int securityLevel)
+    public MamChannelSubscription Create(Hash root, Mode mode, int securityLevel = 2, TryteString channelKey = null)
     {
-      var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser);
-      channelSubscription.Init(root, mode, channelKey, securityLevel);
+      var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser, this.Mask);
+      channelSubscription.Init(root, mode, securityLevel, channelKey);
 
       return channelSubscription;
     }
@@ -75,7 +84,7 @@
     {
       var unserializedSubscriptionData = JsonConvert.DeserializeObject<dynamic>(serializedSubscription);
 
-      var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser);
+      var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser, this.Mask);
 
       var nextRootValue = (string)unserializedSubscriptionData.NextRoot.Value;
 
@@ -84,16 +93,16 @@
         channelSubscription.Init(
           new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
           (Mode)unserializedSubscriptionData.Mode,
-          new Hash((string)unserializedSubscriptionData.Key.Value),
-          (int)unserializedSubscriptionData.SecurityLevel);
+          (int)unserializedSubscriptionData.SecurityLevel,
+          new Hash((string)unserializedSubscriptionData.Key.Value));
       }
       else
       {
         channelSubscription.Init(
           new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
           (Mode)unserializedSubscriptionData.Mode,
-          new Hash((string)unserializedSubscriptionData.Key.Value),
           (int)unserializedSubscriptionData.SecurityLevel,
+          new Hash((string)unserializedSubscriptionData.Key.Value),
           new Hash(nextRootValue));
       }
 

@@ -24,10 +24,11 @@
     /// The <see cref="Task"/>.
     /// </returns>
     [TestMethod]
-    public async Task TestMamCreationAndDecryption()
+    public async Task TestRestrictedMamCreationAndDecryption()
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
+      var mask = new CurlMask();
+      var mamFactory = new CurlMamFactory(new Curl(), mask);
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
       var iotaRepository = new InMemoryIotaRepository();
@@ -44,8 +45,102 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(new CurlMask(), treeFactory, new Curl()));
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey, SecurityLevel.Medium);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
+
+      var unmaskedMessages = await subscription.FetchAsync();
+
+      Assert.AreEqual("Hello everyone!", unmaskedMessages[0].Message.ToUtf8String());
+      Assert.AreEqual(message.NextRoot.Value, unmaskedMessages[0].NextRoot.Value);
+      Assert.AreEqual(message.Root.Value, unmaskedMessages[0].Root.Value);
+      Assert.AreEqual("Hello everyone the second!", unmaskedMessages[1].Message.ToUtf8String());
+      Assert.AreEqual("Hello everyone the third!", unmaskedMessages[2].Message.ToUtf8String());
+
+      var messageFour = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the fourth!"));
+      await channel.PublishAsync(messageFour);
+
+      unmaskedMessages = await subscription.FetchNext();
+
+      Assert.AreEqual(1, unmaskedMessages.Count);
+      Assert.AreEqual("Hello everyone the fourth!", unmaskedMessages[0].Message.ToUtf8String());
+    }
+
+    /// <summary>
+    /// The test private mam creation and decryption.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestPrivateMamCreationAndDecryption()
+    {
+      var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
+      var mask = new CurlMask();
+      var mamFactory = new CurlMamFactory(new Curl(), mask);
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+
+      var iotaRepository = new InMemoryIotaRepository();
+      var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
+      var channel = channelFactory.Create(Mode.Private, seed);
+
+      var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
+      await channel.PublishAsync(message);
+
+      var messageTwo = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the second!"));
+      await channel.PublishAsync(messageTwo);
+
+      var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
+      await channel.PublishAsync(messageThree);
+
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Private);
+
+      var unmaskedMessages = await subscription.FetchAsync();
+
+      Assert.AreEqual("Hello everyone!", unmaskedMessages[0].Message.ToUtf8String());
+      Assert.AreEqual(message.NextRoot.Value, unmaskedMessages[0].NextRoot.Value);
+      Assert.AreEqual(message.Root.Value, unmaskedMessages[0].Root.Value);
+      Assert.AreEqual("Hello everyone the second!", unmaskedMessages[1].Message.ToUtf8String());
+      Assert.AreEqual("Hello everyone the third!", unmaskedMessages[2].Message.ToUtf8String());
+
+      var messageFour = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the fourth!"));
+      await channel.PublishAsync(messageFour);
+
+      unmaskedMessages = await subscription.FetchNext();
+
+      Assert.AreEqual(1, unmaskedMessages.Count);
+      Assert.AreEqual("Hello everyone the fourth!", unmaskedMessages[0].Message.ToUtf8String());
+    }
+
+    /// <summary>
+    /// The test public mam creation and decryption.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    [TestMethod]
+    public async Task TestPublicMamCreationAndDecryption()
+    {
+      var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
+      var mask = new CurlMask();
+      var mamFactory = new CurlMamFactory(new Curl(), mask);
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+
+      var iotaRepository = new InMemoryIotaRepository();
+      var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
+      var channel = channelFactory.Create(Mode.Public, seed);
+
+      var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
+      await channel.PublishAsync(message);
+
+      var messageTwo = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the second!"));
+      await channel.PublishAsync(messageTwo);
+
+      var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
+      await channel.PublishAsync(messageThree);
+
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Public);
 
       var unmaskedMessages = await subscription.FetchAsync();
 
@@ -108,7 +203,8 @@
     public async Task TestInvalidMessageOnMamStreamShouldBeIgnored()
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
+      var mask = new CurlMask();
+      var mamFactory = new CurlMamFactory(new Curl(), mask);
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
 
       var iotaRepository = new InMemoryIotaRepository();
@@ -133,8 +229,8 @@
 
       await iotaRepository.SendTrytesAsync(bundle.Transactions, 27, 14);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(new CurlMask(), treeFactory, new Curl()));
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey, SecurityLevel.Medium);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
 
       var unmaskedMessages = await subscription.FetchAsync();
 

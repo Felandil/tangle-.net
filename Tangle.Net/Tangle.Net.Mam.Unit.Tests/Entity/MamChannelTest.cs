@@ -99,5 +99,30 @@
         Assert.AreEqual(bundle.Transactions[i].Fragment.Value, message.Payload.Transactions[i].Fragment.Value);
       }
     }
+
+    /// <summary>
+    /// The test public message creation.
+    /// </summary>
+    [TestMethod]
+    public void TestPublicMessageCreation()
+    {
+      var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
+      var curlMask = new CurlMask();
+      var mamFactory = new CurlMamFactory(new Curl(), curlMask);
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+
+      var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
+      var channel = channelFactory.Create(Mode.Private, seed);
+
+      var message = channel.CreateMessage(new TryteString("IREALLYWANTTHISTOWORKINCSHARPASWELLPLEASEMAKEITHAPPEN"));
+
+      var expectedAddress = curlMask.Hash(message.Root);
+
+      Assert.AreEqual("ILUOWHDESMHWKVHTRVOF9YERPLWCXEZPJBYGLWOHWCRWMCS9GHICAZTKEZVN9JYQLBIWVXKSTWNZIUAVV", message.Root.Value);
+      Assert.AreEqual(expectedAddress.Value, message.Address.Value);
+      Assert.AreEqual("UMESARRQWAHNSWYNZEGQYLBSOULJYCURIOBMMBIPVFKRJBYVMUXXWXZMCKQIPSMVGUVKIG9HROBWOGBIR", message.NextRoot.Value);
+
+      Assert.AreEqual("UMESARRQWAHNSWYNZEGQYLBSOULJYCURIOBMMBIPVFKRJBYVMUXXWXZMCKQIPSMVGUVKIG9HROBWOGBIR", channel.NextRoot.Value);
+    }
   }
 }

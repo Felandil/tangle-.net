@@ -20,16 +20,18 @@
     [TestMethod]
     public void TestSubscriptionCreationAndRecreation()
     {
+      var mask = new CurlMask();
       var subscriptionFactory = new MamChannelSubscriptionFactory(
         new InMemoryIotaRepository(),
         new CurlMamParser(
-          new CurlMask(),
+          mask,
           new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator())),
-          new Curl()));
+          new Curl()),
+        mask);
 
       var root = new Hash(Seed.Random().Value);
       var channelKey = Seed.Random();
-      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey, SecurityLevel.Medium);
+      var subscription = subscriptionFactory.Create(root, Mode.Restricted, SecurityLevel.Medium, channelKey);
 
       var serializedSubscription = subscription.ToJson();
 

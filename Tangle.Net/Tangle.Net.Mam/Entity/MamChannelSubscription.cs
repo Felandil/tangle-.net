@@ -25,10 +25,14 @@
     /// <param name="parser">
     /// The parser.
     /// </param>
-    public MamChannelSubscription(IIotaRepository repository, IMamParser parser)
+    /// <param name="mask">
+    /// The mask.
+    /// </param>
+    public MamChannelSubscription(IIotaRepository repository, IMamParser parser, IMask mask)
     {
       this.Repository = repository;
       this.Parser = parser;
+      this.Mask = mask;
     }
 
     /// <summary>
@@ -60,6 +64,11 @@
     /// Gets the parser.
     /// </summary>
     private IMamParser Parser { get; }
+
+    /// <summary>
+    /// Gets the mask.
+    /// </summary>
+    private IMask Mask { get; }
 
     /// <summary>
     /// Gets the iota repository.
@@ -98,16 +107,16 @@
     /// <param name="mode">
     /// The mode.
     /// </param>
-    /// <param name="channelKey">
-    /// The channel key.
-    /// </param>
     /// <param name="securityLevel">
     /// The security level.
+    /// </param>
+    /// <param name="channelKey">
+    /// The channel key.
     /// </param>
     /// <param name="nextRoot">
     /// The next Root.
     /// </param>
-    public void Init(Hash messageRoot, Mode mode, TryteString channelKey, int securityLevel, Hash nextRoot = null)
+    public void Init(Hash messageRoot, Mode mode, int securityLevel = 2, TryteString channelKey = null, Hash nextRoot = null)
     {
       this.MessageRoot = messageRoot;
       this.Mode = mode;
@@ -139,8 +148,20 @@
 
       while (true)
       {
-        var address = new Address(
-          this.Mode != Mode.Private ? new CurlMask().Hash(this.NextRoot).Value : this.NextRoot.Value);
+        Address address;
+        TryteString decryptionKey;
+
+        if (this.Mode == Mode.Public)
+        {
+          address = new Address(this.NextRoot.Value);
+          decryptionKey = this.NextRoot;
+        }
+        else
+        {
+          address = new Address(this.Mask.Hash(this.NextRoot).Value);
+          decryptionKey = this.Mode == Mode.Restricted ? this.Key : this.NextRoot;
+        }
+
         var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
 
         if (!transactionHashList.Hashes.Any())
@@ -153,7 +174,7 @@
         {
           try
           {
-            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.Key, this.SecurityLevel);
+            var unmaskedMessage = this.Parser.Unmask(bundles[i], decryptionKey, this.SecurityLevel);
             this.NextRoot = unmaskedMessage.NextRoot;
             result.Add(unmaskedMessage);
           }

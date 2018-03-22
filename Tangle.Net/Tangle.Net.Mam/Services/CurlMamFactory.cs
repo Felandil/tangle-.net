@@ -29,9 +29,9 @@
     }
 
     /// <inheritdoc />
-    public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey)
+    public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode)
     {
-      var address = this.GetMessageAddress(tree.Root.Hash);
+      var address = this.GetMessageAddress(tree.Root.Hash, mode);
 
       var subtree = tree.GetSubtreeByIndex(index);
       var preparedSubtree = subtree.ToTryteString().Concat(Hash.Empty);
@@ -71,21 +71,6 @@
     }
 
     /// <summary>
-    /// The get message address.
-    /// </summary>
-    /// <param name="rootHash">
-    /// The root Hash.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Address"/>.
-    /// </returns>
-    private Address GetMessageAddress(Hash rootHash)
-    {
-      var addressHash = this.Mask.Hash(rootHash);
-      return new Address(addressHash.Value);
-    }
-
-    /// <summary>
     /// The get buffer length.
     /// </summary>
     /// <param name="length">
@@ -105,6 +90,29 @@
     }
 
     /// <summary>
+    /// The get message address.
+    /// </summary>
+    /// <param name="rootHash">
+    /// The root Hash.
+    /// </param>
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Address"/>.
+    /// </returns>
+    private Address GetMessageAddress(TryteString rootHash, Mode mode)
+    {
+      if (mode == Mode.Public)
+      {
+        return new Address(rootHash.Value);
+      }
+
+      var addressHash = this.Mask.Hash(rootHash);
+      return new Address(addressHash.Value);
+    }
+
+    /// <summary>
     /// The create signature.
     /// </summary>
     /// <param name="message">
@@ -116,7 +124,7 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    private List<Fragment> CreateSignature(TryteString message, IPrivateKey privateKey)
+    private IEnumerable<Fragment> CreateSignature(TryteString message, IPrivateKey privateKey)
     {
       var messageHash = this.GetMessageHash(message);
       var signatureFragmentGenerator = new SignatureFragmentGenerator(privateKey as PrivateKey, messageHash);
