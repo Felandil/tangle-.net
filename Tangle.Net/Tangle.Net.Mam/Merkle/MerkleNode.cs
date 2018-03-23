@@ -52,7 +52,7 @@
     /// <summary>
     /// Gets or sets the key.
     /// </summary>
-    public IPrivateKey Key { get; set; }
+    public AbstractPrivateKey Key { get; set; }
 
     /// <summary>
     /// Gets or sets the left node.

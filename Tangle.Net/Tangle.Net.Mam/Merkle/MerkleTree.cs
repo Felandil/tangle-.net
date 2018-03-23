@@ -40,7 +40,7 @@
     {
       var leaves = new List<MerkleNode>();
       var node = this.Root;
-      IPrivateKey key = null;
+      AbstractPrivateKey key = null;
       var size = this.Size;
 
       if (index < size)

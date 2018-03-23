@@ -5,6 +5,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -22,7 +24,7 @@
     [ExpectedException(typeof(ArgumentException))]
     public void TestGetKeyIndexIsNegativeShouldThrowException()
     {
-      var keyGenerator = new KeyGenerator(new Kerl());
+      var keyGenerator = new KeyGenerator(new Kerl(), new IssSigningHelper());
       var privateKey = keyGenerator.GetKey(new Seed("TESTSEED9DONTUSEINPRODUCTION99999ZTRFNBTRBSDIHWKOWCFBOQYQTENWL9999999999999999999"), - 1);
     }
 
@@ -32,7 +34,7 @@
     [TestMethod]
     public void TestGetKeyWithHigherSecurityLevel()
     {
-      var keyGenerator = new KeyGenerator(new Kerl());
+      var keyGenerator = new KeyGenerator(new Kerl(), new IssSigningHelper());
       var privateKey = keyGenerator.GetKey(new Seed("TESTSEED9DONTUSEINPRODUCTION99999TPXGCGPRTMI9QQNCW9PKWTAAOPYHU9999999999999999999"), 1, SecurityLevel.Medium);
 
       Assert.AreEqual(
@@ -79,7 +81,7 @@
     [TestMethod]
     public void TestSingleKeyGeneration()
     {
-      var keyGenerator = new KeyGenerator(new Kerl());
+      var keyGenerator = new KeyGenerator(new Kerl(), new IssSigningHelper());
       var seed = new Seed("TESTSEED9DONTUSEINPRODUCTION99999ZTRFNBTRBSDIHWKOWCFBOQYQTENWL9999999999999999999");
       var privateKey = keyGenerator.GetKey(seed, 0);
 

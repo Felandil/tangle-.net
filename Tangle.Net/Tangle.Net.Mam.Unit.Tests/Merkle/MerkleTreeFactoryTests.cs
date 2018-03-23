@@ -5,6 +5,7 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Unit.Tests.Cryptography;
@@ -26,7 +27,7 @@
     public void TestTreeHasOnlyMoreThanOneLeafShouldCreateNodes()
     {
       var seed = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
-      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
       var tree = factory.Create(seed, 0, 10, SecurityLevel.Medium);
 
       Assert.IsNotNull(tree.Root);

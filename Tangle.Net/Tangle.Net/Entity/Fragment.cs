@@ -97,61 +97,6 @@
       return new Fragment(TryteString.FromUtf8String(input).Value);
     }
 
-    /// <summary>
-    /// The validate fragments.
-    /// </summary>
-    /// <param name="fragments">
-    /// The fragments.
-    /// </param>
-    /// <param name="hash">
-    /// The hash.
-    /// </param>
-    /// <param name="publicKey">
-    /// The public key.
-    /// </param>
-    /// <returns>
-    /// The <see cref="bool"/>.
-    /// </returns>
-    public static bool ValidateFragments(List<Fragment> fragments, Hash hash, TryteString publicKey)
-    {
-      var checksum = new List<int>();
-      var normalizedHash = Hash.Normalize(hash);
-
-      for (var i = 0; i < fragments.Count; i++)
-      {
-        var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray();
-        var buffer = new int[AbstractCurl.HashLength];
-
-        var outerSponge = new Kerl();
-        var fragmentChunks = fragments[i].GetChunks(Hash.Length);
-        for (var j = 0; j < fragmentChunks.Count; j++)
-        {
-          buffer = fragmentChunks[j].ToTrits();
-          var innerSponge = new Kerl();
-
-          for (var k = 0; k < normalizedHashChunk[j] + 13; k++)
-          {
-            innerSponge.Reset();
-            innerSponge.Absorb(buffer);
-            innerSponge.Squeeze(buffer);
-          }
-
-          outerSponge.Absorb(buffer);
-        }
-
-        outerSponge.Squeeze(buffer);
-        checksum.AddRange(buffer);
-      }
-
-      var actualPublicKey = new int[AbstractCurl.HashLength];
-      var kerl = new Kerl();
-      kerl.Absorb(checksum.ToArray());
-      kerl.Squeeze(actualPublicKey);
-
-      var actualPublicKeyTrytes = Converter.TritsToTrytes(actualPublicKey);
-      return actualPublicKeyTrytes == publicKey.Value;
-    }
-
     #endregion
   }
 }

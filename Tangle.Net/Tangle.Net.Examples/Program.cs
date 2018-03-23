@@ -29,8 +29,8 @@
     /// </param>
     internal static void Main(string[] args)
     {
-      ExecuteApiExample();
-      // ExecuteMamExample().Wait();
+      // ExecuteApiExample();
+      ExecuteMamExample().Wait();
       Console.ReadKey();
     }
 

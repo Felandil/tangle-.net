@@ -7,6 +7,8 @@
 
   using Org.BouncyCastle.Math;
 
+  using Tangle.Net.Cryptography.Curl;
+
   /// <summary>
   /// The converter.
   /// </summary>

@@ -1,6 +1,5 @@
-﻿namespace Tangle.Net.Cryptography
+﻿namespace Tangle.Net.Cryptography.Curl
 {
-  using System;
   using System.Threading.Tasks;
 
   /// <summary>
@@ -8,34 +7,21 @@
   /// </summary>
   public class Curl : AbstractCurl
   {
-    #region Constants
-
     /// <summary>
     /// The number of rounds.
     /// </summary>
-    public const int NumberOfRounds = 81;
+    public const int DefaultNumberOfRounds = 81;
 
     /// <summary>
     /// The state length.
     /// </summary>
     public const int StateLength = 3 * HashLength;
 
-    #endregion
-
-    #region Static Fields
-
     /// <summary>
     /// The truth table.
     /// </summary>
     public static readonly int[] TruthTable = { 1, 0, -1, 2, 1, -1, 0, 2, -1, 1, 0 };
 
-    #endregion
-
-    #region Fields
-
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Curl"/> class.
@@ -43,11 +29,25 @@
     public Curl()
     {
       this.Reset();
+      this.NumberOfRounds = DefaultNumberOfRounds;
     }
 
-    #endregion
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Curl"/> class.
+    /// </summary>
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
+    public Curl(CurlMode mode)
+    {
+      this.Reset();
+      this.NumberOfRounds = (int)mode;
+    }
 
-    #region Public Methods and Operators
+    /// <summary>
+    /// Gets the number of rounds.
+    /// </summary>
+    private int NumberOfRounds { get; }
 
     /// <summary>
     /// The absorb.
@@ -102,10 +102,6 @@
       while ((length -= AbstractCurl.HashLength) > 0);
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// The transform.
     /// </summary>
@@ -114,7 +110,7 @@
       var stateCopy = new int[StateLength];
       var index = 0;
 
-      for (var round = 0; round < NumberOfRounds; round++)
+      for (var round = 0; round < this.NumberOfRounds; round++)
       {
         Parallel.For(
           0,
@@ -130,7 +126,5 @@
         }
       }
     }
-
-    #endregion
   }
 }

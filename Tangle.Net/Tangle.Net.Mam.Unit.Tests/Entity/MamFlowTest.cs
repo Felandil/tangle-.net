@@ -5,6 +5,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -28,8 +30,8 @@
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
       var mask = new CurlMask();
-      var mamFactory = new CurlMamFactory(new Curl(), mask);
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), mask, new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
@@ -45,7 +47,7 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl(), new SignatureValidator()), mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
 
       var unmaskedMessages = await subscription.FetchAsync();
@@ -76,8 +78,8 @@
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
       var mask = new CurlMask();
-      var mamFactory = new CurlMamFactory(new Curl(), mask);
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), mask, new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
@@ -92,7 +94,7 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl(), new SignatureValidator()), mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Private);
 
       var unmaskedMessages = await subscription.FetchAsync();
@@ -123,8 +125,8 @@
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
       var mask = new CurlMask();
-      var mamFactory = new CurlMamFactory(new Curl(), mask);
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), mask, new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
@@ -139,7 +141,10 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(
+        iotaRepository,
+        new CurlMamParser(mask, treeFactory, new Curl(), new SignatureValidator()),
+        mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Public);
 
       var unmaskedMessages = await subscription.FetchAsync();
@@ -169,8 +174,8 @@
     public async Task TestMamChannelRecreation()
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask(), new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
@@ -204,8 +209,8 @@
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
       var mask = new CurlMask();
-      var mamFactory = new CurlMamFactory(new Curl(), mask);
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), mask, new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, iotaRepository);
@@ -229,7 +234,10 @@
 
       await iotaRepository.SendTrytesAsync(bundle.Transactions, 27, 14);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, new CurlMamParser(mask, treeFactory, new Curl()), mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(
+        iotaRepository,
+        new CurlMamParser(mask, treeFactory, new Curl(), new SignatureValidator()),
+        mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
 
       var unmaskedMessages = await subscription.FetchAsync();

@@ -3,6 +3,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>

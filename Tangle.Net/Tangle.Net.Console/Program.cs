@@ -8,6 +8,8 @@
   using RestSharp;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
@@ -35,7 +37,7 @@
       var acc = repository.GetAccountData(Seed.Random(), true, SecurityLevel.Medium, 0);
 
       var seed = Seed.Random();
-      var addressGenerator = new AddressGenerator(new Kerl(), new KeyGenerator(new Kerl()));
+      var addressGenerator = new AddressGenerator(new Kerl(), new KeyGenerator(new Kerl(), new IssSigningHelper()));
 
       var addresses = addressGenerator.GetAddresses(seed, SecurityLevel.Medium, 0, 6);
       var addressesWithSpentInformation = repository.WereAddressesSpentFrom(addresses);

@@ -3,6 +3,8 @@
   using System.Collections.Generic;
   using System.Linq;
 
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -16,7 +18,7 @@
     public AddressGenerator()
     {
       this.Curl = new Kerl();
-      this.KeyGenerator = new KeyGenerator(new Kerl());
+      this.KeyGenerator = new KeyGenerator(new Kerl(), new IssSigningHelper());
     }
 
     #region Constructors and Destructors

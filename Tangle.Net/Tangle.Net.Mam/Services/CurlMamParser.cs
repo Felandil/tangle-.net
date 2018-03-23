@@ -4,6 +4,8 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -27,9 +29,13 @@
     /// <param name="curl">
     /// The curl.
     /// </param>
-    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory, AbstractCurl curl)
+    /// <param name="signatureValidator">
+    /// The signature Validator.
+    /// </param>
+    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory, AbstractCurl curl, ISignatureValidator signatureValidator)
     {
       this.TreeFactory = treeFactory;
+      this.SignatureValidator = signatureValidator;
       this.Mask = mask;
       this.Curl = curl;
     }
@@ -38,6 +44,11 @@
     /// Gets the tree factory.
     /// </summary>
     private IMerkleTreeFactory TreeFactory { get; }
+
+    /// <summary>
+    /// Gets the signature validator.
+    /// </summary>
+    private ISignatureValidator SignatureValidator { get; }
 
     /// <inheritdoc />
     public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel)
@@ -76,7 +87,7 @@
       chainedMessageTrytes = chainedMessageTrytes.GetChunk(0, chainedMessageTrytes.TrytesLength - Checksum.Length);
 
       var messageHash = this.GetMessageHash(nextRoot.Concat(chainedMessageTrytes));
-      if (!Fragment.ValidateFragments(signatureFragments, messageHash, treeHashes[0]))
+      if (!this.SignatureValidator.ValidateFragments(signatureFragments, messageHash, treeHashes[0]))
       {
         throw new InvalidBundleException("Mam Bundle signature failed verification", new List<string>());
       }

@@ -97,6 +97,7 @@
     <Compile Include="Utils\AsciiToTrytesTest.cs" />
     <Compile Include="Utils\ExtensionTests.cs" />
     <Compile Include="Utils\InputValidatorTest.cs" />
+    <Compile Include="Utils\SigningHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">

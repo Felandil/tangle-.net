@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Entity
 {
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Utils;
 
   /// <summary>

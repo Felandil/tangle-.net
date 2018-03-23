@@ -4,8 +4,9 @@
   using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
-  using Tangle.Net.Mam;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Mam.Services;
@@ -27,8 +28,8 @@
       var curl = new Curl();
       var mask = new CurlMask();
       var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(curl), new CurlMerkleLeafFactory(new AddressGenerator()));
-      var mamFactory = new CurlMamFactory(curl, mask);
-      var mamParser = new CurlMamParser(mask, treeFactory, curl);
+      var mamFactory = new CurlMamFactory(curl, mask, new SignatureFragmentGenerator(new Kerl()));
+      var mamParser = new CurlMamParser(mask, treeFactory, curl, new SignatureValidator());
 
       this.ChannelFactory = new MamChannelFactory(mamFactory, treeFactory, repository);
       this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, mamParser, mask);

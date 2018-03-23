@@ -5,6 +5,7 @@
   using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
 
   /// <summary>

@@ -3,6 +3,7 @@
   using System;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
 
   /// <summary>
   /// The checksum.

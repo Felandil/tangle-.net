@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
 
   /// <summary>

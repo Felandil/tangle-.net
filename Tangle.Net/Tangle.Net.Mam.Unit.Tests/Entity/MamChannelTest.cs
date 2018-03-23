@@ -5,6 +5,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -24,8 +26,8 @@
     public void TestPublicChannelCreation()
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask(), new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
       var channel = channelFactory.Create(Mode.Public, seed);
@@ -42,8 +44,8 @@
     public void TestRestrictedChannelCreation()
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask(), new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
@@ -79,8 +81,8 @@
       bundle.Sign();
 
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");  
-      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask());
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), new CurlMask(), new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
@@ -108,8 +110,8 @@
     {
       var seed = new Seed("JETCPWLCYRM9XYQMMZIFZLDBZZEWRMRVGWGGNCUH9LFNEHKEMLXAVEOFFVOATCNKVKELNQFAGOVUNWEJI");
       var curlMask = new CurlMask();
-      var mamFactory = new CurlMamFactory(new Curl(), curlMask);
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var mamFactory = new CurlMamFactory(new Curl(), curlMask, new SignatureFragmentGenerator(new Kerl()));
+      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
 
       var channelFactory = new MamChannelFactory(mamFactory, treeFactory, new InMemoryIotaRepository());
       var channel = channelFactory.Create(Mode.Private, seed);

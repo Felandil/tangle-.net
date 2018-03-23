@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Cryptography
+﻿namespace Tangle.Net.Cryptography.Signing
 {
   using System.Collections.Generic;
 

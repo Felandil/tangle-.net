@@ -3,6 +3,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -26,7 +28,8 @@
         new CurlMamParser(
           mask,
           new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator())),
-          new Curl()),
+          new Curl(),
+          new SignatureValidator()),
         mask);
 
       var root = new Hash(Seed.Random().Value);

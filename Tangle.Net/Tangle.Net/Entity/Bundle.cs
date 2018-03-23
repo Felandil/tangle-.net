@@ -5,6 +5,8 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -452,7 +454,7 @@
       {
         validationErrors.AddRange(
           transactionGroup.Where((t, i) => i > 0 && t.Value != 0)
-            .Select(t => string.Format("Transaction {0} has invalid value. Expected: 0. Got {1}.", t.CurrentIndex, t.Value)));
+            .Select(t => $"Transaction {t.CurrentIndex} has invalid value. Expected: 0. Got {t.Value}."));
       }
 
       if (validationErrors.Any())
@@ -464,9 +466,9 @@
         from transactionGroup in transactionGroups
         where transactionGroup[0].Value < 0
         let hasValidSignature =
-          Fragment.ValidateFragments(transactionGroup.Select(t => t.Fragment).ToList(), transactionGroup[0].BundleHash, transactionGroup[0].Address)
+          new SignatureValidator().ValidateFragments(transactionGroup.Select(t => t.Fragment).ToList(), transactionGroup[0].BundleHash, transactionGroup[0].Address)
         where !hasValidSignature
-        select string.Format("Transaction {0} has invalid signature (using {1} fragments).", transactionGroup[0].CurrentIndex, transactionGroup.Count));
+        select $"Transaction {transactionGroup[0].CurrentIndex} has invalid signature (using {transactionGroup.Count} fragments).");
 
       return validationErrors;
     }
@@ -486,8 +488,7 @@
         var transaction = this.Transactions[i];
         if (transaction.BundleHash.Value != this.Hash.Value)
         {
-          validationErrors.Add(
-            string.Format("Transaction {0} has an invalid bundle hash (check that all transactions have the same bundle hash).", i));
+          validationErrors.Add($"Transaction {i} has an invalid bundle hash (check that all transactions have the same bundle hash).");
         }
 
         if (transaction.CurrentIndex != i)
@@ -497,8 +498,7 @@
 
         if (transaction.LastIndex != transactionsCount - 1)
         {
-          validationErrors.Add(
-            string.Format("Transaction {0} has an invalid last index. Expected: {1}. Got {2}.", i, transactionsCount - 1, transaction.LastIndex));
+          validationErrors.Add($"Transaction {i} has an invalid last index. Expected: {transactionsCount - 1}. Got {transaction.LastIndex}.");
         }
       }
 

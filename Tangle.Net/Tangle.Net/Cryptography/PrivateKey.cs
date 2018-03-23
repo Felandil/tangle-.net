@@ -4,6 +4,8 @@
   using System.Collections.Generic;
   using System.Linq;
 
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>

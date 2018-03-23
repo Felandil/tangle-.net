@@ -47,7 +47,7 @@
     /// <inheritdoc />
     public MerkleTree Create(Seed seed, int startIndex, int count, int securityLevel)
     {
-      var leaves = this.LeafFactory.Create(startIndex, count);
+      var leaves = this.LeafFactory.Create(seed, securityLevel, startIndex, count);
       return new MerkleTree { Root = this.BuildTree(leaves) };
     }
 

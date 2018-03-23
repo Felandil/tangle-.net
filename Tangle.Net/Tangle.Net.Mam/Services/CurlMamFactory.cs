@@ -5,6 +5,8 @@
   using System.Diagnostics.CodeAnalysis;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -12,7 +14,7 @@
 
   /// <inheritdoc />
   public class CurlMamFactory : AbstractMam, IMamFactory
-  {
+  { 
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMamFactory"/> class.
     /// </summary>
@@ -22,11 +24,20 @@
     /// <param name="mask">
     /// The mask.
     /// </param>
-    public CurlMamFactory(AbstractCurl curl, IMask mask)
+    /// <param name="signatureFragmentGenerator">
+    /// The signature Fragment Generator.
+    /// </param>
+    public CurlMamFactory(AbstractCurl curl, IMask mask, ISignatureFragmentGenerator signatureFragmentGenerator)
     {
+      this.SignatureFragmentGenerator = signatureFragmentGenerator;
       this.Mask = mask;
       this.Curl = curl;
     }
+
+    /// <summary>
+    /// Gets the signature fragment generator.
+    /// </summary>
+    private ISignatureFragmentGenerator SignatureFragmentGenerator { get; }
 
     /// <inheritdoc />
     public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode)
@@ -124,12 +135,10 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    private IEnumerable<Fragment> CreateSignature(TryteString message, IPrivateKey privateKey)
+    private IEnumerable<Fragment> CreateSignature(TryteString message, AbstractPrivateKey privateKey)
     {
       var messageHash = this.GetMessageHash(message);
-      var signatureFragmentGenerator = new SignatureFragmentGenerator(privateKey as PrivateKey, messageHash);
-
-      return signatureFragmentGenerator.Generate();
+      return this.SignatureFragmentGenerator.Generate(privateKey, messageHash);
     }
   }
 }

@@ -3,6 +3,7 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
 
@@ -21,7 +22,7 @@
     public void TestGetTreeByIndexBuildsNewTreeCorretcly()
     {
       var seed = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
-      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator(seed)));
+      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator()));
       var tree = factory.Create(seed, 0, 10, SecurityLevel.Medium);
       var treeFromIndex = tree.GetSubtreeByIndex(5);
 

@@ -1,8 +1,9 @@
-﻿namespace Tangle.Net.Cryptography
+﻿namespace Tangle.Net.Cryptography.Signing
 {
   using System.Collections.Generic;
   using System.Linq;
 
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
 
   /// <summary>

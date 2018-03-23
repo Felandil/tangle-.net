@@ -5,6 +5,7 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
 
   /// <summary>
   /// The hash.
@@ -15,6 +16,16 @@
     /// The length.
     /// </summary>
     public const int Length = AbstractCurl.HashLength / Converter.Radix;
+
+    /// <summary>
+    /// The min tryte value.
+    /// </summary>
+    public const int MinTryteValue = -13;
+
+    /// <summary>
+    /// The max tryte value.
+    /// </summary>
+    public const int MaxTryteValue = 13;
 
     /// <summary>
     /// Gets the empty.
@@ -74,7 +85,7 @@
           sum -= 1;
           for (var j = 0; j < ChunkSize; j++)
           {
-            if (chunk[j] <= -13)
+            if (chunk[j] <= MinTryteValue)
             {
               continue;
             }
@@ -89,7 +100,7 @@
           sum += 1;
           for (var j = 0; j < ChunkSize; j++)
           {
-            if (chunk[j] >= 13)
+            if (chunk[j] >= MaxTryteValue)
             {
               continue;
             }

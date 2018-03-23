@@ -37,22 +37,11 @@
 
     #region Public Methods and Operators
 
-    /// <summary>
-    /// The create.
-    /// </summary>
-    /// <param name="startIndex">
-    /// The start index.
-    /// </param>
-    /// <param name="count">
-    /// The count.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List"/>.
-    /// </returns>
-    public List<MerkleNode> Create(int startIndex, int count)
+    /// <inheritdoc />
+    public List<MerkleNode> Create(Seed seed, int securityLevel, int startIndex, int count)
     {
       return
-        this.AddressGenerator.GetAddresses(startIndex, count)
+        this.AddressGenerator.GetAddresses(seed, securityLevel, startIndex, count)
           .Select(address => new MerkleNode { Hash = new Hash(address.Value), Key = address.PrivateKey, Size = 1 })
           .ToList();
     }

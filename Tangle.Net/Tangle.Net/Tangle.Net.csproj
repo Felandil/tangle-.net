@@ -57,19 +57,22 @@
   <ItemGroup>
     <Compile Include="Cryptography\AddressGenerator.cs" />
     <Compile Include="Cryptography\Converter.cs" />
-    <Compile Include="Cryptography\Curl.cs" />
-    <Compile Include="Cryptography\AbstractCurl.cs" />
+    <Compile Include="Cryptography\Curl\Curl.cs" />
+    <Compile Include="Cryptography\Curl\AbstractCurl.cs" />
+    <Compile Include="Cryptography\Curl\CurlMode.cs" />
     <Compile Include="Cryptography\IAddressGenerator.cs" />
     <Compile Include="Cryptography\IKeyGenerator.cs" />
     <Compile Include="Cryptography\AbstractPrivateKey.cs" />
-    <Compile Include="Cryptography\ISignatureFragmentGenerator.cs" />
-    <Compile Include="Cryptography\Kerl.cs" />
+    <Compile Include="Cryptography\Signing\ISignatureFragmentGenerator.cs" />
+    <Compile Include="Cryptography\Signing\ISignatureValidator.cs" />
+    <Compile Include="Cryptography\Curl\Kerl.cs" />
     <Compile Include="Cryptography\KeyGenerator.cs" />
+    <Compile Include="Cryptography\Signing\SignatureValidator.cs" />
     <Compile Include="ProofOfWork\IPoWDiver.cs" />
     <Compile Include="ProofOfWork\CpuPowDiver.cs" />
     <Compile Include="Cryptography\PrivateKey.cs" />
     <Compile Include="Cryptography\SecurityLevel.cs" />
-    <Compile Include="Cryptography\SignatureFragmentGenerator.cs" />
+    <Compile Include="Cryptography\Signing\SignatureFragmentGenerator.cs" />
     <Compile Include="Entity\ValidationSummary.cs" />
     <Compile Include="ProofOfWork\IPoWService.cs" />
     <Compile Include="ProofOfWork\PoWService.cs" />
@@ -125,6 +128,8 @@
     <Compile Include="Repository\RestIotaExtendedRepository.cs" />
     <Compile Include="Repository\CommandType.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Cryptography\Signing\ISigningHelper.cs" />
+    <Compile Include="Cryptography\Signing\IssSigningHelper.cs" />
     <Compile Include="Utils\Timestamp.cs" />
     <Compile Include="Utils\InputValidator.cs" />
   </ItemGroup>

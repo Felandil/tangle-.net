@@ -4,6 +4,7 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
   using Tangle.Net.Utils;
 

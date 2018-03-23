@@ -2,6 +2,8 @@
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Entity;
+
   /// <summary>
   /// The MerkleLeafFactory interface.
   /// </summary>
@@ -12,6 +14,12 @@
     /// <summary>
     /// The create.
     /// </summary>
+    /// <param name="seed">
+    /// The seed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
     /// <param name="startIndex">
     /// The start Index.
     /// </param>
@@ -21,7 +29,7 @@
     /// <returns>
     /// The <see cref="MerkleNode"/>.
     /// </returns>
-    List<MerkleNode> Create(int startIndex, int count);
+    List<MerkleNode> Create(Seed seed, int securityLevel, int startIndex, int count);
 
     #endregion
   }

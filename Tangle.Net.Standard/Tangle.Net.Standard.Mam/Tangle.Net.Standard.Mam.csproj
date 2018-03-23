@@ -27,6 +27,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleLeafFactory.cs" Link="Merkle\IMerkleLeafFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleNodeFactory.cs" Link="Merkle\IMerkleNodeFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\IMerkleTreeFactory.cs" Link="Merkle\IMerkleTreeFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleAddressGenerator.cs" Link="Merkle\MerkleAddressGenerator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleNode.cs" Link="Merkle\MerkleNode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleSubTree.cs" Link="Merkle\MerkleSubTree.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleTree.cs" Link="Merkle\MerkleTree.cs" />

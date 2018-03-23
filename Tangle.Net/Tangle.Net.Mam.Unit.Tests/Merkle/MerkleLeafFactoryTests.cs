@@ -3,6 +3,8 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Merkle;
 
@@ -18,14 +20,16 @@
     [TestMethod]
     public void TestLeafFactorySetsPropertiesAccordingly()
     {
-      var addressGenerator = new AddressGenerator(new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN"));
-      var address = addressGenerator.GetAddress(0);
+      var seed = new Seed("L9DRGFPYDMGVLH9ZCEWHXNEPC9TQQSA9W9FZVYXLBMJTHJC9HZDONEJMMVJVEMHWCIBLAUYBAUFQOMYSN");
+
+      var addressGenerator = new MerkleAddressGenerator(
+        new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)));
 
       var factory = new CurlMerkleLeafFactory(addressGenerator);
-      var leaves = factory.Create(0, 1);
+      var leaves = factory.Create(seed, SecurityLevel.Medium, 0, 1);
 
-      Assert.AreEqual(address.Value, leaves[0].Hash.Value);
-      Assert.AreEqual(address.PrivateKey.Value, leaves[0].Key.Value);
+      Assert.AreEqual("MYNGVRBGNNKWHSTPOUOCBFWXKIUGZEYRCS9NGO9RYKLSOYAEBPOTNNONK9EVJTXQHYLOCRGCJWTTETSYA", leaves[0].Hash.Value);
+      // Assert.AreEqual(address.PrivateKey.Value, leaves[0].Key.Value);
       Assert.AreEqual(1, leaves[0].Size);
     }
   }

@@ -46,6 +46,7 @@
 
       this.Client = new RestIotaClient(client);
       this.PoWService = powService ?? new RestPoWService(this.Client);
+      this.AddressGenerator = new AddressGenerator();
     }
 
     /// <summary>
@@ -304,7 +305,10 @@
             .FirstOrDefault(transactionHash => transactionHash.Key.Value == tailTransaction.Value).Value;
         }
 
-        associatedBundles.Add(bundle);
+        if (associatedBundles.All(b => b.Hash.Value != bundle.Hash.Value))
+        {
+          associatedBundles.Add(bundle);
+        }
       }
 
       return associatedBundles;
@@ -361,7 +365,10 @@
             .FirstOrDefault(transactionHash => transactionHash.Key.Value == tailTransaction.Value).Value;
         }
 
-        associatedBundles.Add(bundle);
+        if (associatedBundles.All(b => b.Hash.Value != bundle.Hash.Value))
+        {
+          associatedBundles.Add(bundle);
+        }
       }
 
       return associatedBundles;

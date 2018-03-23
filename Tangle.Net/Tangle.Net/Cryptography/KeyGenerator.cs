@@ -3,6 +3,8 @@
   using System;
   using System.Collections.Generic;
 
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -11,25 +13,29 @@
   public class KeyGenerator : IKeyGenerator
   {
     /// <summary>
-    /// The hashes per fragment.
-    /// </summary>
-    public const int HashesPerFragment = PrivateKey.FragmentLength / AbstractCurl.HashLength;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="KeyGenerator"/> class.
     /// </summary>
     /// <param name="curl">
     /// The curl.
     /// </param>
-    public KeyGenerator(AbstractCurl curl)
+    /// <param name="signingHelper">
+    /// The signing Helper.
+    /// </param>
+    public KeyGenerator(AbstractCurl curl, ISigningHelper signingHelper)
     {
       this.Curl = curl;
+      this.SigningHelper = signingHelper;
     }
 
     /// <summary>
     /// Gets the curl.
     /// </summary>
     private AbstractCurl Curl { get; }
+
+    /// <summary>
+    /// Gets the signing helper.
+    /// </summary>
+    private ISigningHelper SigningHelper { get; }
 
     /// <inheritdoc />
     public AbstractPrivateKey GetKey(Seed seed, int index, int securityLevel = SecurityLevel.Low)
@@ -39,11 +45,8 @@
         throw new ArgumentException("Indices must not be negative");
       }
 
-      var subseed = Converter.AddTrits(seed.ToTrits(), Converter.IntToTrits(index, 27));
+      var subseed = this.SigningHelper.GetSubseed(seed, index);
 
-      this.Curl.Reset();
-      this.Curl.Absorb(subseed);
-      this.Curl.Squeeze(subseed);
       this.Curl.Reset();
       this.Curl.Absorb(subseed);
 
@@ -52,7 +55,7 @@
 
       for (var fragmentSequence = 0; fragmentSequence < securityLevel; fragmentSequence++)
       {
-        for (var hashSequence = 0; hashSequence < HashesPerFragment; hashSequence++)
+        for (var hashSequence = 0; hashSequence < IssSigningHelper.HashesPerFragment; hashSequence++)
         {
           this.Curl.Squeeze(buffer);
           keyTrits.AddRange(buffer);
