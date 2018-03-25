@@ -5,7 +5,7 @@
   using System.Linq;
 
   using Tangle.Net.Cryptography;
-  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The hash.
@@ -15,7 +15,7 @@
     /// <summary>
     /// The length.
     /// </summary>
-    public const int Length = AbstractCurl.HashLength / Converter.Radix;
+    public const int Length = Constants.TritHashLength / Converter.Radix;
 
     /// <summary>
     /// The min tryte value.

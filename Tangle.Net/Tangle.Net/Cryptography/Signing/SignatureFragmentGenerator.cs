@@ -5,6 +5,7 @@
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The signature fragment generator.
@@ -37,16 +38,16 @@
       var chunks = privateKey.GetChunks(AbstractPrivateKey.ChunkLength);
       foreach (var chunk in chunks)
       {
-        var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray(); // TODO - replace magic numbers
+        var normalizedHashChunk = normalizedHash.Skip((i % Converter.Radix) * 27).Take(27).ToArray();
         var signatureFragmentTrits = chunk.ToTrits();
         var finalizedSignatureFragmentTrits = new List<int>();
 
         var count = chunk.GetChunks(Hash.Length).Count;
         for (var j = 0; j < count; j++)
         {
-          var buffer = signatureFragmentTrits.Skip(j * AbstractCurl.HashLength).Take(AbstractCurl.HashLength).ToArray();
+          var buffer = signatureFragmentTrits.Skip(j * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
 
-          for (var k = 0; k < 13 - normalizedHashChunk[j]; k++)
+          for (var k = 0; k < Hash.MaxTryteValue - normalizedHashChunk[j]; k++)
           {
             this.Curl.Reset();
             this.Curl.Absorb(buffer);

@@ -27,7 +27,8 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTests.cs" Link="Entity\TransactionTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTrytesTest.cs" Link="Entity\TransactionTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TryteStringTest.cs" Link="Entity\TryteStringTest.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWDiverStub.cs" Link="ProofOfWork\PoWDiverStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\CpuNonceSeekerTest.cs" Link="ProofOfWork\CpuNonceSeekerTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\NonceSeekerStub.cs" Link="ProofOfWork\NonceSeekerStub.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWServiceTest.cs" Link="ProofOfWork\PoWServiceTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\RestIotaRepositoryTest.cs" Link="Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />

@@ -6,6 +6,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The kerl test.
@@ -26,7 +27,7 @@
       var kerl = new Kerl();
       kerl.Absorb(tritValue);
 
-      var hashValue = new int[Kerl.HashLength];
+      var hashValue = new int[Constants.TritHashLength];
       kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
@@ -44,7 +45,7 @@
       var kerl = new Kerl();
       kerl.Absorb(tritValue);
 
-      var hashValue = new int[Kerl.HashLength * 2];
+      var hashValue = new int[Constants.TritHashLength * 2];
       kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
@@ -62,7 +63,7 @@
       var kerl = new Kerl();
       kerl.Absorb(tritValue);
 
-      var hashValue = new int[Kerl.HashLength * 2];
+      var hashValue = new int[Constants.TritHashLength * 2];
       kerl.Squeeze(hashValue);
 
       var hash = Converter.TritsToTrytes(hashValue);
@@ -105,19 +106,19 @@
           var kerl = new Kerl();
           kerl.Absorb(trits);
 
-          var tritsOut = new int[Kerl.HashLength];
+          var tritsOut = new int[Constants.TritHashLength];
           kerl.Squeeze(tritsOut);
           var trytesOut = Converter.TritsToTrytes(tritsOut);
 
           Assert.AreEqual(hashes1, trytesOut);
 
-          tritsOut = new int[Kerl.HashLength];
+          tritsOut = new int[Constants.TritHashLength];
           kerl.Squeeze(tritsOut);
           trytesOut = Converter.TritsToTrytes(tritsOut);
 
           Assert.AreEqual(hashes2, trytesOut);
 
-          tritsOut = new int[Kerl.HashLength];
+          tritsOut = new int[Constants.TritHashLength];
           kerl.Squeeze(tritsOut);
           trytesOut = Converter.TritsToTrytes(tritsOut);
 

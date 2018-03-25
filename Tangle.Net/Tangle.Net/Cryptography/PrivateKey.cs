@@ -7,6 +7,7 @@
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The private key.
@@ -41,7 +42,7 @@
           return this.digest;
         }
 
-        var buffer = new int[AbstractCurl.HashLength];
+        var buffer = new int[Constants.TritHashLength];
         var digests = new List<int>();
         var privateKeyAsTrits = Converter.TrytesToTrits(this.Value);
 
@@ -51,7 +52,7 @@
 
           for (var j = 0; j < 27; j++)
           {
-            buffer = keyFragment.Skip(j * AbstractCurl.HashLength).Take(AbstractCurl.HashLength).ToArray();
+            buffer = keyFragment.Skip(j * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
 
             for (var k = 0; k < 26; k++)
             {
@@ -60,9 +61,9 @@
               this.Curl.Squeeze(buffer);
             }
 
-            for (var k = 0; k < AbstractCurl.HashLength; k++)
+            for (var k = 0; k < Constants.TritHashLength; k++)
             {
-              keyFragment[(j * AbstractCurl.HashLength) + k] = buffer[k];
+              keyFragment[(j * Constants.TritHashLength) + k] = buffer[k];
             }
           }
 
@@ -70,9 +71,9 @@
           this.Curl.Absorb(keyFragment);
           this.Curl.Squeeze(buffer);
 
-          for (var j = 0; j < AbstractCurl.HashLength; j++)
+          for (var j = 0; j < Constants.TritHashLength; j++)
           {
-            digests.Insert((i * AbstractCurl.HashLength) + j, buffer[j]);
+            digests.Insert((i * Constants.TritHashLength) + j, buffer[j]);
           }
         }
 

@@ -3,6 +3,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The abstract mam.
@@ -36,7 +37,7 @@
     /// </returns>
     protected Hash GetMessageHash(TryteString message)
     {
-      var hash = new int[AbstractCurl.HashLength];
+      var hash = new int[Constants.TritHashLength];
 
       this.Curl.Reset();
       this.Curl.Absorb(message.ToTrits());

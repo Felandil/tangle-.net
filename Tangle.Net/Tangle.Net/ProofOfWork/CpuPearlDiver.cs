@@ -7,13 +7,36 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The cpu pow diver.
   /// </summary>
-  public class CpuPowDiver : IPoWDiver
+  public class CpuPearlDiver : IPearlDiver
   {
-    #region Constants
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CpuPearlDiver"/> class.
+    /// </summary>
+    public CpuPearlDiver()
+    {
+      this.Rounds = (int)CurlMode.CurlP81;
+    }
+
+    /// <summary>
+    /// Gets or sets the rounds.
+    /// </summary>
+    public int Rounds { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CpuPearlDiver"/> class.
+    /// </summary>
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
+    public CpuPearlDiver(CurlMode mode)
+    {
+      this.Rounds = (int)mode;
+    }
 
     /// <summary>
     /// The hig h_0.
@@ -66,18 +89,9 @@
     private const ulong LowBits = 0x0000000000000000;
 
     /// <summary>
-    /// The number of rounds.
-    /// </summary>
-    private const int NumberOfRounds = 81;
-
-    /// <summary>
     /// The transactio n_ length.
     /// </summary>
-    private const int TransactionLength = 8019;
-
-    #endregion
-
-    #region Fields
+    public const int TransactionLength = 8019;
 
     /// <summary>
     /// The sync obj.
@@ -89,9 +103,6 @@
     /// </summary>
     private State state;
 
-    #endregion
-
-    #region Enums
 
     /// <summary>
     /// The state.
@@ -114,10 +125,6 @@
       Completed
     }
 
-    #endregion
-
-    #region Public Methods and Operators
-
     /// <summary>
     /// The cancel.
     /// </summary>
@@ -126,68 +133,11 @@
       this.state = State.Cancelled;
     }
 
-    /// <summary>
-    /// The do pow.
-    /// </summary>
-    /// <param name="trytes">
-    /// The trytes.
-    /// </param>
-    /// <param name="minWeightMagnitude">
-    /// The min weight magnitude.
-    /// </param>
-    /// <returns>
-    /// The <see cref="TransactionTrytes"/>.
-    /// </returns>
-    public TransactionTrytes DoPow(TransactionTrytes trytes, int minWeightMagnitude)
+    /// <inheritdoc />
+    public int[] Search(int[] trits, int minWeightMagnitude)
     {
-      var transactionTrits = trytes.ToTrits();
-      this.Search(transactionTrits, minWeightMagnitude, 0);
-
-      return new TransactionTrytes(Converter.TritsToTrytes(transactionTrits));
-    }
-
-    #endregion
-
-    #region Methods
-
-    /// <summary>
-    /// The increment.
-    /// </summary>
-    /// <param name="midCurlStateCopyLow">
-    /// The mid curl state copy low.
-    /// </param>
-    /// <param name="midCurlStateCopyHigh">
-    /// The mid curl state copy high.
-    /// </param>
-    /// <param name="fromIndex">
-    /// The from index.
-    /// </param>
-    /// <param name="toIndex">
-    /// The to index.
-    /// </param>
-    private static void Increment(ulong[] midCurlStateCopyLow, ulong[] midCurlStateCopyHigh, int fromIndex, int toIndex)
-    {
-      for (var i = fromIndex; i < toIndex; i++)
-      {
-        if (midCurlStateCopyLow[i] == LowBits)
-        {
-          midCurlStateCopyLow[i] = HighBits;
-          midCurlStateCopyHigh[i] = LowBits;
-        }
-        else
-        {
-          if (midCurlStateCopyHigh[i] == LowBits)
-          {
-            midCurlStateCopyHigh[i] = HighBits;
-          }
-          else
-          {
-            midCurlStateCopyLow[i] = LowBits;
-          }
-
-          break;
-        }
-      }
+      this.Search(trits, minWeightMagnitude, 0);
+      return trits;
     }
 
     /// <summary>
@@ -205,10 +155,10 @@
     /// <param name="curlScratchpadHigh">
     /// The curl scratchpad high.
     /// </param>
-    private static void Transform(ulong[] curlStateLow, ulong[] curlStateHigh, ulong[] curlScratchpadLow, ulong[] curlScratchpadHigh)
+    private void Transform(ulong[] curlStateLow, ulong[] curlStateHigh, ulong[] curlScratchpadLow, ulong[] curlScratchpadHigh)
     {
-      int curlScratchpadIndex = 0;
-      for (int round = 0; round < NumberOfRounds; round++)
+      var curlScratchpadIndex = 0;
+      for (var round = 0; round < this.Rounds; round++)
       {
         Array.Copy(curlStateLow, 0, curlScratchpadLow, 0, Curl.StateLength);
         Array.Copy(curlStateHigh, 0, curlScratchpadHigh, 0, Curl.StateLength);
@@ -254,7 +204,7 @@
         throw new Exception("Invalid transaction trits length: " + transactionTrits.Length);
       }
 
-      if (minWeightMagnitude < 0 || minWeightMagnitude > Curl.HashLength)
+      if (minWeightMagnitude < 0 || minWeightMagnitude > Constants.TritHashLength)
       {
         throw new Exception("Invalid min weight magnitude: " + minWeightMagnitude);
       }
@@ -266,7 +216,7 @@
 
       ulong[] midCurlStateLow = new ulong[Curl.StateLength], midCurlStateHigh = new ulong[Curl.StateLength];
       {
-        for (var i = Curl.HashLength; i < Curl.StateLength; i++)
+        for (var i = Constants.TritHashLength; i < Curl.StateLength; i++)
         {
           midCurlStateLow[i] = HighBits;
           midCurlStateHigh[i] = HighBits;
@@ -275,9 +225,9 @@
         var offset = 0;
         var curlScratchpadLow = new ulong[Curl.StateLength]; 
         var curlScratchpadHigh = new ulong[Curl.StateLength];
-        for (var i = (TransactionLength - Curl.HashLength) / Curl.HashLength; i-- > 0; )
+        for (var i = (TransactionLength - Constants.TritHashLength) / Constants.TritHashLength; i-- > 0; )
         {
-          for (var j = 0; j < Curl.HashLength; j++)
+          for (var j = 0; j < Constants.TritHashLength; j++)
           {
             switch (transactionTrits[offset++])
             {
@@ -300,7 +250,7 @@
             }
           }
 
-          Transform(midCurlStateLow, midCurlStateHigh, curlScratchpadLow, curlScratchpadHigh);
+          this.Transform(midCurlStateLow, midCurlStateHigh, curlScratchpadLow, curlScratchpadHigh);
         }
 
         for (int i = 0; i < 162; i++)
@@ -354,12 +304,12 @@
         var task = Task.Factory.StartNew(
           () =>
             {
-              ulong[] midCurlStateCopyLow = new ulong[Curl.StateLength], midCurlStateCopyHigh = new ulong[Curl.StateLength];
-              Array.Copy(midCurlStateLow, 0, midCurlStateCopyLow, 0, Curl.StateLength);
-              Array.Copy(midCurlStateHigh, 0, midCurlStateCopyHigh, 0, Curl.StateLength);
+              var collection = new ULongTritsCollection(Curl.StateLength);
+              Array.Copy(midCurlStateLow, 0, collection.Low, 0, Curl.StateLength);
+              Array.Copy(midCurlStateHigh, 0, collection.High, 0, Curl.StateLength);
               for (var i = threadIndex; i-- > 0;)
               {
-                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + (Curl.HashLength / 9), 162 + ((Curl.HashLength / 9) * 2));
+                collection.Increment(162 + (Constants.TritHashLength / 9), 162 + ((Constants.TritHashLength / 9) * 2));
               }
 
               ulong[] curlStateLow = new ulong[Curl.StateLength], curlStateHigh = new ulong[Curl.StateLength];
@@ -367,16 +317,16 @@
               ulong outMask = 1;
               while (this.state == State.Running)
               {
-                Increment(midCurlStateCopyLow, midCurlStateCopyHigh, 162 + ((Curl.HashLength / 9) * 2), Curl.HashLength);
+                collection.Increment(162 + ((Constants.TritHashLength / 9) * 2), Constants.TritHashLength);
 
-                Array.Copy(midCurlStateCopyLow, 0, curlStateLow, 0, Curl.StateLength);
-                Array.Copy(midCurlStateCopyHigh, 0, curlStateHigh, 0, Curl.StateLength);
-                Transform(curlStateLow, curlStateHigh, curlScratchpadLow, curlScratchpadHigh);
+                Array.Copy(collection.Low, 0, curlStateLow, 0, Curl.StateLength);
+                Array.Copy(collection.High, 0, curlStateHigh, 0, Curl.StateLength);
+                this.Transform(curlStateLow, curlStateHigh, curlScratchpadLow, curlScratchpadHigh);
 
                 var mask = HighBits;
                 for (var i = minWeightMagnitude; i-- > 0;)
                 {
-                  mask &= ~(curlStateLow[Curl.HashLength - 1 - i] ^ curlStateHigh[Curl.HashLength - 1 - i]);
+                  mask &= ~(curlStateLow[Constants.TritHashLength - 1 - i] ^ curlStateHigh[Constants.TritHashLength - 1 - i]);
                   if (mask == 0)
                   {
                     break;
@@ -398,11 +348,11 @@
                       outMask <<= 1;
                     }
 
-                    for (var i = 0; i < Curl.HashLength; i++)
+                    for (var i = 0; i < Constants.TritHashLength; i++)
                     {
-                      transactionTrits[TransactionLength - Curl.HashLength + i] = (midCurlStateCopyLow[i] & outMask) == 0
+                      transactionTrits[TransactionLength - Constants.TritHashLength + i] = (collection.Low[i] & outMask) == 0
                                                                                      ? 1
-                                                                                     : (midCurlStateCopyHigh[i] & outMask) == 0 ? -1 : 0;
+                                                                                     : (collection.High[i] & outMask) == 0 ? -1 : 0;
                     }
                   }
                 }
@@ -415,7 +365,5 @@
 
       Task.WaitAll(tasks.ToArray());
     }
-
-    #endregion
   }
 }

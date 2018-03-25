@@ -209,7 +209,7 @@
     [TestMethod]
     public void TestPowServiceAddsTimeStamps()
     {
-      var service = new PoWService(new PoWDiverStub());
+      var service = new PoWService(new PearlDiverStub());
       var result = service.DoPoW(new Hash("BRANCH"), new Hash("TRUNK"), this.bundle.Transactions);
 
       foreach (var transaction in result)
@@ -227,7 +227,7 @@
     [TestMethod]
     public void TestPowServiceChainsTransactionsCorrectly()
     {
-      var service = new PoWService(new PoWDiverStub());
+      var service = new PoWService(new PearlDiverStub());
       var result = service.DoPoW(new Hash("BRANCH"), new Hash("TRUNK"), this.bundle.Transactions);
 
       for (var i = 0; i < result.Count; i++)

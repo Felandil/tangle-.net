@@ -27,11 +27,10 @@
       var repository = new RestIotaRepositoryFactory().CreateAsync().Result;
       var curl = new Curl();
       var mask = new CurlMask();
-      var treeFactory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(curl), new CurlMerkleLeafFactory(new AddressGenerator()));
       var mamFactory = new CurlMamFactory(curl, mask, new SignatureFragmentGenerator(new Kerl()));
-      var mamParser = new CurlMamParser(mask, treeFactory, curl, new SignatureValidator());
+      var mamParser = new CurlMamParser(mask, CurlMerkleTreeFactory.Default, curl, new SignatureValidator());
 
-      this.ChannelFactory = new MamChannelFactory(mamFactory, treeFactory, repository);
+      this.ChannelFactory = new MamChannelFactory(mamFactory, CurlMerkleTreeFactory.Default, repository);
       this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, mamParser, mask);
     }
 

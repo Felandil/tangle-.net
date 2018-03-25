@@ -4,6 +4,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The checksum.
@@ -56,7 +57,7 @@
       var kerl = new Kerl();
       kerl.Absorb(addressTrits);
 
-      var checksumTrits = new int[AbstractCurl.HashLength];
+      var checksumTrits = new int[Constants.TritHashLength];
       kerl.Squeeze(checksumTrits);
 
       var tritsToTrytes = Converter.TritsToTrytes(checksumTrits);

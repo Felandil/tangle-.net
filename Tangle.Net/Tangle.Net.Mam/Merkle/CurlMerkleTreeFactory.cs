@@ -2,6 +2,8 @@
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -9,8 +11,6 @@
   /// </summary>
   public class CurlMerkleTreeFactory : IMerkleTreeFactory
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMerkleTreeFactory"/> class.
     /// </summary>
@@ -26,9 +26,11 @@
       this.LeafFactory = leafFactory;
     }
 
-    #endregion
-
-    #region Properties
+    /// <summary>
+    /// The default.
+    /// </summary>
+    public static CurlMerkleTreeFactory Default =>
+      new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl(CurlMode.CurlP27)), new CurlMerkleLeafFactory(MerkleAddressGenerator.Default));
 
     /// <summary>
     /// Gets or sets the leaf factory.
@@ -39,10 +41,6 @@
     /// Gets or sets the node factory.
     /// </summary>
     private IMerkleNodeFactory NodeFactory { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <inheritdoc />
     public MerkleTree Create(Seed seed, int startIndex, int count, int securityLevel)
@@ -56,10 +54,6 @@
     {
       return new MerkleTree { Root = this.NodeFactory.Create(branchLeaves[0], branchLeaves[0]) };
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// The build tree.
@@ -87,7 +81,5 @@
 
       return this.BuildTree(subnodes);
     }
-
-    #endregion
   }
 }

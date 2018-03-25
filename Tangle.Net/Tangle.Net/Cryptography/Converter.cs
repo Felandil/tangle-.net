@@ -8,6 +8,7 @@
   using Org.BouncyCastle.Math;
 
   using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The converter.
@@ -211,7 +212,7 @@
     /// </returns>
     public static int[] ConvertBytesToTrits(IEnumerable<byte> bytes)
     {
-      return ConvertBigIntToTrits(ConvertBytesToBigInt(bytes), Kerl.HashLength);
+      return ConvertBigIntToTrits(ConvertBytesToBigInt(bytes), Constants.TritHashLength);
     }
 
     /// <summary>
@@ -252,7 +253,7 @@
     /// </returns>
     public static byte[] ConvertTritsToBytes(int[] trits)
     {
-      return ConvertBigIntToBytes(ConvertTritsToBigInt(trits, 0, Kerl.HashLength));
+      return ConvertBigIntToBytes(ConvertTritsToBigInt(trits, 0, Constants.TritHashLength));
     }
 
     /// <summary>
@@ -293,8 +294,8 @@
     /// </returns>
     public static int[] IntToTrits(int value, int size)
     {
-      var destination = new int[size];
       var absoluteValue = value < 0 ? -value : value;
+      var destination = new int[size];
       var i = 0;
 
       while (absoluteValue > 0)
@@ -312,12 +313,14 @@
         i++;
       }
 
-      if (value < 0)
+      if (value >= 0)
       {
-        for (var y = 0; y < destination.Length; y++)
-        {
-          destination[i] = -destination[i];
-        }
+        return destination;
+      }
+
+      for (var y = 0; y < destination.Length; y++)
+      {
+        destination[i] = -destination[i];
       }
 
       return destination;
@@ -365,7 +368,7 @@
 
       for (var i = trits.Length; i-- > 0;)
       {
-        returnValue = returnValue * 3 + trits[i];
+        returnValue = (returnValue * Radix) + trits[i];
       }
 
       return returnValue;

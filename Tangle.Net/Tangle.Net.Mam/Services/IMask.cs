@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
 
   /// <summary>
@@ -27,13 +28,10 @@
     /// <param name="payload">
     /// The payload.
     /// </param>
-    /// <param name="key">
-    /// The key.
+    /// <param name="keyContainingCurl">
+    /// The key Containing Curl.
     /// </param>
-    /// <returns>
-    /// The <see cref="TryteString"/>.
-    /// </returns>
-    TryteString Mask(TryteString payload, TryteString key);
+    void Mask(int[] payload, AbstractCurl keyContainingCurl);
 
     /// <summary>
     /// The unmask.

@@ -4,6 +4,7 @@
   using System.Linq;
   using System.Threading.Tasks;
 
+  using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Utils;
 
@@ -29,7 +30,7 @@
     /// <param name="powDiver">
     /// The pow diver.
     /// </param>
-    public PoWService(IPoWDiver powDiver)
+    public PoWService(IPearlDiver powDiver)
     {
       this.PowDiver = powDiver;
     }
@@ -41,7 +42,7 @@
     /// <summary>
     /// Gets the pow diver.
     /// </summary>
-    private IPoWDiver PowDiver { get; }
+    private IPearlDiver PowDiver { get; }
 
     #endregion
 
@@ -93,8 +94,8 @@
           transactions[i].Tag = transactions[i].ObsoleteTag;
         }
 
-        var resultTransactionTrytes = this.PowDiver.DoPow(transactions[i].ToTrytes(), minWeightMagnitude);
-        var resultTransaction = Transaction.FromTrytes(resultTransactionTrytes);
+        var resultTransactionTrits = this.PowDiver.Search(transactions[i].ToTrytes().ToTrits(), minWeightMagnitude);
+        var resultTransaction = Transaction.FromTrytes(new TransactionTrytes(Converter.TritsToTrytes(resultTransactionTrits)));
         lastTransactionHash = resultTransaction.Hash;
 
         resultTransactions.Add(resultTransaction);

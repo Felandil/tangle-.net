@@ -48,11 +48,12 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\Transfer.cs" Link="Entity\Transfer.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\TryteString.cs" Link="Entity\TryteString.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\ValidationSummary.cs" Link="Entity\ValidationSummary.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPowDiver.cs" Link="ProofOfWork\CpuPowDiver.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPoWDiver.cs" Link="ProofOfWork\IPoWDiver.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPoWService.cs" Link="ProofOfWork\IPoWService.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\PoWService.cs" Link="ProofOfWork\PoWService.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\RestPoWService.cs" Link="ProofOfWork\RestPoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPearlDiver.cs" Link="ProofOfWork\CpuPearlDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPearlDiver.cs" Link="ProofOfWork\IPearlDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\IPoWService.cs" Link="ProofOfWork\Service\IPoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWService.cs" Link="ProofOfWork\Service\PoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\RestPoWService.cs" Link="ProofOfWork\Service\RestPoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\ULongTritsCollection.cs" Link="ProofOfWork\ULongTritsCollection.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaCoreRepository.cs" Link="Repository\RestIotaCoreRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaExtendedRepository.cs" Link="Repository\RestIotaExtendedRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaNodeRepository.cs" Link="Repository\RestIotaNodeRepository.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Constants.cs" Link="Utils\Constants.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Extensions.cs" Link="Utils\Extensions.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\InputValidator.cs" Link="Utils\InputValidator.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Timestamp.cs" Link="Utils\Timestamp.cs" />
@@ -107,7 +109,6 @@
     <Folder Include="Repository\Factory\" />
     <Folder Include="Repository\Responses\" />
     <Folder Include="Utils\" />
-    <Folder Include="ProofOfWork\" />
   </ItemGroup>
 
 </Project>

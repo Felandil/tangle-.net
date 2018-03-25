@@ -5,15 +5,15 @@
   /// <summary>
   /// The PoWDiver interface.
   /// </summary>
-  public interface IPoWDiver
+  public interface IPearlDiver
   {
     #region Public Methods and Operators
 
     /// <summary>
     /// The do pow.
     /// </summary>
-    /// <param name="trytes">
-    /// The trytes.
+    /// <param name="trits">
+    /// The trits.
     /// </param>
     /// <param name="minWeightMagnitude">
     /// The min weight magnitude.
@@ -21,7 +21,7 @@
     /// <returns>
     /// The <see cref="TransactionTrytes"/>.
     /// </returns>
-    TransactionTrytes DoPow(TransactionTrytes trytes, int minWeightMagnitude);
+    int[] Search(int[] trits, int minWeightMagnitude);
 
     #endregion
   }

@@ -46,24 +46,9 @@
       }
 
       var subseed = this.SigningHelper.GetSubseed(seed, index);
+      var keyTrits = this.SigningHelper.PrivateKeyFromSubseed(subseed, securityLevel);
 
-      this.Curl.Reset();
-      this.Curl.Absorb(subseed);
-
-      var keyTrits = new List<int>();
-      var buffer = new int[subseed.Length];
-
-      for (var fragmentSequence = 0; fragmentSequence < securityLevel; fragmentSequence++)
-      {
-        for (var hashSequence = 0; hashSequence < IssSigningHelper.HashesPerFragment; hashSequence++)
-        {
-          this.Curl.Squeeze(buffer);
-          keyTrits.AddRange(buffer);
-        }
-      }
-
-      var trytes = Converter.TritsToTrytes(keyTrits.ToArray());
-      return new PrivateKey(trytes, securityLevel, index, new SignatureFragmentGenerator(this.Curl), this.Curl);
+      return new PrivateKey(Converter.TritsToTrytes(keyTrits), securityLevel, index, new SignatureFragmentGenerator(this.Curl), this.Curl);
     }
 
     /// <inheritdoc />

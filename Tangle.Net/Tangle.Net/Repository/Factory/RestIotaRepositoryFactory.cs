@@ -58,7 +58,7 @@
       }
       else
       {
-        powService = new PoWService(new CpuPowDiver());
+        powService = new PoWService(new CpuPearlDiver());
       }
 
       return new RestIotaRepository(client, powService);

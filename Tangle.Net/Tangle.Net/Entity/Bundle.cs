@@ -221,7 +221,7 @@
       var balance = this.Balance;
       if (balance < 0)
       {
-        if (this.RemainderAddress != null && !string.IsNullOrEmpty(this.RemainderAddress.Value))
+        if (!string.IsNullOrEmpty(this.RemainderAddress?.Value))
         {
           this.Transactions.Add(
             new Transaction
@@ -408,7 +408,7 @@
           kerl.Absorb(transactionTrits);
         }
 
-        var hashTrits = new int[AbstractCurl.HashLength];
+        var hashTrits = new int[Constants.TritHashLength];
         kerl.Squeeze(hashTrits);
         bundleHash = new Hash(Converter.TritsToTrytes(hashTrits));
         var normalizedBundleValue = Hash.Normalize(bundleHash);
@@ -493,7 +493,7 @@
 
         if (transaction.CurrentIndex != i)
         {
-          validationErrors.Add(string.Format("Transaction {0} has an invalid current index. Expected: {0}. Got {1}.", i, transaction.CurrentIndex));
+          validationErrors.Add($"Transaction {i} has an invalid current index. Expected: {i}. Got {transaction.CurrentIndex}.");
         }
 
         if (transaction.LastIndex != transactionsCount - 1)

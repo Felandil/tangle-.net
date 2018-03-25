@@ -5,6 +5,7 @@
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The signature validator.
@@ -64,7 +65,7 @@
       for (var i = 0; i < fragments.Count; i++)
       {
         var normalizedHashChunk = normalizedHash.Skip((i % 3) * 27).Take(27).ToArray();
-        var buffer = new int[AbstractCurl.HashLength];
+        var buffer = new int[Constants.TritHashLength];
 
         this.OuterCurl.Reset();
 
@@ -87,7 +88,7 @@
         checksum.AddRange(buffer);
       }
 
-      var actualPublicKey = new int[AbstractCurl.HashLength];
+      var actualPublicKey = new int[Constants.TritHashLength];
 
       this.Curl.Reset();
       this.Curl.Absorb(checksum.ToArray());

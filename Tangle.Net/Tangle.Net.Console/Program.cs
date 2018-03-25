@@ -33,7 +33,7 @@
     {
       var factory = new RestIotaRepositoryFactory();
       var repo = factory.CreateAsync(true).Result;
-      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPowDiver()));
+      var repository = new RestIotaRepository(new RestClient("http://localhost:14265"), new PoWService(new CpuPearlDiver()));
       var acc = repository.GetAccountData(Seed.Random(), true, SecurityLevel.Medium, 0);
 
       var seed = Seed.Random();

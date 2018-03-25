@@ -58,7 +58,7 @@
       var nodeUri = ConfigurationManager.AppSettings["nodeUri"]; // The node URI is saved in the projects App.config ... let's get it 
 
       var iotaClient = new RestIotaClient(new RestClient(nodeUri));
-      var powService = new PoWService(new CpuPowDiver()); // the examples will use the CPU to do PoW for a transaction.
+      var powService = new PoWService(new CpuPearlDiver()); // the examples will use the CPU to do PoW for a transaction.
 
       // you could also use a remote node for PoW, if the node supports it. Uncomment this line and comment the line above to do so. Don't forget to change the node Uri in App.Config
       // var powService = new RestPoWService(iotaClient); 

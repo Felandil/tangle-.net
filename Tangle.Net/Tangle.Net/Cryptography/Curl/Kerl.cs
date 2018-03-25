@@ -1,9 +1,12 @@
 ﻿namespace Tangle.Net.Cryptography.Curl
 {
   using System;
+  using System.Linq;
   using System.Threading.Tasks;
 
   using Org.BouncyCastle.Crypto.Digests;
+
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The kerl.
@@ -45,7 +48,7 @@
     /// </summary>
     public Kerl()
     {
-      this.State = new int[HashLength];
+      this.State = new int[Constants.TritHashLength];
       this.byteState = new byte[ByteHashLength];
       this.digest = new KeccakDigest(BitHashLength);
     }
@@ -64,18 +67,18 @@
       {
         Parallel.For(
           0,
-          AbstractCurl.HashLength,
+          Constants.TritHashLength,
           (i) =>
             {
               this.State[i] = trits[offset + i];
             });
 
-        this.State[AbstractCurl.HashLength - 1] = 0;
+        this.State[Constants.TritHashLength - 1] = 0;
 
         var bytes = Converter.ConvertTritsToBytes(this.State);
         this.digest.BlockUpdate(bytes, 0, bytes.Length);
 
-        offset += AbstractCurl.HashLength;
+        offset += Constants.TritHashLength;
       }
     }
 
@@ -102,11 +105,11 @@
       {
         this.digest.DoFinal(this.byteState, 0);
         this.State = Converter.ConvertBytesToTrits(this.byteState);
-        this.State[HashLength - 1] = 0;
+        this.State[Constants.TritHashLength - 1] = 0;
 
         Parallel.For(
           0,
-          AbstractCurl.HashLength,
+          Constants.TritHashLength,
           (i) =>
             {
               trits[offset + i] = this.State[i];
@@ -123,7 +126,7 @@
             });
 
         this.digest.BlockUpdate(this.byteState, 0, this.byteState.Length);
-        offset += HashLength;
+        offset += Constants.TritHashLength;
       }
     }
 
@@ -139,7 +142,7 @@
     /// </param>
     private static void ValidateLength(int length)
     {
-      if (length % HashLength != 0)
+      if (length % Constants.TritHashLength != 0)
       {
         throw new ArgumentException("Illegal length provided'.");
       }

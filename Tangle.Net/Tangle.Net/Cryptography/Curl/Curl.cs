@@ -1,6 +1,9 @@
 ﻿namespace Tangle.Net.Cryptography.Curl
 {
+  using System.Linq;
   using System.Threading.Tasks;
+
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The curl.
@@ -15,7 +18,7 @@
     /// <summary>
     /// The state length.
     /// </summary>
-    public const int StateLength = 3 * HashLength;
+    public const int StateLength = 3 * Constants.TritHashLength;
 
     /// <summary>
     /// The truth table.
@@ -64,12 +67,12 @@
 
         Parallel.For(
           0,
-          length < AbstractCurl.HashLength ? length : AbstractCurl.HashLength,
+          length < Constants.TritHashLength ? length : Constants.TritHashLength,
           (i) => { this.State[i] = trits[offset + i]; });
 
         this.Transform();
 
-        offset += AbstractCurl.HashLength;
+        offset += Constants.TritHashLength;
       }
     }
 
@@ -90,16 +93,19 @@
     public override void Squeeze(int[] trits)
     {
       var length = trits.Length;
+      var round = 0;
+
       do
       {
         Parallel.For(
           0,
-          length < AbstractCurl.HashLength ? length : AbstractCurl.HashLength,
-          (i) => { trits[i] = this.State[i]; });
+          length < Constants.TritHashLength ? length : Constants.TritHashLength,
+          (i) => { trits[i + (round * Constants.TritHashLength)] = this.State[i]; });
 
         this.Transform();
+        round++;
       }
-      while ((length -= AbstractCurl.HashLength) > 0);
+      while ((length -= Constants.TritHashLength) > 0);
     }
 
     /// <summary>

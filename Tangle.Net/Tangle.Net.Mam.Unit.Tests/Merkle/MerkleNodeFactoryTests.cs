@@ -74,11 +74,11 @@
     /// The test only left node is given should combine with left node hash.
     /// </summary>
     [TestMethod]
-    public void TestOnlyLeftNodeIsGivenShouldCombineWithLeftNodeHash()
+    public void TestOnlyLeftNodeIsGivenShouldTakeLeftNodeHash()
     {
       var node = this.NodeFactory.Create(this.leftNode);
-      Assert.AreEqual("9ZAO9ZKQZPVRVPLVEVXYEWMTVMEQNQBE9JKM9IQEBLJBIYWSUCZGFIHVCKYTAHLV9GEVMFON9NVWRDGAM", node.Hash.Value);
-      Assert.AreEqual("9ZAO9ZKQZPVRVPLVEVXYEWMTVMEQNQBE9JKM9IQEBLJBIYWSUCZGFIHVCKYTAHLV9GEVMFON9NVWRDGAM", node.LeftNode.ParentNode.Hash.Value);
+      Assert.AreEqual("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999", node.Hash.Value);
+      Assert.AreEqual("HG9KCXQZGQDVTFGRHOZDZ99RMKGVRIQXEKXWXTPWYRGXQQVFVMTLQLUPJSIDONDEURVKHMBPRYGP99999", node.LeftNode.ParentNode.Hash.Value);
     }
 
     #endregion

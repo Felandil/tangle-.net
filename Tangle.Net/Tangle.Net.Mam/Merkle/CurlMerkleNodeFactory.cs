@@ -3,6 +3,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The curl merkle node factory.
@@ -49,15 +50,22 @@
     /// </returns>
     public MerkleNode Create(MerkleNode leftNode, MerkleNode rightNode = null)
     {
-      var hashTrits = new int[AbstractCurl.HashLength];
+      var hashTrits = new int[Constants.TritHashLength];
       var leftNodeTrits = leftNode.Hash.ToTrits();
+      Hash hash;
 
-      this.Curl.Reset();
-      this.Curl.Absorb(leftNodeTrits);
-      this.Curl.Absorb(rightNode == null ? leftNodeTrits : rightNode.Hash.ToTrits());
-      this.Curl.Squeeze(hashTrits);
-
-      var hash = new Hash(Converter.TritsToTrytes(hashTrits));
+      if (rightNode != null)
+      {
+        this.Curl.Reset();
+        this.Curl.Absorb(leftNodeTrits);
+        this.Curl.Absorb(rightNode.Hash.ToTrits());
+        this.Curl.Squeeze(hashTrits);
+        hash = new Hash(Converter.TritsToTrytes(hashTrits));
+      }
+      else
+      {
+        hash = leftNode.Hash;
+      }
 
       return new MerkleNode(leftNode, rightNode) { Hash = hash };
     }

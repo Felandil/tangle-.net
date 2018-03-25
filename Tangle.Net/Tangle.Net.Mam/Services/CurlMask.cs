@@ -23,6 +23,17 @@
       this.Curl = new Curl();
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CurlMask"/> class.
+    /// </summary>
+    /// <param name="curl">
+    /// The curl.
+    /// </param>
+    public CurlMask(AbstractCurl curl)
+    {
+      this.Curl = curl;
+    }
+
     #endregion
 
     #region Properties
@@ -39,7 +50,7 @@
     /// <inheritdoc />
     public Hash Hash(TryteString key, TryteString salt = null)
     {
-      var keyTrits = new int[AbstractCurl.HashLength];
+      var keyTrits = new int[Constants.TritHashLength];
 
       this.Curl.Reset();
       this.Curl.Absorb(key.ToTrits());
@@ -55,28 +66,25 @@
     }
 
     /// <inheritdoc />
-    public TryteString Mask(TryteString payload, TryteString key)
+    public void Mask(int[] payload, AbstractCurl keyContainingCurl)
     {
-      this.Curl.Reset();
-      this.Curl.Absorb(key.ToTrits());
+      var keyChunk = keyContainingCurl.Rate(Constants.TritHashLength);
 
-      var keyChunk = new int[AbstractCurl.HashLength];
-
-      var maskedPayload = new List<int>();
-      foreach (var chunk in payload.ToTrits().GetChunks(AbstractCurl.HashLength))
+      var round = 0;
+      foreach (var chunk in payload.GetChunks(Constants.TritHashLength))
       {
-        this.Curl.Squeeze(keyChunk);
+        keyContainingCurl.Absorb(chunk);
+        var curlState = keyContainingCurl.Rate(Constants.TritHashLength);
         var length = chunk.Length;
 
         for (var i = 0; i < length; i++)
         {
-          keyChunk[i] = Converter.Sum(chunk[i], keyChunk[i]);
+          payload[(round * Constants.TritHashLength) + i] = Converter.Sum(chunk[i], keyChunk[i]);
+          keyChunk[i] = curlState[i];
         }
 
-        maskedPayload.AddRange(keyChunk.Take(length));
+        round++;
       }
-
-      return new TryteString(Converter.TritsToTrytes(maskedPayload.ToArray()));
     }
 
     /// <inheritdoc />
@@ -85,10 +93,10 @@
       this.Curl.Reset();
       this.Curl.Absorb(key.ToTrits());
 
-      var keyChunk = new int[AbstractCurl.HashLength];
+      var keyChunk = new int[Constants.TritHashLength];
 
       var unmasked = new List<int>();
-      foreach (var chunk in payload.ToTrits().GetChunks(AbstractCurl.HashLength))
+      foreach (var chunk in payload.ToTrits().GetChunks(Constants.TritHashLength))
       {
         this.Curl.Squeeze(keyChunk);
         var length = chunk.Length;

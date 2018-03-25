@@ -3,8 +3,10 @@
   using System.Collections.Generic;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
 
   /// <summary>
   /// The merkle address generator.
@@ -23,9 +25,16 @@
     }
 
     /// <summary>
+    /// The default.
+    /// </summary>
+    public static MerkleAddressGenerator Default =>
+      new MerkleAddressGenerator(new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)));
+
+    /// <summary>
     /// Gets the signing.
     /// </summary>
     private ISigningHelper Signing { get; }
+
 
     /// <inheritdoc />
     public Address GetAddress(Seed seed, int securityLevel, int index)
@@ -33,8 +42,10 @@
       var subseed = this.Signing.GetSubseed(seed, index);
       var digest = this.Signing.DigestFromSubseed(subseed, securityLevel);
       var addressTrits = this.Signing.AddressFromDigest(digest);
+      var privateKeyTrits = this.Signing.PrivateKeyFromSubseed(subseed, securityLevel);
 
-      return new Address(Converter.TritsToTrytes(addressTrits));
+      var privateKey = new MerklePrivateKey(Converter.TritsToTrytes(privateKeyTrits), securityLevel, index, Converter.TritsToTrytes(digest));
+      return new Address(Converter.TritsToTrytes(addressTrits)) { PrivateKey = privateKey, KeyIndex = index, SecurityLevel = securityLevel };
     }
 
     /// <inheritdoc />

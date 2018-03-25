@@ -45,5 +45,19 @@
     /// The <see cref="int[]"/>.
     /// </returns>
     int[] AddressFromDigest(int[] digest);
+
+    /// <summary>
+    /// The private key from subseed.
+    /// </summary>
+    /// <param name="subseed">
+    /// The subseed.
+    /// </param>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    int[] PrivateKeyFromSubseed(int[] subseed, int securityLevel);
   }
 }
