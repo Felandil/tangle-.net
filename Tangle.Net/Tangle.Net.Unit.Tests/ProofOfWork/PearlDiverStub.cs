@@ -8,7 +8,7 @@
   public class PearlDiverStub : IPearlDiver
   {
     /// <inheritdoc />
-    public int[] Search(int[] trits, int minWeightMagnitude)
+    public int[] Search(int[] trits, int minWeightMagnitude, int offset, int size)
     {
       return trits;
     }

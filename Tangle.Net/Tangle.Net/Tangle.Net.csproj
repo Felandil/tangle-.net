@@ -68,6 +68,8 @@
     <Compile Include="Cryptography\Curl\Kerl.cs" />
     <Compile Include="Cryptography\KeyGenerator.cs" />
     <Compile Include="Cryptography\Signing\SignatureValidator.cs" />
+    <Compile Include="ProofOfWork\AbstractPearlDiver.cs" />
+    <Compile Include="ProofOfWork\HammingNonceDiver.cs" />
     <Compile Include="ProofOfWork\IPearlDiver.cs" />
     <Compile Include="Cryptography\PrivateKey.cs" />
     <Compile Include="Cryptography\SecurityLevel.cs" />

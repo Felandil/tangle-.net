@@ -91,7 +91,6 @@
     <Compile Include="Entity\TransactionTrytesTest.cs" />
     <Compile Include="Entity\TryteStringTest.cs" />
     <Compile Include="ProofOfWork\CpuPearlDiverTest.cs" />
-    <Compile Include="ProofOfWork\NonceCurlTest.cs" />
     <Compile Include="ProofOfWork\PearlDiverStub.cs" />
     <Compile Include="ProofOfWork\PoWServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

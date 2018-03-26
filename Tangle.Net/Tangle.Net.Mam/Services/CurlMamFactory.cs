@@ -100,17 +100,12 @@
         payload[nextRootStart + i] = encryptablePayloadPart[i];
       }
 
-      // Please no look here
-      var nonceDummy = new int[CpuPearlDiver.TransactionLength];
-      var curlRate = this.Curl.Rate(Constants.TritHashLength);
-      for (var i = 0; i < Constants.TritHashLength; i++)
-      {
-        nonceDummy[CpuPearlDiver.TransactionLength - Constants.TritHashLength + i] = curlRate[i];
-      }
-      var poW = new CpuPearlDiver(CurlMode.CurlP81).Search(nonceDummy, subtree.Key.TrytesLength / PrivateKey.FragmentLength);
-      var powTrytes = new TransactionTrytes(Converter.TritsToTrytes(poW));
-      var nonce = powTrytes.GetChunk<Tag>(2646, Tag.Length);
-      var nonceTrits = nonce.ToTrits(); //new int[NonceLength]; // TODO
+      var nonceTrits = new HammingNonceDiver(CurlMode.CurlP27).Search(
+        this.Curl.Rate(Constants.TritHashLength),
+        2,
+        0,
+        Constants.TritHashLength / 3);
+      var powTrytes = new TransactionTrytes(Converter.TritsToTrytes(nonceTrits));
       payload.InsertRange(messageEnd, nonceTrits);
 
       this.Mask.Mask(nonceTrits, this.Curl);

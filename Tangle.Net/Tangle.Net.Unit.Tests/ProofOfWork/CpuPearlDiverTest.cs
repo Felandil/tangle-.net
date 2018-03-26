@@ -5,6 +5,7 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The cpu po w diver test.
@@ -41,7 +42,7 @@
                           };
 
       var powDiver = new CpuPearlDiver();
-      var transactionTrits = powDiver.Search(transaction.ToTrytes().ToTrits(), 14);
+      var transactionTrits = powDiver.Search(transaction.ToTrytes().ToTrits(), 14, 162, Constants.TritHashLength);
       var transactionFromPow = Transaction.FromTrytes(new TransactionTrytes(Converter.TritsToTrytes(transactionTrits)), transaction.Hash);
 
       Assert.AreEqual("DGOLNGOKKIHNQTAPICINFYC9VMS", transactionFromPow.Nonce.Value);

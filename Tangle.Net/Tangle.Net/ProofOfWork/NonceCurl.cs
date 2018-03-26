@@ -33,8 +33,6 @@
       this.Rounds = rounds;
       this.Low = new ulong[length];
       this.High = new ulong[length];
-      this.ScratchPadHigh = new ulong[length];
-      this.ScratchPadLow = new ulong[length];
     }
 
     /// <summary>
@@ -54,9 +52,6 @@
       this.Low = (ulong[])low.Clone();
       this.High = (ulong[])high.Clone();
       this.Rounds = rounds;
-
-      this.ScratchPadHigh = new ulong[high.Length];
-      this.ScratchPadLow = new ulong[low.Length];
     }
 
     /// <summary>
@@ -73,16 +68,6 @@
     /// Gets the rounds.
     /// </summary>
     private int Rounds { get; }
-
-    /// <summary>
-    /// Gets or sets the high.
-    /// </summary>
-    private ulong[] ScratchPadHigh { get; set; }
-
-    /// <summary>
-    /// Gets or sets the low.
-    /// </summary>
-    private ulong[] ScratchPadLow { get; set; }
 
     /// <summary>
     /// The init.
@@ -189,42 +174,6 @@
       }
 
       return toIndex - fromIndex;
-    }
-
-    /// <summary>
-    /// The transform.
-    /// </summary>
-    /// <param name="rounds">
-    /// The rounds.
-    /// </param>
-    public void Transform()
-    {
-      var curlScratchpadIndex = 0;
-      for (var round = 0; round < this.Rounds; round++)
-      {
-        Array.Copy(this.Low, this.ScratchPadLow, Curl.StateLength);
-        Array.Copy(this.High, this.ScratchPadHigh, Curl.StateLength);
-
-        for (var curlStateIndex = 0; curlStateIndex < Curl.StateLength; curlStateIndex++)
-        {
-          var alpha = this.ScratchPadLow[curlScratchpadIndex];
-          var beta = this.ScratchPadHigh[curlScratchpadIndex];
-          if (curlScratchpadIndex < 365)
-          {
-            curlScratchpadIndex += 364;
-          }
-          else
-          {
-            curlScratchpadIndex += -365;
-          }
-
-          var gamma = this.ScratchPadHigh[curlScratchpadIndex];
-          var delta = (alpha | ~gamma) & (this.ScratchPadLow[curlScratchpadIndex] ^ beta);
-
-          this.Low[curlStateIndex] = ~delta;
-          this.High[curlStateIndex] = (alpha ^ gamma) | delta;
-        }
-      }
     }
   }
 }

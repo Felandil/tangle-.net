@@ -94,7 +94,7 @@
           transactions[i].Tag = transactions[i].ObsoleteTag;
         }
 
-        var resultTransactionTrits = this.PowDiver.Search(transactions[i].ToTrytes().ToTrits(), minWeightMagnitude);
+        var resultTransactionTrits = this.PowDiver.Search(transactions[i].ToTrytes().ToTrits(), minWeightMagnitude, 162, Constants.TritHashLength);
         var resultTransaction = Transaction.FromTrytes(new TransactionTrytes(Converter.TritsToTrytes(resultTransactionTrits)));
         lastTransactionHash = resultTransaction.Hash;
 
