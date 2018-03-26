@@ -12,12 +12,12 @@
     /// <summary>
     /// The high.
     /// </summary>
-    private const ulong Max = 0xFFFFFFFFFFFFFFFF;
+    public const ulong Max = 0xFFFFFFFFFFFFFFFF;
 
     /// <summary>
     /// The low.
     /// </summary>
-    private const ulong Min = 0x0000000000000000;
+    public const ulong Min = 0x0000000000000000;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NonceCurl"/> class.
@@ -161,7 +161,10 @@
     /// <param name="toIndex">
     /// The to index.
     /// </param>
-    public void Increment(int fromIndex, int toIndex)
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    public int Increment(int fromIndex, int toIndex)
     {
       for (var i = fromIndex; i < toIndex; i++)
       {
@@ -184,6 +187,8 @@
           break;
         }
       }
+
+      return toIndex - fromIndex;
     }
 
     /// <summary>
@@ -192,10 +197,10 @@
     /// <param name="rounds">
     /// The rounds.
     /// </param>
-    public void Transform(int rounds)
+    public void Transform()
     {
       var curlScratchpadIndex = 0;
-      for (var round = 0; round < rounds; round++)
+      for (var round = 0; round < this.Rounds; round++)
       {
         Array.Copy(this.Low, this.ScratchPadLow, Curl.StateLength);
         Array.Copy(this.High, this.ScratchPadHigh, Curl.StateLength);

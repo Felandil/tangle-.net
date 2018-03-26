@@ -2,6 +2,7 @@
 {
   using System;
 
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Utils;
 
@@ -30,18 +31,31 @@
     /// </returns>
     public int[] Seek(int[] trits, int security, int offset, int length)
     {
-      var ulongTritsCollection = NonceCurl.FromTrits(trits);
+      var nonceCurl = new NonceCurl(trits.Length, (int) CurlMode.CurlP27);
+      nonceCurl.Absorb(trits, trits.Length, 0);
+
+      nonceCurl.High[0] = 13176245766935394011;
+      nonceCurl.High[1] = 14403622084951293727;
+      nonceCurl.High[2] = 18445620372817592319;
+      nonceCurl.High[3] = 2199023255551;
+
+      nonceCurl.Low[0] = 15811494920322472813;
+      nonceCurl.Low[1] = 17941353825114769379;
+      nonceCurl.Low[2] = 576458557575118879;
+      nonceCurl.Low[3] = 18446741876833779711;
+
       var size = Math.Min(length, Constants.TritHashLength) - offset;
 
       //let mut size = min(length, HASH_LENGTH) - offset;
       //for _ in 0..group {
-      //  (&mut curl.state_mut()[offset + size / 3..offset + size * 2 / 3]).incr(); // GROUP = 0
+      //  (&mut curl.state_mut()[offset + size / 3..offset + size * 2 / 3]).incr(); // GROUP = 0, MUST NOT IMPLEMENT! (?)
       //}
 
       var index = 0;
       while (index == 0)
       {
-        var round = Pascal.RoundThird(offset + size * 2 / 3 + 0);
+        var round = Pascal.RoundThird(offset + size * 2 / 3 + nonceCurl.Increment(offset + size * 2 / 3, offset + size));
+        size = Math.Min(round, Constants.TritHashLength) - offset;
       }
 
       //let mut index: Option<usize> = None;

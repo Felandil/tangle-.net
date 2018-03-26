@@ -59,11 +59,6 @@
     private const ulong High3 = 0x003FFFFFFFFFFFFF;
 
     /// <summary>
-    /// The hig h_ bits.
-    /// </summary>
-    private const ulong HighBits = 0xFFFFFFFFFFFFFFFF;
-
-    /// <summary>
     /// The lo w_0.
     /// </summary>
     private const ulong Low0 = 0xDB6DB6DB6DB6DB6D;
@@ -82,11 +77,6 @@
     /// The lo w_3.
     /// </summary>
     private const ulong Low3 = 0xFFC0000007FFFFFF;
-
-    /// <summary>
-    /// The lo w_ bits.
-    /// </summary>
-    private const ulong LowBits = 0x0000000000000000;
 
     /// <summary>
     /// The transactio n_ length.
@@ -221,7 +211,7 @@
       for (var i = (TransactionLength - Constants.TritHashLength) / Constants.TritHashLength; i-- > 0; )
       {
         offset = nonceCurl.Absorb(transactionTrits, Constants.TritHashLength, offset);
-        nonceCurl.Transform(this.Rounds);
+        nonceCurl.Transform();
       }
 
       nonceCurl.Absorb(transactionTrits, 162, offset);
@@ -269,7 +259,7 @@
                 // it is significantly faster do do the transform process in here. (only csharp things)
                 this.Transform(threadCurlClone.Low, threadCurlClone.High, curlScratchpadLow, curlScratchpadHigh);
 
-                var mask = HighBits;
+                var mask = NonceCurl.Max;
                 for (var i = minWeightMagnitude; i-- > 0;)
                 {
                   mask &= ~(threadCurlClone.Low[Constants.TritHashLength - 1 - i] ^ threadCurlClone.High[Constants.TritHashLength - 1 - i]);
