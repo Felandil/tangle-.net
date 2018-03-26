@@ -214,12 +214,12 @@
         this.state = State.Running; 
       }
 
-      ulong[] midCurlStateLow = new ulong[Curl.StateLength], midCurlStateHigh = new ulong[Curl.StateLength];
+      var midCurlCollection = new ULongTritsCollection(Curl.StateLength);
       {
         for (var i = Constants.TritHashLength; i < Curl.StateLength; i++)
         {
-          midCurlStateLow[i] = HighBits;
-          midCurlStateHigh[i] = HighBits;
+          midCurlCollection.Low[i] = HighBits;
+          midCurlCollection.High[i] = HighBits;
         }
 
         var offset = 0;
@@ -232,25 +232,25 @@
             switch (transactionTrits[offset++])
             {
               case 0:
-                midCurlStateLow[j] = HighBits;
-                midCurlStateHigh[j] = HighBits;
+                midCurlCollection.Low[j] = HighBits;
+                midCurlCollection.High[j] = HighBits;
 
                 break;
 
               case 1:
-                midCurlStateLow[j] = LowBits;
-                midCurlStateHigh[j] = HighBits;
+                midCurlCollection.Low[j] = LowBits;
+                midCurlCollection.High[j] = HighBits;
 
                 break;
 
               default:
-                midCurlStateLow[j] = HighBits;
-                midCurlStateHigh[j] = LowBits;
+                midCurlCollection.Low[j] = HighBits;
+                midCurlCollection.High[j] = LowBits;
                 break;
             }
           }
 
-          this.Transform(midCurlStateLow, midCurlStateHigh, curlScratchpadLow, curlScratchpadHigh);
+          midCurlCollection.Transform(this.Rounds);
         }
 
         for (int i = 0; i < 162; i++)
@@ -258,35 +258,28 @@
           switch (transactionTrits[offset++])
           {
             case 0:
-
-              midCurlStateLow[i] = HighBits;
-              midCurlStateHigh[i] = HighBits;
-
+              midCurlCollection.Low[i] = HighBits;
+              midCurlCollection.High[i] = HighBits;
               break;
-
             case 1:
-
-              midCurlStateLow[i] = LowBits;
-              midCurlStateHigh[i] = HighBits;
-
+              midCurlCollection.Low[i] = LowBits;
+              midCurlCollection.High[i] = HighBits;
               break;
-
             default:
-
-              midCurlStateLow[i] = HighBits;
-              midCurlStateHigh[i] = LowBits;
+              midCurlCollection.Low[i] = HighBits;
+              midCurlCollection.High[i] = LowBits;
               break;
           }
         }
 
-        midCurlStateLow[162 + 0] = Low0;
-        midCurlStateHigh[162 + 0] = High0;
-        midCurlStateLow[162 + 1] = Low1;
-        midCurlStateHigh[162 + 1] = High1;
-        midCurlStateLow[162 + 2] = Low2;
-        midCurlStateHigh[162 + 2] = High2;
-        midCurlStateLow[162 + 3] = Low3;
-        midCurlStateHigh[162 + 3] = High3;
+        midCurlCollection.Low[162 + 0] = Low0;
+        midCurlCollection.High[162 + 0] = High0;
+        midCurlCollection.Low[162 + 1] = Low1;
+        midCurlCollection.High[162 + 1] = High1;
+        midCurlCollection.Low[162 + 2] = Low2;
+        midCurlCollection.High[162 + 2] = High2;
+        midCurlCollection.Low[162 + 3] = Low3;
+        midCurlCollection.High[162 + 3] = High3;
       }
 
       if (numberOfThreads <= 0)
@@ -304,29 +297,26 @@
         var task = Task.Factory.StartNew(
           () =>
             {
-              var collection = new ULongTritsCollection(Curl.StateLength);
-              Array.Copy(midCurlStateLow, 0, collection.Low, 0, Curl.StateLength);
-              Array.Copy(midCurlStateHigh, 0, collection.High, 0, Curl.StateLength);
+              var collection = midCurlCollection.Clone();
               for (var i = threadIndex; i-- > 0;)
               {
                 collection.Increment(162 + (Constants.TritHashLength / 9), 162 + ((Constants.TritHashLength / 9) * 2));
               }
 
-              ulong[] curlStateLow = new ulong[Curl.StateLength], curlStateHigh = new ulong[Curl.StateLength];
               ulong[] curlScratchpadLow = new ulong[Curl.StateLength], curlScratchpadHigh = new ulong[Curl.StateLength];
               ulong outMask = 1;
               while (this.state == State.Running)
               {
                 collection.Increment(162 + ((Constants.TritHashLength / 9) * 2), Constants.TritHashLength);
+                var curlState = collection.Clone();
 
-                Array.Copy(collection.Low, 0, curlStateLow, 0, Curl.StateLength);
-                Array.Copy(collection.High, 0, curlStateHigh, 0, Curl.StateLength);
-                this.Transform(curlStateLow, curlStateHigh, curlScratchpadLow, curlScratchpadHigh);
+                //curlState.Transform(this.Rounds);
+                this.Transform(curlState.Low, curlState.High, curlScratchpadLow, curlScratchpadHigh);
 
                 var mask = HighBits;
                 for (var i = minWeightMagnitude; i-- > 0;)
                 {
-                  mask &= ~(curlStateLow[Constants.TritHashLength - 1 - i] ^ curlStateHigh[Constants.TritHashLength - 1 - i]);
+                  mask &= ~(curlState.Low[Constants.TritHashLength - 1 - i] ^ curlState.High[Constants.TritHashLength - 1 - i]);
                   if (mask == 0)
                   {
                     break;

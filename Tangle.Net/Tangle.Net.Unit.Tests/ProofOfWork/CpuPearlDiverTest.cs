@@ -10,7 +10,7 @@
   /// The cpu po w diver test.
   /// </summary>
   [TestClass]
-  public class CpuNonceSeekerTest
+  public class CpuPearlDiverTest
   {
     /// <summary>
     /// The test pow.

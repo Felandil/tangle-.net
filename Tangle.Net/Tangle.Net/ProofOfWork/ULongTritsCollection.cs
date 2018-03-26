@@ -1,4 +1,9 @@
-﻿namespace Tangle.Net.ProofOfWork
+﻿using System;
+using System.Threading.Tasks;
+using Tangle.Net.Cryptography.Curl;
+using Tangle.Net.Utils;
+
+namespace Tangle.Net.ProofOfWork
 {
   /// <summary>
   /// The u long trits collection.
@@ -26,6 +31,17 @@
     {
       this.Low = new ulong[length];
       this.High = new ulong[length];
+      this.ScratchPadHigh = new ulong[length]; 
+      this.ScratchPadLow = new ulong[length];
+    }
+
+    public ULongTritsCollection(ulong[] low, ulong[] high)
+    {
+      this.Low = (ulong[])low.Clone();
+      this.High = (ulong[])high.Clone();
+
+      this.ScratchPadHigh = new ulong[high.Length];
+      this.ScratchPadLow = new ulong[low.Length];
     }
 
     /// <summary>
@@ -37,6 +53,16 @@
     /// Gets or sets the low.
     /// </summary>
     public ulong[] Low { get; set; }
+
+    /// <summary>
+    /// Gets or sets the high.
+    /// </summary>
+    private ulong[] ScratchPadHigh { get; set; }
+
+    /// <summary>
+    /// Gets or sets the low.
+    /// </summary>
+    private ulong[] ScratchPadLow { get; set; }
 
     /// <summary>
     /// The from trits.
@@ -73,6 +99,11 @@
       return collection;
     }
 
+    public ULongTritsCollection Clone()
+    {
+      return new ULongTritsCollection(this.Low, this.High);
+    }
+
     /// <summary>
     /// The increment.
     /// </summary>
@@ -103,6 +134,36 @@
           }
 
           break;
+        }
+      }
+    }
+
+    public void Transform(int rounds)
+    {
+      var curlScratchpadIndex = 0;
+      for (var round = 0; round < rounds; round++)
+      {
+        Array.Copy(this.Low, this.ScratchPadLow, Curl.StateLength);
+        Array.Copy(this.High, this.ScratchPadHigh, Curl.StateLength);
+
+        for (var curlStateIndex = 0; curlStateIndex < Curl.StateLength; curlStateIndex++)
+        {
+          var alpha = this.ScratchPadLow[curlScratchpadIndex];
+          var beta = this.ScratchPadHigh[curlScratchpadIndex];
+          if (curlScratchpadIndex < 365)
+          {
+            curlScratchpadIndex += 364;
+          }
+          else
+          {
+            curlScratchpadIndex += -365;
+          }
+
+          ulong gamma = this.ScratchPadHigh[curlScratchpadIndex];
+          ulong delta = (alpha | (~gamma)) & (this.ScratchPadLow[curlScratchpadIndex] ^ beta);
+
+          this.Low[curlStateIndex] = ~delta;
+          this.High[curlStateIndex] = (alpha ^ gamma) | delta;
         }
       }
     }
