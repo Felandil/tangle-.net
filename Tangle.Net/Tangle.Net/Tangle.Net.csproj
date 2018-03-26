@@ -77,7 +77,7 @@
     <Compile Include="ProofOfWork\Service\IPoWService.cs" />
     <Compile Include="ProofOfWork\Service\PoWService.cs" />
     <Compile Include="ProofOfWork\Service\RestPoWService.cs" />
-    <Compile Include="ProofOfWork\ULongTritsCollection.cs" />
+    <Compile Include="ProofOfWork\NonceCurl.cs" />
     <Compile Include="Repository\Client\IIotaClient.cs" />
     <Compile Include="Repository\Client\RestIotaClient.cs" />
     <Compile Include="Repository\DataTransfer\InclusionStates.cs" />

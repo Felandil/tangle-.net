@@ -1,14 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using Tangle.Net.Cryptography.Curl;
-using Tangle.Net.Utils;
-
-namespace Tangle.Net.ProofOfWork
+﻿namespace Tangle.Net.ProofOfWork
 {
+  using System;
+
+  using Tangle.Net.Cryptography.Curl;
+
   /// <summary>
   /// The u long trits collection.
   /// </summary>
-  public class ULongTritsCollection
+  public class NonceCurl
   {
     /// <summary>
     /// The high.
@@ -20,25 +19,41 @@ namespace Tangle.Net.ProofOfWork
     /// </summary>
     private const ulong Min = 0x0000000000000000;
 
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="ULongTritsCollection"/> class.
+    /// Initializes a new instance of the <see cref="NonceCurl"/> class.
     /// </summary>
     /// <param name="length">
     /// The length.
     /// </param>
-    public ULongTritsCollection(int length)
+    /// <param name="rounds">
+    /// The rounds.
+    /// </param>
+    public NonceCurl(int length, int rounds)
     {
+      this.Rounds = rounds;
       this.Low = new ulong[length];
       this.High = new ulong[length];
-      this.ScratchPadHigh = new ulong[length]; 
+      this.ScratchPadHigh = new ulong[length];
       this.ScratchPadLow = new ulong[length];
     }
 
-    public ULongTritsCollection(ulong[] low, ulong[] high)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NonceCurl"/> class.
+    /// </summary>
+    /// <param name="low">
+    /// The low.
+    /// </param>
+    /// <param name="high">
+    /// The high.
+    /// </param>
+    /// <param name="rounds">
+    /// The rounds.
+    /// </param>
+    public NonceCurl(ulong[] low, ulong[] high, int rounds)
     {
       this.Low = (ulong[])low.Clone();
       this.High = (ulong[])high.Clone();
+      this.Rounds = rounds;
 
       this.ScratchPadHigh = new ulong[high.Length];
       this.ScratchPadLow = new ulong[low.Length];
@@ -55,6 +70,11 @@ namespace Tangle.Net.ProofOfWork
     public ulong[] Low { get; set; }
 
     /// <summary>
+    /// Gets the rounds.
+    /// </summary>
+    private int Rounds { get; }
+
+    /// <summary>
     /// Gets or sets the high.
     /// </summary>
     private ulong[] ScratchPadHigh { get; set; }
@@ -65,43 +85,71 @@ namespace Tangle.Net.ProofOfWork
     private ulong[] ScratchPadLow { get; set; }
 
     /// <summary>
+    /// The init.
+    /// </summary>
+    /// <param name="start">
+    /// The start.
+    /// </param>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    public void Init(int start, int length)
+    {
+      for (var i = start; i < length; i++)
+      {
+        this.Low[i] = Max;
+        this.High[i] = Max;
+      }
+    }
+
+    /// <summary>
     /// The from trits.
     /// </summary>
     /// <param name="trits">
     /// The trits.
     /// </param>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    /// <param name="offset">
+    /// The offset.
+    /// </param>
     /// <returns>
-    /// The <see cref="ULongTritsCollection"/>.
+    /// The <see cref="NonceCurl"/>.
     /// </returns>
-    public static ULongTritsCollection FromTrits(int[] trits)
+    public int Absorb(int[] trits, int length, int offset)
     {
-      var collection = new ULongTritsCollection(trits.Length);
-
-      for (var i = 0; i < trits.Length; i++)
+      for (var i = 0; i < length; i++)
       {
-        switch (trits[i])
+        switch (trits[offset++])
         {
           case 0:
-            collection.Low[i] = Min;
-            collection.High[i] = Max;
+            this.Low[i] = Max;
+            this.High[i] = Max;
             break;
           case 1:
-            collection.Low[i] = Min;
-            collection.High[i] = Max;
+            this.Low[i] = Min;
+            this.High[i] = Max;
             break;
           default:
-            collection.Low[i] = Max;
-            collection.High[i] = Min;
+            this.Low[i] = Max;
+            this.High[i] = Min;
             break;
         }
       }
 
-      return collection;
+      return offset;
     }
 
-    public ULongTritsCollection Clone()
+    /// <summary>
+    /// The clone.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="NonceCurl"/>.
+    /// </returns>
+    public NonceCurl Clone()
     {
-      return new ULongTritsCollection(this.Low, this.High);
+      return new NonceCurl(this.Low, this.High, this.Rounds);
     }
 
     /// <summary>
@@ -138,6 +186,12 @@ namespace Tangle.Net.ProofOfWork
       }
     }
 
+    /// <summary>
+    /// The transform.
+    /// </summary>
+    /// <param name="rounds">
+    /// The rounds.
+    /// </param>
     public void Transform(int rounds)
     {
       var curlScratchpadIndex = 0;
@@ -159,8 +213,8 @@ namespace Tangle.Net.ProofOfWork
             curlScratchpadIndex += -365;
           }
 
-          ulong gamma = this.ScratchPadHigh[curlScratchpadIndex];
-          ulong delta = (alpha | (~gamma)) & (this.ScratchPadLow[curlScratchpadIndex] ^ beta);
+          var gamma = this.ScratchPadHigh[curlScratchpadIndex];
+          var delta = (alpha | ~gamma) & (this.ScratchPadLow[curlScratchpadIndex] ^ beta);
 
           this.Low[curlStateIndex] = ~delta;
           this.High[curlStateIndex] = (alpha ^ gamma) | delta;

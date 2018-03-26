@@ -30,7 +30,7 @@
     /// </returns>
     public int[] Seek(int[] trits, int security, int offset, int length)
     {
-      var ulongTritsCollection = ULongTritsCollection.FromTrits(trits);
+      var ulongTritsCollection = NonceCurl.FromTrits(trits);
       var size = Math.Min(length, Constants.TritHashLength) - offset;
 
       //let mut size = min(length, HASH_LENGTH) - offset;

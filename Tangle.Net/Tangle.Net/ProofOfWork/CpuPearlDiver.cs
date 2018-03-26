@@ -214,73 +214,27 @@
         this.state = State.Running; 
       }
 
-      var midCurlCollection = new ULongTritsCollection(Curl.StateLength);
+      var nonceCurl = new NonceCurl(Curl.StateLength, this.Rounds);
+      nonceCurl.Init(Constants.TritHashLength, Curl.StateLength);
+
+      var offset = 0;
+      for (var i = (TransactionLength - Constants.TritHashLength) / Constants.TritHashLength; i-- > 0; )
       {
-        for (var i = Constants.TritHashLength; i < Curl.StateLength; i++)
-        {
-          midCurlCollection.Low[i] = HighBits;
-          midCurlCollection.High[i] = HighBits;
-        }
-
-        var offset = 0;
-        var curlScratchpadLow = new ulong[Curl.StateLength]; 
-        var curlScratchpadHigh = new ulong[Curl.StateLength];
-        for (var i = (TransactionLength - Constants.TritHashLength) / Constants.TritHashLength; i-- > 0; )
-        {
-          for (var j = 0; j < Constants.TritHashLength; j++)
-          {
-            switch (transactionTrits[offset++])
-            {
-              case 0:
-                midCurlCollection.Low[j] = HighBits;
-                midCurlCollection.High[j] = HighBits;
-
-                break;
-
-              case 1:
-                midCurlCollection.Low[j] = LowBits;
-                midCurlCollection.High[j] = HighBits;
-
-                break;
-
-              default:
-                midCurlCollection.Low[j] = HighBits;
-                midCurlCollection.High[j] = LowBits;
-                break;
-            }
-          }
-
-          midCurlCollection.Transform(this.Rounds);
-        }
-
-        for (int i = 0; i < 162; i++)
-        {
-          switch (transactionTrits[offset++])
-          {
-            case 0:
-              midCurlCollection.Low[i] = HighBits;
-              midCurlCollection.High[i] = HighBits;
-              break;
-            case 1:
-              midCurlCollection.Low[i] = LowBits;
-              midCurlCollection.High[i] = HighBits;
-              break;
-            default:
-              midCurlCollection.Low[i] = HighBits;
-              midCurlCollection.High[i] = LowBits;
-              break;
-          }
-        }
-
-        midCurlCollection.Low[162 + 0] = Low0;
-        midCurlCollection.High[162 + 0] = High0;
-        midCurlCollection.Low[162 + 1] = Low1;
-        midCurlCollection.High[162 + 1] = High1;
-        midCurlCollection.Low[162 + 2] = Low2;
-        midCurlCollection.High[162 + 2] = High2;
-        midCurlCollection.Low[162 + 3] = Low3;
-        midCurlCollection.High[162 + 3] = High3;
+        offset = nonceCurl.Absorb(transactionTrits, Constants.TritHashLength, offset);
+        nonceCurl.Transform(this.Rounds);
       }
+
+      nonceCurl.Absorb(transactionTrits, 162, offset);
+
+      nonceCurl.Low[162 + 0] = Low0;
+      nonceCurl.High[162 + 0] = High0;
+      nonceCurl.Low[162 + 1] = Low1;
+      nonceCurl.High[162 + 1] = High1;
+      nonceCurl.Low[162 + 2] = Low2;
+      nonceCurl.High[162 + 2] = High2;
+      nonceCurl.Low[162 + 3] = Low3;
+      nonceCurl.High[162 + 3] = High3;
+
 
       if (numberOfThreads <= 0)
       {
@@ -297,26 +251,28 @@
         var task = Task.Factory.StartNew(
           () =>
             {
-              var collection = midCurlCollection.Clone();
+              var nonceThreadCurl = nonceCurl.Clone();
               for (var i = threadIndex; i-- > 0;)
               {
-                collection.Increment(162 + (Constants.TritHashLength / 9), 162 + ((Constants.TritHashLength / 9) * 2));
+                nonceThreadCurl.Increment(162 + (Constants.TritHashLength / 9), 162 + ((Constants.TritHashLength / 9) * 2));
               }
 
-              ulong[] curlScratchpadLow = new ulong[Curl.StateLength], curlScratchpadHigh = new ulong[Curl.StateLength];
+              var curlScratchpadLow = new ulong[Curl.StateLength];
+              var curlScratchpadHigh = new ulong[Curl.StateLength];
+
               ulong outMask = 1;
               while (this.state == State.Running)
               {
-                collection.Increment(162 + ((Constants.TritHashLength / 9) * 2), Constants.TritHashLength);
-                var curlState = collection.Clone();
+                nonceThreadCurl.Increment(162 + ((Constants.TritHashLength / 9) * 2), Constants.TritHashLength);
+                var threadCurlClone = nonceThreadCurl.Clone();
 
-                //curlState.Transform(this.Rounds);
-                this.Transform(curlState.Low, curlState.High, curlScratchpadLow, curlScratchpadHigh);
+                // it is significantly faster do do the transform process in here. (only csharp things)
+                this.Transform(threadCurlClone.Low, threadCurlClone.High, curlScratchpadLow, curlScratchpadHigh);
 
                 var mask = HighBits;
                 for (var i = minWeightMagnitude; i-- > 0;)
                 {
-                  mask &= ~(curlState.Low[Constants.TritHashLength - 1 - i] ^ curlState.High[Constants.TritHashLength - 1 - i]);
+                  mask &= ~(threadCurlClone.Low[Constants.TritHashLength - 1 - i] ^ threadCurlClone.High[Constants.TritHashLength - 1 - i]);
                   if (mask == 0)
                   {
                     break;
@@ -340,9 +296,9 @@
 
                     for (var i = 0; i < Constants.TritHashLength; i++)
                     {
-                      transactionTrits[TransactionLength - Constants.TritHashLength + i] = (collection.Low[i] & outMask) == 0
+                      transactionTrits[TransactionLength - Constants.TritHashLength + i] = (nonceThreadCurl.Low[i] & outMask) == 0
                                                                                      ? 1
-                                                                                     : (collection.High[i] & outMask) == 0 ? -1 : 0;
+                                                                                     : (nonceThreadCurl.High[i] & outMask) == 0 ? -1 : 0;
                     }
                   }
                 }
