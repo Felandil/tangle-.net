@@ -11,45 +11,14 @@
   /// </summary>
   public abstract class AbstractPearlDiver : IPearlDiver
   {
-    /// <summary>
-    /// The hig h_0.
-    /// </summary>
-    private const ulong High0 = 0xB6DB6DB6DB6DB6DB;
-
-    /// <summary>
-    /// The hig h_1.
-    /// </summary>
-    private const ulong High1 = 0x8FC7E3F1F8FC7E3F;
-
-    /// <summary>
-    /// The hig h_2.
-    /// </summary>
-    private const ulong High2 = 0xFFC01FFFF803FFFF;
-
-    /// <summary>
-    /// The hig h_3.
-    /// </summary>
-    private const ulong High3 = 0x003FFFFFFFFFFFFF;
-
-    /// <summary>
-    /// The lo w_0.
-    /// </summary>
-    private const ulong Low0 = 0xDB6DB6DB6DB6DB6D;
-
-    /// <summary>
-    /// The lo w_1.
-    /// </summary>
-    private const ulong Low1 = 0xF1F8FC7E3F1F8FC7;
-
-    /// <summary>
-    /// The lo w_2.
-    /// </summary>
-    private const ulong Low2 = 0x7FFFE00FFFFC01FF;
-
-    /// <summary>
-    /// The lo w_3.
-    /// </summary>
-    private const ulong Low3 = 0xFFC0000007FFFFFF;
+    protected virtual ulong High0 => 0xB6DB6DB6DB6DB6DB;
+    protected virtual ulong High1 => 0x8FC7E3F1F8FC7E3F;
+    protected virtual ulong High2 => 0xFFC01FFFF803FFFF;
+    protected virtual ulong High3 => 0x003FFFFFFFFFFFFF;
+    protected virtual ulong Low0 => 0xDB6DB6DB6DB6DB6D;
+    protected virtual ulong Low1 => 0xF1F8FC7E3F1F8FC7;
+    protected virtual ulong Low2 => 0x7FFFE00FFFFC01FF;
+    protected virtual ulong Low3 => 0xFFC0000007FFFFFF;
 
     /// <summary>
     /// The sync obj.
@@ -141,32 +110,6 @@
     }
 
     /// <summary>
-    /// The demux.
-    /// </summary>
-    /// <param name="curl">
-    /// The curl.
-    /// </param>
-    /// <param name="mask">
-    /// The mask.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int[]"/>.
-    /// </returns>
-    protected int[] Demux(NonceCurl curl, ulong mask)
-    {
-      var length = this.TritState.Length;
-      var demuxedState = new int[this.Size];
-
-      for (var i = 0; i < this.Size; i++)
-      {
-        this.TritState[length - this.Size + i] = (curl.Low[i] & mask) == 0 ? 1 : (curl.High[i] & mask) == 0 ? -1 : 0;
-        demuxedState[i] = this.TritState[length - this.Size + i];
-      }
-
-      return demuxedState;
-    }
-
-    /// <summary>
     /// The check.
     /// </summary>
     /// <param name="minWeightMagnitude">
@@ -215,14 +158,14 @@
 
       nonceCurl.Absorb(this.TritState, this.Offset, offset);
 
-      nonceCurl.Low[this.Offset + 0] = Low0;
-      nonceCurl.High[this.Offset + 0] = High0;
-      nonceCurl.Low[this.Offset + 1] = Low1;
-      nonceCurl.High[this.Offset + 1] = High1;
-      nonceCurl.Low[this.Offset + 2] = Low2;
-      nonceCurl.High[this.Offset + 2] = High2;
-      nonceCurl.Low[this.Offset + 3] = Low3;
-      nonceCurl.High[this.Offset + 3] = High3;
+      nonceCurl.Low[this.Offset + 0] = this.Low0;
+      nonceCurl.High[this.Offset + 0] = this.High0;
+      nonceCurl.Low[this.Offset + 1] = this.Low1;
+      nonceCurl.High[this.Offset + 1] = this.High1;
+      nonceCurl.Low[this.Offset + 2] = this.Low2;
+      nonceCurl.High[this.Offset + 2] = this.High2;
+      nonceCurl.Low[this.Offset + 3] = this.Low3;
+      nonceCurl.High[this.Offset + 3] = this.High3;
 
       if (numberOfThreads <= 0)
       {
@@ -266,7 +209,10 @@
                   if (this.state == State.Running)
                   {
                     this.state = State.Completed;
-                    this.Demux(nonceThreadCurl, mask);
+                    for (var i = 0; i < this.Size; i++)
+                    {
+                      this.TritState[this.TritState.Length - this.Size + i] = (nonceThreadCurl.Low[i] & mask) == 0 ? 1 : (nonceThreadCurl.High[i] & mask) == 0 ? -1 : 0;
+                    }
                   }
                 }
 
@@ -299,8 +245,8 @@
       var curlScratchpadIndex = 0;
       for (var round = 0; round < this.Rounds; round++)
       {
-        Array.Copy(curlStateLow, 0, curlScratchpadLow, 0, Curl.StateLength);
-        Array.Copy(curlStateHigh, 0, curlScratchpadHigh, 0, Curl.StateLength);
+        Array.Copy(curlStateLow, curlScratchpadLow, Curl.StateLength);
+        Array.Copy(curlStateHigh, curlScratchpadHigh, Curl.StateLength);
 
         for (var curlStateIndex = 0; curlStateIndex < Curl.StateLength; curlStateIndex++)
         {

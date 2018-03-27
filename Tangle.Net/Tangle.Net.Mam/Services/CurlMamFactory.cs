@@ -105,15 +105,10 @@
         2,
         0,
         Constants.TritHashLength / 3);
-      var powTrytes = new TransactionTrytes(Converter.TritsToTrytes(nonceTrits));
-      payload.InsertRange(messageEnd, nonceTrits);
 
       this.Mask.Mask(nonceTrits, this.Curl);
 
-      for (var i = 0; i < nonceTrits.Length; i++)
-      {
-        payload[messageEnd + i] = nonceTrits[i];
-      }
+      payload.InsertRange(messageEnd, nonceTrits);
 
       var signatureFragment = this.SignatureFragmentGenerator.Generate(
         subtree.Key,
