@@ -146,10 +146,7 @@
     /// <param name="toIndex">
     /// The to index.
     /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    public int Increment(int fromIndex, int toIndex)
+    public void Increment(int fromIndex, int toIndex)
     {
       for (var i = fromIndex; i < toIndex; i++)
       {
@@ -172,8 +169,6 @@
           break;
         }
       }
-
-      return toIndex - fromIndex;
     }
   }
 }

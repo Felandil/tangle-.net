@@ -46,7 +46,6 @@
       var transactionFromPow = Transaction.FromTrytes(new TransactionTrytes(Converter.TritsToTrytes(transactionTrits)), transaction.Hash);
 
       Assert.AreEqual("DGOLNGOKKIHNQTAPICINFYC9VMS", transactionFromPow.Nonce.Value);
-      // PEOLNGOKKHHNQTAPICPYBYC9VMS
     }
   }
 }

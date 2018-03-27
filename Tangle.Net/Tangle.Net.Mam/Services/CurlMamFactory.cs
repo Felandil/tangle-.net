@@ -100,11 +100,8 @@
         payload[nextRootStart + i] = encryptablePayloadPart[i];
       }
 
-      var nonceTrits = new HammingNonceDiver(CurlMode.CurlP27).Search(
-        this.Curl.Rate(Constants.TritHashLength),
-        2,
-        0,
-        Constants.TritHashLength / 3);
+      var nonceTrits = new HammingNonceDiver(CurlMode.CurlP27).Search(this.Curl.Rate(Constants.TritHashLength), 2, 0, NonceLength).Take(NonceLength)
+        .ToArray();
 
       this.Mask.Mask(nonceTrits, this.Curl);
 

@@ -2,6 +2,7 @@
 {
   using System.Linq;
 
+  using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
 
   /// <summary>
@@ -32,37 +33,44 @@
     protected override ulong Check(int minWeightMagnitude, NonceCurl curl)
     {
       var trits = new int[curl.Low.Length];
+
       for (var i = 0; i < trits.Length; i++)
       {
-        trits[i] = (curl.Low[i] & 1) == 0 ? 1 : (curl.High[i] & 1) == 0 ? -1 : 0;
+        var sum = 0;
+        for (var j = 0; j < minWeightMagnitude; j++)
+        {
+          for (var k = 0; k < trits.Length; k++)
+          {
+            trits[k] = (curl.Low[k] & (ulong)i) == 0 ? 1 : (curl.High[k] & (ulong)i) == 0 ? -1 : 0;
+          }
+
+          sum += this.Sum(trits.Skip(j * (AbstractCurl.HashLength / 3)).Take(AbstractCurl.HashLength / 3).ToArray());
+          if (sum == 0 && j < minWeightMagnitude - 1)
+          {
+            sum = 1;
+            break;
+          }
+        }
+
+        if (sum == 0)
+        {
+          return (ulong)i;
+        }
       }
-
-      var sum = trits.Take(minWeightMagnitude * AbstractCurl.HashLength).Sum();
-
-      if (sum == 0)
-      {
-        return 1;
-      }
-
-      //for (var i = 0; i < trits.Length; i++)
-      //{
-      //  var sum = 0;
-      //  for (var j = 0; j < minWeightMagnitude; j++)
-      //  {
-      //    sum += trits.Skip(i).Skip(j * AbstractCurl.HashLength / 3).Take(AbstractCurl.HashLength / 3).Sum();
-      //    if (sum == 0 && j < minWeightMagnitude - 1)
-      //    {
-      //      return 1;
-      //    }
-      //  }
-
-      //  if (sum == 0)
-      //  {
-      //    return (ulong)i;
-      //  }
-      //}
 
       return 0;
+    }
+
+    private int Sum(int[] take)
+    {
+      var sum = take[0];
+
+      for (var i = 1; i < take.Length; i++)
+      {
+        sum = Converter.Sum(sum, take[i]);
+      }
+
+      return sum;
     }
   }
 }
