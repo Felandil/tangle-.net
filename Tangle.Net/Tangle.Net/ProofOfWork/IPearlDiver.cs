@@ -18,16 +18,16 @@
     /// <param name="minWeightMagnitude">
     /// The min weight magnitude.
     /// </param>
+    /// <param name="length">
+    /// The length.
+    /// </param>
     /// <param name="offset">
     /// The offset.
-    /// </param>
-    /// <param name="size">
-    /// The size.
     /// </param>
     /// <returns>
     /// The <see cref="TransactionTrytes"/>.
     /// </returns>
-    int[] Search(int[] trits, int minWeightMagnitude, int offset, int size);
+    int[] Search(int[] trits, int minWeightMagnitude, int length, int offset);
 
     #endregion
   }

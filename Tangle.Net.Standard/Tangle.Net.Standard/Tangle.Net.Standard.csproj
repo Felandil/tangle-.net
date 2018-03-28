@@ -50,12 +50,15 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Entity\ValidationSummary.cs" Link="Entity\ValidationSummary.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\AbstractPearlDiver.cs" Link="ProofOfWork\AbstractPearlDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPearlDiver.cs" Link="ProofOfWork\CpuPearlDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Entity\UlongTritTouple.cs" Link="ProofOfWork\Entity\UlongTritTouple.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonceDiver.cs" Link="ProofOfWork\HammingNonceDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPearlDiver.cs" Link="ProofOfWork\IPearlDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\NonceCurl.cs" Link="ProofOfWork\NonceCurl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\IPoWService.cs" Link="ProofOfWork\Service\IPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWService.cs" Link="ProofOfWork\Service\PoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\RestPoWService.cs" Link="ProofOfWork\Service\RestPoWService.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\UlongTritConverter.cs" Link="ProofOfWork\UlongTritConverter.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Utils\TrinaryDemultiplexer.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexer.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />

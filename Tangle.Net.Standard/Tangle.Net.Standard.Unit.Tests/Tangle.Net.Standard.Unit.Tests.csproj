@@ -27,9 +27,13 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTests.cs" Link="Entity\TransactionTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TransactionTrytesTest.cs" Link="Entity\TransactionTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Entity\TryteStringTest.cs" Link="Entity\TryteStringTest.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\CpuNonceSeekerTest.cs" Link="ProofOfWork\CpuNonceSeekerTest.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\NonceSeekerStub.cs" Link="ProofOfWork\NonceSeekerStub.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\AbstractPearlDiverTest.cs" Link="ProofOfWork\AbstractPearlDiverTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\CpuPearlDiverTest.cs" Link="ProofOfWork\CpuPearlDiverTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\HammingNonceDiverTest.cs" Link="ProofOfWork\HammingNonceDiverTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PearlDiverStub.cs" Link="ProofOfWork\PearlDiverStub.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWServiceTest.cs" Link="ProofOfWork\PoWServiceTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\UlongTritConverterTest.cs" Link="ProofOfWork\UlongTritConverterTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\RestIotaRepositoryTest.cs" Link="Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\ExtensionTests.cs" Link="Utils\ExtensionTests.cs" />
@@ -51,7 +55,6 @@
   <ItemGroup>
     <Folder Include="Entity\" />
     <Folder Include="Utils\" />
-    <Folder Include="ProofOfWork\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 

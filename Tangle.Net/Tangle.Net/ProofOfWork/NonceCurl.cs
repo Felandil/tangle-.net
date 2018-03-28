@@ -3,22 +3,13 @@
   using System;
 
   using Tangle.Net.Cryptography.Curl;
+  using Tangle.Net.ProofOfWork.Entity;
 
   /// <summary>
   /// The u long trits collection.
   /// </summary>
   public class NonceCurl
   {
-    /// <summary>
-    /// The high.
-    /// </summary>
-    public const ulong Max = 0xFFFFFFFFFFFFFFFF;
-
-    /// <summary>
-    /// The low.
-    /// </summary>
-    public const ulong Min = 0x0000000000000000;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="NonceCurl"/> class.
     /// </summary>
@@ -82,8 +73,8 @@
     {
       for (var i = start; i < length; i++)
       {
-        this.Low[i] = Max;
-        this.High[i] = Max;
+        this.Low[i] = UlongTritConverter.Max;
+        this.High[i] = UlongTritConverter.Max;
       }
     }
 
@@ -109,16 +100,16 @@
         switch (trits[offset++])
         {
           case 0:
-            this.Low[i] = Max;
-            this.High[i] = Max;
+            this.Low[i] = UlongTritConverter.Max;
+            this.High[i] = UlongTritConverter.Max;
             break;
           case 1:
-            this.Low[i] = Min;
-            this.High[i] = Max;
+            this.Low[i] = UlongTritConverter.Min;
+            this.High[i] = UlongTritConverter.Max;
             break;
           default:
-            this.Low[i] = Max;
-            this.High[i] = Min;
+            this.Low[i] = UlongTritConverter.Max;
+            this.High[i] = UlongTritConverter.Min;
             break;
         }
       }
@@ -150,20 +141,20 @@
     {
       for (var i = fromIndex; i < toIndex; i++)
       {
-        if (this.Low[i] == Min)
+        if (this.Low[i] == UlongTritConverter.Min)
         {
-          this.Low[i] = Max;
-          this.High[i] = Min;
+          this.Low[i] = UlongTritConverter.Max;
+          this.High[i] = UlongTritConverter.Min;
         }
         else
         {
-          if (this.High[i] == Min)
+          if (this.High[i] == UlongTritConverter.Min)
           {
-            this.High[i] = Max;
+            this.High[i] = UlongTritConverter.Max;
           }
           else
           {
-            this.Low[i] = Min;
+            this.Low[i] = UlongTritConverter.Min;
           }
 
           break;
