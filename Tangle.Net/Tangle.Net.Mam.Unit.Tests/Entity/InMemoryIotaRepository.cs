@@ -170,13 +170,13 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    public List<TransactionTrytes> GetTrytes(List<Hash> hashes)
     {
       return null;
     }
 
     /// <inheritdoc />
-    public Task<List<TransactionTrytes>> GetTrytesAsync(IEnumerable<Hash> hashes)
+    public Task<List<TransactionTrytes>> GetTrytesAsync(List<Hash> hashes)
     {
       return null;
     }
@@ -263,7 +263,7 @@
     }
 
     /// <inheritdoc />
-    public List<Bundle> GetBundles(IEnumerable<Hash> transactionHashes, bool includeInclusionStates)
+    public List<Bundle> GetBundles(List<Hash> transactionHashes, bool includeInclusionStates)
     {
       var requestedBundles = new List<Bundle>();
       foreach (var transactionHash in transactionHashes)
@@ -276,7 +276,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<Bundle>> GetBundlesAsync(IEnumerable<Hash> transactionHashes, bool includeInclusionStates)
+    public async Task<List<Bundle>> GetBundlesAsync(List<Hash> transactionHashes, bool includeInclusionStates)
     {
       return this.GetBundles(transactionHashes, includeInclusionStates);
     }

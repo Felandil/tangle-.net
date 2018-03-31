@@ -14,6 +14,12 @@
   /// </summary>
   public partial class RestIotaRepository : IIotaRepository
   {
+
+    /// <summary>
+    /// The max get trytes hash count.
+    /// </summary>
+    private const int MaxGetTrytesHashCount = 500;
+
     /// <summary>
     ///   The valid find transactions parameters.
     /// </summary>
@@ -322,27 +328,55 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes)
+    public List<TransactionTrytes> GetTrytes(List<Hash> hashes)
     {
-      var result = this.Client.ExecuteParameterizedCommand<GetTrytesResponse>(
-        new Dictionary<string, object>
-          {
-            { "command", CommandType.GetTrytes },
-            { "hashes", hashes.Select(h => h.Value).ToList() }
-          });
+      var result = new GetTrytesResponse { Trytes = new List<string>() };
+      if (hashes.Count > MaxGetTrytesHashCount)
+      {
+        for (var i = 0; i < (hashes.Count / MaxGetTrytesHashCount) + 1; i++)
+        {
+          var requestHashes = hashes.Skip(i * MaxGetTrytesHashCount).Take(MaxGetTrytesHashCount);
+          var interimResult = this.Client.ExecuteParameterizedCommand<GetTrytesResponse>(
+            new Dictionary<string, object> { { "command", CommandType.GetTrytes }, { "hashes", requestHashes.Select(h => h.Value).ToList() } });
+
+          result.Trytes.AddRange(interimResult.Trytes);
+        }
+      }
+      else
+      {
+        result = this.Client.ExecuteParameterizedCommand<GetTrytesResponse>(
+          new Dictionary<string, object> { { "command", CommandType.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+      }
+
 
       return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> GetTrytesAsync(IEnumerable<Hash> hashes)
+    public async Task<List<TransactionTrytes>> GetTrytesAsync(List<Hash> hashes)
     {
-      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTrytesResponse>(
-                     new Dictionary<string, object>
-                       {
-                         { "command", CommandType.GetTrytes },
-                         { "hashes", hashes.Select(h => h.Value).ToList() }
-                       });
+      var result = new GetTrytesResponse { Trytes = new List<string>() };
+      if (hashes.Count > MaxGetTrytesHashCount)
+      {
+        for (var i = 0; i < (hashes.Count / MaxGetTrytesHashCount) + 1; i++)
+        {
+          var requestHashes = hashes.Skip(i * MaxGetTrytesHashCount).Take(MaxGetTrytesHashCount);
+          var interimResult = await this.Client.ExecuteParameterizedCommandAsync<GetTrytesResponse>(
+                                new Dictionary<string, object>
+                                  {
+                                    { "command", CommandType.GetTrytes },
+                                    { "hashes", requestHashes.Select(h => h.Value).ToList() }
+                                  });
+
+          result.Trytes.AddRange(interimResult.Trytes);
+        }
+      }
+      else
+      {
+        result = await this.Client.ExecuteParameterizedCommandAsync<GetTrytesResponse>(
+                   new Dictionary<string, object> { { "command", CommandType.GetTrytes }, { "hashes", hashes.Select(h => h.Value).ToList() } });
+      }
+
 
       return result.Trytes.Select(tryte => new TransactionTrytes(tryte)).ToList();
     }

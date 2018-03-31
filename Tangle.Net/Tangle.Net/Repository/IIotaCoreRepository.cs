@@ -293,7 +293,7 @@
     /// <returns>
     /// The <see cref="TryteString"/>.
     /// </returns>
-    List<TransactionTrytes> GetTrytes(IEnumerable<Hash> hashes);
+    List<TransactionTrytes> GetTrytes(List<Hash> hashes);
 
     /// <summary>
     /// The get trytes async.
@@ -304,7 +304,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<TransactionTrytes>> GetTrytesAsync(IEnumerable<Hash> hashes);
+    Task<List<TransactionTrytes>> GetTrytesAsync(List<Hash> hashes);
 
     /// <summary>
     /// The interrupt attaching to tangle.

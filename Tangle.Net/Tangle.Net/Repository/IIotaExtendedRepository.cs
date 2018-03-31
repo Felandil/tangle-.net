@@ -147,7 +147,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<Bundle> GetBundles(IEnumerable<Hash> transactionHashes, bool includeInclusionStates);
+    List<Bundle> GetBundles(List<Hash> transactionHashes, bool includeInclusionStates);
 
     /// <summary>
     /// The get bundles async.
@@ -161,7 +161,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<Bundle>> GetBundlesAsync(IEnumerable<Hash> transactionHashes, bool includeInclusionStates);
+    Task<List<Bundle>> GetBundlesAsync(List<Hash> transactionHashes, bool includeInclusionStates);
 
     /// <summary>
     /// The get inputs.

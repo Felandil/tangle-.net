@@ -29,8 +29,8 @@
     /// </param>
     internal static void Main(string[] args)
     {
-      // ExecuteApiExample();
-      ExecuteMamExample().Wait();
+      ExecuteApiExample();
+      // ExecuteMamExample().Wait();
       Console.ReadKey();
     }
 
@@ -70,7 +70,7 @@
       // var factory = new RestIotaRepositoryFactory(); In an async context it is also possible to create a repository via factory as shown here. 
       // var repository = await factory.CreateAsync(); This automatically picks a healthy node.
 
-      var example = new SendTrytesExample(repository); // get the example to execute. Change this to any example you want
+      var example = new GetAccountDataExample(repository); // get the example to execute. Change this to any example you want
 
       var result = example.Execute();
 

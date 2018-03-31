@@ -3,7 +3,7 @@
   /// <summary>
   /// The constants.
   /// </summary>
-  public class Constants
+  public static class Constants
   {
     /// <summary>
     /// The trit hash length.
