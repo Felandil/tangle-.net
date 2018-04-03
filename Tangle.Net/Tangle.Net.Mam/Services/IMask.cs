@@ -28,10 +28,10 @@
     /// <param name="payload">
     /// The payload.
     /// </param>
-    /// <param name="keyContainingCurl">
+    /// <param name="curl">
     /// The key Containing Curl.
     /// </param>
-    void Mask(int[] payload, AbstractCurl keyContainingCurl);
+    void Mask(int[] payload, AbstractCurl curl);
 
     /// <summary>
     /// The unmask.

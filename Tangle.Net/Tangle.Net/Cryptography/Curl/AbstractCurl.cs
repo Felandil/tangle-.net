@@ -21,7 +21,7 @@
     /// <summary>
     /// The trit state.
     /// </summary>
-    protected int[] State;
+    public int[] State;
 
     #endregion
 

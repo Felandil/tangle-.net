@@ -13,17 +13,20 @@
     /// <summary>
     /// Initializes a new instance of the <see cref="NonceCurl"/> class.
     /// </summary>
-    /// <param name="length">
-    /// The length.
-    /// </param>
     /// <param name="rounds">
     /// The rounds.
     /// </param>
-    public NonceCurl(int length, int rounds)
+    public NonceCurl(int rounds)
     {
       this.Rounds = rounds;
-      this.Low = new ulong[length];
-      this.High = new ulong[length];
+      this.Low = new ulong[Curl.StateLength];
+      this.High = new ulong[Curl.StateLength];
+
+      for (var i = 0; i < Curl.StateLength; i++)
+      {
+        this.Low[i] = UlongTritConverter.Max;
+        this.High[i] = UlongTritConverter.Min;
+      }
     }
 
     /// <summary>
@@ -40,9 +43,12 @@
     /// </param>
     public NonceCurl(ulong[] low, ulong[] high, int rounds)
     {
-      this.Low = (ulong[])low.Clone();
-      this.High = (ulong[])high.Clone();
       this.Rounds = rounds;
+      this.Low = new ulong[Curl.StateLength];
+      this.High = new ulong[Curl.StateLength];
+
+      Array.Copy(low, this.Low, low.Length);
+      Array.Copy(high, this.High, high.Length);
     }
 
     /// <summary>
@@ -59,63 +65,6 @@
     /// Gets the rounds.
     /// </summary>
     private int Rounds { get; }
-
-    /// <summary>
-    /// The init.
-    /// </summary>
-    /// <param name="start">
-    /// The start.
-    /// </param>
-    /// <param name="length">
-    /// The length.
-    /// </param>
-    public void Init(int start, int length)
-    {
-      for (var i = start; i < length; i++)
-      {
-        this.Low[i] = UlongTritConverter.Max;
-        this.High[i] = UlongTritConverter.Max;
-      }
-    }
-
-    /// <summary>
-    /// The from trits.
-    /// </summary>
-    /// <param name="trits">
-    /// The trits.
-    /// </param>
-    /// <param name="length">
-    /// The length.
-    /// </param>
-    /// <param name="offset">
-    /// The offset.
-    /// </param>
-    /// <returns>
-    /// The <see cref="NonceCurl"/>.
-    /// </returns>
-    public int Absorb(int[] trits, int length, int offset)
-    {
-      for (var i = 0; i < length; i++)
-      {
-        switch (trits[offset++])
-        {
-          case 0:
-            this.Low[i] = UlongTritConverter.Max;
-            this.High[i] = UlongTritConverter.Max;
-            break;
-          case 1:
-            this.Low[i] = UlongTritConverter.Min;
-            this.High[i] = UlongTritConverter.Max;
-            break;
-          default:
-            this.Low[i] = UlongTritConverter.Max;
-            this.High[i] = UlongTritConverter.Min;
-            break;
-        }
-      }
-
-      return offset;
-    }
 
     /// <summary>
     /// The clone.
@@ -137,27 +86,51 @@
     /// <param name="toIndex">
     /// The to index.
     /// </param>
-    public void Increment(int fromIndex, int toIndex)
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    public int Increment(int fromIndex, int toIndex)
     {
       for (var i = fromIndex; i < toIndex; i++)
       {
-        if (this.Low[i] == UlongTritConverter.Min)
-        {
-          this.Low[i] = UlongTritConverter.Max;
-          this.High[i] = UlongTritConverter.Min;
-        }
-        else
-        {
-          if (this.High[i] == UlongTritConverter.Min)
-          {
-            this.High[i] = UlongTritConverter.Max;
-          }
-          else
-          {
-            this.Low[i] = UlongTritConverter.Min;
-          }
+        var low = this.Low[i];
+        var high = this.High[i];
 
-          break;
+        this.Low[i] = high ^ low;
+        this.High[i] = low;
+
+        if ((high & ~low) == 0)
+        {
+          return toIndex - fromIndex;
+        }
+      }
+
+      return toIndex - fromIndex + 1;
+    }
+
+    /// <summary>
+    /// The transform.
+    /// </summary>
+    public void Transform()
+    {
+      var scratchpadIndex = 0;
+      var scratchpadLow = new ulong[Curl.StateLength];
+      var scratchpadHigh = new ulong[Curl.StateLength];
+
+      for (var round = 0; round < this.Rounds; round++)
+      {
+        Array.Copy(this.Low, scratchpadLow, Curl.StateLength);
+        Array.Copy(this.High, scratchpadHigh, Curl.StateLength);
+
+        for (var stateIndex = 0; stateIndex < Curl.StateLength; stateIndex++)
+        {
+          var alpha = scratchpadLow[scratchpadIndex];
+          var beta = scratchpadHigh[scratchpadIndex];
+          var gamma = scratchpadHigh[scratchpadIndex += scratchpadIndex < 365 ? 364 : -365];
+          var delta = (alpha | (~gamma)) & (scratchpadLow[scratchpadIndex] ^ beta);
+
+          this.Low[stateIndex] = ~delta;
+          this.High[stateIndex] = (alpha ^ gamma) | delta;
         }
       }
     }

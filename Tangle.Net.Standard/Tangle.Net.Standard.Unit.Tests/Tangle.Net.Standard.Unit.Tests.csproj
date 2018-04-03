@@ -38,6 +38,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\ExtensionTests.cs" Link="Utils\ExtensionTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\InputValidatorTest.cs" Link="Utils\InputValidatorTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\PascalTest.cs" Link="Utils\PascalTest.cs" />
   </ItemGroup>
 
   <ItemGroup>

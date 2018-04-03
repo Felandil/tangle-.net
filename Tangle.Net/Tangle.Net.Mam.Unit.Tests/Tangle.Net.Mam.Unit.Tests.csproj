@@ -67,7 +67,6 @@
     <Compile Include="Merkle\MerkleTreeFactoryTests.cs" />
     <Compile Include="Merkle\MerkleTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\PascalTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tangle.Net.Mam\Tangle.Net.Mam.csproj">

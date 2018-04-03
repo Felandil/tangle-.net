@@ -2,6 +2,7 @@
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.ProofOfWork.Entity;
 
   /// <summary>
@@ -17,7 +18,7 @@
     public void TestTritToULongConversion()
     {
       var input = new[] { -1, 0, 1 };
-      var result = UlongTritConverter.TritsToUlong(input);
+      var result = UlongTritConverter.TritsToUlong(input, Curl.StateLength);
 
       Assert.AreEqual(UlongTritConverter.Max, result.Low[0]);
       Assert.AreEqual(UlongTritConverter.Min, result.High[0]);

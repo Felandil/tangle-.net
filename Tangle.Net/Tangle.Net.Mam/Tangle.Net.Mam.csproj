@@ -79,7 +79,6 @@
     <Compile Include="Merkle\MerkleSubTree.cs" />
     <Compile Include="Merkle\MerkleTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Pascal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

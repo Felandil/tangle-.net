@@ -37,17 +37,17 @@
     public void TestCorrectLengthOutput()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
-      ulongTrits.Low[0] = AbstractPearlDiver.Low0;
-      ulongTrits.Low[1] = AbstractPearlDiver.Low1;
-      ulongTrits.Low[2] = AbstractPearlDiver.Low2;
-      ulongTrits.Low[3] = AbstractPearlDiver.Low3;
+      ulongTrits.Low[0] = 15811494920322472813;
+      ulongTrits.Low[1] = 17941353825114769379;
+      ulongTrits.Low[2] = 576458557575118879;
+      ulongTrits.Low[3] = 18446741876833779711;
 
-      ulongTrits.High[0] = AbstractPearlDiver.High0;
-      ulongTrits.High[1] = AbstractPearlDiver.High1;
-      ulongTrits.High[2] = AbstractPearlDiver.High2;
-      ulongTrits.High[3] = AbstractPearlDiver.High3;
+      ulongTrits.High[0] = 13176245766935394011;
+      ulongTrits.High[1] = 14403622084951293727;
+      ulongTrits.High[2] = 18445620372817592319;
+      ulongTrits.High[3] = 2199023255551;
 
       var mux = new TrinaryDemultiplexer(ulongTrits);
 
@@ -61,17 +61,17 @@
     public void TestDemuxMapsCorrectly()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
-      ulongTrits.Low[0] = AbstractPearlDiver.Low0;
-      ulongTrits.Low[1] = AbstractPearlDiver.Low1;
-      ulongTrits.Low[2] = AbstractPearlDiver.Low2;
-      ulongTrits.Low[3] = AbstractPearlDiver.Low3;
+      ulongTrits.Low[0] = 15811494920322472813;
+      ulongTrits.Low[1] = 17941353825114769379;
+      ulongTrits.Low[2] = 576458557575118879;
+      ulongTrits.Low[3] = 18446741876833779711;
 
-      ulongTrits.High[0] = AbstractPearlDiver.High0;
-      ulongTrits.High[1] = AbstractPearlDiver.High1;
-      ulongTrits.High[2] = AbstractPearlDiver.High2;
-      ulongTrits.High[3] = AbstractPearlDiver.High3;
+      ulongTrits.High[0] = 13176245766935394011;
+      ulongTrits.High[1] = 14403622084951293727;
+      ulongTrits.High[2] = 18445620372817592319;
+      ulongTrits.High[3] = 2199023255551;
 
       var mux = new TrinaryDemultiplexer(ulongTrits);
 

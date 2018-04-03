@@ -27,10 +27,9 @@
                                // "GCHMOICIPKGYHYL9VMMSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH" complete rust nonce output
 
       var finder = new HammingNonceDiver(CurlMode.CurlP27);
+      var nonce = finder.Search(input.ToTrits(), 2, Constants.TritHashLength / 3, 0);
 
-      var nonce = finder.Search(input.ToTrits(), 2, 0, Constants.TritHashLength / 3);
-
-      // Assert.AreEqual(expectedNonce, Converter.TritsToTrytes(nonce.Take(81).ToArray()));
+      Assert.AreEqual(expectedNonce, Converter.TritsToTrytes(nonce.Take(81).ToArray()));
     }
   }
 }

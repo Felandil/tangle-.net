@@ -1,8 +1,8 @@
-﻿namespace Tangle.Net.Mam.Unit.Tests.Services
+﻿namespace Tangle.Net.Unit.Tests.Utils
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-  using Tangle.Net.Mam.Services;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The pascal test.

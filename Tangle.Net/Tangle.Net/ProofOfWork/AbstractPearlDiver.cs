@@ -1,6 +1,12 @@
 ﻿namespace Tangle.Net.ProofOfWork
 {
+  using System;
+  using System.Linq;
+
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.ProofOfWork.Entity;
+  using Tangle.Net.ProofOfWork.Utils;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The abstract pearl diver.
@@ -8,49 +14,83 @@
   public abstract class AbstractPearlDiver : IPearlDiver
   {
     /// <summary>
-    /// The high 0.
+    /// Initializes a new instance of the <see cref="AbstractPearlDiver"/> class.
     /// </summary>
-    public const ulong High0 = 0xB6DB6DB6DB6DB6DB;
+    /// <param name="mode">
+    /// The mode.
+    /// </param>
+    protected AbstractPearlDiver(CurlMode mode)
+    {
+      this.Rounds = (int)mode;
+    }
 
     /// <summary>
-    /// The high 1.
+    /// Gets the high 0.
     /// </summary>
-    public const ulong High1 = 0x8FC7E3F1F8FC7E3F;
+    public abstract ulong High0 { get; }
 
     /// <summary>
-    /// The high 2.
+    /// Gets the high 1.
     /// </summary>
-    public const ulong High2 = 0xFFC01FFFF803FFFF;
+    public abstract ulong High1 { get; }
 
     /// <summary>
-    /// The high 3.
+    /// Gets the high 2.
     /// </summary>
-    public const ulong High3 = 0x003FFFFFFFFFFFFF;
+    public abstract ulong High2 { get; }
 
     /// <summary>
-    /// The low 0.
+    /// Gets the high 3.
     /// </summary>
-    public const ulong Low0 = 0xDB6DB6DB6DB6DB6D;
+    public abstract ulong High3 { get; }
 
     /// <summary>
-    /// The low 1.
+    /// Gets the low 0.
     /// </summary>
-    public const ulong Low1 = 0xF1F8FC7E3F1F8FC7;
+    public abstract ulong Low0 { get; }
 
     /// <summary>
-    /// The low 2.
+    /// Gets the low 1.
     /// </summary>
-    public const ulong Low2 = 0x7FFFE00FFFFC01FF;
+    public abstract ulong Low1 { get; }
 
     /// <summary>
-    /// The low 3.
+    /// Gets the low 2.
     /// </summary>
-    public const ulong Low3 = 0xFFC0000007FFFFFF;
+    public abstract ulong Low2 { get; }
+
+    /// <summary>
+    /// Gets the low 3.
+    /// </summary>
+    public abstract ulong Low3 { get; }
+
+    /// <summary>
+    /// Gets the rounds.
+    /// </summary>
+    protected int Rounds { get; }
 
     /// <inheritdoc />
-    public int[] Search(int[] trits, int minWeightMagnitude, int length, int offset)
+    public int[] Search(int[] trits, int security, int length, int offset)
     {
-      return new int[] { };
+      var ulongTrits = this.PrepareTrits(trits, offset);
+      var curl = new NonceCurl(ulongTrits.Low, ulongTrits.High, this.Rounds);
+      var size = Math.Min(length, AbstractCurl.HashLength) - offset;
+
+      var index = 0;
+
+      while (index == 0)
+      {
+        var incrementResult = curl.Increment(offset + size * 2 / 3, offset + size);
+        size = Math.Min(Pascal.RoundThird(offset + size * 2 / 3 + incrementResult), AbstractCurl.HashLength) - offset;
+
+        var curlCopy = curl.Clone();
+        curlCopy.Transform();
+
+        index = Check(security, curlCopy.Low.Take(AbstractCurl.HashLength).ToArray(), curlCopy.High.Take(AbstractCurl.HashLength).ToArray());
+      }
+
+      var result = new TrinaryDemultiplexer(new UlongTritTouple(curl.Low.Take(size).ToArray(), curl.High.Take(size).ToArray()));
+      return result.Get(index);
     }
 
     /// <summary>
@@ -67,19 +107,60 @@
     /// </returns>
     protected UlongTritTouple PrepareTrits(int[] trits, int offset)
     {
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
-      ulongTrits.Low[offset] = Low0;
-      ulongTrits.Low[offset + 1] = Low1;
-      ulongTrits.Low[offset + 2] = Low2;
-      ulongTrits.Low[offset + 3] = Low3;
+      ulongTrits.Low[offset] = this.Low0;
+      ulongTrits.Low[offset + 1] = this.Low1;
+      ulongTrits.Low[offset + 2] = this.Low2;
+      ulongTrits.Low[offset + 3] = this.Low3;
 
-      ulongTrits.High[offset] = High0;
-      ulongTrits.High[offset + 1] = High1;
-      ulongTrits.High[offset + 2] = High2;
-      ulongTrits.High[offset + 3] = High3;
+      ulongTrits.High[offset] = this.High0;
+      ulongTrits.High[offset + 1] = this.High1;
+      ulongTrits.High[offset + 2] = this.High2;
+      ulongTrits.High[offset + 3] = this.High3;
 
       return ulongTrits;
+    }
+
+    /// <summary>
+    /// The check.
+    /// </summary>
+    /// <param name="security">
+    /// The security.
+    /// </param>
+    /// <param name="low">
+    /// The low.
+    /// </param>
+    /// <param name="high">
+    /// The high.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    private static int Check(int security, ulong[] low, ulong[] high)
+    {
+      var demux = new TrinaryDemultiplexer(new UlongTritTouple(low, high));
+      for (var i = 0; i < demux.Length; i++)
+      {
+        var sum = 0;
+        for (var j = 0; j < security; j++)
+        {
+          sum += demux.Get(i).Skip(j * AbstractCurl.HashLength / 3).Take(AbstractCurl.HashLength / 3).Sum();
+
+          if (sum == 0 && j < security - 1)
+          {
+            sum = 1;
+            break;
+          }
+        }
+
+        if (sum == 0)
+        {
+          return i;
+        }
+      }
+
+      return 0;
     }
   }
 }

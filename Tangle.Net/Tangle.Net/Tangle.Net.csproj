@@ -137,6 +137,7 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Cryptography\Signing\ISigningHelper.cs" />
     <Compile Include="Cryptography\Signing\IssSigningHelper.cs" />
+    <Compile Include="Utils\Pascal.cs" />
     <Compile Include="Utils\Timestamp.cs" />
     <Compile Include="Utils\InputValidator.cs" />
   </ItemGroup>

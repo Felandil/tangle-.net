@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Mam.Services
+﻿namespace Tangle.Net.Utils
 {
   using System;
   using System.Collections.Generic;

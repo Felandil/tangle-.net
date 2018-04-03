@@ -99,6 +99,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Constants.cs" Link="Utils\Constants.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Extensions.cs" Link="Utils\Extensions.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\InputValidator.cs" Link="Utils\InputValidator.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Pascal.cs" Link="Utils\Pascal.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Utils\Timestamp.cs" Link="Utils\Timestamp.cs" />
   </ItemGroup>
 

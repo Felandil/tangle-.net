@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tangle.Net.ProofOfWork.Entity
+﻿namespace Tangle.Net.ProofOfWork.Entity
 {
   public class UlongTritConverter
   {
@@ -24,12 +18,15 @@ namespace Tangle.Net.ProofOfWork.Entity
     /// <param name="input">
     /// The input.
     /// </param>
+    /// <param name="length">
+    /// The length.
+    /// </param>
     /// <returns>
     /// The <see cref="UlongTritTouple"/>.
     /// </returns>
-    public static UlongTritTouple TritsToUlong(int[] input)
+    public static UlongTritTouple TritsToUlong(int[] input, int length)
     {
-      var result = new UlongTritTouple(new ulong[input.Length], new ulong[input.Length]);
+      var result = new UlongTritTouple(new ulong[length], new ulong[length]);
 
       for (var i = 0; i < input.Length; i++)
       {
@@ -47,6 +44,15 @@ namespace Tangle.Net.ProofOfWork.Entity
             result.Low[i] = Max;
             result.High[i] = Min;
             break;
+        }
+      }
+
+      if (input.Length < length)
+      {
+        for (var i = input.Length; i < length; i++)
+        {
+          result.Low[i] = Max;
+          result.High[i] = Max;
         }
       }
 

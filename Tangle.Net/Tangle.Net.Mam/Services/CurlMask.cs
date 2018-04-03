@@ -66,15 +66,15 @@
     }
 
     /// <inheritdoc />
-    public void Mask(int[] payload, AbstractCurl keyContainingCurl)
+    public void Mask(int[] payload, AbstractCurl curl)
     {
-      var keyChunk = keyContainingCurl.Rate(Constants.TritHashLength);
+      var keyChunk = curl.Rate(Constants.TritHashLength);
 
       var round = 0;
       foreach (var chunk in payload.GetChunks(Constants.TritHashLength))
       {
-        keyContainingCurl.Absorb(chunk);
-        var curlState = keyContainingCurl.Rate(Constants.TritHashLength);
+        curl.Absorb(chunk);
+        var curlState = curl.Rate(Constants.TritHashLength);
         var length = chunk.Length;
 
         for (var i = 0; i < length; i++)
