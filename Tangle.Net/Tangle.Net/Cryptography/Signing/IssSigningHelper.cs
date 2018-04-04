@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Diagnostics.CodeAnalysis;
   using System.Linq;
 
   using Tangle.Net.Cryptography.Curl;
@@ -137,6 +138,39 @@
       }
 
       return actualKeyTrits.ToArray();
+    }
+
+    /// <summary>
+    /// The signature.
+    /// </summary>
+    /// <param name="hashTrits">
+    /// The hash trits.
+    /// </param>
+    /// <param name="key">
+    /// The key.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
+    public int[] Signature(int[] hashTrits, int[] key)
+    {
+      var signature = new List<int>();
+
+      for (var i = 0; i < key.Length / Constants.TritHashLength; i++)
+      {
+        var buffer = key.Skip(i * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
+        for (var k = 0; k < Hash.MaxTryteValue - (hashTrits[i * 3] + hashTrits[i * 3 + 1] * 3 + hashTrits[i * 3 + 2] * 9); k++)
+        {
+          this.CurlOne.Reset();
+          this.CurlOne.Absorb(buffer);
+          buffer = this.CurlOne.Rate(Constants.TritHashLength);
+        }
+
+        signature.AddRange(buffer);
+      }
+
+      return signature.ToArray();
     }
   }
 }

@@ -30,9 +30,12 @@
     /// <param name="mode">
     /// The mode.
     /// </param>
+    /// <param name="securityLevel">
+    /// The security Level.
+    /// </param>
     /// <returns>
     /// The <see cref="MaskedAuthenticatedMessage"/>.
     /// </returns>
-    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode);
+    MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode, int securityLevel);
   }
 }

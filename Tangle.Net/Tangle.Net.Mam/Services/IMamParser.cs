@@ -14,15 +14,15 @@
     /// <param name="payload">
     /// The payload.
     /// </param>
+    /// <param name="root">
+    /// The root.
+    /// </param>
     /// <param name="channelKey">
     /// The channel key.
-    /// </param>
-    /// <param name="securityLevel">
-    /// The security Level.
     /// </param>
     /// <returns>
     /// The <see cref="UnmaskedAuthenticatedMessage"/>.
     /// </returns>
-    UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel);
+    UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString root, TryteString channelKey);
   }
 }

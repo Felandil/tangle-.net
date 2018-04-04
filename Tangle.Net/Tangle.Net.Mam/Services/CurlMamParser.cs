@@ -51,12 +51,12 @@
     private ISignatureValidator SignatureValidator { get; }
 
     /// <inheritdoc />
-    public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString channelKey, int securityLevel)
+    public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString root, TryteString channelKey)
     {
       var maskedMessage = payload.Transactions.Select(t => t.Fragment).ToList().Merge();
       var unmaskedMessage = this.Mask.Unmask(maskedMessage, channelKey);
 
-      var signatureLength = securityLevel * Fragment.Length;
+      var signatureLength = 2 * Fragment.Length;
       var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(signatureLength, unmaskedMessage.TrytesLength - signatureLength);
 
       var index = Converter.TritsToInt(unmaskedMessageWithoutSignature.GetChunk(0, 27).ToTrits());

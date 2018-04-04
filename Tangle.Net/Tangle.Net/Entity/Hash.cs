@@ -115,5 +115,16 @@
 
       return normalizedHash.ToArray();
     }
+
+    /// <summary>
+    /// The normalize.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    public int[] Normalize()
+    {
+      return Normalize(this);
+    }
   }
 }

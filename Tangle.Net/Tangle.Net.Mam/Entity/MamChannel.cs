@@ -104,17 +104,17 @@
     /// </returns>
     public MaskedAuthenticatedMessage CreateMessage(TryteString message)
     {
-      var tree = this.TreeFactory.Create(this.Seed, this.Start, this.Count, Cryptography.SecurityLevel.Medium);
-      var nextRootTree = this.TreeFactory.Create(this.Seed, this.Start + this.Count, this.NextCount, Cryptography.SecurityLevel.Medium);
+      var tree = this.TreeFactory.Create(this.Seed, this.Start, this.Count, this.SecurityLevel);
+      var nextRootTree = this.TreeFactory.Create(this.Seed, this.Start + this.Count, this.NextCount, this.SecurityLevel);
 
-      var encrytionKey = this.Key;
-
-      if (this.Mode != Mode.Restricted)
-      {
-        encrytionKey = tree.Root.Hash;
-      }
-
-      var maskedAutheticatedMessage = this.MamFactory.Create(tree, this.Index, message, nextRootTree.Root.Hash, encrytionKey, this.Mode);
+      var maskedAutheticatedMessage = this.MamFactory.Create(
+        tree,
+        this.Index,
+        message,
+        nextRootTree.Root.Hash,
+        this.Mode != Mode.Restricted ? tree.Root.Hash : this.Key,
+        this.Mode,
+        this.SecurityLevel);
 
       if (this.Index == this.Count - 1)
       {

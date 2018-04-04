@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.ProofOfWork
 {
   using System;
+  using System.Diagnostics.CodeAnalysis;
   using System.Linq;
 
   using Tangle.Net.Cryptography.Curl;
@@ -70,6 +71,7 @@
     protected int Rounds { get; }
 
     /// <inheritdoc />
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
     public int[] Search(int[] trits, int security, int length, int offset)
     {
       var ulongTrits = this.PrepareTrits(trits, offset);

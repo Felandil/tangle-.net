@@ -22,14 +22,13 @@
     [TestMethod]
     public void TestNonceGeneration()
     {
-      var expectedNonce = "GCHMOICIPKGYHYL9VMMSSXHGKTU";
+      const string ExpectedNonce = "GCHMOICIPKGYHYL9VMMSSXHGKTU"; // "GCHMOICIPKGYHYL9VMMSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH" complete rust nonce output
       var input = new TryteString("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-                               // "GCHMOICIPKGYHYL9VMMSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH" complete rust nonce output
 
       var finder = new HammingNonceDiver(CurlMode.CurlP27);
       var nonce = finder.Search(input.ToTrits(), 2, Constants.TritHashLength / 3, 0);
 
-      Assert.AreEqual(expectedNonce, Converter.TritsToTrytes(nonce.Take(81).ToArray()));
+      Assert.AreEqual(ExpectedNonce, Converter.TritsToTrytes(nonce.Take(81).ToArray()));
     }
   }
 }

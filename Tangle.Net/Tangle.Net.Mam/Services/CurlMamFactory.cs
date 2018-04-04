@@ -32,23 +32,42 @@
     /// <param name="mask">
     /// The mask.
     /// </param>
-    /// <param name="signatureFragmentGenerator">
-    /// The signature Fragment Generator.
+    /// <param name="signingHelper">
+    /// The signing helper.
     /// </param>
-    public CurlMamFactory(AbstractCurl curl, IMask mask, ISignatureFragmentGenerator signatureFragmentGenerator)
+    /// <param name="hammingNonceDiver">
+    /// The hamming nonce diver.
+    /// </param>
+    public CurlMamFactory(AbstractCurl curl, IMask mask, ISigningHelper signingHelper, AbstractPearlDiver hammingNonceDiver)
     {
-      this.SignatureFragmentGenerator = signatureFragmentGenerator;
+      this.SigningHelper = signingHelper;
+      this.HammingNonceDiver = hammingNonceDiver;
       this.Mask = mask;
       this.Curl = curl;
     }
 
     /// <summary>
+    /// The default.
+    /// </summary>
+    public static CurlMamFactory Default =>
+      new CurlMamFactory(
+        new Curl(CurlMode.CurlP27),
+        new CurlMask(),
+        new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
+        new HammingNonceDiver(CurlMode.CurlP27));
+
+    /// <summary>
     /// Gets the signature fragment generator.
     /// </summary>
-    private ISignatureFragmentGenerator SignatureFragmentGenerator { get; }
+    private ISigningHelper SigningHelper { get; }
+
+    /// <summary>
+    /// Gets the hamming nonce diver.
+    /// </summary>
+    private AbstractPearlDiver HammingNonceDiver { get; }
 
     /// <inheritdoc />
-    public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode)
+    public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode, int securityLevel)
     {
       var nextRootTrits = nextRoot.ToTrits();
 
@@ -65,10 +84,6 @@
       var siblingsCountTrits = Pascal.Encode(siblingsCount);
       var signatureLength = subtree.Key.TrytesLength * Converter.Radix;
 
-      var payloadMinimumLength = messageLengthTrits.Length + Constants.TritHashLength + messageTrits.Length
-                                 + NonceLength + signatureLength + siblingsCountTrits.Length + siblingsLength
-                                 + indexTrits.Length;
-
       var nextRootStart = indexTrits.Length + messageLengthTrits.Length;
       var nextRootEnd = nextRootStart + nextRootTrits.Length;
 
@@ -77,7 +92,6 @@
       var signatureEnd = nonceEnd + signatureLength;
 
       var siblingsCountTritsEnd = signatureEnd + siblingsCountTrits.Length;
-      var siblingsEnd = siblingsCountTritsEnd + siblingsLength;
 
       this.Curl.Reset();
       this.Curl.Absorb(channelKey.ToTrits());
@@ -100,16 +114,14 @@
         payload[nextRootStart + i] = encryptablePayloadPart[i];
       }
 
-      var nonceTrits = new HammingNonceDiver(CurlMode.CurlP27).Search(this.Curl.Rate(this.Curl.State.Length), 2, Constants.TritHashLength / 3, 0).ToArray();
+      var nonceTrits = this.HammingNonceDiver.Search(this.Curl.Rate(this.Curl.State.Length), securityLevel, Constants.TritHashLength / 3, 0)
+        .ToArray();
       this.Mask.Mask(nonceTrits, this.Curl);
-
       payload.InsertRange(messageEnd, nonceTrits);
 
-      var signatureFragment = this.SignatureFragmentGenerator.Generate(
-        subtree.Key,
-        new Hash(Converter.TritsToTrytes(this.Curl.Rate(Constants.TritHashLength)))).Merge();
+      var signature = this.SigningHelper.Signature(this.Curl.Rate(Constants.TritHashLength), subtree.Key.ToTrits());
 
-      payload.InsertRange(nonceEnd, signatureFragment.ToTrits());
+      payload.InsertRange(nonceEnd, signature);
       payload.InsertRange(signatureEnd, siblingsCountTrits);
       payload.InsertRange(siblingsCountTritsEnd, subtreeTrits);
 
@@ -124,17 +136,16 @@
       var nextThirdRound = payload.Count % Converter.Radix;
       if (nextThirdRound != 0)
       {
-        payload.InsertRange(payload.Count - 1, new int[Converter.Radix - nextThirdRound]);
+        payload.InsertRange(payload.Count, new int[Converter.Radix - nextThirdRound]);
       }
 
       this.Curl.Reset();
-      var address = this.GetMessageAddress(tree.Root.Hash, mode);
 
       var bundle = new Bundle();
       bundle.AddTransfer(
         new Transfer
           {
-            Address = address,
+            Address = this.GetMessageAddress(tree.Root.Hash, mode),
             Message = new TryteString(Converter.TritsToTrytes(payload.ToArray())),
             Tag = new Tag("999999"),
             Timestamp = Timestamp.UnixSecondsTimestamp
@@ -147,7 +158,7 @@
                {
                  Payload = bundle,
                  Root = tree.Root.Hash,
-                 Address = address,
+                 Address = this.GetMessageAddress(tree.Root.Hash, mode),
                  NextRoot = nextRoot
                };
     }

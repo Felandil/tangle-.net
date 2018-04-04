@@ -1,10 +1,8 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
-  using System;
   using System.Collections.Generic;
 
   using Tangle.Net.Cryptography;
-  using Tangle.Net.Entity;
 
   /// <summary>
   /// The merkle tree.
@@ -28,13 +26,13 @@
     #region Public Methods and Operators
 
     /// <summary>
-    /// The get leaves by key index.
+    /// The get subtree by index.
     /// </summary>
     /// <param name="index">
     /// The index.
     /// </param>
     /// <returns>
-    /// The <see cref="Tuple"/>.
+    /// The <see cref="MerkleSubTree"/>.
     /// </returns>
     public MerkleSubTree GetSubtreeByIndex(int index)
     {

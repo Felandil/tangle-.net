@@ -59,5 +59,19 @@
     /// The <see cref="int[]"/>.
     /// </returns>
     int[] PrivateKeyFromSubseed(int[] subseed, int securityLevel);
+
+    /// <summary>
+    /// The signature.
+    /// </summary>
+    /// <param name="hashTrits">
+    /// The hash trits.
+    /// </param>
+    /// <param name="key">
+    /// The key.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    int[] Signature(int[] hashTrits, int[] key);
   }
 }
