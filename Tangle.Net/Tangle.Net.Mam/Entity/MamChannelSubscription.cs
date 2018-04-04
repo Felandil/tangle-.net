@@ -174,7 +174,7 @@
         {
           try
           {
-            var unmaskedMessage = this.Parser.Unmask(bundles[i], decryptionKey, this.SecurityLevel);
+            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.MessageRoot, decryptionKey);
             this.NextRoot = unmaskedMessage.NextRoot;
             result.Add(unmaskedMessage);
           }
