@@ -39,12 +39,12 @@
     /// <param name="payload">
     /// The payload.
     /// </param>
-    /// <param name="key">
-    /// The key.
+    /// <param name="curl">
+    /// The curl.
     /// </param>
     /// <returns>
-    /// The <see cref="TryteString"/>.
+    /// The <see cref="int[]"/>.
     /// </returns>
-    TryteString Unmask(TryteString payload, TryteString key);
+    int[] Unmask(int[] payload, AbstractCurl curl);
   }
 }

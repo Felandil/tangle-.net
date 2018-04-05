@@ -88,28 +88,21 @@
     }
 
     /// <inheritdoc />
-    public TryteString Unmask(TryteString payload, TryteString key)
+    public int[] Unmask(int[] payload, AbstractCurl curl)
     {
-      this.Curl.Reset();
-      this.Curl.Absorb(key.ToTrits());
-
-      var keyChunk = new int[Constants.TritHashLength];
-
       var unmasked = new List<int>();
-      foreach (var chunk in payload.ToTrits().GetChunks(Constants.TritHashLength))
+      foreach (var chunk in payload.GetChunks(Constants.TritHashLength))
       {
-        this.Curl.Squeeze(keyChunk);
-        var length = chunk.Length;
-
-        for (var i = 0; i < length; i++)
+        for (var i = 0; i < chunk.Length; i++)
         {
-          keyChunk[i] = Converter.Sum(chunk[i], -keyChunk[i]);
+          chunk[i] = Converter.Sum(chunk[i], -curl.Rate(Constants.TritHashLength)[i]);
         }
 
-        unmasked.AddRange(keyChunk.Take(length));
+        unmasked.AddRange(chunk);
+        curl.Absorb(chunk);
       }
 
-      return new TryteString(Converter.TritsToTrytes(unmasked.ToArray()));
+      return unmasked.ToArray();
     }
 
     #endregion

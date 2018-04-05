@@ -164,25 +164,6 @@
     }
 
     /// <summary>
-    /// The get buffer length.
-    /// </summary>
-    /// <param name="length">
-    /// The length.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    [SuppressMessage(
-      "StyleCop.CSharp.MaintainabilityRules",
-      "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
-      Justification = "Reviewed. Suppression is OK here.")]
-    private static int GetBufferLength(int length)
-    {
-      // ReSharper disable once PossibleLossOfFraction
-      return (int)(Fragment.Length - (length - Math.Floor((decimal)(length / Fragment.Length)) * Fragment.Length));
-    }
-
-    /// <summary>
     /// The get message address.
     /// </summary>
     /// <param name="rootHash">

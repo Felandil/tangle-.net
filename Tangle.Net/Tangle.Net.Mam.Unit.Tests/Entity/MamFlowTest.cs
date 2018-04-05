@@ -47,7 +47,7 @@
 
       var subcriptionFactory = new MamChannelSubscriptionFactory(
         iotaRepository,
-        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
+        CurlMamParser.Default,
         mask);
 
       var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);

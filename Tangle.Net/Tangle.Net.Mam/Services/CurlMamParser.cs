@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
 
@@ -41,6 +42,16 @@
     }
 
     /// <summary>
+    /// The default.
+    /// </summary>
+    public static CurlMamParser Default =>
+      new CurlMamParser(
+        new CurlMask(new Curl(CurlMode.CurlP27)),
+        CurlMerkleTreeFactory.Default,
+        new Curl(CurlMode.CurlP27),
+        new SignatureValidator());
+
+    /// <summary>
     /// Gets the tree factory.
     /// </summary>
     private IMerkleTreeFactory TreeFactory { get; }
@@ -53,54 +64,32 @@
     /// <inheritdoc />
     public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString root, TryteString channelKey)
     {
-      var maskedMessage = payload.Transactions.Select(t => t.Fragment).ToList().Merge();
-      var unmaskedMessage = this.Mask.Unmask(maskedMessage, channelKey);
+      var payloadTrits = payload.Transactions.Select(t => t.Fragment).ToList().Merge().ToTrits();
 
-      var signatureLength = 2 * Fragment.Length;
-      var unmaskedMessageWithoutSignature = unmaskedMessage.GetChunk(signatureLength, unmaskedMessage.TrytesLength - signatureLength);
+      var indexData = Pascal.Decode(payloadTrits);
+      var index = indexData.Item1;
 
-      var index = Converter.TritsToInt(unmaskedMessageWithoutSignature.GetChunk(0, 27).ToTrits());
+      var messageData = Pascal.Decode(payloadTrits.Skip(indexData.Item2).ToArray());
+      var messageLength = messageData.Item1;
+      var nextRootStart = indexData.Item2 + messageData.Item2;
+      var messageStart = nextRootStart + Constants.TritHashLength;
+      var messageEnd = messageStart + messageLength;
 
-      var signature = unmaskedMessage.GetChunk(0, signatureLength);
-      var signatureFragments = signature.GetChunks(Fragment.Length).Select(c => new Fragment(c.Value)).ToList();
+      this.Curl.Reset();
+      this.Curl.Absorb(channelKey.ToTrits());
+      this.Curl.Absorb(root.ToTrits());
+      this.Curl.Absorb(payloadTrits.Take(nextRootStart).ToArray());
 
-      var messageHashes = unmaskedMessageWithoutSignature.GetChunk(27, unmaskedMessageWithoutSignature.TrytesLength - 27).GetChunks(Hash.Length);
-      var nextRoot = Hash.Empty;
-      var treeHashes = new List<Hash>();
-      var messageTrytes = new List<TryteString>();
-
-      for (var i = 0; i < messageHashes.Count; i++)
-      {
-        if (messageHashes[i].Value != Hash.Empty.Value)
-        {
-          continue;
-        }
-
-        treeHashes = messageHashes.Take(i).Select(h => new Hash(h.Value)).ToList();
-        nextRoot = new Hash(messageHashes[i + 1].Value);
-        messageTrytes.AddRange(messageHashes.Skip(i + 2).Take(messageHashes.Count - i + 2));
-
-        break;
-      }
-
-      var chainedMessageTrytes = messageTrytes.Merge();
-      chainedMessageTrytes = chainedMessageTrytes.GetChunk(0, chainedMessageTrytes.TrytesLength - Checksum.Length);
-
-      var messageHash = this.GetMessageHash(nextRoot.Concat(chainedMessageTrytes));
-      if (!this.SignatureValidator.ValidateFragments(signatureFragments, messageHash, treeHashes[0]))
-      {
-        throw new InvalidBundleException("Mam Bundle signature failed verification", new List<string>());
-      }
-
-
-      var recalculatedTree = this.TreeFactory.FromBranch(treeHashes.Select(t => new MerkleNode { Hash = t }).ToList());
+      var nextRoot = this.Mask.Unmask(payloadTrits.Skip(nextRootStart).Take(Constants.TritHashLength).ToArray(), this.Curl);
+      var message = this.Mask.Unmask(payloadTrits.Skip(messageStart).Take(messageLength).ToArray(), this.Curl);
+      var nonce = this.Mask.Unmask(payloadTrits.Skip(messageEnd).Take(Constants.TritHashLength / 3).ToArray(), this.Curl);
 
       return new UnmaskedAuthenticatedMessage
                {
-                 NextRoot = nextRoot,
-                 Message = chainedMessageTrytes,
-                 Root = recalculatedTree.Root.Hash
-               };
+                 NextRoot = new Hash(Converter.TritsToTrytes(nextRoot)),
+                 Message = new TryteString(Converter.TritsToTrytes(message)),
+                 Root = new Hash(root.Value)
+      };
     }
   }
 }

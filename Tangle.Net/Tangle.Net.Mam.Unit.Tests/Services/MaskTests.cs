@@ -5,6 +5,7 @@
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
   using Tangle.Net.Cryptography;
+  using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Services;
   using Tangle.Net.Utils;
@@ -37,12 +38,18 @@
     [TestMethod]
     public void TestMaskUnmask()
     {
-      //var mask = new CurlMask();
+      var mask = new CurlMask();
+      var curl = new Curl(CurlMode.CurlP27);
+      curl.Absorb(this.authId.ToTrits());
+      var payloadTrits = this.payload.ToTrits();
 
-      //var maskedCipher = mask.Mask(this.payload, this.authId);
-      //var unmaskedCipher = mask.Unmask(maskedCipher, this.authId);
+      mask.Mask(payloadTrits, curl);
 
-      //Assert.AreEqual(this.payload.Value, unmaskedCipher.Value);
+      curl.Reset();
+      curl.Absorb(this.authId.ToTrits());
+      var unmasked = mask.Unmask(payloadTrits, curl);
+
+      Assert.AreEqual(this.payload.Value, Converter.TritsToTrytes(unmasked));
     }
 
     /// <summary>
