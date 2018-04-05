@@ -9,5 +9,7 @@
     /// The trit hash length.
     /// </summary>
     public const int TritHashLength = 243;
+
+    public const int TritsPerTryte = 3;
   }
 }

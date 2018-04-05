@@ -39,9 +39,9 @@
       var encoding = 0;
       var index = 0;
 
-      for (var i = 0; i < length - Converter.Radix; i += Converter.Radix)
+      for (var i = 0; i < length - Constants.TritsPerTryte; i += Constants.TritsPerTryte)
       {
-        var tritValue = trits.Skip(i).Take(Converter.Radix).ToArray();
+        var tritValue = trits.Skip(i).Take(Constants.TritsPerTryte).ToArray();
         var tritsAsInt = Converter.TritsToInt(tritValue);
 
         if (tritsAsInt >= 0)
@@ -56,12 +56,12 @@
         index++;
       }
 
-      if (Converter.TritsToInt(trits.Skip(length - Converter.Radix).Take(length).ToArray()) < 0)
+      if (Converter.TritsToInt(trits.Skip(length - Constants.TritsPerTryte).Take(length).ToArray()) < 0)
       {
         encoding |= 1 << index;
-        for (var i = 0; i < trits.Skip(length - Converter.Radix).Take(length).ToArray().Length; i++)
+        for (var i = 0; i < trits.Skip(length - Constants.TritsPerTryte).Take(length).ToArray().Length; i++)
         {
-          trits[i + length - Converter.Radix] = -trits[i + length - Converter.Radix];
+          trits[i + length - Constants.TritsPerTryte] = -trits[i + length - Constants.TritsPerTryte];
         }
       }
 
@@ -74,6 +74,32 @@
       }
 
       return trits;
+    }
+
+    public static Tuple<int, int> Decode(int[] value)
+    {
+      if (value.Take(4).SequenceEqual(Zero))
+      {
+        return new Tuple<int, int>(0, 4);
+      } 
+      else
+      {
+        var encoderStart = End(value);
+        var inputEnd = encoderStart + (encoderStart / Constants.TritsPerTryte);
+        var encoder = Converter.TritsToInt(value.Skip(encoderStart).Take(inputEnd - encoderStart).ToArray());
+
+        var result = 0;
+        for (var i = 0; i < encoderStart; i += Constants.TritsPerTryte)
+        {
+          var tritsIntValue = ((encoder >> i) & 1) != 0 
+            ? -Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray()) 
+            : Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray());
+
+          result = result + (int)Math.Pow((double)27, i) * tritsIntValue;
+        }
+
+        return new Tuple<int, int>(result, inputEnd);
+      }
     }
 
     /// <summary>
@@ -94,6 +120,38 @@
       }
 
       return input + Converter.Radix - rem;
+    }
+
+    /// <summary>
+    /// The encoded length.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    public static int EncodedLength(int value)
+    {
+      if (value == 0)
+      {
+        return Zero.Length;
+      }
+
+      var length = RoundThird(CalculateMinimumTrits(Math.Abs(value), 1));
+      return length + (length / Converter.Radix);
+    }
+
+    private static int End(int[] input)
+    {
+      if (Converter.TritsToInt(input.Take(Constants.TritsPerTryte).ToArray()) > 0)
+      {
+        return Constants.TritsPerTryte;
+      }
+      else
+      {
+        return Constants.TritsPerTryte + End(input.Skip(Constants.TritsPerTryte).ToArray());
+      }
     }
 
     /// <summary>
@@ -163,26 +221,6 @@
     }
 
     /// <summary>
-    /// The encoded length.
-    /// </summary>
-    /// <param name="value">
-    /// The value.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    public static int EncodedLength(int value)
-    {
-      if (value == 0)
-      {
-        return Zero.Length;
-      }
-
-      var length = RoundThird(CalculateMinimumTrits(Math.Abs(value), 1));
-      return length + (length / Converter.Radix);
-    }
-
-    /// <summary>
     /// The calculate minimum trits.
     /// </summary>
     /// <param name="input">
@@ -201,7 +239,7 @@
         return 1;
       }
 
-      return 1 + CalculateMinimumTrits(input, 1 + (basis * Converter.Radix));
+      return 1 + CalculateMinimumTrits(input, 1 + (basis * Constants.TritsPerTryte));
     }
   }
 }
