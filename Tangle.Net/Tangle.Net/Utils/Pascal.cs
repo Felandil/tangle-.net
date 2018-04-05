@@ -76,30 +76,37 @@
       return trits;
     }
 
+    /// <summary>
+    /// The decode.
+    /// </summary>
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Tuple"/>.
+    /// </returns>
     public static Tuple<int, int> Decode(int[] value)
     {
       if (value.Take(4).SequenceEqual(Zero))
       {
         return new Tuple<int, int>(0, 4);
-      } 
-      else
-      {
-        var encoderStart = End(value);
-        var inputEnd = encoderStart + (encoderStart / Constants.TritsPerTryte);
-        var encoder = Converter.TritsToInt(value.Skip(encoderStart).Take(inputEnd - encoderStart).ToArray());
-
-        var result = 0;
-        for (var i = 0; i < encoderStart; i += Constants.TritsPerTryte)
-        {
-          var tritsIntValue = ((encoder >> i) & 1) != 0 
-            ? -Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray()) 
-            : Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray());
-
-          result = result + (int)Math.Pow((double)27, i) * tritsIntValue;
-        }
-
-        return new Tuple<int, int>(result, inputEnd);
       }
+
+      var encoderStart = End(value);
+      var inputEnd = encoderStart + (encoderStart / Constants.TritsPerTryte);
+      var encoder = Converter.TritsToInt(value.Skip(encoderStart).Take(inputEnd - encoderStart).ToArray());
+
+      var result = 0;
+      for (var i = 0; i < encoderStart / Constants.TritsPerTryte; i++)
+      {
+        var tritsIntValue = ((encoder >> i) & 1) != 0 
+                              ? -Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray()) 
+                              : Converter.TritsToInt(value.Skip(i * Constants.TritsPerTryte).Take(Constants.TritsPerTryte).ToArray());
+
+        result = result + ((int)Math.Pow(27, i) * tritsIntValue);
+      }
+
+      return new Tuple<int, int>(result, inputEnd);
     }
 
     /// <summary>

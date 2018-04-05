@@ -41,6 +41,9 @@
       }
     }
 
+    /// <summary>
+    /// The test value decoding.
+    /// </summary>
     [TestMethod]
     public void TestValueDecoding()
     {
@@ -55,8 +58,14 @@
       valueToDecode = new[] { -1, 0, 0, -1, 0, -1, 1, 0, 0, 0, 1, 0 };
       result = Pascal.Decode(valueToDecode);
 
-      //Assert.AreEqual(expected.Item1, result.Item1);
-      //Assert.AreEqual(expected.Item2, result.Item2);
+      Assert.AreEqual(expected.Item1, result.Item1);
+      Assert.AreEqual(expected.Item2, result.Item2);
+
+      valueToDecode = new[] { -1, 0, 0, -1, 0, -1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, -1 };
+      result = Pascal.Decode(valueToDecode);
+
+      Assert.AreEqual(expected.Item1, result.Item1);
+      Assert.AreEqual(expected.Item2, result.Item2);
     }
   }
 }
