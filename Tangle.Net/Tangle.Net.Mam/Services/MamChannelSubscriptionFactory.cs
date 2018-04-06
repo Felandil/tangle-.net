@@ -54,19 +54,16 @@
     /// <param name="mode">
     /// The mode.
     /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
     /// <param name="channelKey">
     /// The channel key.
     /// </param>
     /// <returns>
     /// The <see cref="MamChannelSubscription"/>.
     /// </returns>
-    public MamChannelSubscription Create(Hash root, Mode mode, int securityLevel = 2, TryteString channelKey = null)
+    public MamChannelSubscription Create(Hash root, Mode mode, TryteString channelKey = null)
     {
       var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser, this.Mask);
-      channelSubscription.Init(root, mode, securityLevel, channelKey);
+      channelSubscription.Init(root, mode, channelKey);
 
       return channelSubscription;
     }
@@ -93,7 +90,6 @@
         channelSubscription.Init(
           new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
           (Mode)unserializedSubscriptionData.Mode,
-          (int)unserializedSubscriptionData.SecurityLevel,
           new Hash((string)unserializedSubscriptionData.Key.Value));
       }
       else
@@ -101,7 +97,6 @@
         channelSubscription.Init(
           new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
           (Mode)unserializedSubscriptionData.Mode,
-          (int)unserializedSubscriptionData.SecurityLevel,
           new Hash((string)unserializedSubscriptionData.Key.Value),
           new Hash(nextRootValue));
       }

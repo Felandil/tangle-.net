@@ -25,12 +25,10 @@
       // Create all needed objects to create a channel and subscription factory. 
       // This would be done via DI (e.g. Ninject) in production environment
       var repository = new RestIotaRepositoryFactory().CreateAsync().Result;
-      var curl = new Curl();
       var mask = new CurlMask();
-      var mamParser = new CurlMamParser(mask, CurlMerkleTreeFactory.Default, curl, new SignatureValidator());
 
       this.ChannelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, repository);
-      this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, mamParser, mask);
+      this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, CurlMamParser.Default, mask);
     }
 
     /// <summary>
@@ -68,7 +66,7 @@
 
       // Messages published on a channel, can be retrieved by subscribing to the channel.
       // To find and decrypt messages published on a restricted stream, we need the root of the first message in our stream and the channelKey
-      var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
+      var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
 
       // Fetch the messages published on that stream
       var publishedMessages = await channelSubscription.FetchAsync();

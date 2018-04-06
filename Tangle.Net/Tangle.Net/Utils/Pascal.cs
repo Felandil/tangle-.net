@@ -87,6 +87,11 @@
     /// </returns>
     public static Tuple<int, int> Decode(int[] value)
     {
+      if (value.Length < 3)
+      {
+        throw new ArgumentException("Given trits can not be Pascal decoded. Invalid length.");
+      }
+
       if (value.Take(4).SequenceEqual(Zero))
       {
         return new Tuple<int, int>(0, 4);
@@ -149,16 +154,23 @@
       return length + (length / Converter.Radix);
     }
 
+    /// <summary>
+    /// The end.
+    /// </summary>
+    /// <param name="input">
+    /// The input.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
     private static int End(int[] input)
     {
       if (Converter.TritsToInt(input.Take(Constants.TritsPerTryte).ToArray()) > 0)
       {
         return Constants.TritsPerTryte;
       }
-      else
-      {
-        return Constants.TritsPerTryte + End(input.Skip(Constants.TritsPerTryte).ToArray());
-      }
+
+      return Constants.TritsPerTryte + End(input.Skip(Constants.TritsPerTryte).ToArray());
     }
 
     /// <summary>

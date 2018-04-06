@@ -30,13 +30,13 @@
     /// <param name="curl">
     /// The curl.
     /// </param>
-    /// <param name="signatureValidator">
+    /// <param name="signingHelper">
     /// The signature Validator.
     /// </param>
-    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory, AbstractCurl curl, ISignatureValidator signatureValidator)
+    public CurlMamParser(IMask mask, IMerkleTreeFactory treeFactory, AbstractCurl curl, ISigningHelper signingHelper)
     {
       this.TreeFactory = treeFactory;
-      this.SignatureValidator = signatureValidator;
+      this.SigningHelper = signingHelper;
       this.Mask = mask;
       this.Curl = curl;
     }
@@ -49,7 +49,7 @@
         new CurlMask(new Curl(CurlMode.CurlP27)),
         CurlMerkleTreeFactory.Default,
         new Curl(CurlMode.CurlP27),
-        new SignatureValidator());
+        new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)));
 
     /// <summary>
     /// Gets the tree factory.
@@ -59,7 +59,7 @@
     /// <summary>
     /// Gets the signature validator.
     /// </summary>
-    private ISignatureValidator SignatureValidator { get; }
+    private ISigningHelper SigningHelper { get; }
 
     /// <inheritdoc />
     public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString root, TryteString channelKey)
@@ -85,7 +85,7 @@
       var nonce = this.Mask.Unmask(payloadTrits.Skip(messageEnd).Take(Constants.TritHashLength / 3).ToArray(), this.Curl);
       var hmac = this.Curl.Rate(Constants.TritHashLength);
 
-      var securityLevel = new IssSigningHelper().ChecksumSecurity(hmac);
+      var securityLevel = this.SigningHelper.ChecksumSecurity(hmac);
 
       if (securityLevel == 0)
       {
@@ -93,10 +93,9 @@
       }
 
       var decryptedMetadata = this.Mask.Unmask(payloadTrits.Skip(messageEnd + nonce.Length).ToArray(), this.Curl);
-      var signatureEnd = (securityLevel * PrivateKey.FragmentLength) + messageEnd + nonce.Length;
       var signature = decryptedMetadata.Take(securityLevel * PrivateKey.FragmentLength).ToArray();
 
-      var digest = new IssSigningHelper().DigestFromSignature(hmac, signature);
+      var digest = this.SigningHelper.DigestFromSignature(hmac, signature);
       this.Curl.Reset();
       this.Curl.Absorb(digest);
 

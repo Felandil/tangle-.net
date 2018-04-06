@@ -56,11 +56,6 @@
     public Mode Mode { get; private set; }
 
     /// <summary>
-    /// Gets the security level.
-    /// </summary>
-    public int SecurityLevel { get; private set; }
-
-    /// <summary>
     /// Gets the parser.
     /// </summary>
     private IMamParser Parser { get; }
@@ -107,21 +102,17 @@
     /// <param name="mode">
     /// The mode.
     /// </param>
-    /// <param name="securityLevel">
-    /// The security level.
-    /// </param>
     /// <param name="channelKey">
     /// The channel key.
     /// </param>
     /// <param name="nextRoot">
     /// The next Root.
     /// </param>
-    public void Init(Hash messageRoot, Mode mode, int securityLevel = 2, TryteString channelKey = null, Hash nextRoot = null)
+    public void Init(Hash messageRoot, Mode mode, TryteString channelKey = null, Hash nextRoot = null)
     {
       this.MessageRoot = messageRoot;
       this.Mode = mode;
       this.Key = channelKey;
-      this.SecurityLevel = securityLevel;
       this.NextRoot = nextRoot;
     }
 

@@ -50,7 +50,7 @@
         CurlMamParser.Default,
         mask);
 
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
 
       var unmaskedMessages = await subscription.FetchAsync();
 
@@ -94,10 +94,7 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(
-        iotaRepository,
-        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
-        mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Private);
 
       var unmaskedMessages = await subscription.FetchAsync();
@@ -142,10 +139,7 @@
       var messageThree = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone the third!"));
       await channel.PublishAsync(messageThree);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(
-        iotaRepository,
-        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
-        mask);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, mask);
       var subscription = subcriptionFactory.Create(message.Root, Mode.Public);
 
       var unmaskedMessages = await subscription.FetchAsync();
@@ -231,11 +225,8 @@
 
       await iotaRepository.SendTrytesAsync(bundle.Transactions, 27, 14);
 
-      var subcriptionFactory = new MamChannelSubscriptionFactory(
-        iotaRepository,
-        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
-        mask);
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, SecurityLevel.Medium, channelKey);
+      var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, mask);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
 
       var unmaskedMessages = await subscription.FetchAsync();
 

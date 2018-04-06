@@ -23,14 +23,11 @@
     public void TestSubscriptionCreationAndRecreation()
     {
       var mask = new CurlMask();
-      var subscriptionFactory = new MamChannelSubscriptionFactory(
-        new InMemoryIotaRepository(),
-        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
-        mask);
+      var subscriptionFactory = new MamChannelSubscriptionFactory(new InMemoryIotaRepository(), CurlMamParser.Default, mask);
 
       var root = new Hash(Seed.Random().Value);
       var channelKey = Seed.Random();
-      var subscription = subscriptionFactory.Create(root, Mode.Restricted, SecurityLevel.Medium, channelKey);
+      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey);
 
       var serializedSubscription = subscription.ToJson();
 
