@@ -25,11 +25,7 @@
       var mask = new CurlMask();
       var subscriptionFactory = new MamChannelSubscriptionFactory(
         new InMemoryIotaRepository(),
-        new CurlMamParser(
-          mask,
-          new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGenerator())),
-          new Curl(),
-          new SignatureValidator()),
+        new CurlMamParser(mask, CurlMerkleTreeFactory.Default, new Curl(), new SignatureValidator()),
         mask);
 
       var root = new Hash(Seed.Random().Value);

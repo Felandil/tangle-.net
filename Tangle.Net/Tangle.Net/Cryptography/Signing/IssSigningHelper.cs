@@ -140,18 +140,7 @@
       return actualKeyTrits.ToArray();
     }
 
-    /// <summary>
-    /// The signature.
-    /// </summary>
-    /// <param name="hashTrits">
-    /// The hash trits.
-    /// </param>
-    /// <param name="key">
-    /// The key.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int[]"/>.
-    /// </returns>
+    /// <inheritdoc />
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
     public int[] Signature(int[] hashTrits, int[] key)
     {
@@ -171,6 +160,46 @@
       }
 
       return signature.ToArray();
+    }
+
+    /// <inheritdoc />
+    public int ChecksumSecurity(int[] hash)
+    {
+      if (hash.Take(Constants.TritHashLength / 3).Sum() == 0)
+      {
+        return 1;
+      }
+
+      if (hash.Take(2 * (Constants.TritHashLength / 3)).Sum() == 0)
+      {
+        return 2;
+      }
+
+      return hash.Sum() == 0 ? 3 : 0;
+    }
+
+    /// <inheritdoc />
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
+    public int[] DigestFromSignature(int[] hash, int[] signature)
+    {
+      var buffer = new List<int>();
+
+      for (var i = 0; i < (signature.Length / Constants.TritHashLength); i++)
+      {
+        var chunk = signature.Skip(i * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
+
+        for (var j = 0; j < (hash[i * 3] + hash[i * 3 + 1] * 3 + hash[i * 3 + 2] * 9) - Hash.MinTryteValue; j++)
+        {
+          this.CurlOne.Reset();
+          this.CurlOne.Absorb(chunk);
+          buffer.AddRange(this.CurlOne.Rate(Constants.TritHashLength));
+        }
+      }
+
+      this.CurlOne.Reset();
+      this.CurlOne.Absorb(buffer.ToArray());
+
+      return this.CurlOne.Rate(Constants.TritHashLength);
     }
   }
 }

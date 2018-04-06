@@ -2,9 +2,11 @@
 {
   using System.Collections.Generic;
 
+  using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The curl merkle tree factory.
@@ -20,22 +22,34 @@
     /// <param name="leafFactory">
     /// The leaf Factory.
     /// </param>
-    public CurlMerkleTreeFactory(IMerkleNodeFactory nodeFactory, IMerkleLeafFactory leafFactory)
+    /// <param name="curl">
+    /// The curl.
+    /// </param>
+    public CurlMerkleTreeFactory(IMerkleNodeFactory nodeFactory, IMerkleLeafFactory leafFactory, AbstractCurl curl)
     {
       this.NodeFactory = nodeFactory;
       this.LeafFactory = leafFactory;
+      this.Curl = curl;
     }
 
     /// <summary>
     /// The default.
     /// </summary>
     public static CurlMerkleTreeFactory Default =>
-      new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl(CurlMode.CurlP27)), new CurlMerkleLeafFactory(MerkleAddressGenerator.Default));
+      new CurlMerkleTreeFactory(
+        new CurlMerkleNodeFactory(new Curl(CurlMode.CurlP27)),
+        new CurlMerkleLeafFactory(MerkleAddressGenerator.Default),
+        new Curl(CurlMode.CurlP27));
 
     /// <summary>
     /// Gets or sets the leaf factory.
     /// </summary>
     private IMerkleLeafFactory LeafFactory { get; set; }
+
+    /// <summary>
+    /// Gets the curl.
+    /// </summary>
+    private AbstractCurl Curl { get; }
 
     /// <summary>
     /// Gets or sets the node factory.
@@ -50,9 +64,34 @@
     }
 
     /// <inheritdoc />
-    public MerkleTree FromBranch(List<MerkleNode> branchLeaves)
+    public Hash RecalculateRoot(int[] siblings, int[] address, int index)
     {
-      return new MerkleTree { Root = this.NodeFactory.Create(branchLeaves[0], branchLeaves[0]) };
+      var tempLeave = new MerkleNode { Hash = new Hash(Converter.TritsToTrytes(siblings)) };
+      return this.NodeFactory.Create(tempLeave).Hash;
+
+      var i = 1;
+      foreach (var chunk in siblings.GetChunks(Constants.TritHashLength))
+      {
+        this.Curl.Reset();
+
+        if ((i & index) == 0)
+        {
+          this.Curl.Absorb(address);
+          this.Curl.Absorb(chunk);
+        }
+        else
+        {
+          this.Curl.Absorb(chunk);
+          this.Curl.Absorb(address);
+        }
+
+        i <<= 1;
+
+        address = this.Curl.Rate(Constants.TritHashLength);
+      }
+
+
+      return new Hash(Converter.TritsToTrytes(this.Curl.Rate(Constants.TritHashLength)));
     }
 
     /// <summary>

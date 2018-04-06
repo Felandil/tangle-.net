@@ -83,6 +83,45 @@
       var nextRoot = this.Mask.Unmask(payloadTrits.Skip(nextRootStart).Take(Constants.TritHashLength).ToArray(), this.Curl);
       var message = this.Mask.Unmask(payloadTrits.Skip(messageStart).Take(messageLength).ToArray(), this.Curl);
       var nonce = this.Mask.Unmask(payloadTrits.Skip(messageEnd).Take(Constants.TritHashLength / 3).ToArray(), this.Curl);
+      var hmac = this.Curl.Rate(Constants.TritHashLength);
+
+      var securityLevel = new IssSigningHelper().ChecksumSecurity(hmac);
+
+      if (securityLevel == 0)
+      {
+        throw new ArgumentException("Given payload is invalid. (Security level can not be verified)");
+      }
+
+      var decryptedMetadata = this.Mask.Unmask(payloadTrits.Skip(messageEnd + nonce.Length).ToArray(), this.Curl);
+      var signatureEnd = (securityLevel * PrivateKey.FragmentLength) + messageEnd + nonce.Length;
+      var signature = decryptedMetadata.Take(securityLevel * PrivateKey.FragmentLength).ToArray();
+
+      var digest = new IssSigningHelper().DigestFromSignature(hmac, signature);
+      this.Curl.Reset();
+      this.Curl.Absorb(digest);
+
+      var siblingsCountData = Pascal.Decode(decryptedMetadata.Skip(securityLevel * PrivateKey.FragmentLength).ToArray());
+      var siblingsCount = siblingsCountData.Item1;
+
+      if (siblingsCount != 0)
+      {
+        var siblings = decryptedMetadata.Skip((securityLevel * PrivateKey.FragmentLength) + siblingsCountData.Item2)
+          .Take(siblingsCount * Constants.TritHashLength).ToArray();
+
+        var recalculatedRoot = this.TreeFactory.RecalculateRoot(
+          siblings,
+          this.Curl.Rate(Constants.TritHashLength),
+          index);
+
+        if (recalculatedRoot.Value != root.Value)
+        {
+          throw new ArgumentException("Given payload is invalid. (Given root does not match payload root)");
+        }
+      }
+      else
+      {
+        throw new ArgumentException("Given payload is invalid. (No siblings attached to payload)");
+      }
 
       return new UnmaskedAuthenticatedMessage
                {

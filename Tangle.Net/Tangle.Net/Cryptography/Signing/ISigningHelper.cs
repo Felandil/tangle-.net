@@ -73,5 +73,30 @@
     /// The <see cref="int[]"/>.
     /// </returns>
     int[] Signature(int[] hashTrits, int[] key);
+
+    /// <summary>
+    /// The checksum security.
+    /// </summary>
+    /// <param name="hash">
+    /// The hash.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    int ChecksumSecurity(int[] hash);
+
+    /// <summary>
+    /// The digest from signature.
+    /// </summary>
+    /// <param name="hash">
+    /// The hash.
+    /// </param>
+    /// <param name="signature">
+    /// The signature.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    int[] DigestFromSignature(int[] hash, int[] signature);
   }
 }

@@ -41,7 +41,7 @@
     [TestMethod]
     public void TestTreeHasOnlyOneLeafShouldSetLeafAsRootNode()
     {
-      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGeneratorStub()));
+      var factory = new CurlMerkleTreeFactory(new CurlMerkleNodeFactory(new Curl()), new CurlMerkleLeafFactory(new AddressGeneratorStub()), new Curl(CurlMode.CurlP27));
       var tree = factory.Create(Seed.Random(), 0, 1, SecurityLevel.Medium);
 
       Assert.IsNotNull(tree.Root);

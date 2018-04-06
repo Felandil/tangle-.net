@@ -34,13 +34,19 @@
     /// <summary>
     /// The from branch.
     /// </summary>
-    /// <param name="branchLeaves">
-    /// The branch leaves.
+    /// <param name="siblings">
+    /// The siblings.
+    /// </param>
+    /// <param name="address">
+    /// The address.
+    /// </param>
+    /// <param name="index">
+    /// The index.
     /// </param>
     /// <returns>
     /// The <see cref="MerkleTree"/>.
     /// </returns>
-    MerkleTree FromBranch(List<MerkleNode> branchLeaves);
+    Hash RecalculateRoot(int[] siblings, int[] address, int index);
 
     #endregion
   }
