@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Entity\MerklePrivateKey.cs" />
     <Compile Include="Merkle\MerkleAddressGenerator.cs" />
+    <Compile Include="Mode.cs" />
     <Compile Include="Services\CurlMask.cs" />
     <Compile Include="Services\IMask.cs" />
     <Compile Include="Services\AbstractMam.cs" />

@@ -102,24 +102,25 @@
       var siblingsCountData = Pascal.Decode(decryptedMetadata.Skip(securityLevel * PrivateKey.FragmentLength).ToArray());
       var siblingsCount = siblingsCountData.Item1;
 
+      Hash recalculatedRoot;
       if (siblingsCount != 0)
       {
         var siblings = decryptedMetadata.Skip((securityLevel * PrivateKey.FragmentLength) + siblingsCountData.Item2)
           .Take(siblingsCount * Constants.TritHashLength).ToArray();
 
-        var recalculatedRoot = this.TreeFactory.RecalculateRoot(
+        recalculatedRoot = this.TreeFactory.RecalculateRoot(
           siblings,
           this.Curl.Rate(Constants.TritHashLength),
           index);
-
-        if (recalculatedRoot.Value != root.Value)
-        {
-          throw new ArgumentException("Given payload is invalid. (Given root does not match payload root)");
-        }
       }
       else
       {
-        throw new ArgumentException("Given payload is invalid. (No siblings attached to payload)");
+        recalculatedRoot = new Hash(root.Value);
+      }
+
+      if (recalculatedRoot.Value != root.Value)
+      {
+        throw new ArgumentException("Given payload is invalid. (Given root does not match payload root)");
       }
 
       return new UnmaskedAuthenticatedMessage

@@ -1,34 +1,14 @@
-﻿namespace Tangle.Net.ProofOfWork
+﻿namespace Tangle.Net.ProofOfWork.HammingNonce
 {
   using System;
 
   using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.ProofOfWork.Entity;
 
   /// <summary>
   /// The u long trits collection.
   /// </summary>
   public class NonceCurl
   {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NonceCurl"/> class.
-    /// </summary>
-    /// <param name="rounds">
-    /// The rounds.
-    /// </param>
-    public NonceCurl(int rounds)
-    {
-      this.Rounds = rounds;
-      this.Low = new ulong[Curl.StateLength];
-      this.High = new ulong[Curl.StateLength];
-
-      for (var i = 0; i < Curl.StateLength; i++)
-      {
-        this.Low[i] = UlongTritConverter.Max;
-        this.High[i] = UlongTritConverter.Min;
-      }
-    }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="NonceCurl"/> class.
     /// </summary>

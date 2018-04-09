@@ -12,7 +12,10 @@
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.ProofOfWork;
+  using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
+
+  using Mode = Tangle.Net.Mam.Entity.Mode;
 
   /// <inheritdoc cref="AbstractMam"/>
   /// <inheritdoc cref="IMamFactory"/>
@@ -54,7 +57,7 @@
         new Curl(CurlMode.CurlP27),
         new CurlMask(),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
-        new HammingNonceDiver(CurlMode.CurlP27));
+        new HammingNonceDiver(CurlMode.CurlP27, ProofOfWork.HammingNonce.Mode._32bit));
 
     /// <summary>
     /// Gets the signature fragment generator.
