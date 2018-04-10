@@ -1,7 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
   using System;
-  using System.Collections.Generic;
   using System.Linq;
 
   using Tangle.Net.Cryptography;
@@ -10,7 +9,6 @@
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
-  using Tangle.Net.Repository;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -115,7 +113,7 @@
       }
       else
       {
-        recalculatedRoot = new Hash(root.Value);
+        recalculatedRoot = new Hash(Converter.TritsToTrytes(this.Curl.Rate(Constants.TritHashLength)));
       }
 
       if (recalculatedRoot.Value != root.Value)
