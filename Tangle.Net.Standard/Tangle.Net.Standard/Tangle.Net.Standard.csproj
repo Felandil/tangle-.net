@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Version>1.0.6.1</Version>
+    <Version>1.0.7.0</Version>
     <Description>.NET Standard 2.0 IOTA Library C# Port</Description>
     <Authors>Felandil</Authors>
     <Company>Felandil</Company>
@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.6.1</AssemblyVersion>
-    <FileVersion>1.0.6.1</FileVersion>  
+    <AssemblyVersion>1.0.7.0</AssemblyVersion>
+    <FileVersion>1.0.7.0</FileVersion>  
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,13 +51,14 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\AbstractPearlDiver.cs" Link="ProofOfWork\AbstractPearlDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPearlDiver.cs" Link="ProofOfWork\CpuPearlDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Entity\UlongTritTouple.cs" Link="ProofOfWork\Entity\UlongTritTouple.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonceDiver.cs" Link="ProofOfWork\HammingNonceDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\HammingNonceDiver.cs" Link="ProofOfWork\HammingNonce\HammingNonceDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\Mode.cs" Link="ProofOfWork\HammingNonce\Mode.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\NonceCurl.cs" Link="ProofOfWork\HammingNonce\NonceCurl.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\UlongTritConverter.cs" Link="ProofOfWork\HammingNonce\UlongTritConverter.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPearlDiver.cs" Link="ProofOfWork\IPearlDiver.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\NonceCurl.cs" Link="ProofOfWork\NonceCurl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\IPoWService.cs" Link="ProofOfWork\Service\IPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWService.cs" Link="ProofOfWork\Service\PoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\RestPoWService.cs" Link="ProofOfWork\Service\RestPoWService.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\UlongTritConverter.cs" Link="ProofOfWork\UlongTritConverter.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Utils\TrinaryDemultiplexer.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexer.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />

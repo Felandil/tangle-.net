@@ -4,8 +4,6 @@
   using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography;
-  using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
@@ -13,22 +11,39 @@
   using Tangle.Net.Repository.Factory;
 
   /// <summary>
-  /// The mam example.
+  /// The mam publish example.
   /// </summary>
-  public class MamExample
+  public class MamPublishExample
   {
+    // Javascript Code to receive MAM payload from the tangle (https://github.com/iotaledger/mam.client.js)
+
+    // var Mam = require('../lib/mam.node.js')
+    // var IOTA = require('iota.lib.js')
+
+    // var iota = new IOTA({ provider: `https://field.carriota.com:443` })
+
+    //// Init State
+    // let root = "ROOTHERE" // Enter the root output from the C# example
+    // let sideKey = "SIDEKEYHERE" // Enter the channel Key from the C# example
+    // let mode = 'restricted'
+
+    //// Initialise MAM State
+    // var mamState = Mam.init(iota)
+
+    // var resp = Mam.fetch(root, mode, sideKey, console.log)
+    // console.log(resp)
+
+
     /// <summary>
-    /// Initializes a new instance of the <see cref="MamExample"/> class.
+    /// Initializes a new instance of the <see cref="MamPublishExample"/> class.
     /// </summary>
-    public MamExample()
+    public MamPublishExample()
     {
       // Create all needed objects to create a channel and subscription factory. 
       // This would be done via DI (e.g. Ninject) in production environment
       var repository = new RestIotaRepositoryFactory().CreateAsync().Result;
-      var mask = new CurlMask();
 
       this.ChannelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, repository);
-      this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, CurlMamParser.Default, mask);
     }
 
     /// <summary>
@@ -37,24 +52,16 @@
     private MamChannelFactory ChannelFactory { get; }
 
     /// <summary>
-    /// Gets the subscription factory.
-    /// </summary>
-    private MamChannelSubscriptionFactory SubscriptionFactory { get; }
-
-    /// <summary>
     /// The execute.
     /// </summary>
-    /// <param name="seed">
-    /// The seed.
-    /// </param>
-    /// <param name="channelKey">
-    /// The channel key.
-    /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    public async Task Execute(Seed seed, TryteString channelKey)
+    public async Task Execute()
     {
+      var seed = Seed.Random();
+      var channelKey = Seed.Random();
+
       // To send a message we first create a channel via factory. Note that only one seed should be used per channel
       var channel = this.ChannelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
 
@@ -64,14 +71,9 @@
       // Nevertheless we still need to publish the message after creating it
       await channel.PublishAsync(message);
 
-      // Messages published on a channel, can be retrieved by subscribing to the channel.
-      // To find and decrypt messages published on a restricted stream, we need the root of the first message in our stream and the channelKey
-      var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
-
-      // Fetch the messages published on that stream
-      var publishedMessages = await channelSubscription.FetchAsync();
-
-      Console.WriteLine(publishedMessages[0].Message.ToUtf8String());
+      Console.WriteLine($"Seed: {seed.Value}");
+      Console.WriteLine($"ChannelKey: {channelKey.Value}");
+      Console.WriteLine($"Root: {message.Root.Value}");
     }
   }
 }

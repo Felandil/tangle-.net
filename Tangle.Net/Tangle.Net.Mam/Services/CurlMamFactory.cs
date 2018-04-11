@@ -148,7 +148,6 @@
           {
             Address = this.GetMessageAddress(tree.Root.Hash, mode),
             Message = new TryteString(Converter.TritsToTrytes(payload.ToArray())),
-            Tag = new Tag("999999"),
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
 
