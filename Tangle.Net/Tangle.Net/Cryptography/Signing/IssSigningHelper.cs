@@ -186,14 +186,16 @@
 
       for (var i = 0; i < (signature.Length / Constants.TritHashLength); i++)
       {
-        var chunk = signature.Skip(i * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
+        var innerBuffer = signature.Skip(i * Constants.TritHashLength).Take(Constants.TritHashLength).ToArray();
 
         for (var j = 0; j < (hash[i * 3] + hash[i * 3 + 1] * 3 + hash[i * 3 + 2] * 9) - Hash.MinTryteValue; j++)
         {
           this.CurlOne.Reset();
-          this.CurlOne.Absorb(chunk);
-          buffer.AddRange(this.CurlOne.Rate(Constants.TritHashLength));
+          this.CurlOne.Absorb(innerBuffer);
+          innerBuffer = this.CurlOne.Rate(Constants.TritHashLength);
         }
+
+        buffer.AddRange(innerBuffer);
       }
 
       this.CurlOne.Reset();

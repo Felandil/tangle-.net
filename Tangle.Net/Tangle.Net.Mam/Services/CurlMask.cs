@@ -1,7 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
   using System.Collections.Generic;
-  using System.Linq;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
@@ -13,8 +12,6 @@
   /// </summary>
   public class CurlMask : IMask
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMask"/> class.
     /// </summary>
@@ -34,18 +31,15 @@
       this.Curl = curl;
     }
 
-    #endregion
-
-    #region Properties
+    /// <summary>
+    /// The default.
+    /// </summary>
+    public static CurlMask Default => new CurlMask();
 
     /// <summary>
     /// Gets or sets the curl.
     /// </summary>
     private AbstractCurl Curl { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <inheritdoc />
     public Hash Hash(TryteString key, TryteString salt = null)
@@ -79,7 +73,7 @@
 
         for (var i = 0; i < length; i++)
         {
-          payload[(round * Constants.TritHashLength) + i] = Converter.Sum(chunk[i], keyChunk[i]);
+          payload[round * Constants.TritHashLength + i] = Converter.Sum(chunk[i], keyChunk[i]);
           keyChunk[i] = curlState[i];
         }
 
@@ -104,7 +98,5 @@
 
       return unmasked.ToArray();
     }
-
-    #endregion
   }
 }

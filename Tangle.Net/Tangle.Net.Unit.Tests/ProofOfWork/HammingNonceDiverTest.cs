@@ -8,6 +8,7 @@
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork;
+  using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
 
   /// <summary>
@@ -25,7 +26,7 @@
       const string ExpectedNonce = "GCHMOICIPKGYHYL9VMMSSXHGKTU"; // "GCHMOICIPKGYHYL9VMMSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH" complete rust nonce output
       var input = new TryteString("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
 
-      var finder = new HammingNonceDiver(CurlMode.CurlP27);
+      var finder = new HammingNonceDiver(CurlMode.CurlP27, Mode._64bit);
       var nonce = finder.Search(input.ToTrits(), 2, Constants.TritHashLength / 3, 0);
 
       Assert.AreEqual(ExpectedNonce, Converter.TritsToTrytes(nonce.Take(81).ToArray()));

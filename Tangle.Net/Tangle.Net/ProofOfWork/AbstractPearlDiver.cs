@@ -6,6 +6,7 @@
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.ProofOfWork.Entity;
+  using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.ProofOfWork.Utils;
   using Tangle.Net.Utils;
 
@@ -109,7 +110,7 @@
     /// </returns>
     protected UlongTritTouple PrepareTrits(int[] trits, int offset)
     {
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
 
       ulongTrits.Low[offset] = this.Low0;
       ulongTrits.Low[offset + 1] = this.Low1;

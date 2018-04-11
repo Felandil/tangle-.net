@@ -30,24 +30,12 @@
     internal static void Main(string[] args)
     {
       ExecuteApiExample();
-      // ExecuteMamExample().Wait();
+
+      // new MamFlowExample().Execute().Wait();
+      // new MamFetchExample().Execute().Wait();
+      // new MamPublishExample().Execute().Wait();
+
       Console.ReadKey();
-    }
-
-    /// <summary>
-    /// The execute mam example.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="Task"/>.
-    /// </returns>
-    private static async Task ExecuteMamExample()
-    {
-      var seed = Seed.Random();
-      var channelKey = Seed.Random();
-
-      var example = new MamExample();
-
-      await example.Execute(seed, channelKey);
     }
 
     /// <summary>

@@ -36,6 +36,11 @@
     /// </returns>
     public MerkleSubTree GetSubtreeByIndex(int index)
     {
+      if (this.Size == 1)
+      {
+        return new MerkleSubTree { Key = this.Root.LeftNode.Key, Leaves = new List<MerkleNode>() };
+      }
+
       var leaves = new List<MerkleNode>();
       var node = this.Root;
       AbstractPrivateKey key = null;

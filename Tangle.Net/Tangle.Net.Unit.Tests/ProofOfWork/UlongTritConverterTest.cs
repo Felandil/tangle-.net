@@ -4,6 +4,7 @@
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.ProofOfWork.Entity;
+  using Tangle.Net.ProofOfWork.HammingNonce;
 
   /// <summary>
   /// The ulong trit converter test.
@@ -18,16 +19,16 @@
     public void TestTritToULongConversion()
     {
       var input = new[] { -1, 0, 1 };
-      var result = UlongTritConverter.TritsToUlong(input, Curl.StateLength);
+      var result = UlongTritConverter.TritsToUlong(input, Curl.StateLength, Mode._64bit);
 
-      Assert.AreEqual(UlongTritConverter.Max, result.Low[0]);
+      Assert.AreEqual(ulong.MaxValue, result.Low[0]);
       Assert.AreEqual(UlongTritConverter.Min, result.High[0]);
 
-      Assert.AreEqual(UlongTritConverter.Max, result.Low[1]);
-      Assert.AreEqual(UlongTritConverter.Max, result.High[1]);
+      Assert.AreEqual(ulong.MaxValue, result.Low[1]);
+      Assert.AreEqual(ulong.MaxValue, result.High[1]);
 
       Assert.AreEqual(UlongTritConverter.Min, result.Low[2]);
-      Assert.AreEqual(UlongTritConverter.Max, result.High[2]);
+      Assert.AreEqual(ulong.MaxValue, result.High[2]);
     }
   }
 }

@@ -64,7 +64,9 @@
     <Compile Include="Examples\Api\ReplayBundleExample.cs" />
     <Compile Include="Examples\Api\SendTransferExample.cs" />
     <Compile Include="Examples\Api\SendTrytesExample.cs" />
-    <Compile Include="Examples\Mam\MamExample.cs" />
+    <Compile Include="Examples\Mam\MamFetchExample.cs" />
+    <Compile Include="Examples\Mam\MamFlowExample.cs" />
+    <Compile Include="Examples\Mam\MamPublishExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

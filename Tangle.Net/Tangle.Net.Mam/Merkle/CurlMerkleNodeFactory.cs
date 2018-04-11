@@ -6,12 +6,10 @@
   using Tangle.Net.Utils;
 
   /// <summary>
-  /// The curl merkle node factory.
+  ///   The curl merkle node factory.
   /// </summary>
   public class CurlMerkleNodeFactory : IMerkleNodeFactory
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMerkleNodeFactory"/> class.
     /// </summary>
@@ -23,18 +21,15 @@
       this.Curl = curl;
     }
 
-    #endregion
-
-    #region Properties
+    /// <summary>
+    /// The default.
+    /// </summary>
+    public static CurlMerkleNodeFactory Default => new CurlMerkleNodeFactory(new Curl(CurlMode.CurlP27));
 
     /// <summary>
-    /// Gets or sets the curl.
+    ///   Gets the curl.
     /// </summary>
-    private AbstractCurl Curl { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
+    private AbstractCurl Curl { get; }
 
     /// <summary>
     /// The create.
@@ -69,7 +64,5 @@
 
       return new MerkleNode(leftNode, rightNode) { Hash = hash };
     }
-
-    #endregion
   }
 }

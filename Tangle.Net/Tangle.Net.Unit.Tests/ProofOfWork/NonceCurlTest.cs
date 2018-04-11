@@ -6,8 +6,7 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.ProofOfWork;
-  using Tangle.Net.ProofOfWork.Entity;
+  using Tangle.Net.ProofOfWork.HammingNonce;
 
   /// <summary>
   /// The nonce curl test.
@@ -280,7 +279,7 @@
     public void TestIncrement()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, this.expectedAfterIncrement.Length);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, this.expectedAfterIncrement.Length, Mode._64bit);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;
@@ -311,7 +310,7 @@
     public void TestTransform()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;

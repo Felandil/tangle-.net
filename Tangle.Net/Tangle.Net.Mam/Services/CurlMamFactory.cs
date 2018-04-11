@@ -1,8 +1,6 @@
 ﻿namespace Tangle.Net.Mam.Services
 {
-  using System;
   using System.Collections.Generic;
-  using System.Diagnostics.CodeAnalysis;
   using System.Linq;
 
   using Tangle.Net.Cryptography;
@@ -12,7 +10,10 @@
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.ProofOfWork;
+  using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
+
+  using Mode = Tangle.Net.Mam.Entity.Mode;
 
   /// <inheritdoc cref="AbstractMam"/>
   /// <inheritdoc cref="IMamFactory"/>
@@ -54,7 +55,7 @@
         new Curl(CurlMode.CurlP27),
         new CurlMask(),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
-        new HammingNonceDiver(CurlMode.CurlP27));
+        new HammingNonceDiver(CurlMode.CurlP27, ProofOfWork.HammingNonce.Mode._32bit));
 
     /// <summary>
     /// Gets the signature fragment generator.
@@ -147,7 +148,6 @@
           {
             Address = this.GetMessageAddress(tree.Root.Hash, mode),
             Message = new TryteString(Converter.TritsToTrytes(payload.ToArray())),
-            Tag = new Tag("999999"),
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
 

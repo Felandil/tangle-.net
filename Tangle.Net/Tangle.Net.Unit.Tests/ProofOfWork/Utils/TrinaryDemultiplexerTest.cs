@@ -6,10 +6,8 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.ProofOfWork;
-  using Tangle.Net.ProofOfWork.Entity;
+  using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.ProofOfWork.Utils;
-  using Tangle.Net.Utils;
 
   /// <summary>
   /// The trinary demultiplexer test.
@@ -37,7 +35,7 @@
     public void TestCorrectLengthOutput()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;
@@ -61,7 +59,7 @@
     public void TestDemuxMapsCorrectly()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;
