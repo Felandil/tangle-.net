@@ -55,6 +55,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tangle.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tangle.Net.1.0.7\lib\net461\Tangle.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\InMemoryIotaRepository.cs" />
@@ -76,10 +79,6 @@
     <ProjectReference Include="..\Tangle.Net.Unit.Tests\Tangle.Net.Unit.Tests.csproj">
       <Project>{31D62B12-8A3B-4E33-B6A5-1D368FF1507F}</Project>
       <Name>Tangle.Net.Unit.Tests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">
-      <Project>{6678b808-1464-490e-becd-842305000560}</Project>
-      <Name>Tangle.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,16 +9,17 @@
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
-    <Version>0.6.0.0</Version>
+    <Version>0.9.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
-    <FileVersion>0.6.0.0</FileVersion>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MamChannel.cs" Link="Entity\MamChannel.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MamChannelSubscription.cs" Link="Entity\MamChannelSubscription.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MaskedAuthenticatedMessage.cs" Link="Entity\MaskedAuthenticatedMessage.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\MerklePrivateKey.cs" Link="Entity\MerklePrivateKey.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\Mode.cs" Link="Entity\Mode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Entity\UnmaskedAuthenticatedMessage.cs" Link="Entity\UnmaskedAuthenticatedMessage.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\CurlMerkleLeafFactory.cs" Link="Merkle\CurlMerkleLeafFactory.cs" />
@@ -49,7 +50,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="Tangle.Net.Standard" Version="1.0.6.1" />
+    <PackageReference Include="Tangle.Net.Standard" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>

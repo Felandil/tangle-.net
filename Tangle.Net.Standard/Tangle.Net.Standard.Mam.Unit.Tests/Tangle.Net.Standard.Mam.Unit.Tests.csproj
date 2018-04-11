@@ -11,11 +11,11 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamChannelTest.cs" Link="Entity\MamChannelTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamFlowTest.cs" Link="Entity\MamFlowTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Entity\MamSubscriptionTest.cs" Link="Entity\MamSubscriptionTest.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\MaskTests.cs" Link="MaskTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleLeafFactoryTests.cs" Link="Merkle\MerkleLeafFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleNodeFactoryTests.cs" Link="Merkle\MerkleNodeFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleTreeFactoryTests.cs" Link="Merkle\MerkleTreeFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Merkle\MerkleTreeTests.cs" Link="Merkle\MerkleTreeTests.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam.Unit.Tests\Services\MaskTests.cs" Link="Services\MaskTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
