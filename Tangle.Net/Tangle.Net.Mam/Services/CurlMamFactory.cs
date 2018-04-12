@@ -13,7 +13,7 @@
   using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
 
-  using Mode = Tangle.Net.ProofOfWork.HammingNonce.Mode;
+  using Mode = ProofOfWork.HammingNonce.Mode;
 
   /// <inheritdoc cref="IMamFactory"/>
   public class CurlMamFactory : IMamFactory

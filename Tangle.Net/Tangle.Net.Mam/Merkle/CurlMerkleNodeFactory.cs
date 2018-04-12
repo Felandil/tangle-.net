@@ -31,18 +31,7 @@
     /// </summary>
     private AbstractCurl Curl { get; }
 
-    /// <summary>
-    /// The create.
-    /// </summary>
-    /// <param name="leftNode">
-    /// The left node.
-    /// </param>
-    /// <param name="rightNode">
-    /// The right node.
-    /// </param>
-    /// <returns>
-    /// The <see cref="MerkleNode"/>.
-    /// </returns>
+    /// <inheritdoc />
     public MerkleNode Create(MerkleNode leftNode, MerkleNode rightNode = null)
     {
       var hashTrits = new int[Constants.TritHashLength];
