@@ -7,8 +7,6 @@
   /// </summary>
   public class HammingNonceDiver : AbstractPearlDiver
   {
-    private Mode ScratchMode { get; }
-
     /// <inheritdoc />
     public HammingNonceDiver()
       : base(CurlMode.CurlP81)
@@ -45,17 +43,10 @@
 
     /// <inheritdoc />
     public override ulong Low3 => this.ScratchMode == Mode._32bit ? 2147483391 : 18446741876833779711;
+
+    /// <summary>
+    /// Gets the scratch mode.
+    /// </summary>
+    private Mode ScratchMode { get; }
   }
 }
-
-//18446744073709551615				2147483647
-//H
-//0	13176245766935394011			1533916891
-//1	14403622084951293727			1676802300	
-//2	18445620372817592319			2147352831	
-//3	2199023255551				      256	
-//L
-//0	15811494920322472813			1840700269	
-//1	17941353825114769379			2088648479	
-//2	576458557575118879			  67108608
-//3	18446741876833779711			2147483391	

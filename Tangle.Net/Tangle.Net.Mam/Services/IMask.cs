@@ -31,7 +31,10 @@
     /// <param name="curl">
     /// The key Containing Curl.
     /// </param>
-    void Mask(int[] payload, AbstractCurl curl);
+    /// <returns>
+    /// The <see cref="int[]"/>.
+    /// </returns>
+    int[] Mask(int[] payload, AbstractCurl curl);
 
     /// <summary>
     /// The unmask.

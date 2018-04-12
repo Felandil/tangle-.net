@@ -60,7 +60,7 @@
     }
 
     /// <inheritdoc />
-    public void Mask(int[] payload, AbstractCurl curl)
+    public int[] Mask(int[] payload, AbstractCurl curl)
     {
       var keyChunk = curl.Rate(Constants.TritHashLength);
 
@@ -73,12 +73,14 @@
 
         for (var i = 0; i < length; i++)
         {
-          payload[round * Constants.TritHashLength + i] = Converter.Sum(chunk[i], keyChunk[i]);
+          payload[(round * Constants.TritHashLength) + i] = Converter.Sum(chunk[i], keyChunk[i]);
           keyChunk[i] = curlState[i];
         }
 
         round++;
       }
+
+      return payload;
     }
 
     /// <inheritdoc />
