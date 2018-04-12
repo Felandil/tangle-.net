@@ -1,9 +1,11 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
   using System.Collections.Generic;
+  using System.Linq;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The merkle sub tree.
@@ -36,13 +38,7 @@
     /// </returns>
     public TryteString ToTryteString()
     {
-      var value = string.Empty;
-      foreach (var merkleNode in this.Leaves)
-      {
-        value += merkleNode.Hash.Value;
-      }
-
-      return new TryteString(value);
+      return this.Leaves.Select(l => l.Hash).Merge();
     }
   }
 }

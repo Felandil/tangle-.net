@@ -32,7 +32,6 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleNode.cs" Link="Merkle\MerkleNode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleSubTree.cs" Link="Merkle\MerkleSubTree.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Merkle\MerkleTree.cs" Link="Merkle\MerkleTree.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\AbstractMam.cs" Link="Services\AbstractMam.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMamFactory.cs" Link="Services\CurlMamFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMamParser.cs" Link="Services\CurlMamParser.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Mam\Services\CurlMask.cs" Link="Services\CurlMask.cs" />

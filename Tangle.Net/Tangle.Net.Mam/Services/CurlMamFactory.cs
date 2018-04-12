@@ -15,9 +15,8 @@
 
   using Mode = Tangle.Net.ProofOfWork.HammingNonce.Mode;
 
-  /// <inheritdoc cref="AbstractMam"/>
   /// <inheritdoc cref="IMamFactory"/>
-  public class CurlMamFactory : AbstractMam, IMamFactory
+  public class CurlMamFactory : IMamFactory
   {
     /// <summary>
     /// The nonce length.
@@ -66,6 +65,16 @@
     /// Gets the signature fragment generator.
     /// </summary>
     private ISigningHelper SigningHelper { get; }
+
+    /// <summary>
+    /// Gets the curl.
+    /// </summary>
+    private AbstractCurl Curl { get; }
+
+    /// <summary>
+    /// Gets the mask.
+    /// </summary>
+    private IMask Mask { get; }
 
     /// <inheritdoc />
     public MaskedAuthenticatedMessage Create(

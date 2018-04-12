@@ -60,7 +60,6 @@
     <Compile Include="Merkle\MerkleAddressGenerator.cs" />
     <Compile Include="Services\CurlMask.cs" />
     <Compile Include="Services\IMask.cs" />
-    <Compile Include="Services\AbstractMam.cs" />
     <Compile Include="Services\CurlMamFactory.cs" />
     <Compile Include="Services\CurlMamParser.cs" />
     <Compile Include="Services\IMamFactory.cs" />

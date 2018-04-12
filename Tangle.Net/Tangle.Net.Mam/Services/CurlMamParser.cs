@@ -11,10 +11,8 @@
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Utils;
 
-  /// <summary>
-  /// The curl mam parser.
-  /// </summary>
-  public class CurlMamParser : AbstractMam, IMamParser
+  /// <inheritdoc />
+  public class CurlMamParser : IMamParser
   {
     /// <summary>
     /// Initializes a new instance of the <see cref="CurlMamParser"/> class.
@@ -58,6 +56,16 @@
     /// Gets the signature validator.
     /// </summary>
     private ISigningHelper SigningHelper { get; }
+
+    /// <summary>
+    /// Gets the curl.
+    /// </summary>
+    private AbstractCurl Curl { get; }
+
+    /// <summary>
+    /// Gets the mask.
+    /// </summary>
+    private IMask Mask { get; }
 
     /// <inheritdoc />
     public UnmaskedAuthenticatedMessage Unmask(Bundle payload, TryteString root, TryteString channelKey)
