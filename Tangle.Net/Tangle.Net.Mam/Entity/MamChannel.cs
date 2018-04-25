@@ -138,12 +138,15 @@
     /// <param name="message">
     /// The message.
     /// </param>
+    /// <param name="minWeightMagnitude">
+    /// The min Weight Magnitude.
+    /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    public async Task PublishAsync(MaskedAuthenticatedMessage message)
+    public async Task PublishAsync(MaskedAuthenticatedMessage message, int minWeightMagnitude = 14)
     {
-      await this.Repository.SendTrytesAsync(message.Payload.Transactions, 6, 14);
+      await this.Repository.SendTrytesAsync(message.Payload.Transactions, 6, minWeightMagnitude);
     }
 
     /// <summary>
