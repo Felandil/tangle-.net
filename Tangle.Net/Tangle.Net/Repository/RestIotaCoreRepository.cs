@@ -411,7 +411,7 @@
     /// <inheritdoc />
     public List<Address> WereAddressesSpentFrom(List<Address> addresses)
     {
-      var response = this.Client.ExecuteParameterizedCommand<WhereAddressesSpentFromResponse>(
+      var response = this.Client.ExecuteParameterizedCommand<WereAddressesSpentFromResponse>(
         new Dictionary<string, object>
           {
             { "command", CommandType.WereAddressesSpentFrom },
@@ -429,7 +429,7 @@
     /// <inheritdoc />
     public async Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses)
     {
-      var response = await this.Client.ExecuteParameterizedCommandAsync<WhereAddressesSpentFromResponse>(
+      var response = await this.Client.ExecuteParameterizedCommandAsync<WereAddressesSpentFromResponse>(
                        new Dictionary<string, object>
                          {
                            { "command", CommandType.WereAddressesSpentFrom },

@@ -65,10 +65,10 @@
       {
         var length = trits.Length - offset;
 
-        Parallel.For(
-          0,
-          length < Constants.TritHashLength ? length : Constants.TritHashLength,
-          (i) => { this.State[i] = trits[offset + i]; });
+        for (var i = 0; i < (length < Constants.TritHashLength ? length : Constants.TritHashLength); i++)
+        {
+          this.State[i] = trits[offset + i];
+        }
 
         this.Transform();
 
@@ -97,10 +97,10 @@
 
       do
       {
-        Parallel.For(
-          0,
-          length < Constants.TritHashLength ? length : Constants.TritHashLength,
-          (i) => { trits[i + (round * Constants.TritHashLength)] = this.State[i]; });
+        for (var i = 0; i < (length < Constants.TritHashLength ? length : Constants.TritHashLength); i++)
+        {
+          trits[i + (round * Constants.TritHashLength)] = this.State[i];
+        }
 
         this.Transform();
         round++;
@@ -118,13 +118,10 @@
 
       for (var round = 0; round < this.NumberOfRounds; round++)
       {
-        Parallel.For(
-          0,
-          StateLength,
-          (i) =>
-            {
-              stateCopy[i] = this.State[i];
-            });
+        for (var i = 0; i < StateLength; i++)
+        {
+          stateCopy[i] = this.State[i];
+        }
 
         for (var i = 0; i < StateLength; i++)
         {
