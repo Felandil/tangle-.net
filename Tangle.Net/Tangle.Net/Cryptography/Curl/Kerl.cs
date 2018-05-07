@@ -13,8 +13,6 @@
   /// </summary>
   public class Kerl : AbstractCurl
   {
-    #region Constants
-
     /// <summary>
     /// The bit hash length.
     /// </summary>
@@ -25,23 +23,11 @@
     /// </summary>
     public const int ByteHashLength = BitHashLength / 8;
 
-    #endregion
-
-    #region Fields
-
-    /// <summary>
-    /// The byte state.
-    /// </summary>
-    private readonly byte[] byteState;
-
     /// <summary>
     /// The digest.
     /// </summary>
     private readonly KeccakDigest digest;
 
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Kerl"/> class.
@@ -49,13 +35,8 @@
     public Kerl()
     {
       this.State = new int[Constants.TritHashLength];
-      this.byteState = new byte[ByteHashLength];
       this.digest = new KeccakDigest(BitHashLength);
     }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <inheritdoc />
     public override void Absorb(int[] trits)
@@ -65,14 +46,7 @@
 
       while (offset < trits.Length)
       {
-        Parallel.For(
-          0,
-          Constants.TritHashLength,
-          (i) =>
-            {
-              this.State[i] = trits[offset + i];
-            });
-
+        this.State = trits.Skip(offset).Take(Constants.TritHashLength).ToArray();
         this.State[Constants.TritHashLength - 1] = 0;
 
         var bytes = Converter.ConvertTritsToBytes(this.State);
@@ -90,49 +64,35 @@
       this.digest.Reset();
     }
 
-    /// <summary>
-    /// The squeeze.
-    /// </summary>
-    /// <param name="trits">
-    /// The checksum trits.
-    /// </param>
+    /// <inheritdoc />
     public override void Squeeze(int[] trits)
     {
       ValidateLength(trits.Length);
       var offset = 0;
+      var byteState = new byte[ByteHashLength];
 
       while (offset < trits.Length)
       {
-        this.digest.DoFinal(this.byteState, 0);
-        this.State = Converter.ConvertBytesToTrits(this.byteState);
+        this.digest.DoFinal(byteState, 0);
+        this.State = Converter.ConvertBytesToTrits(byteState);
         this.State[Constants.TritHashLength - 1] = 0;
 
-        Parallel.For(
-          0,
-          Constants.TritHashLength,
-          (i) =>
-            {
-              trits[offset + i] = this.State[i];
-            });
+        for (var i = 0; i < Constants.TritHashLength; i++)
+        {
+          trits[offset + i] = this.State[i];
+        }
 
         this.digest.Reset();
 
-        Parallel.For(
-          0,
-          this.byteState.Length,
-          (i) =>
-            {
-              this.byteState[i] = (byte)(this.byteState[i] ^ 0xFF);
-            });
+        for (var i = byteState.Length; i-- > 0;)
+        {
+          byteState[i] = (byte)(byteState[i] ^ 0xFF);
+        }
 
-        this.digest.BlockUpdate(this.byteState, 0, this.byteState.Length);
+        this.digest.BlockUpdate(byteState, 0, byteState.Length);
         offset += Constants.TritHashLength;
       }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// The validate length.
@@ -147,7 +107,5 @@
         throw new ArgumentException("Illegal length provided'.");
       }
     }
-
-    #endregion
   }
 }

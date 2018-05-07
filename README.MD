@@ -39,7 +39,7 @@ Next Up:
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
-| whereAddressesSpentFrom	     | Yes			   |
+| wereAddressesSpentFrom	     | Yes			   |
 
 In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
 
