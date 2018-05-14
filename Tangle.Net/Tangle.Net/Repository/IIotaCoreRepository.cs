@@ -360,6 +360,28 @@
     /// </returns>
     Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses);
 
+    /// <summary>
+    /// The check consistency.
+    /// </summary>
+    /// <param name="tailHashes">
+    /// The tail hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ConsistencyInfo"/>.
+    /// </returns>
+    ConsistencyInfo CheckConsistency(List<Hash> tailHashes);
+
+    /// <summary>
+    /// The check consistency async.
+    /// </summary>
+    /// <param name="tailHashes">
+    /// The tail hashes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes);
+
     #endregion
   }
 }

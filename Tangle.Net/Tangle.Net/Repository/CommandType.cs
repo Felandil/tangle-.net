@@ -82,6 +82,11 @@
     /// </summary>
     public const string WereAddressesSpentFrom = "wereAddressesSpentFrom";
 
+    /// <summary>
+    /// The check consistency.
+    /// </summary>
+    public const string CheckConsistency = "checkConsistency";
+
     #endregion
   }
 }
