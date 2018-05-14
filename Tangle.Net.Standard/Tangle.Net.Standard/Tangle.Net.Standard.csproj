@@ -65,6 +65,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\CommandType.cs" Link="Repository\CommandType.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\AddressWithBalances.cs" Link="Repository\DataTransfer\AddressWithBalances.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\ConsistencyInfo.cs" Link="Repository\DataTransfer\ConsistencyInfo.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\InclusionStates.cs" Link="Repository\DataTransfer\InclusionStates.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\Neighbor.cs" Link="Repository\DataTransfer\Neighbor.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\NeighborList.cs" Link="Repository\DataTransfer\NeighborList.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\InvalidBundleException.cs" Link="Repository\InvalidBundleException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AddNeighborsResponse.cs" Link="Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\AttachToTangleResponse.cs" Link="Repository\Responses\AttachToTangleResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\CheckConsistencyResponse.cs" Link="Repository\Responses\CheckConsistencyResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\FindUsedAddressesResponse.cs" Link="Repository\Responses\FindUsedAddressesResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetAccountDataResponse.cs" Link="Repository\Responses\GetAccountDataResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetBalanceResponse.cs" Link="Repository\Responses\GetBalanceResponse.cs" />
