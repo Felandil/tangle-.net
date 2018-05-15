@@ -200,13 +200,13 @@
       }
 
       return new AddressWithBalances
-               {
-                 Addresses = addresses,
-                 Duration = result.Duration,
-                 MilestoneIndex = result.MilestoneIndex,
-                 References =
+      {
+        Addresses = addresses,
+        Duration = result.Duration,
+        MilestoneIndex = result.MilestoneIndex,
+        References =
                    result.References.ConvertAll(reference => new TryteString(reference))
-               };
+      };
     }
 
     /// <inheritdoc />
@@ -226,13 +226,13 @@
       }
 
       return new AddressWithBalances
-               {
-                 Addresses = addresses,
-                 Duration = result.Duration,
-                 MilestoneIndex = result.MilestoneIndex,
-                 References =
+      {
+        Addresses = addresses,
+        Duration = result.Duration,
+        MilestoneIndex = result.MilestoneIndex,
+        References =
                    result.References.ConvertAll(reference => new TryteString(reference))
-               };
+      };
     }
 
     /// <inheritdoc />
@@ -281,10 +281,10 @@
       var response = this.Client.ExecuteParameterlessCommand<GetTipsResponse>(CommandType.GetTips);
 
       return new TipHashList
-               {
-                 Duration = response.Duration,
-                 Hashes = response.Hashes.Select(h => new Hash(h)).ToList()
-               };
+      {
+        Duration = response.Duration,
+        Hashes = response.Hashes.Select(h => new Hash(h)).ToList()
+      };
     }
 
     /// <inheritdoc />
@@ -293,10 +293,10 @@
       var response = await this.Client.ExecuteParameterlessCommandAsync<GetTipsResponse>(CommandType.GetTips);
 
       return new TipHashList
-               {
-                 Duration = response.Duration,
-                 Hashes = response.Hashes.Select(h => new Hash(h)).ToList()
-               };
+      {
+        Duration = response.Duration,
+        Hashes = response.Hashes.Select(h => new Hash(h)).ToList()
+      };
     }
 
     /// <inheritdoc />
@@ -306,11 +306,11 @@
         new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
-               {
-                 BranchTransaction = new Hash(result.BranchTransaction),
-                 TrunkTransaction = new Hash(result.TrunkTransaction),
-                 Duration = result.Duration
-               };
+      {
+        BranchTransaction = new Hash(result.BranchTransaction),
+        TrunkTransaction = new Hash(result.TrunkTransaction),
+        Duration = result.Duration
+      };
     }
 
     /// <inheritdoc />
@@ -320,11 +320,11 @@
                      new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
 
       return new TransactionsToApprove
-               {
-                 BranchTransaction = new Hash(result.BranchTransaction),
-                 TrunkTransaction = new Hash(result.TrunkTransaction),
-                 Duration = result.Duration
-               };
+      {
+        BranchTransaction = new Hash(result.BranchTransaction),
+        TrunkTransaction = new Hash(result.TrunkTransaction),
+        Duration = result.Duration
+      };
     }
 
     /// <inheritdoc />
@@ -442,6 +442,42 @@
       }
 
       return addresses;
+    }
+
+    /// <inheritdoc />
+    public ConsistencyInfo CheckConsistency(List<Hash> tailHashes)
+    {
+      var response = Client.ExecuteParameterizedCommand<CheckConsistencyResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", CommandType.CheckConsistency },
+            { "tails", tailHashes.Select(h => h.Value).ToList() }
+          });
+
+      return new ConsistencyInfo
+      {
+        Duration = response.Duration,
+        State = response.State,
+        Info = response.Info
+      };
+    }
+
+    /// <inheritdoc />
+    public async Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
+    {
+      var response = await Client.ExecuteParameterizedCommandAsync<CheckConsistencyResponse>(
+        new Dictionary<string, object>
+          {
+            { "command", CommandType.CheckConsistency },
+            { "tails", tailHashes.Select(h => h.Value).ToList() }
+          });
+
+      return new ConsistencyInfo
+      {
+        Duration = response.Duration,
+        State = response.State,
+        Info = response.Info
+      };
     }
 
     /// <summary>
