@@ -30,7 +30,7 @@
       Hash branchTransaction,
       Hash trunkTransaction,
       IEnumerable<Transaction> transactions,
-      int minWeightMagnitude = 18)
+      int minWeightMagnitude = 14)
     {
       return this.PoWService.DoPoW(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude).Select(t => t.ToTrytes()).ToList();
     }
@@ -40,7 +40,7 @@
       Hash branchTransaction,
       Hash trunkTransaction,
       IEnumerable<Transaction> transactions,
-      int minWeightMagnitude = 18)
+      int minWeightMagnitude = 14)
     {
       return (await this.PoWService.DoPoWAsync(branchTransaction, trunkTransaction, transactions.ToList(), minWeightMagnitude))
         .Select(t => t.ToTrytes()).ToList();
