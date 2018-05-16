@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class WhereAddressesSpentFromResponse
+    public class WereAddressesSpentFromResponse
     {
         public int Duration { get; set; }
         public List<bool> States { get; set; }

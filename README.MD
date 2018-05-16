@@ -18,8 +18,9 @@ The project was set up a little different from most (except the python one) IOTA
 
 Next Up: 
 
-	**Mam Finalizing**
 	**Multisig**
+	**Curl Performance**
+	**Flash Channels**
 
 
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
@@ -38,7 +39,7 @@ Next Up:
 | interruptAttachingToTangle	 | Yes             |
 | broadcastTransactions			 | Yes			   |
 | storeTransactions				 | Yes			   |
-| WereAddressesSpentFrom	     | Yes			   |
+| wereAddressesSpentFrom	     | Yes			   |
 
 In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
 
@@ -53,10 +54,13 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## NuGet
 
-.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net
-
+### Tangle.Net
+.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net <br>
 .NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard/
 
+### Tangle.Net.Mam
+.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net.Mam/ <br>
+.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard.Mam/
 
 ## Note
 
@@ -66,7 +70,7 @@ You can reach me via iota Discord (@Felandil) if you've got any questions.
 ## Donate
 
 ```javascript
-YTXCUUWTXIXVRQIDSECVFRTKAFOEZITGDPLWYVUVFURMNVDPIRXEIQN9JHNFNVKVJMQVMA9GDZJROTSFZHIVJOVAEC
+HIO9DXIRTOMRLDM9JGATOLVRHIIFFLQCARIPYLVIDFBWMTADTKYQJKFEPYBVYIBDZYH9GHDZJUGTX9YZ9
 ```
 
 ## Getting started

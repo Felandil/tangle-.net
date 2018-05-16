@@ -86,6 +86,7 @@
     <Compile Include="ProofOfWork\Utils\TrinaryDemultiplexer.cs" />
     <Compile Include="Repository\Client\IIotaClient.cs" />
     <Compile Include="Repository\Client\RestIotaClient.cs" />
+    <Compile Include="Repository\DataTransfer\ConsistencyInfo.cs" />
     <Compile Include="Repository\DataTransfer\InclusionStates.cs" />
     <Compile Include="Repository\DataTransfer\TipHashList.cs" />
     <Compile Include="Repository\DataTransfer\TransactionHashList.cs" />
@@ -129,7 +130,8 @@
     <Compile Include="Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
     <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
-    <Compile Include="Repository\Responses\WhereAddressesSpentFromResponse.cs" />
+    <Compile Include="Repository\Responses\WereAddressesSpentFromResponse.cs" />
+    <Compile Include="Repository\Responses\CheckConsistencyResponse.cs" />
     <Compile Include="Repository\RestIotaCoreRepository.cs" />
     <Compile Include="Repository\RestIotaNodeRepository.cs" />
     <Compile Include="Repository\RestIotaExtendedRepository.cs" />

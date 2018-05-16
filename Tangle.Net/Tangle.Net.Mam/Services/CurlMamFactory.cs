@@ -13,11 +13,10 @@
   using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
 
-  using Mode = Tangle.Net.Mam.Entity.Mode;
+  using Mode = ProofOfWork.HammingNonce.Mode;
 
-  /// <inheritdoc cref="AbstractMam"/>
   /// <inheritdoc cref="IMamFactory"/>
-  public class CurlMamFactory : AbstractMam, IMamFactory
+  public class CurlMamFactory : IMamFactory
   {
     /// <summary>
     /// The nonce length.
@@ -55,7 +54,12 @@
         new Curl(CurlMode.CurlP27),
         new CurlMask(),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
-        new HammingNonceDiver(CurlMode.CurlP27, ProofOfWork.HammingNonce.Mode._32bit));
+        new HammingNonceDiver(CurlMode.CurlP27, Mode._32bit));
+
+    /// <summary>
+    /// Gets the hamming nonce diver.
+    /// </summary>
+    private AbstractPearlDiver HammingNonceDiver { get; }
 
     /// <summary>
     /// Gets the signature fragment generator.
@@ -63,12 +67,24 @@
     private ISigningHelper SigningHelper { get; }
 
     /// <summary>
-    /// Gets the hamming nonce diver.
+    /// Gets the curl.
     /// </summary>
-    private AbstractPearlDiver HammingNonceDiver { get; }
+    private AbstractCurl Curl { get; }
+
+    /// <summary>
+    /// Gets the mask.
+    /// </summary>
+    private IMask Mask { get; }
 
     /// <inheritdoc />
-    public MaskedAuthenticatedMessage Create(MerkleTree tree, int index, TryteString message, Hash nextRoot, TryteString channelKey, Mode mode, int securityLevel)
+    public MaskedAuthenticatedMessage Create(
+      MerkleTree tree,
+      int index,
+      TryteString message,
+      Hash nextRoot,
+      TryteString channelKey,
+      Entity.Mode mode,
+      int securityLevel)
     {
       var nextRootTrits = nextRoot.ToTrits();
 
@@ -77,22 +93,6 @@
       var messageLengthTrits = Pascal.Encode(messageTrits.Length);
 
       var subtree = tree.GetSubtreeByIndex(index);
-      var subtreeTrytes = subtree.ToTryteString();
-      var subtreeTrits = subtreeTrytes.ToTrits();
-
-      var siblingsLength = subtreeTrits.Length;
-      var siblingsCount = siblingsLength / Constants.TritHashLength;
-      var siblingsCountTrits = Pascal.Encode(siblingsCount);
-      var signatureLength = subtree.Key.TrytesLength * Converter.Radix;
-
-      var nextRootStart = indexTrits.Length + messageLengthTrits.Length;
-      var nextRootEnd = nextRootStart + nextRootTrits.Length;
-
-      var messageEnd = nextRootStart + nextRootTrits.Length + messageTrits.Length;
-      var nonceEnd = messageEnd + NonceLength;
-      var signatureEnd = nonceEnd + signatureLength;
-
-      var siblingsCountTritsEnd = signatureEnd + siblingsCountTrits.Length;
 
       this.Curl.Reset();
       this.Curl.Absorb(channelKey.ToTrits());
@@ -102,51 +102,72 @@
       payload.InsertRange(0, indexTrits);
       payload.InsertRange(indexTrits.Length, messageLengthTrits);
 
+      var nextRootStart = indexTrits.Length + messageLengthTrits.Length;
       this.Curl.Absorb(payload.Take(nextRootStart).ToArray());
 
-      payload.InsertRange(nextRootStart, nextRootTrits);
-      payload.InsertRange(nextRootEnd, messageTrits);
+      // encrypt next root together with message trits
+      payload.InsertRange(nextRootStart, this.Mask.Mask(nextRootTrits.Concat(messageTrits).ToArray(), this.Curl));
 
-      var encryptablePayloadPart = payload.Skip(nextRootStart).Take(nextRootTrits.Length + messageTrits.Length).ToArray();
-      this.Mask.Mask(encryptablePayloadPart, this.Curl);
+      // calculate message end and add nonce
+      var messageEnd = nextRootStart + nextRootTrits.Length + messageTrits.Length;
+      this.AddNonce(securityLevel, messageEnd, payload);
 
-      for (var i = 0; i < encryptablePayloadPart.Length; i++)
-      {
-        payload[nextRootStart + i] = encryptablePayloadPart[i];
-      }
-
-      var nonceTrits = this.HammingNonceDiver.Search(this.Curl.Rate(this.Curl.State.Length), securityLevel, Constants.TritHashLength / 3, 0)
-        .ToArray();
-      this.Mask.Mask(nonceTrits, this.Curl);
-      payload.InsertRange(messageEnd, nonceTrits);
-
+      // create signature, encrypt signature + sibling count (get trits from pascal) + siblings
       var signature = this.SigningHelper.Signature(this.Curl.Rate(Constants.TritHashLength), subtree.Key.ToTrits());
+      var subtreeTrits = subtree.ToTryteString().ToTrits();
+      var siblingsCount = subtreeTrits.Length / Constants.TritHashLength;
+      var encryptedSignature = this.Mask.Mask(signature.Concat(Pascal.Encode(siblingsCount)).Concat(subtreeTrits).ToArray(), this.Curl);
 
-      payload.InsertRange(nonceEnd, signature);
-      payload.InsertRange(signatureEnd, siblingsCountTrits);
-      payload.InsertRange(siblingsCountTritsEnd, subtreeTrits);
+      // insert signature and pad to correct length (% 3 == 0)
+      payload.InsertRange(messageEnd + NonceLength, encryptedSignature);
+      PadPayload(payload);
 
-      var encryptableSignaturePart = payload.Skip(nonceEnd).ToArray();
-      this.Mask.Mask(encryptableSignaturePart, this.Curl);
+      this.Curl.Reset();
 
-      for (var i = 0; i < encryptableSignaturePart.Length; i++)
-      {
-        payload[nonceEnd + i] = encryptableSignaturePart[i];
-      }
+      var messageAddress = this.GetMessageAddress(tree.Root.Hash, mode);
+      return new MaskedAuthenticatedMessage
+               {
+                 Payload = CreateBundleFromPayload(messageAddress, payload),
+                 Root = tree.Root.Hash,
+                 Address = messageAddress,
+                 NextRoot = nextRoot
+               };
+    }
 
+    /// <summary>
+    /// The pad payload.
+    /// </summary>
+    /// <param name="payload">
+    /// The payload.
+    /// </param>
+    private static void PadPayload(List<int> payload)
+    {
       var nextThirdRound = payload.Count % Converter.Radix;
       if (nextThirdRound != 0)
       {
         payload.InsertRange(payload.Count, new int[Converter.Radix - nextThirdRound]);
       }
+    }
 
-      this.Curl.Reset();
-
+    /// <summary>
+    /// The create bundle from payload.
+    /// </summary>
+    /// <param name="messageAddress">
+    /// The message address.
+    /// </param>
+    /// <param name="payload">
+    /// The payload.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Bundle"/>.
+    /// </returns>
+    private static Bundle CreateBundleFromPayload(Address messageAddress, List<int> payload)
+    {
       var bundle = new Bundle();
       bundle.AddTransfer(
         new Transfer
           {
-            Address = this.GetMessageAddress(tree.Root.Hash, mode),
+            Address = messageAddress,
             Message = new TryteString(Converter.TritsToTrytes(payload.ToArray())),
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
@@ -154,13 +175,27 @@
       bundle.Finalize();
       bundle.Sign();
 
-      return new MaskedAuthenticatedMessage
-               {
-                 Payload = bundle,
-                 Root = tree.Root.Hash,
-                 Address = this.GetMessageAddress(tree.Root.Hash, mode),
-                 NextRoot = nextRoot
-               };
+      return bundle;
+    }
+
+    /// <summary>
+    /// The add nonce.
+    /// </summary>
+    /// <param name="securityLevel">
+    /// The security level.
+    /// </param>
+    /// <param name="messageEnd">
+    /// The message end.
+    /// </param>
+    /// <param name="payload">
+    /// The payload.
+    /// </param>
+    private void AddNonce(int securityLevel, int messageEnd, List<int> payload)
+    {
+      var nonceTrits = this.HammingNonceDiver.Search(this.Curl.Rate(this.Curl.State.Length), securityLevel, Constants.TritHashLength / 3, 0)
+        .ToArray();
+      this.Mask.Mask(nonceTrits, this.Curl);
+      payload.InsertRange(messageEnd, nonceTrits);
     }
 
     /// <summary>
@@ -175,9 +210,9 @@
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
-    private Address GetMessageAddress(TryteString rootHash, Mode mode)
+    private Address GetMessageAddress(TryteString rootHash, Entity.Mode mode)
     {
-      if (mode == Mode.Public)
+      if (mode == Entity.Mode.Public)
       {
         return new Address(rootHash.Value);
       }

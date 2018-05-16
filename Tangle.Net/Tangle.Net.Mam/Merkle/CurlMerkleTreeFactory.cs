@@ -4,7 +4,6 @@
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Utils;
 
@@ -36,10 +35,7 @@
     /// The default.
     /// </summary>
     public static CurlMerkleTreeFactory Default =>
-      new CurlMerkleTreeFactory(
-        new CurlMerkleNodeFactory(new Curl(CurlMode.CurlP27)),
-        new CurlMerkleLeafFactory(MerkleAddressGenerator.Default),
-        new Curl(CurlMode.CurlP27));
+      new CurlMerkleTreeFactory(CurlMerkleNodeFactory.Default, CurlMerkleLeafFactory.Default, new Curl(CurlMode.CurlP27));
 
     /// <summary>
     /// Gets or sets the leaf factory.

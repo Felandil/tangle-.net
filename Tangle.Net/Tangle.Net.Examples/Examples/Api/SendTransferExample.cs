@@ -19,8 +19,7 @@
     /// 
     /// 1. Get the seed that contains the value to be sent
     /// 2. Create a bundle with a transfer that contains the value and receiver address
-    /// 3. Finalize and sign the bundle. You've got to provide the KeyGenerator in order to sign a bundle that contains value
-    /// 4. Send the transfer. The method handles input addresses and remainder internally if not provided. Alternatively you can provide them manually
+    /// 3. Send the transfer. The method handles input addresses and remainder internally if not provided. Alternatively you can provide them manually
     public override Bundle Execute()
     {
       var seed = Seed.Random();
@@ -34,9 +33,6 @@
             ValueToTransfer = 100,
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
-
-      bundle.Finalize();
-      bundle.Sign();
 
       return this.Repository.SendTransfer(seed, bundle, SecurityLevel.Medium, 27, 14);
     }
