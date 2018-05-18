@@ -65,6 +65,10 @@
 
       Assert.AreEqual(1, unmaskedMessages.Count);
       Assert.AreEqual("Hello everyone the fourth!", unmaskedMessages[0].Message.ToUtf8String());
+
+      var unmaskedSingleMessage = await subscription.FetchSingle(messageTwo.Root);
+
+      Assert.AreEqual("Hello everyone the second!", unmaskedSingleMessage.Message.ToUtf8String());
     }
 
     /// <summary>
