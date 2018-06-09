@@ -3,6 +3,7 @@
   using System;
   using System.Collections;
   using System.Collections.Generic;
+  using System.Diagnostics.CodeAnalysis;
   using System.Linq;
   using System.Text;
 
@@ -40,7 +41,7 @@
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TryteString"/> class.
+    /// Initializes a new instance of the <see cref="T:Tangle.Net.Entity.TryteString" /> class.
     /// </summary>
     public TryteString()
       : this(string.Empty)
@@ -50,13 +51,7 @@
     /// <summary>
     /// Gets the chunkLength.
     /// </summary>
-    public int TrytesLength
-    {
-      get
-      {
-        return this.Value.Length;
-      }
-    }
+    public int TrytesLength => this.Value.Length;
 
     /// <summary>
     /// Gets or sets the value.
@@ -200,7 +195,7 @@
     /// </returns>
     public string ToAsciiString()
     {
-      return Encoding.ASCII.GetString(this.ToBytes());
+      return Encoding.ASCII.GetString(this.TextToBytes());
     }
 
     /// <summary>
@@ -209,24 +204,13 @@
     /// <returns>
     /// The <see cref="byte[]"/>.
     /// </returns>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
     public byte[] ToBytes()
     {
       var messageTrytes = this.Value;
+      messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
 
-      if (messageTrytes.Last() == '9')
-      {
-        messageTrytes = messageTrytes.TrimEnd(new[] { '9' });
-        messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
-      }
-
-      var byteResult = new List<byte>();
-      for (var i = 0; i < messageTrytes.Length; i += 2)
-      {
-        var byteValue = TryteAlphabet.IndexOf(this.Value[i]) + TryteAlphabet.IndexOf(this.Value[i + 1]) * 27;
-        byteResult.Add((byte)byteValue);
-      }
-
-      return byteResult.ToArray();
+      return TrytesToBytes(messageTrytes);
     }
 
     /// <summary>
@@ -259,7 +243,7 @@
     /// </returns>
     public string ToUtf8String()
     {
-      return Encoding.UTF8.GetString(this.ToBytes());
+      return Encoding.UTF8.GetString(this.TextToBytes());
     }
 
     /// <summary>
@@ -309,6 +293,50 @@
     protected void Pad(int length)
     {
       this.Value = this.Value.PadRight(length, '9');
+    }
+
+    /// <summary>
+    /// The trytes to bytes.
+    /// </summary>
+    /// <param name="messageTrytes">
+    /// The message trytes.
+    /// </param>
+    /// <returns>
+    /// The <see cref="byte[]"/>.
+    /// </returns>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
+    private static byte[] TrytesToBytes(string messageTrytes)
+    {
+      var byteResult = new List<byte>();
+      for (var i = 0; i < messageTrytes.Length; i += 2)
+      {
+        var byteValue = TryteAlphabet.IndexOf(messageTrytes[i]) + TryteAlphabet.IndexOf(messageTrytes[i + 1]) * 27;
+        byteResult.Add((byte)byteValue);
+      }
+
+      return byteResult.ToArray();
+    }
+
+    /// <summary>
+    /// The text to bytes.
+    /// When converting text, we need to trim all 9's at the end of a TryteString
+    /// </summary>
+    /// <returns>
+    /// The <see cref="byte[]"/>.
+    /// </returns>
+    private byte[] TextToBytes()
+    {
+      var messageTrytes = this.Value;
+
+      if (messageTrytes.Last() != '9')
+      {
+        return TrytesToBytes(messageTrytes);
+      }
+
+      messageTrytes = messageTrytes.TrimEnd('9');
+      messageTrytes += messageTrytes.Length % 2 == 1 ? "9" : string.Empty;
+
+      return TrytesToBytes(messageTrytes);
     }
   }
 }

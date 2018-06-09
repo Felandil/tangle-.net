@@ -378,7 +378,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 27, int minWeightMagnitude = 18);
+    List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 18);
 
     /// <summary>
     /// The replay bundle async.
@@ -395,7 +395,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 27, int minWeightMagnitude = 18);
+    Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 18);
 
     /// <summary>
     /// The send transfer.
@@ -428,8 +428,8 @@
       Seed seed, 
       Bundle bundle, 
       int securityLevel, 
-      int depth = 27, 
-      int minWeightMagnitude = 18, 
+      int depth = 8, 
+      int minWeightMagnitude = 14, 
       Address remainderAddress = null, 
       List<Address> inputAddresses = null);
 
@@ -464,8 +464,8 @@
       Seed seed,
       Bundle bundle,
       int securityLevel,
-      int depth = 27,
-      int minWeightMagnitude = 18,
+      int depth = 8,
+      int minWeightMagnitude = 14,
       Address remainderAddress = null,
       List<Address> inputAddresses = null);
 
@@ -484,7 +484,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
+    List<TransactionTrytes> SendTrytes(IEnumerable<Transaction> transactions, int depth = 8, int minWeightMagnitude = 14);
 
     /// <summary>
     /// The send trytes async.
@@ -501,7 +501,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 18);
+    Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 8, int minWeightMagnitude = 14);
 
     #endregion
   }

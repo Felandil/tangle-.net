@@ -94,6 +94,57 @@
     }
 
     /// <summary>
+    /// The fetch single.
+    /// </summary>
+    /// <param name="root">
+    /// The root.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Task"/>.
+    /// </returns>
+    public async Task<UnmaskedAuthenticatedMessage> FetchSingle(Hash root)
+    {
+      Address address;
+      TryteString decryptionKey;
+
+      if (this.Mode == Mode.Public)
+      {
+        address = new Address(root.Value);
+        decryptionKey = root;
+      }
+      else
+      {
+        address = new Address(this.Mask.Hash(root).Value);
+        decryptionKey = this.Mode == Mode.Restricted ? this.Key : root;
+      }
+
+      var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
+
+      if (!transactionHashList.Hashes.Any())
+      {
+        return null;
+      }
+
+      var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
+      foreach (var bundle in bundles)
+      {
+        try
+        {
+          return this.Parser.Unmask(bundle, root, decryptionKey);
+        }
+        catch (Exception exception)
+        {
+          if (exception is InvalidBundleException)
+          {
+            // TODO: Add invalid bundle handler
+          }
+        }
+      }
+
+      return null;
+    }
+
+    /// <summary>
     /// The init.
     /// </summary>
     /// <param name="messageRoot">
@@ -139,48 +190,16 @@
 
       while (true)
       {
-        Address address;
-        TryteString decryptionKey;
+        var unmasked = await this.FetchSingle(this.NextRoot);
 
-        if (this.Mode == Mode.Public)
+        if (unmasked != null)
         {
-          address = new Address(this.NextRoot.Value);
-          decryptionKey = this.NextRoot;
+          this.NextRoot = unmasked.NextRoot;
+          result.Add(unmasked);
         }
         else
         {
-          address = new Address(this.Mask.Hash(this.NextRoot).Value);
-          decryptionKey = this.Mode == Mode.Restricted ? this.Key : this.NextRoot;
-        }
-
-        var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
-
-        if (!transactionHashList.Hashes.Any())
-        {
           break;
-        }
-
-        var bundles = await this.Repository.GetBundlesAsync(transactionHashList.Hashes, false);
-        for (var i = 0; i < bundles.Count; i++)
-        {
-          try
-          {
-            var unmaskedMessage = this.Parser.Unmask(bundles[i], this.NextRoot, decryptionKey);
-            this.NextRoot = unmaskedMessage.NextRoot;
-            result.Add(unmaskedMessage);
-          }
-          catch (Exception exception)
-          {
-            if (exception is InvalidBundleException)
-            {
-              // TODO: Add invalid bundle handler
-            }
-
-            if (i + 1 == bundles.Count)
-            {
-              return result;
-            }
-          }
         }
       }
 

@@ -271,7 +271,7 @@
     /// <returns>
     /// The <see cref="TransactionsToApprove"/>.
     /// </returns>
-    TransactionsToApprove GetTransactionsToApprove(int depth = 27);
+    TransactionsToApprove GetTransactionsToApprove(int depth = 8);
 
     /// <summary>
     /// The get transactions to approve async.
@@ -282,7 +282,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27);
+    Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8);
 
     /// <summary>
     /// The get trytes.
