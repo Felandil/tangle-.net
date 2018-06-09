@@ -632,7 +632,7 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 27, int minWeightMagnitude = 14)
+    public List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
     {
       var bundle = this.GetBundle(transactionHash);
 
@@ -640,7 +640,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 27, int minWeightMagnitude = 14)
+    public async Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
     {
       var bundle = await this.GetBundleAsync(transactionHash);
 
@@ -652,7 +652,7 @@
       Seed seed,
       Bundle bundle,
       int securityLevel,
-      int depth = 27,
+      int depth = 8,
       int minWeightMagnitude = 14,
       Address remainderAddress = null,
       List<Address> inputAddresses = null)
@@ -668,7 +668,7 @@
       Seed seed,
       Bundle bundle,
       int securityLevel,
-      int depth = 27,
+      int depth = 8,
       int minWeightMagnitude = 14,
       Address remainderAddress = null,
       List<Address> inputAddresses = null)
@@ -682,7 +682,7 @@
     /// <inheritdoc />
     public List<TransactionTrytes> SendTrytes(
       IEnumerable<Transaction> transactions,
-      int depth = 27,
+      int depth = 8,
       int minWeightMagnitude = 14)
     {
       var transactionsToApprove = this.GetTransactionsToApprove(depth);
@@ -699,7 +699,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 27, int minWeightMagnitude = 14)
+    public async Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 8, int minWeightMagnitude = 14)
     {
       var transactionsToApprove = await this.GetTransactionsToApproveAsync(depth);
 

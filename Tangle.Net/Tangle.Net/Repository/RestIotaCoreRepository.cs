@@ -166,7 +166,7 @@
                new Dictionary<string, IEnumerable<TryteString>>
                  {
                    {
-                     "tags", tags.Select(a => new TryteString(a.Value)).ToList()
+                     "tags", tags.Select(a => new Tag(a.Value)).ToList()
                    }
                  });
     }
@@ -178,7 +178,7 @@
         new Dictionary<string, IEnumerable<TryteString>>
           {
             {
-              "tags", tags.Select(a => new TryteString(a.Value)).ToList()
+              "tags", tags.Select(a => new Tag(a.Value)).ToList()
             }
           });
     }
@@ -300,7 +300,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionsToApprove GetTransactionsToApprove(int depth = 27)
+    public TransactionsToApprove GetTransactionsToApprove(int depth = 8)
     {
       var result = this.Client.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
         new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
@@ -314,7 +314,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27)
+    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8)
     {
       var result = await this.Client.ExecuteParameterizedCommandAsync<GetTransactionsToApproveResponse>(
                      new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
