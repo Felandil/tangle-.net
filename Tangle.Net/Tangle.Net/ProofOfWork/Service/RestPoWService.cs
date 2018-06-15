@@ -31,35 +31,35 @@
     private IIotaClient Client { get; }
 
     /// <inheritdoc />
-    public List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    public List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14)
     {
       var result = this.Client.ExecuteParameterizedCommand<AttachToTangleResponse>(
         new Dictionary<string, object>
           {
             { "command", CommandType.AttachToTangle },
-            { "trunkTransaction", trunkTransaction.ToString() },
-            { "branchTransaction", branchTransaction.ToString() },
+            { "trunkTransaction", trunkTransaction.Value },
+            { "branchTransaction", branchTransaction.Value },
             { "minWeightMagnitude", minWeightMagnitude },
-            { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).ToList() }
+            { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).Reverse().ToList() }
           });
 
-      return result.Trytes.Select(t => Transaction.FromTrytes(new TransactionTrytes(t))).ToList();
+      return result.Trytes.Select(t => Transaction.FromTrytes(new TransactionTrytes(t))).Reverse().ToList();
     }
 
     /// <inheritdoc />
-    public async Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    public async Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14)
     {
       var result = await this.Client.ExecuteParameterizedCommandAsync<AttachToTangleResponse>(
                      new Dictionary<string, object>
                        {
                          { "command", CommandType.AttachToTangle },
-                         { "trunkTransaction", trunkTransaction.ToString() },
-                         { "branchTransaction", branchTransaction.ToString() },
+                         { "trunkTransaction", trunkTransaction.Value },
+                         { "branchTransaction", branchTransaction.Value },
                          { "minWeightMagnitude", minWeightMagnitude },
-                         { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).ToList() }
+                         { "trytes", transactions.Select(transaction => transaction.ToTrytes().Value).Reverse().ToList() }
                        });
 
-      return result.Trytes.Select(t => Transaction.FromTrytes(new TransactionTrytes(t))).ToList();
+      return result.Trytes.Select(t => Transaction.FromTrytes(new TransactionTrytes(t))).Reverse().ToList();
     }
   }
 }
