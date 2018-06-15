@@ -215,6 +215,16 @@
       return null;
     }
 
+    public ConsistencyInfo CheckConsistency(List<Hash> tailHashes)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
+    {
+      throw new System.NotImplementedException();
+    }
+
     /// <inheritdoc />
     public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
     {
