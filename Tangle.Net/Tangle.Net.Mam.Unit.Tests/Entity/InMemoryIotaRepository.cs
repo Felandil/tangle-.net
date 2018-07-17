@@ -164,7 +164,7 @@
     }
 
     /// <inheritdoc />
-    public Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27)
+    public Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 27, Hash reference = null)
     {
       return null;
     }
@@ -223,6 +223,18 @@
     public Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
     {
       throw new System.NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public Task<bool> IsPromotableAsync(Hash tailTransaction, int depth = 6)
+    {
+      return null;
+    }
+
+    /// <inheritdoc />
+    public Task PromoteTransactionAsync(Hash tailTransaction, int depth = 8, int minWeightMagnitude = 14, int attempts = 10)
+    {
+      return null;
     }
 
     /// <inheritdoc />

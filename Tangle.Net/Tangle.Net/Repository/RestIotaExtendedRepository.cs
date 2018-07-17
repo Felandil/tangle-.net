@@ -14,6 +14,7 @@
   using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
+  using Tangle.Net.Utils;
 
   /// <inheritdoc />
   public partial class RestIotaRepository : IIotaRepository
@@ -82,6 +83,62 @@
     /// Gets the address generator.
     /// </summary>
     private IAddressGenerator AddressGenerator { get; }
+
+    /// <inheritdoc />
+    public async Task<bool> IsPromotableAsync(Hash tailTransaction, int depth = 6)
+    {
+      const int MilestoneInterval = 2 * 60 * 1000;
+      const int OneWayDelay = 1 * 60 * 1000;
+
+      var consitencyInfo = await this.CheckConsistencyAsync(new List<Hash> { tailTransaction });
+      var transaction = Transaction.FromTrytes((await this.GetTrytesAsync(new List<Hash> { tailTransaction })).First());
+
+      var timestamp = Timestamp.UnixSecondsTimestamp;
+      var isAboveMaxDepth = transaction.AttachmentTimestamp < timestamp
+                            && timestamp - transaction.AttachmentTimestamp < (depth * MilestoneInterval) - OneWayDelay;
+
+      return consitencyInfo.State && isAboveMaxDepth;
+    }
+
+    /// <inheritdoc />
+    public async Task PromoteTransactionAsync(Hash tailTransaction, int depth = 8, int minWeightMagnitude = 14, int attempts = 10)
+    {
+      if (attempts <= 0)
+      {
+        return;
+      }
+
+      var isPromotable = await this.IsPromotableAsync(tailTransaction, depth);
+
+      if (!isPromotable)
+      {
+        throw new ArgumentException("Transaction not promotable (anymore). Try to reattach!");
+      }
+
+      var promotionBundle = new Bundle();
+      promotionBundle.AddTransfer(
+        new Transfer
+          {
+            Address = new Address(Hash.Empty.Value),
+            Tag = Tag.Empty,
+            Message = TryteString.FromUtf8String("Tangle.Net Promotion"),
+            ValueToTransfer = 0
+          });
+
+      promotionBundle.Finalize();
+      promotionBundle.Sign();
+
+      var approveeTransactions = await this.GetTransactionsToApproveAsync(depth, tailTransaction);
+
+      var attachResultTrytes = await this.AttachToTangleAsync(
+                                 approveeTransactions.BranchTransaction,
+                                 approveeTransactions.TrunkTransaction,
+                                 promotionBundle.Transactions,
+                                 minWeightMagnitude);
+
+      await this.BroadcastAndStoreTransactionsAsync(attachResultTrytes);
+      await this.PromoteTransactionAsync(tailTransaction, depth, minWeightMagnitude, attempts - 1);
+    }
 
     /// <inheritdoc />
     public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)

@@ -14,6 +14,10 @@
   {
     #region Public Methods and Operators
 
+    Task<bool> IsPromotableAsync(Hash tailTransaction, int depth = 6);
+
+    Task PromoteTransactionAsync(Hash tailTransaction, int depth = 8, int minWeightMagnitude = 14, int attempts = 10);
+
     /// <summary>
     /// The broadcast and store transactions.
     /// </summary>
@@ -378,7 +382,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 18);
+    List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14);
 
     /// <summary>
     /// The replay bundle async.
@@ -395,7 +399,7 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 18);
+    Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14);
 
     /// <summary>
     /// The send transfer.

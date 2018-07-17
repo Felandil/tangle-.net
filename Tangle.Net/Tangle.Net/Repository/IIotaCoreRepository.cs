@@ -11,8 +11,6 @@
   /// </summary>
   public interface IIotaCoreRepository
   {
-    #region Public Methods and Operators
-
     /// <summary>
     /// The attach to tangle.
     /// </summary>
@@ -35,7 +33,7 @@
       Hash branchTransaction, 
       Hash trunkTransaction, 
       IEnumerable<Transaction> transactions, 
-      int minWeightMagnitude = 18);
+      int minWeightMagnitude = 14);
 
     /// <summary>
     /// The attach to tangle async.
@@ -59,7 +57,7 @@
       Hash branchTransaction,
       Hash trunkTransaction,
       IEnumerable<Transaction> transactions,
-      int minWeightMagnitude = 18);
+      int minWeightMagnitude = 14);
 
     /// <summary>
     /// The broadcast transactions.
@@ -109,7 +107,7 @@
     /// The addresses.
     /// </param>
     /// <returns>
-    /// The <see cref="GetTransactionsResponse"/>.
+    /// The <see cref="TransactionHashList"/>.
     /// </returns>
     TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses);
 
@@ -279,10 +277,13 @@
     /// <param name="depth">
     /// The depth.
     /// </param>
+    /// <param name="reference">
+    /// The reference.
+    /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8);
+    Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8, Hash reference = null);
 
     /// <summary>
     /// The get trytes.
@@ -381,7 +382,5 @@
     /// The <see cref="Task"/>.
     /// </returns>
     Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes);
-
-    #endregion
   }
 }
