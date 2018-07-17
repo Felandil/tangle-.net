@@ -45,13 +45,9 @@
     /// <summary>
     /// Gets the hash.
     /// </summary>
-    public Hash Hash
-    {
-      get
-      {
-        return this.Transactions.Count > 0 ? this.Transactions[0].BundleHash : null;
-      }
-    }
+    public Hash Hash => this.Transactions.Count > 0 ? this.Transactions[0].BundleHash : null;
+
+    public Transaction TailTransaction => this.Transactions.Count > 0 ? this.Transactions[0] : null;
 
     /// <summary>
     /// Gets or sets a value indicating whether is confirmed.

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Version>1.0.7.4</Version>
+    <Version>1.0.8.0</Version>
     <Description>.NET Standard 2.0 IOTA Library C# Port</Description>
     <Authors>Felandil</Authors>
     <Company>Felandil</Company>
@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.7.4</AssemblyVersion>
-    <FileVersion>1.0.7.4</FileVersion>  
+    <AssemblyVersion>1.0.8.0</AssemblyVersion>
+    <FileVersion>1.0.8.0</FileVersion>  
   </PropertyGroup>
 
   <ItemGroup>

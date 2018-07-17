@@ -314,10 +314,16 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8)
+    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8, Hash reference = null)
     {
-      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTransactionsToApproveResponse>(
-                     new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
+      var parameters = new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } };
+
+      if (reference != null)
+      {
+        parameters.Add("reference", reference.Value);
+      }
+
+      var result = await this.Client.ExecuteParameterizedCommandAsync<GetTransactionsToApproveResponse>(parameters);
 
       return new TransactionsToApprove
       {
@@ -447,7 +453,7 @@
     /// <inheritdoc />
     public ConsistencyInfo CheckConsistency(List<Hash> tailHashes)
     {
-      var response = Client.ExecuteParameterizedCommand<CheckConsistencyResponse>(
+      var response = this.Client.ExecuteParameterizedCommand<CheckConsistencyResponse>(
         new Dictionary<string, object>
           {
             { "command", CommandType.CheckConsistency },
@@ -465,7 +471,7 @@
     /// <inheritdoc />
     public async Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
     {
-      var response = await Client.ExecuteParameterizedCommandAsync<CheckConsistencyResponse>(
+      var response = await this.Client.ExecuteParameterizedCommandAsync<CheckConsistencyResponse>(
         new Dictionary<string, object>
           {
             { "command", CommandType.CheckConsistency },
