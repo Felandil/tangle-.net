@@ -88,6 +88,7 @@
       // since address generation takes very long, we will do it parallel (if there are any concerns regarding this, please communicate them)
       return Enumerable.Range(startIndex, count)
        .Select(i => this.GetAddress(seed, securityLevel, i))
+       .AsParallel()
        .OrderBy(x => x.KeyIndex)
        .ToList();
     }
