@@ -28,7 +28,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18);
+    List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14);
 
     /// <summary>
     /// The do po w async.
@@ -48,6 +48,6 @@
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18);
+    Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14);
   }
 }

@@ -66,7 +66,7 @@
     /// <returns>
     /// The <see cref="List"/>.
     /// </returns>
-    public List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    public List<Transaction> DoPoW(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14)
     {
       var resultTransactions = new List<Transaction>();
       var lastTransactionHash = new Hash();
@@ -107,7 +107,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 18)
+    public async Task<List<Transaction>> DoPoWAsync(Hash branchTransaction, Hash trunkTransaction, List<Transaction> transactions, int minWeightMagnitude = 14)
     {
       return await Task.Factory.StartNew(() => this.DoPoW(branchTransaction, trunkTransaction, transactions, minWeightMagnitude));
     }
