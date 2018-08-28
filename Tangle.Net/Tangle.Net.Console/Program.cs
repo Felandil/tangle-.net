@@ -32,7 +32,7 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("https://field.deviota.com:443"), new PiDiverService());
+      var repository = new RestIotaRepository(new RestClient("https://field.deviota.com:443"), new PoWSrvService());
 
       var bundle = new Bundle();
       bundle.AddTransfer(new Transfer

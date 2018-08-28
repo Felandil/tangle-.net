@@ -11,18 +11,18 @@
   using Tangle.Net.Repository.Responses;
 
   /// <summary>
-  /// Implementation of the PiDiver Api provided by https://powsrv.io/
+  /// Implementation of the PoW Api provided by https://powsrv.io/
   /// </summary>
-  public class PiDiverService : IPoWService
+  public class PoWSrvService : IPoWService
   {
-    public PiDiverService(string apiKey = null)
+    public PoWSrvService(string apiKey = null)
     {
       this.Client = new RestClient("https://api.powsrv.io:443/");
       this.ApiKey = apiKey;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PiDiverService"/> class.
+    /// Initializes a new instance of the <see cref="PoWSrvService"/> class.
     /// </summary>
     /// <param name="client">
     /// The client.
@@ -30,7 +30,7 @@
     /// <param name="apiKey">
     /// The api Key.
     /// </param>
-    public PiDiverService(RestClient client, string apiKey = null)
+    public PoWSrvService(RestClient client, string apiKey = null)
     {
       this.Client = client;
       this.ApiKey = apiKey;
