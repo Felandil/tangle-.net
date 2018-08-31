@@ -91,17 +91,14 @@
       var outputTrits = new int[leftTrits.Length > rightTrits.Length ? leftTrits.Length : rightTrits.Length];
       var carry = 0;
 
-      Parallel.For(
-        0,
-        outputTrits.Length,
-        (i) =>
-          {
-            var a_i = i < leftTrits.Length ? leftTrits[i] : 0;
-            var b_i = i < rightTrits.Length ? rightTrits[i] : 0;
-            var f_a = FullAdd(a_i, b_i, carry);
-            outputTrits[i] = f_a[0];
-            carry = f_a[1];
-          });
+      for (var i = 0; i < outputTrits.Length; i++)
+      {
+        var a_i = i < leftTrits.Length ? leftTrits[i] : 0;
+        var b_i = i < rightTrits.Length ? rightTrits[i] : 0;
+        var f_a = FullAdd(a_i, b_i, carry);
+        outputTrits[i] = f_a[0];
+        carry = f_a[1];
+      }
 
       return outputTrits;
     }

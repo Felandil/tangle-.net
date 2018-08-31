@@ -80,6 +80,7 @@
     <Compile Include="Entity\ValidationSummary.cs" />
     <Compile Include="ProofOfWork\CpuPearlDiver.cs" />
     <Compile Include="ProofOfWork\Service\IPoWService.cs" />
+    <Compile Include="ProofOfWork\Service\PoWSrvService.cs" />
     <Compile Include="ProofOfWork\Service\PoWService.cs" />
     <Compile Include="ProofOfWork\Service\RestPoWService.cs" />
     <Compile Include="ProofOfWork\HammingNonce\NonceCurl.cs" />

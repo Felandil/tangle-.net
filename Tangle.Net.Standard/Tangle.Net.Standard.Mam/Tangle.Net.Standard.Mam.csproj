@@ -9,10 +9,10 @@
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
-    <Version>0.9.0.5</Version>
+    <Version>0.9.0.6</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.9.0.5</AssemblyVersion>
-    <FileVersion>0.9.0.5</FileVersion>
+    <AssemblyVersion>0.9.0.6</AssemblyVersion>
+    <FileVersion>0.9.0.6</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,7 +49,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Tangle.Net.Standard" Version="1.0.8" />
+    <PackageReference Include="Tangle.Net.Standard" Version="1.0.8.1" />
   </ItemGroup>
 
   <ItemGroup>
