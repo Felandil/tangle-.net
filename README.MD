@@ -9,10 +9,9 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 <img src="https://felandilprojects.visualstudio.com/_apis/public/build/definitions/8112d254-cde8-46da-add3-75cab5fb802c/1/badge"/>
 
-## Motivation
+## About
 
-As a C# developer it was very frustrating that the current IOTA C# lib is pretty much outdated. Therefore this project was born.
-The project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
+This project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
 
 ## Supported Operations
 
@@ -47,7 +46,7 @@ In addition to all operations you can also do the Proof of Work locally via CPU.
 
 ## Contributing
 
-If you want to contribute, please feel free to grab an issue. To get your code into the repository please fork it and create a pull request with your changes.
+If you want to contribute, please feel free to grab an issue or implement more features.
 
 ## Encryption
 
@@ -67,12 +66,6 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 The project is still in development. Therefore breaking changes may occur.
 You can reach me via iota Discord (@Felandil) if you've got any questions.
-
-## Donate
-
-```javascript
-FLRRPZQLQGGLGMICJQY9SNTGUZEWUWEAIUFKRPISMYLBOQAEITAQ9TTRYACFZRLRTCNAHKXOER9YZNXPW
-```
 
 ## Getting started
 
