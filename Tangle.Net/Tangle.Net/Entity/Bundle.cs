@@ -350,6 +350,17 @@
     }
 
     /// <summary>
+    /// Aggregates all transaction fragments into one TryteString
+    /// </summary>
+    /// <returns>
+    /// The <see cref="TryteString"/>.
+    /// </returns>
+    public TryteString AggregateFragments()
+    {
+      return this.Transactions.Aggregate(new TryteString(), (current, tryteString) => current.Concat(tryteString.Fragment));
+    }
+
+    /// <summary>
     /// The validate.
     /// </summary>
     /// <returns>
