@@ -17,6 +17,7 @@
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.ProofOfWork.Service;
   using Tangle.Net.Repository;
+  using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.Factory;
   using Tangle.Net.Utils;
 
@@ -35,21 +36,57 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("https://field.deviota.com:443"));
+      var repository = new RestIotaRepository(
+        new FallbackIotaClient(
+          new List<string>
+            {
+              "https://invalid.node.com:443",
+              "https://peanut.iotasalad.org:14265",
+              "http://node04.iotatoken.nl:14265",
+              "http://node05.iotatoken.nl:16265",
+              "https://nodes.thetangle.org:443",
+              "http://iota1.heidger.eu:14265",
+              "https://nodes.iota.cafe:443",
+              "https://potato.iotasalad.org:14265",
+              "https://durian.iotasalad.org:14265",
+              "https://turnip.iotasalad.org:14265",
+              "https://nodes.iota.fm:443",
+              "https://tuna.iotasalad.org:14265",
+              "https://iotanode2.jlld.at:443",
+              "https://node.iota.moe:443",
+              "https://wallet1.iota.town:443",
+              "https://wallet2.iota.town:443",
+              "http://node03.iotatoken.nl:15265",
+              "https://node.iota-tangle.io:14265",
+              "https://pow4.iota.community:443",
+              "https://dyn.tangle-nodes.com:443",
+              "https://pow5.iota.community:443",
+            },
+          5000),
+        new PoWSrvService());
 
-      var nodeInfo = repository.GetNodeInfo();
-      var transactionHash = new Hash("QJSQBHNSVOEYZSWRCBXJTPEBW9PT9GRLYZFJYT9AFJTUXJLLBRUTNQJUKARETCWPHFGXCTYDTSOU99999");
+      var bundle = new Bundle();
+      bundle.AddTransfer(new Transfer
+                           {
+                             Address = new Address(Hash.Empty.Value),
+                             Tag = new Tag("MYCSHARPPI"),
+                             Timestamp = Timestamp.UnixSecondsTimestamp,
+                             Message = TryteString.FromUtf8String("Hello from PiDiver #1!")
+                           });
 
-      var inclusionStates = repository.GetInclusionStates(
-        new List<Hash> { transactionHash },
-        new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
+      bundle.AddTransfer(new Transfer
+                           {
+                             Address = new Address(Hash.Empty.Value),
+                             Tag = new Tag("MYCSHARPPI"),
+                             Timestamp = Timestamp.UnixSecondsTimestamp,
+                             Message = TryteString.FromUtf8String("Hello from PiDiver #2!")
+                           });
 
-      Console.WriteLine($"Transaction confirmed: {inclusionStates.States.FirstOrDefault(s => s.Key.Value == transactionHash.Value).Value}");
+      bundle.Finalize();
+      bundle.Sign();
 
-      var transactionTrytes = repository.GetTrytes(new List<Hash> { transactionHash });
-      var transaction = Transaction.FromTrytes(transactionTrytes.First());
+      repository.SendTrytes(bundle.Transactions, 1);
 
-      Console.WriteLine(transaction.Fragment.ToUtf8String());
 
       Console.WriteLine("Done");
       Console.ReadKey();
