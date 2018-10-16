@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Unit.Tests.Cryptography
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
@@ -19,6 +20,12 @@
     }
 
     /// <inheritdoc />
+    public async Task<Address> GetAddressAsync(Seed seed, int securityLevel, int index)
+    {
+      return this.GetAddress(seed, securityLevel, index);
+    }
+
+    /// <inheritdoc />
     public Address GetAddress(AbstractPrivateKey privateKey)
     {
       throw new System.NotImplementedException();
@@ -34,6 +41,12 @@
       }
 
       return addresses;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<Address>> GetAddressesAsync(Seed seed, int securityLevel, int startIndex, int count)
+    {
+      return this.GetAddresses(seed, securityLevel, startIndex, count);
     }
 
     #endregion

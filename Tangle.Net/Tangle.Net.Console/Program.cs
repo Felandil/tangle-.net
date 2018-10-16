@@ -11,6 +11,9 @@
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
+  using Tangle.Net.Mam.Entity;
+  using Tangle.Net.Mam.Merkle;
+  using Tangle.Net.Mam.Services;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.ProofOfWork.Service;
   using Tangle.Net.Repository;
@@ -32,30 +35,21 @@
     /// </param>
     private static void Main(string[] args)
     {
-      var repository = new RestIotaRepository(new RestClient("https://field.deviota.com:443"), new PoWSrvService());
+      var repository = new RestIotaRepository(new RestClient("https://field.deviota.com:443"));
 
-      var bundle = new Bundle();
-      bundle.AddTransfer(new Transfer
-                           {
-                             Address = new Address(Hash.Empty.Value),
-                             Tag = new Tag("MYCSHARPPI"),
-                             Timestamp = Timestamp.UnixSecondsTimestamp,
-                             Message = TryteString.FromUtf8String("Hello from PiDiver #1!")
-                           });
+      var nodeInfo = repository.GetNodeInfo();
+      var transactionHash = new Hash("QJSQBHNSVOEYZSWRCBXJTPEBW9PT9GRLYZFJYT9AFJTUXJLLBRUTNQJUKARETCWPHFGXCTYDTSOU99999");
 
-      bundle.AddTransfer(new Transfer
-                           {
-                             Address = new Address(Hash.Empty.Value),
-                             Tag = new Tag("MYCSHARPPI"),
-                             Timestamp = Timestamp.UnixSecondsTimestamp,
-                             Message = TryteString.FromUtf8String("Hello from PiDiver #2!")
-                           });
+      var inclusionStates = repository.GetInclusionStates(
+        new List<Hash> { transactionHash },
+        new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
 
-      bundle.Finalize();
-      bundle.Sign();
+      Console.WriteLine($"Transaction confirmed: {inclusionStates.States.FirstOrDefault(s => s.Key.Value == transactionHash.Value).Value}");
 
-      repository.SendTrytes(bundle.Transactions);
+      var transactionTrytes = repository.GetTrytes(new List<Hash> { transactionHash });
+      var transaction = Transaction.FromTrytes(transactionTrytes.First());
 
+      Console.WriteLine(transaction.Fragment.ToUtf8String());
 
       Console.WriteLine("Done");
       Console.ReadKey();

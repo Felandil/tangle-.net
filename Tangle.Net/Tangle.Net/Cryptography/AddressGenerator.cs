@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Linq;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Cryptography.Signing;
@@ -64,6 +65,12 @@
     }
 
     /// <inheritdoc />
+    public async Task<Address> GetAddressAsync(Seed seed, int securityLevel, int index)
+    {
+      return await Task.Run(() => this.GetAddress(seed, securityLevel, index));
+    }
+
+    /// <inheritdoc />
     public Address GetAddress(AbstractPrivateKey privateKey)
     {
       var digest = privateKey.Digest;
@@ -91,6 +98,18 @@
        .AsParallel()
        .OrderBy(x => x.KeyIndex)
        .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<Address>> GetAddressesAsync(Seed seed, int securityLevel, int startIndex, int count)
+    {
+      var addresses = new List<Address>();
+      for (var i = 0; i < count; i++)
+      {
+        addresses.Add(await this.GetAddressAsync(seed, securityLevel, i + startIndex));
+      }
+
+      return addresses.OrderBy(x => x.KeyIndex).ToList();
     }
 
     #endregion

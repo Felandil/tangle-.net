@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Cryptography
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Entity;
 
@@ -27,6 +28,8 @@
     /// The <see cref="Address"/>.
     /// </returns>
     Address GetAddress(Seed seed, int securityLevel, int index);
+
+    Task<Address> GetAddressAsync(Seed seed, int securityLevel, int index);
 
     /// <summary>
     /// The get address.
@@ -58,6 +61,8 @@
     /// The <see cref="List"/>.
     /// </returns>
     List<Address> GetAddresses(Seed seed, int securityLevel, int startIndex, int count);
+
+    Task<List<Address>> GetAddressesAsync(Seed seed, int securityLevel, int startIndex, int count);
 
     #endregion
   }

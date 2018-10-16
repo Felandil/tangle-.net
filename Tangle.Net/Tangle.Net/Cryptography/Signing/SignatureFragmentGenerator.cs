@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Linq;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
@@ -63,6 +64,12 @@
       }
 
       return result;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<Fragment>> GenerateAsync(AbstractPrivateKey privateKey, Hash hash)
+    {
+      return await Task.Run(() => this.Generate(privateKey, hash));
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Unit.Tests.Cryptography
 {
   using System.Diagnostics;
+  using System.Threading.Tasks;
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -54,6 +55,28 @@
       Assert.AreEqual(3, addresses.Count);
     }
 
+    [TestMethod]
+    public async Task TestGetMultipleAddressesAsync()
+    {
+      var generator = new AddressGenerator();
+
+      var addresses = await generator.GetAddressesAsync(this.seedTwo, SecurityLevel.Medium, 1, 1);
+      Assert.AreEqual(1, addresses.Count);
+
+      addresses = generator.GetAddresses(this.seedTwo, SecurityLevel.Medium, 0, 3);
+      Assert.AreEqual("FNKCVJPUANHNWNBAHFBTCONMCUBC9KCZ9EKREBCJAFMABCTEPLGGXDJXVGPXDCFOUCRBWFJFLEAVOEUPY", addresses[0].Value);
+      Assert.IsNotNull(addresses[0].PrivateKey);
+      Assert.AreEqual("MSYILYYZLSJ99TDMGQHDOBWGHTBARCBGJZE9PIMQLTEXJXKTDREGVTPA9NDGGLQHTMGISGRAKSLYPGWMB", addresses[1].Value);
+      Assert.AreEqual("IIREHGHXUHARKVZDMHGUUCHZLUEQQULLEUSJHIIBWFYZIZDUFTOVHAWCKRJXUZ9CSUVLTRYSUGBVRMTOW", addresses[2].Value);
+      Assert.AreEqual(3, addresses.Count);
+
+      addresses = generator.GetAddresses(this.seedTwo, SecurityLevel.Medium, 10, 3);
+      Assert.AreEqual("BPXMVV9UPKBTVPJXPBHHOJYAFLALOYCGTSEDLZBHNFMGEHREBQTRIPZAPREANPMZJNZZNCDIUFOYYGGFY", addresses[0].Value);
+      Assert.AreEqual("RUCZQJWKXVDIXTLHHOKGMHOV9AKVDBG9HUQHPWNZUNKJNFVMULUSLKFJGSTBSNJMRYSJOBVBQSKVXISZB", addresses[1].Value);
+      Assert.AreEqual("FQAKF9XVCLTBESJKWCHFOCTVABYEEJP9RXUVAEUWENFUUQK9VCHFEORHCYDUJQHNUDWNRDUDZTUGKHSPD", addresses[2].Value);
+      Assert.AreEqual(3, addresses.Count);
+    }
+
     /// <summary>
     /// The test get single address.
     /// </summary>
@@ -67,6 +90,20 @@
       Assert.AreEqual(2, address.SecurityLevel);
 
       var addressTwo = generator.GetAddress(this.seedOne, SecurityLevel.Medium, 10);
+      Assert.AreEqual("XLXFTFBXUOOHRJDVBDBFEBDQDUKSLSOCLUYWGLAPR9FUROUHPFINIUFKYSRTFMNWKNEPDZATWXIVWJMDD", addressTwo.Value);
+      Assert.AreEqual(10, addressTwo.KeyIndex);
+    }
+
+    [TestMethod]
+    public async Task TestGetSingleAddressAsync()
+    {
+      var generator = new AddressGenerator();
+
+      var address = await generator.GetAddressAsync(this.seedOne, SecurityLevel.Medium, 0);
+      Assert.AreEqual("DLEIS9XU9V9T9OURAKDUSQWBQEYFGJLRPRVEWKN9SSUGIHBEIPBPEWISSAURGTQKWKWNHXGCBQTWNOGIY", address.Value);
+      Assert.AreEqual(2, address.SecurityLevel);
+
+      var addressTwo = await generator.GetAddressAsync(this.seedOne, SecurityLevel.Medium, 10);
       Assert.AreEqual("XLXFTFBXUOOHRJDVBDBFEBDQDUKSLSOCLUYWGLAPR9FUROUHPFINIUFKYSRTFMNWKNEPDZATWXIVWJMDD", addressTwo.Value);
       Assert.AreEqual(10, addressTwo.KeyIndex);
     }
