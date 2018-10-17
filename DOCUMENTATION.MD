@@ -12,13 +12,11 @@ The library currently uses RestSharp for all it's API calls and the official C# 
 
 The most simple way to start using the library is by instantiating the repository via factory. Note that you could also create instances of the repository via any dependency injection framework.
 
-```javascript
-var factory = new RestIotaRepositoryFactory();
-var repository = await factory.CreateAsync();
+```csharp
+var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
 var nodeInfo = repository.GetNodeInfo();
+var neighbours = repository.GetNeighbors();
 ```
-
-Please note that the sandbox is currently not supported.
 
 ## Entities
 
@@ -28,26 +26,29 @@ Since the library emphasizes an object orientated approach combined with Clean A
 
 A TryteString is the ASCII representation of a sequence of trytes. Please note that only the letters A-Z and the number 9 are allowed. The following regular expression verifies if a given string is a TryteString or not.
 
-```javascript
+```csharp
 ^[9A-Z]*$
 ```
 
 As the TryteString is only the basic class you will propably stumble accross many references for its subclasses:
 
-+ Address
-+ Checksum
-+ Digest
-+ Fragment
-+ Hash
-+ Seed
-+ Tag
-+ TransactionTrytes
-
-### Transaction
-
-As transactions are generated within a bundle or are received via API call you won't need to create them manually (but you can if you want to).
-
-- TBD
++ Address <br>
+  If you want to sign an input, you should generate the address with the AddressGenerator. That way the private key will be generated aswell, which is needed to sign the transaction.
+  For any other cases you can simply instantiate the address with its trytes.
++ Checksum <br>
+  Checksum for a given address
++ Digest <br>
+ Digest to a generated private key for an address. Will be generated along with an address and its private key
++ Fragment <br>
+  Payload part of a transaction. Can either contain parts of the signature or carry data
++ Hash <br>
+  81 trytes long hash to a bundle, transaction or similar
++ Seed <br>
+  81 trytes long "master key". Used to derive addresses and private keys
++ Tag <br>
+  27 trytes long part of a transaction. Can be set to any value 
++ TransactionTrytes <br>
+  2673 trytes long. Represents a transaction as trytes
 
 ### Bundle
 
@@ -55,7 +56,36 @@ A bundle represents a set of transactions that have been or should be attached t
 
 Note that you technically can create all transactions on a bundle manually, but that is not neccessary and more error prone.
 
-- TBD
+The simpliest way to send a bundle to the tangle is to use a bundle without value
+
+```csharp
+var bundle = new Bundle();
+bundle.AddTransfer(new Transfer
+                    {
+                        Address = new Address(Hash.Empty.Value),
+                        Tag = new Tag("TANGLENET"),
+                        Timestamp = Timestamp.UnixSecondsTimestamp,
+                        Message = TryteString.FromUtf8String("Hello #1!")
+                    });
+
+bundle.AddTransfer(new Transfer
+                    {
+                        Address = new Address(Hash.Empty.Value),
+                        Tag = new Tag("TANGLENET"),
+                        Timestamp = Timestamp.UnixSecondsTimestamp,
+                        Message = TryteString.FromUtf8String("Hello #2!")
+                    });
+
+bundle.Finalize();
+bundle.Sign();
+
+// see Getting Started to see how a repository is created
+repository.SendTrytes(bundle.Transactions);
+```
+
+### Transaction
+
+As transactions are generated within a bundle or are received via API call you won't need to create them manually (but you can if you want to).
 
 ## Addresses
 
@@ -67,7 +97,7 @@ Please note that anyone with access to your seed, also has access to your funds.
 
  ### Generating an address
 
- ```javascript
+ ```csharp
 var seed = new Seed("SOMESEEDHERE")
 var addressGenerator = new AddressGenerator(seed, SecurityLevel.Medium);
 var address = addressGenerator.GetAddress(0);
@@ -82,4 +112,26 @@ The higher the security level the longer the private key for your address (used 
 
 There currently are three security levels (range 1-3). You can either use the numbers directly of access them via the SecurityLevel class.
 
+## Clients
 
+For most use cases it should be fine to instantiate the repository as displayed in Getting Started. 
+
+Anyway it sometimes may be useful to have some kind of fallback mechanism in place to handle unresponsive or out of sync nodes. To handle this you can use the fallback client, that will handle node errors internally.
+
+```csharp
+      var repository = new RestIotaRepository(
+        new FallbackIotaClient(
+          new List<string>
+            {
+              "https://invalid.node.com:443",
+              "https://peanut.iotasalad.org:14265",
+              "http://node04.iotatoken.nl:14265",
+              "http://node05.iotatoken.nl:16265",
+            },
+          5000),
+        new PoWSrvService());
+```
+
+Besides the timeout for calls against the node you can specify an error threshold along with a reset timeout. The client behaves similar to a [circuit breaker](https://martinfowler.com/bliki/CircuitBreaker.html).
+
+If you are using the fallback client, make sure that the calls you run against the nodes are correctly formed, since there is no distinction between exceptions.

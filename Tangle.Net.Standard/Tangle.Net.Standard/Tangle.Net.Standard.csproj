@@ -61,6 +61,9 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWSrvService.cs" Link="ProofOfWork\Service\PoWSrvService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\RestPoWService.cs" Link="ProofOfWork\Service\RestPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Utils\TrinaryDemultiplexer.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexer.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\CircuitedClient.cs" Link="Repository\Client\CircuitedClient.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\CircuitOpenException.cs" Link="Repository\Client\CircuitOpenException.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\FallbackIotaClient.cs" Link="Repository\Client\FallbackIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />

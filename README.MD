@@ -62,16 +62,11 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 .NET 4.6.1: https://www.nuget.org/packages/Tangle.Net.Mam/ <br>
 .NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard.Mam/
 
-## Note
-
-The project is still in development. Therefore breaking changes may occur.
-You can reach me via iota Discord (@Felandil) if you've got any questions.
-
 ## Getting started
 
-Have a look at the console application or start by instantiating a new repository!
+Have a look at the console application, start by instantiating a new repository or have a look at the documentation!
 
-```javascript
+```csharp
 var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
 var nodeInfo = repository.GetNodeInfo();
 var neighbours = repository.GetNeighbors();

@@ -34,6 +34,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\PoWServiceTest.cs" Link="ProofOfWork\PoWServiceTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\UlongTritConverterTest.cs" Link="ProofOfWork\UlongTritConverterTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\Client\CircuitedClientTest.cs" Link="Repository\Client\CircuitedClientTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\RestIotaRepositoryTest.cs" Link="Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\ExtensionTests.cs" Link="Utils\ExtensionTests.cs" />
@@ -55,8 +56,14 @@
 
   <ItemGroup>
     <Folder Include="Entity\" />
+    <Folder Include="Repository\Client\" />
     <Folder Include="Utils\" />
-    <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Telerik.XamarinForms.Common">
+      <HintPath>E:\Program Files (x86)\Progress\Telerik UI for Xamarin R2 2018\Binaries\Portable\Telerik.XamarinForms.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
