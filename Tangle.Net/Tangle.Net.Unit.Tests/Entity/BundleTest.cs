@@ -865,6 +865,32 @@
       this.bundle.AddTransfer(transfer);
     }
 
+    [TestMethod]
+    public void TestAggregateTransactions()
+    {
+      var fragmentOne = TryteString.FromUtf8String("TestFragmentOne");
+      var fragmentTwo = TryteString.FromUtf8String("TestFragmentTwo");
+
+      var bundle = new Bundle();
+      bundle.AddTransfer(new Transfer
+                                {
+                                  Address =
+                                    new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"),
+                                  Message = fragmentOne,
+                                  Tag = Tag.Empty
+                                });
+      bundle.AddTransfer(new Transfer
+                                {
+                                  Address =
+                                    new Address("RBTC9D9DCDEAUCFDCDADEAMBHAFAHKAJDHAODHADHDAD9KAHAJDADHJSGDJHSDGSDPODHAUDUAHDJAHAB"),
+                                  Message = fragmentTwo,
+                                  Tag = Tag.Empty
+                                });
+
+      var expectedPayload = bundle.Transactions[0].Fragment.Concat(bundle.Transactions[1].Fragment);
+      Assert.AreEqual(expectedPayload.Value, bundle.AggregateFragments().Value);
+    }
+
     #endregion
 
     #region Methods

@@ -60,6 +60,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tangle.Net.Mam\Tangle.Net.Mam.csproj">
+      <Project>{183E56D2-D79B-45F7-8B92-CBEF8D2E9469}</Project>
+      <Name>Tangle.Net.Mam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">
       <Project>{6678b808-1464-490e-becd-842305000560}</Project>
       <Name>Tangle.Net</Name>

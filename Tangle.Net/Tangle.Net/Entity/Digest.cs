@@ -7,8 +7,6 @@
   /// </summary>
   public class Digest : TryteString
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Digest"/> class.
     /// </summary>
@@ -29,10 +27,6 @@
       this.SecurityLevel = securityLevel;
     }
 
-    #endregion
-
-    #region Public Properties
-
     /// <summary>
     /// Gets the key index.
     /// </summary>
@@ -42,10 +36,6 @@
     /// Gets the security level.
     /// </summary>
     public int SecurityLevel { get; private set; }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// The validate tryte length.
@@ -60,7 +50,5 @@
         throw new ArgumentException("Tryte length has to be a multiple of " + Hash.Length);
       }
     }
-
-    #endregion
   }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Version>1.0.8.2</Version>
+    <Version>2.0.0.0</Version>
     <Description>.NET Standard 2.0 IOTA Library C# Port</Description>
     <Authors>Felandil</Authors>
     <Company>Felandil</Company>
@@ -12,8 +12,9 @@
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.8.2</AssemblyVersion>
-    <FileVersion>1.0.8.2</FileVersion>  
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <PackageTags>iota csharp</PackageTags>  
   </PropertyGroup>
 
   <ItemGroup>
@@ -61,6 +62,9 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWSrvService.cs" Link="ProofOfWork\Service\PoWSrvService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\RestPoWService.cs" Link="ProofOfWork\Service\RestPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Utils\TrinaryDemultiplexer.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexer.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\CircuitedClient.cs" Link="Repository\Client\CircuitedClient.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\CircuitOpenException.cs" Link="Repository\Client\CircuitOpenException.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\FallbackIotaClient.cs" Link="Repository\Client\FallbackIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IIotaClient.cs" Link="Repository\Client\IIotaClient.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\IotaApiException.cs" Link="Repository\Client\IotaApiException.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Client\RestIotaClient.cs" Link="Repository\Client\RestIotaClient.cs" />

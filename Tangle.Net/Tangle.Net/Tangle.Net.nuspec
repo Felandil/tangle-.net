@@ -2,12 +2,15 @@
 <package >
   <metadata>
     <id>Tangle.Net</id>
-    <version>1.0.8.2</version>
+    <version>2.0.0.0</version>
     <title>.NET 4.6.1 IOTA Library C# Port</title>
     <authors>Felandil</authors>
     <owners>Felandil</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Felandil/tangle-.net</projectUrl>
     <description>.NET 4.6.1 IOTA Library C# Port</description>
+    <repository url="https://github.com/Felandil/tangle-.net" />
     <tags>iota csharp</tags>
   </metadata>
 </package>

@@ -10,16 +10,10 @@
   /// </summary>
   public class Address : TryteString
   {
-    #region Constants
-
     /// <summary>
     /// The length.
     /// </summary>
     public const int Length = 81;
-
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Address"/> class.
@@ -58,10 +52,6 @@
     {
     }
 
-    #endregion
-
-    #region Public Properties
-
     /// <summary>
     /// Gets or sets the balance.
     /// </summary>
@@ -91,10 +81,6 @@
     /// Gets or sets a value indicating whether spent from.
     /// </summary>
     public bool SpentFrom { get; set; }
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <summary>
     /// The from trits.
@@ -148,7 +134,5 @@
 
       return this;
     }
-
-    #endregion
   }
 }

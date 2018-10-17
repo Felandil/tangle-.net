@@ -26,10 +26,10 @@
     /// <summary>
     /// Gets the client.
     /// </summary>
-    private IRestClient Client { get; }
+    protected IRestClient Client { get; }
 
     /// <inheritdoc />
-    public T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+    public virtual T ExecuteParameterizedCommand<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
       where T : new()
     {
       var response = this.Client.Execute<T>(CreateRequest(parameters));
@@ -37,14 +37,14 @@
     }
 
     /// <inheritdoc />
-    public void ExecuteParameterizedCommand(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+    public virtual void ExecuteParameterizedCommand(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
     {
       var response = this.Client.Execute<object>(CreateRequest(parameters));
       ValidateResponse(response, CommandNameFromParameters(parameters));
     }
 
     /// <inheritdoc />
-    public async Task<T> ExecuteParameterizedCommandAsync<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+    public virtual async Task<T> ExecuteParameterizedCommandAsync<T>(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
       where T : new()
     {
       var response = await this.Client.ExecuteTaskAsync<T>(CreateRequest(parameters));
@@ -52,21 +52,21 @@
     }
 
     /// <inheritdoc />
-    public async Task ExecuteParameterizedCommandAsync(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
+    public virtual async Task ExecuteParameterizedCommandAsync(IReadOnlyCollection<KeyValuePair<string, object>> parameters)
     {
       var response = await this.Client.ExecuteTaskAsync<object>(CreateRequest(parameters));
       ValidateResponse(response, CommandNameFromParameters(parameters));
     }
 
     /// <inheritdoc />
-    public T ExecuteParameterlessCommand<T>(string commandName)
+    public virtual T ExecuteParameterlessCommand<T>(string commandName)
       where T : new()
     {
       return this.ExecuteParameterizedCommand<T>(new Dictionary<string, object> { { "command", commandName } });
     }
 
     /// <inheritdoc />
-    public async Task<T> ExecuteParameterlessCommandAsync<T>(string commandName)
+    public virtual async Task<T> ExecuteParameterlessCommandAsync<T>(string commandName)
       where T : new()
     {
       return await this.ExecuteParameterizedCommandAsync<T>(new Dictionary<string, object> { { "command", commandName } });

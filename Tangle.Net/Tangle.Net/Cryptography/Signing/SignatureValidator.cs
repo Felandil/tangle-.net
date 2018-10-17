@@ -2,6 +2,7 @@
 {
   using System.Collections.Generic;
   using System.Linq;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Entity;
@@ -96,6 +97,12 @@
 
       var actualPublicKeyTrytes = Converter.TritsToTrytes(actualPublicKey);
       return actualPublicKeyTrytes == publicKey.Value;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> ValidateFragmentsAsync(List<Fragment> fragments, Hash hash, TryteString publicKey)
+    {
+      return await Task.Run(() => this.ValidateFragments(fragments, hash, publicKey));
     }
   }
 }
