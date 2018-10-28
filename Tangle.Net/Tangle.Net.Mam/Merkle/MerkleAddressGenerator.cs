@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Mam.Merkle
 {
   using System.Collections.Generic;
+  using System.Threading.Tasks;
 
   using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
@@ -49,6 +50,12 @@
     }
 
     /// <inheritdoc />
+    public async Task<Address> GetAddressAsync(Seed seed, int securityLevel, int index)
+    {
+      return await Task.Run(() => this.GetAddress(seed, securityLevel, index));
+    }
+
+    /// <inheritdoc />
     public Address GetAddress(AbstractPrivateKey privateKey)
     {
       return null;
@@ -65,6 +72,12 @@
       }
 
       return addresses;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<Address>> GetAddressesAsync(Seed seed, int securityLevel, int startIndex, int count)
+    {
+      return await Task.Run(() => this.GetAddresses(seed, securityLevel, startIndex, count));
     }
   }
 }
