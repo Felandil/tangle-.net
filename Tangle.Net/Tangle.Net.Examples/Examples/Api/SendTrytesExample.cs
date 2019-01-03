@@ -35,7 +35,7 @@
       bundle.Finalize();
       bundle.Sign();
 
-      return this.Repository.SendTrytes(bundle.Transactions, 27, 14);
+      return this.Repository.SendTrytes(bundle.Transactions, 2);
     }
   }
 }

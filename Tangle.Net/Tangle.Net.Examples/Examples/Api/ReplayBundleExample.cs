@@ -23,7 +23,7 @@
     {
       var tailTransactionHash = new Hash("SOMETAILTRANSACTIONHASH");
 
-      return this.Repository.ReplayBundle(tailTransactionHash, 27, 14);
+      return this.Repository.ReplayBundle(tailTransactionHash, 2);
     }
   }
 }
