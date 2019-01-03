@@ -34,7 +34,7 @@
             Timestamp = Timestamp.UnixSecondsTimestamp
           });
 
-      return this.Repository.SendTransfer(seed, bundle, SecurityLevel.Medium, 27, 14);
+      return this.Repository.SendTransfer(seed, bundle, SecurityLevel.Medium, 2);
     }
   }
 }

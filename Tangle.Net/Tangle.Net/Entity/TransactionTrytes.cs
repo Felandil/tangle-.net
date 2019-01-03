@@ -2,9 +2,7 @@
 {
   using System;
 
-  /// <summary>
-  /// The transaction trytes.
-  /// </summary>
+  /// <inheritdoc />
   public class TransactionTrytes : TryteString
   {
     #region Constants
@@ -18,12 +16,7 @@
 
     #region Constructors and Destructors
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TransactionTrytes"/> class.
-    /// </summary>
-    /// <param name="value">
-    /// The value.
-    /// </param>
+    /// <inheritdoc />
     public TransactionTrytes(string value)
       : base(value)
     {
