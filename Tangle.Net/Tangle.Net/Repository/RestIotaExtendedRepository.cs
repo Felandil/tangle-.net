@@ -314,7 +314,6 @@
     /// <inheritdoc />
     public List<Bundle> GetBundles(List<Hash> transactionHashes, bool includeInclusionStates)
     {
-      var associatedBundles = new List<Bundle>();
       var tailTransactions = new List<Hash>();
       var nonTailTransactions = new List<Transaction>();
 
@@ -346,35 +345,24 @@
           select transaction.Hash);
       }
 
-      var inclusionStates = new InclusionStates();
-      if (includeInclusionStates)
-      {
-        inclusionStates = this.GetLatestInclusion(tailTransactions);
-      }
-
       var bundles = this.GetBundles(tailTransactions);
 
-      foreach (var bundle in bundles)
+      if (includeInclusionStates)
       {
-        if (includeInclusionStates)
+        var inclusionStates = this.GetLatestInclusion(tailTransactions);
+        foreach (var bundle in bundles)
         {
-          bundle.IsConfirmed = inclusionStates.States
-            .FirstOrDefault(transactionHash => transactionHash.Key.Value == bundle.Transactions[0].Hash.Value).Value;
-        }
-
-        if (associatedBundles.All(b => b.Hash.Value != bundle.Hash.Value))
-        {
-          associatedBundles.Add(bundle);
+            bundle.IsConfirmed = inclusionStates.States
+              .FirstOrDefault(transactionHash => transactionHash.Key.Value == bundle.Transactions[0].Hash.Value).Value;
         }
       }
 
-      return associatedBundles;
+      return bundles;
     }
 
     /// <inheritdoc />
     public async Task<List<Bundle>> GetBundlesAsync(List<Hash> transactionHashes, bool includeInclusionStates)
     {
-      var associatedBundles = new List<Bundle>();
       var tailTransactions = new List<Hash>();
       var nonTailTransactions = new List<Transaction>();
 
@@ -406,29 +394,19 @@
           select transaction.Hash);
       }
 
-      var inclusionStates = new InclusionStates();
-      if (includeInclusionStates)
-      {
-        inclusionStates = await this.GetLatestInclusionAsync(tailTransactions);
-      }
-
       var bundles = await this.GetBundlesAsync(tailTransactions);
 
-      foreach (var bundle in bundles)
+      if (includeInclusionStates)
       {
-        if (includeInclusionStates)
+        var inclusionStates = this.GetLatestInclusion(tailTransactions);
+        foreach (var bundle in bundles)
         {
           bundle.IsConfirmed = inclusionStates.States
             .FirstOrDefault(transactionHash => transactionHash.Key.Value == bundle.Transactions[0].Hash.Value).Value;
         }
-
-        if (associatedBundles.All(b => b.Hash.Value != bundle.Hash.Value))
-        {
-          associatedBundles.Add(bundle);
-        }
       }
 
-      return associatedBundles;
+      return bundles;
     }
 
     /// <inheritdoc />
@@ -791,21 +769,24 @@
       var transactions = this.TraverseBundles(tailTransactions, bundleHashList);
 
       var result = new List<Bundle>();
-
-      foreach (var transaction in transactions)
+      foreach (var tailTransaction in transactions.Where(t => t.IsTail))
       {
-        var bundle = result.FirstOrDefault(b => b.Hash.Value == transaction.BundleHash.Value);
-        if (bundle != null)
+        var bundleForTail = new Bundle { Transactions = new List<Transaction> { tailTransaction } };
+        var current = tailTransaction;
+
+        while (current.CurrentIndex <= tailTransaction.LastIndex)
         {
-          if (bundle.Transactions.All(t => t.CurrentIndex != transaction.CurrentIndex))
+          var next = transactions.FirstOrDefault(t => t.Hash.Value == current.TrunkTransaction.Value);
+          if (next == null)
           {
-            bundle.Transactions.Add(transaction);
+            break;
           }
+
+          bundleForTail.Transactions.Add(next);
+          current = next;
         }
-        else
-        {
-          result.Add(new Bundle { Transactions = new List<Transaction> { transaction } });
-        }
+
+        result.Add(bundleForTail);
       }
 
       return result;
@@ -831,21 +812,24 @@
       var transactions = await this.TraverseBundlesAsync(tailTransactions, bundleHashList);
 
       var result = new List<Bundle>();
-
-      foreach (var transaction in transactions)
+      foreach (var tailTransaction in transactions.Where(t => t.IsTail))
       {
-        var bundle = result.FirstOrDefault(b => b.Hash.Value == transaction.BundleHash.Value);
-        if (bundle != null)
+        var bundleForTail = new Bundle { Transactions = new List<Transaction> { tailTransaction } };
+        var current = tailTransaction;
+
+        while (current.CurrentIndex <= tailTransaction.LastIndex)
         {
-          if (bundle.Transactions.All(t => t.CurrentIndex != transaction.CurrentIndex))
+          var next = transactions.FirstOrDefault(t => t.Hash.Value == current.TrunkTransaction.Value);
+          if (next == null)
           {
-            bundle.Transactions.Add(transaction);
+            break;
           }
+
+          bundleForTail.Transactions.Add(next);
+          current = next;
         }
-        else
-        {
-          result.Add(new Bundle { Transactions = new List<Transaction> { transaction } });
-        }
+
+        result.Add(bundleForTail);
       }
 
       return result;
