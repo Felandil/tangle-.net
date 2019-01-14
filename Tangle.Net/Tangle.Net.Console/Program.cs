@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
 
   using Tangle.Net.Entity;
   using Tangle.Net.ProofOfWork.Service;
@@ -26,7 +27,6 @@
         new FallbackIotaClient(
           new List<string>
             {
-              "https://invalid.node.com:443",
               "https://peanut.iotasalad.org:14265",
               "http://node04.iotatoken.nl:14265",
               "http://node05.iotatoken.nl:16265",
@@ -51,29 +51,28 @@
           5000),
         new PoWSrvService());
 
-      var bundle = new Bundle();
-      bundle.AddTransfer(
-        new Transfer
+      var response = repository.GetBundles(
+        new List<Hash> { new Hash("HRXMDIQMRFDFQFP9ZKHAGRRBWSDHCKJCTGZMHPIFUY9EVNGDXRCOUWTHFMLXRDYVMBZLEVFPZSKFA9999") },
+        true);
+
+      var confirmedBundle = response.FirstOrDefault(b => b.IsConfirmed);
+
+      var notReattached = repository.GetBundles(
+        new List<Hash> { new Hash("DNICBWUUIWYSTOVNTSOLZOHEAGWQPVMJSJDMCNFTR9MJNVVTDWOWSHFDVNZHKCDPVLEXSCILPXTNZ9999") },
+        true);
+
+      var single = repository.GetBundles(
+        new List<Hash> { new Hash("WXHKZQMPIOMUOWGLHLE9ZGAPOBZOBXKTLXAGOIJMQPCIZEZENFRTBIRWZ99KWC9UUKBRHDQUFFJEZ9999") },
+        true);
+
+      var all = repository.GetBundlesAsync(
+        new List<Hash>
           {
-            Address = new Address(Hash.Empty.Value),
-            Tag = new Tag("MYCSHARPPI"),
-            Timestamp = Timestamp.UnixSecondsTimestamp,
-            Message = TryteString.FromUtf8String("Hello from PiDiver #1!")
-          });
-
-      bundle.AddTransfer(
-        new Transfer
-          {
-            Address = new Address(Hash.Empty.Value),
-            Tag = new Tag("MYCSHARPPI"),
-            Timestamp = Timestamp.UnixSecondsTimestamp,
-            Message = TryteString.FromUtf8String("Hello from PiDiver #2!")
-          });
-
-      bundle.Finalize();
-      bundle.Sign();
-
-      repository.SendTrytes(bundle.Transactions, 1);
+            new Hash("HRXMDIQMRFDFQFP9ZKHAGRRBWSDHCKJCTGZMHPIFUY9EVNGDXRCOUWTHFMLXRDYVMBZLEVFPZSKFA9999"),
+            new Hash("DNICBWUUIWYSTOVNTSOLZOHEAGWQPVMJSJDMCNFTR9MJNVVTDWOWSHFDVNZHKCDPVLEXSCILPXTNZ9999"),
+            new Hash("WXHKZQMPIOMUOWGLHLE9ZGAPOBZOBXKTLXAGOIJMQPCIZEZENFRTBIRWZ99KWC9UUKBRHDQUFFJEZ9999")
+          },
+        true).Result;
 
       Console.WriteLine("Done");
       Console.ReadKey();
