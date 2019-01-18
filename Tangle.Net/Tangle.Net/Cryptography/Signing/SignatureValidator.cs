@@ -95,8 +95,7 @@
       this.Curl.Absorb(checksum.ToArray());
       this.Curl.Squeeze(actualPublicKey);
 
-      var actualPublicKeyTrytes = Converter.TritsToTrytes(actualPublicKey);
-      return actualPublicKeyTrytes == publicKey.Value;
+      return Converter.TritsToTrytes(actualPublicKey) == publicKey.Value;
     }
 
     /// <inheritdoc />
