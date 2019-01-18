@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.IO;
   using System.Linq;
 
   using Tangle.Net.Entity;
@@ -56,6 +57,11 @@
         true);
 
       var confirmedBundle = response.FirstOrDefault(b => b.IsConfirmed);
+      confirmedBundle.Transactions.ForEach(
+        t =>
+          {
+            Console.WriteLine(t.Hash.Value);
+          });
 
       var notReattached = repository.GetBundles(
         new List<Hash> { new Hash("DNICBWUUIWYSTOVNTSOLZOHEAGWQPVMJSJDMCNFTR9MJNVVTDWOWSHFDVNZHKCDPVLEXSCILPXTNZ9999") },
