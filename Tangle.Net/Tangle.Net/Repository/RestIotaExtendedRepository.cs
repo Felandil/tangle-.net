@@ -571,7 +571,7 @@
       var transactions = addressStopIndex == 0
                            ? this.FindUsedAddressesWithTransactions(seed, securityLevel, addressStartIndex).AssociatedTransactionHashes
                            : this.FindTransactionsByAddresses(
-                             this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStartIndex - addressStopIndex + 1)).Hashes;
+                             this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStopIndex - addressStartIndex + 1)).Hashes;
 
       return this.GetBundles(transactions, includeInclusionStates);
     }
@@ -582,7 +582,7 @@
       var transactions = addressStopIndex == 0
                            ? (await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex)).AssociatedTransactionHashes
                            : (await this.FindTransactionsByAddressesAsync(
-                                this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStartIndex - addressStopIndex + 1))).Hashes;
+                                this.AddressGenerator.GetAddresses(seed, securityLevel, 0, addressStopIndex - addressStartIndex + 1))).Hashes;
 
       return await this.GetBundlesAsync(transactions, includeInclusionStates);
     }
