@@ -321,6 +321,11 @@
 
       foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte)))
       {
+        if (transaction.Hash.Value == Hash.Empty.Value)
+        {
+          continue;
+        }
+
         if (transaction.IsTail)
         {
           tailTransactions.Add(transaction.Hash);
@@ -370,6 +375,11 @@
 
       foreach (var transaction in transactionTrytes.Select(transactionTryte => Transaction.FromTrytes(transactionTryte)))
       {
+        if (transaction.Hash.Value == Hash.Empty.Value)
+        {
+          continue;
+        }
+
         if (transaction.IsTail)
         {
           tailTransactions.Add(transaction.Hash);
