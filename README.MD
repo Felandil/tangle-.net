@@ -1,4 +1,4 @@
-C# .NET 4.6 Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
+C# .NET 4.6 / .NET Standard Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
 
 ![cleanarch](http://i.imgur.com/WkBAATy.png)
 
