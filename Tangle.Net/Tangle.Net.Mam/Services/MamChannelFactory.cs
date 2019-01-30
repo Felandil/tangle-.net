@@ -84,7 +84,7 @@
       Mode mode,
       Seed seed,
       int securityLevel = SecurityLevel.Medium,
-      TryteString channelKey = null,
+      string channelKey = null,
       Hash nextRoot = null,
       int index = 0,
       int count = 1,
@@ -92,7 +92,16 @@
       int start = 0)
     {
       var channel = new MamChannel(this.MamFactory, this.TreeFactory, this.Repository);
-      channel.Init(mode, seed, securityLevel, channelKey, nextRoot, index, count, nextCount, start);
+      channel.Init(
+        mode,
+        seed,
+        securityLevel,
+        channelKey != null ? TryteString.FromAsciiString(channelKey) : Hash.Empty,
+        nextRoot,
+        index,
+        count,
+        nextCount,
+        start);
 
       return channel;
     }
@@ -116,7 +125,7 @@
         (Mode)unserializedChannelData.Mode,
         new Seed((string)unserializedChannelData.Seed.Value),
         (int)unserializedChannelData.SecurityLevel,
-        new Hash((string)unserializedChannelData.Key.Value),
+        new TryteString((string)unserializedChannelData.Key.Value),
         new Hash((string)unserializedChannelData.NextRoot.Value),
         (int)unserializedChannelData.Index,
         (int)unserializedChannelData.Count,

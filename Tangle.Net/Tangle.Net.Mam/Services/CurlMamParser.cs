@@ -43,7 +43,7 @@
     /// </summary>
     public static CurlMamParser Default =>
       new CurlMamParser(
-        new CurlMask(new Curl(CurlMode.CurlP27)),
+        new CurlMask(new Curl(CurlMode.CurlP81)),
         CurlMerkleTreeFactory.Default,
         new Curl(CurlMode.CurlP27),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)));

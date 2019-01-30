@@ -104,20 +104,7 @@
     /// </returns>
     public async Task<UnmaskedAuthenticatedMessage> FetchSingle(Hash root)
     {
-      Address address;
-      TryteString decryptionKey;
-
-      if (this.Mode == Mode.Public)
-      {
-        address = new Address(root.Value);
-        decryptionKey = root;
-      }
-      else
-      {
-        address = new Address(this.Mask.Hash(root).Value);
-        decryptionKey = this.Mode == Mode.Restricted ? this.Key : root;
-      }
-
+      var address = this.Mode == Mode.Public ? new Address(root.Value) : new Address(this.Mask.Hash(root).Value);
       var transactionHashList = await this.Repository.FindTransactionsByAddressesAsync(new List<Address> { address });
 
       if (!transactionHashList.Hashes.Any())
@@ -130,7 +117,7 @@
       {
         try
         {
-          return this.Parser.Unmask(bundle, root, decryptionKey);
+          return this.Parser.Unmask(bundle, root, this.Key);
         }
         catch (Exception exception)
         {

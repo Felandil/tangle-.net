@@ -6,37 +6,31 @@
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Services;
-  using Tangle.Net.Repository.Factory;
 
   /// <summary>
   /// The mam fetch example.
   /// </summary>
   public class MamFetchExample
   {
-    // Javascript Code to send MAM payload to the tangle (https://github.com/iotaledger/mam.client.js)
+    // Javascript Code to send MAM payload to the tangle (https://www.npmjs.com/package/mam.ts)
 
-    // var Mam = require('../lib/mam.node.js')
-    // var IOTA = require('iota.lib.js')
+    // var mam = require('mam.ts');
 
-    // var iota = new IOTA({ provider: `https://field.carriota.com:443` })
+    // var writer = new mam.MamWriter(
+    //   "https://pow2.iota.community:443",
+    //   "AAARYFWTM9F9QHUGYCPP9FORGQNDVEUNYZKTMUAZSV9ESK9SNXORESIFIMHCJWXVGYNFVSGHKZOGVJVFZ",
+    //   mam.MAM_MODE.RESTRICTED,
+    //   "PCSRCZBAAABIYUTHVZAEEPDEQKGQOAFIB9SPBTXIUUMDSSKBGU9OVHZ9KWKNANJHOPCDIOBDEMFNMTEGB",
+    //   mam.MAM_SECURITY.LEVEL_2
+    // );
 
-    // let seed = "OWKIIGMOPZBNDBHEJCDXWIMKLCUPBGGUMQZ9YYWLZCUNIJZJLWSX9NYNKQEFPLKWWKJFIRRIODWKX9LYF"
-    // let security = 2; // Medium
-    // let sideKey = "FA9KZAARRNBVZTZUTBGSTXKPHHAZOZRX9FNSIERZKQQBPDGKMAYOXUAPTMHHCJ9CTJPLIQKZ9GKYQTEHI"
-    // let mode = 'restricted'
+    // console.log(writer.getNextRoot());
 
-    //// Initialise MAM State
-    // var mamState = Mam.init(iota, seed, security)
+    // var transaction = writer.createAndAttach("HI");
+    // transaction.then(t => console.log(writer));
 
-    //// Set channel mode
-    // mamState = Mam.changeMode(mamState, mode, sideKey)
-
-    // var message = Mam.create(mamState, "CCWCXCGDEAXCGDEAADMDEAUCXCFDGDHDEAADTCGDGDPCVCTCEAKDXCHDWCEAWBKBWBEAUCFDCDADEAMBBCWCPCFDDDFA") // Tryte encoded message data to send
-
-    // console.log('Root: ', message.root)
-    // console.log('Address: ', message.address)
-
-    // Mam.attach(message.payload, message.address)
+    // var transaction2 = writer.createAndAttach("HI 2");
+    // transaction2.then(t => console.log(writer));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MamFetchExample"/> class.
@@ -45,9 +39,7 @@
     {
       // Create all needed objects to create a channel and subscription factory. 
       // This would be done via DI (e.g. Ninject) in production environment
-      var repository = new RestIotaRepositoryFactory().CreateAsync().Result;
-
-      this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, CurlMamParser.Default, CurlMask.Default);
+      this.SubscriptionFactory = new MamChannelSubscriptionFactory(Utils.Repository, CurlMamParser.Default, CurlMask.Default);
     }
 
     /// <summary>
@@ -64,17 +56,17 @@
     public async Task Execute()
     {
       // Take root and channelKey (sideKey) from js code above. (to cleanly test things you can change the seed above and generate your own messages via js lib) 
-      var root = new Hash("RWSAMBJMEENBNBUBOD9SFZARWXNXOETJQOYZNJXAHETBUJWQPVPALBOVYBRNUGOOIVZQODPQGDZRDEQWR");
-      var channelKey = new TryteString("FA9KZAARRNBVZTZUTBGSTXKPHHAZOZRX9FNSIERZKQQBPDGKMAYOXUAPTMHHCJ9CTJPLIQKZ9GKYQTEHI");
+      var root = new Hash("IKMRBBSHKBW9VZLYHRIASMFDQISJUZKAWPQSHRVPSWYPJRYXRJYMYPNCZBODMMYLAMDLEKMUISCRZC9FB");
+      var channelKey = new TryteString("PCSRCZBAAABIYUTHVZAEEPDEQKGQOAFIB9SPBTXIUUMDSSKBGU9OVHZ9KWKNANJHOPCDIOBDEMFNMTEGB");
 
       // Messages published on a channel, can be retrieved by subscribing to the channel.
       // To find and decrypt messages published on a restricted stream, we need the root of the first message in our stream and the channelKey
-      var channelSubscription = this.SubscriptionFactory.Create(root, Mode.Restricted, channelKey);
+      var channelSubscription = this.SubscriptionFactory.Create(root, Mode.Restricted, channelKey.Value);
 
       // Fetch the messages published on that stream
       var publishedMessages = await channelSubscription.FetchAsync();
 
-      Console.WriteLine(publishedMessages[0].Message.ToUtf8String());
+      publishedMessages.ForEach(m => Console.WriteLine(m.Message.ToAsciiString()));
     }
   }
 }

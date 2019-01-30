@@ -52,7 +52,7 @@
         this.Index,
         message,
         nextRootTree.Root.Hash,
-        this.Mode != Mode.Restricted ? tree.Root.Hash : this.Key,
+        this.Key,
         this.Mode,
         this.SecurityLevel);
 

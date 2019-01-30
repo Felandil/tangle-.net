@@ -35,7 +35,7 @@
     /// The default.
     /// </summary>
     public static CurlMerkleTreeFactory Default =>
-      new CurlMerkleTreeFactory(CurlMerkleNodeFactory.Default, CurlMerkleLeafFactory.Default, new Curl(CurlMode.CurlP27));
+      new CurlMerkleTreeFactory(CurlMerkleNodeFactory.Default, CurlMerkleLeafFactory.Default, new Curl(CurlMode.CurlP81));
 
     /// <summary>
     /// Gets or sets the leaf factory.
@@ -65,29 +65,29 @@
       var tempLeave = new MerkleNode { Hash = new Hash(Converter.TritsToTrytes(siblings)) };
       return this.NodeFactory.Create(tempLeave).Hash;
 
-      var i = 1;
-      foreach (var chunk in siblings.GetChunks(Constants.TritHashLength))
-      {
-        this.Curl.Reset();
+      //var i = 1;
+      //foreach (var chunk in siblings.GetChunks(Constants.TritHashLength))
+      //{
+      //  this.Curl.Reset();
 
-        if ((i & index) == 0)
-        {
-          this.Curl.Absorb(address);
-          this.Curl.Absorb(chunk);
-        }
-        else
-        {
-          this.Curl.Absorb(chunk);
-          this.Curl.Absorb(address);
-        }
+      //  if ((i & index) == 0)
+      //  {
+      //    this.Curl.Absorb(address);
+      //    this.Curl.Absorb(chunk);
+      //  }
+      //  else
+      //  {
+      //    this.Curl.Absorb(chunk);
+      //    this.Curl.Absorb(address);
+      //  }
 
-        i <<= 1;
+      //  i <<= 1;
 
-        address = this.Curl.Rate(Constants.TritHashLength);
-      }
+      //  address = this.Curl.Rate(Constants.TritHashLength);
+      //}
 
 
-      return new Hash(Converter.TritsToTrytes(this.Curl.Rate(Constants.TritHashLength)));
+      //return new Hash(Converter.TritsToTrytes(this.Curl.Rate(Constants.TritHashLength)));
     }
 
     /// <summary>
