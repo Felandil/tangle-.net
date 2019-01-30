@@ -27,7 +27,7 @@
 
       var root = new Hash(Seed.Random().Value);
       var channelKey = Seed.Random();
-      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey);
+      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey.Value);
 
       var serializedSubscription = subscription.ToJson();
 

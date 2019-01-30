@@ -248,17 +248,17 @@
     /// <summary>
     /// The bytes to trytes.
     /// </summary>
-    /// <param name="byteValues">
+    /// <param name="bytes">
     /// The byte values.
     /// </param>
     /// <returns>
     /// The <see cref="string"/>.
     /// </returns>
-    internal static string BytesToTrytes(IEnumerable<byte> byteValues)
+    internal static string BytesToTrytes(IEnumerable<byte> bytes)
     {
-      return (from asciiValue in byteValues
-              let firstValue = asciiValue % 27
-              let secondValue = (asciiValue - firstValue) / 27
+      return (from byteValue in bytes
+              let firstValue = byteValue % 27
+              let secondValue = (byteValue - firstValue) / 27
               select $"{TryteAlphabet[firstValue]}{TryteAlphabet[secondValue]}").Aggregate(
         string.Empty,
         (current, trytesValue) => current + trytesValue);

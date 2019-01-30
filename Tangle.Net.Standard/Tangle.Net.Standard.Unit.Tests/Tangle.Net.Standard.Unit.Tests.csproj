@@ -60,10 +60,4 @@
     <Folder Include="Utils\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Telerik.XamarinForms.Common">
-      <HintPath>E:\Program Files (x86)\Progress\Telerik UI for Xamarin R2 2018\Binaries\Portable\Telerik.XamarinForms.Common.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

@@ -32,7 +32,7 @@
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, iotaRepository);
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
-      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
 
       var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
       await channel.PublishAsync(message);
@@ -48,7 +48,7 @@
         CurlMamParser.Default,
         mask);
 
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey.Value);
 
       var unmaskedMessages = await subscription.FetchAsync();
 
@@ -174,7 +174,7 @@
 
       var channelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
-      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
 
       var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
       await channel.PublishAsync(message);
@@ -208,7 +208,7 @@
       var iotaRepository = new InMemoryIotaRepository();
       var channelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, iotaRepository);
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
-      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
 
       var message = channel.CreateMessage(TryteString.FromUtf8String("Hello everyone!"));
       await channel.PublishAsync(message);
@@ -228,7 +228,7 @@
       await iotaRepository.SendTrytesAsync(bundle.Transactions, 27, 14);
 
       var subcriptionFactory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, mask);
-      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
+      var subscription = subcriptionFactory.Create(message.Root, Mode.Restricted, channelKey.Value);
 
       var unmaskedMessages = await subscription.FetchAsync();
 

@@ -8,7 +8,6 @@
   using Tangle.Net.Mam.Entity;
   using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Mam.Services;
-  using Tangle.Net.Repository.Factory;
 
   /// <summary>
   /// The mam example.
@@ -22,10 +21,8 @@
     {
       // Create all needed objects to create a channel and subscription factory. 
       // This would be done via DI (e.g. Ninject) in production environment
-      var repository = new RestIotaRepositoryFactory().CreateAsync().Result;
-
-      this.ChannelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, repository);
-      this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, CurlMamParser.Default, CurlMask.Default);
+      this.ChannelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, Utils.Repository);
+      this.SubscriptionFactory = new MamChannelSubscriptionFactory(Utils.Repository, CurlMamParser.Default, CurlMask.Default);
     }
 
     /// <summary>
@@ -50,7 +47,7 @@
       var channelKey = Seed.Random();
 
       // To send a message we first create a channel via factory. Note that only one seed should be used per channel
-      var channel = this.ChannelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey);
+      var channel = this.ChannelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
 
       // Creating a message is rather easy. The channel keeps track of everything internal
       var message = channel.CreateMessage(TryteString.FromUtf8String("This is my first message with MAM from CSharp!"));
@@ -60,7 +57,7 @@
 
       // Messages published on a channel, can be retrieved by subscribing to the channel.
       // To find and decrypt messages published on a restricted stream, we need the root of the first message in our stream and the channelKey
-      var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey);
+      var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey.Value);
 
       // Fetch the messages published on that stream
       var publishedMessages = await channelSubscription.FetchAsync();
