@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Version>2.0.2.0</Version>
+    <Version>2.0.3.0</Version>
     <Description>.NET Standard 2.0 IOTA Library C# Port</Description>
     <Authors>Felandil</Authors>
     <Company>Felandil</Company>
@@ -11,9 +11,9 @@
     <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <FileVersion>2.0.3.0</FileVersion>
     <PackageTags>iota csharp</PackageTags>  
   </PropertyGroup>
 
@@ -53,7 +53,6 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\CpuPearlDiver.cs" Link="ProofOfWork\CpuPearlDiver.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Entity\UlongTritTouple.cs" Link="ProofOfWork\Entity\UlongTritTouple.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\HammingNonceDiver.cs" Link="ProofOfWork\HammingNonce\HammingNonceDiver.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\Mode.cs" Link="ProofOfWork\HammingNonce\Mode.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\NonceCurl.cs" Link="ProofOfWork\HammingNonce\NonceCurl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\UlongTritConverter.cs" Link="ProofOfWork\HammingNonce\UlongTritConverter.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPearlDiver.cs" Link="ProofOfWork\IPearlDiver.cs" />

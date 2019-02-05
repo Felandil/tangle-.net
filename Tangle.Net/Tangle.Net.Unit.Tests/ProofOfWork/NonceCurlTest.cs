@@ -279,7 +279,7 @@
     public void TestIncrement()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, this.expectedAfterIncrement.Length, Mode._64bit);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, this.expectedAfterIncrement.Length);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;
@@ -310,7 +310,7 @@
     public void TestTransform()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;

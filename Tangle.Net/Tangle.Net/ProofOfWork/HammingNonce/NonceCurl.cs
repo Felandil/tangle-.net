@@ -4,23 +4,8 @@
 
   using Tangle.Net.Cryptography.Curl;
 
-  /// <summary>
-  /// The u long trits collection.
-  /// </summary>
   public class NonceCurl
   {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NonceCurl"/> class.
-    /// </summary>
-    /// <param name="low">
-    /// The low.
-    /// </param>
-    /// <param name="high">
-    /// The high.
-    /// </param>
-    /// <param name="rounds">
-    /// The rounds.
-    /// </param>
     public NonceCurl(ulong[] low, ulong[] high, int rounds)
     {
       this.Rounds = rounds;
@@ -31,44 +16,17 @@
       Array.Copy(high, this.High, high.Length);
     }
 
-    /// <summary>
-    /// Gets or sets the high.
-    /// </summary>
-    public ulong[] High { get; set; }
+    public ulong[] High { get; }
 
-    /// <summary>
-    /// Gets or sets the low.
-    /// </summary>
-    public ulong[] Low { get; set; }
+    public ulong[] Low { get; }
 
-    /// <summary>
-    /// Gets the rounds.
-    /// </summary>
     private int Rounds { get; }
 
-    /// <summary>
-    /// The clone.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="NonceCurl"/>.
-    /// </returns>
     public NonceCurl Clone()
     {
       return new NonceCurl(this.Low, this.High, this.Rounds);
     }
 
-    /// <summary>
-    /// The increment.
-    /// </summary>
-    /// <param name="fromIndex">
-    /// The from index.
-    /// </param>
-    /// <param name="toIndex">
-    /// The to index.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
     public int Increment(int fromIndex, int toIndex)
     {
       for (var i = fromIndex; i < toIndex; i++)
@@ -88,9 +46,6 @@
       return toIndex - fromIndex + 1;
     }
 
-    /// <summary>
-    /// The transform.
-    /// </summary>
     public void Transform()
     {
       var scratchpadIndex = 0;
@@ -107,7 +62,7 @@
           var alpha = scratchpadLow[scratchpadIndex];
           var beta = scratchpadHigh[scratchpadIndex];
           var gamma = scratchpadHigh[scratchpadIndex += scratchpadIndex < 365 ? 364 : -365];
-          var delta = (alpha | (~gamma)) & (scratchpadLow[scratchpadIndex] ^ beta);
+          var delta = (alpha | ~gamma) & (scratchpadLow[scratchpadIndex] ^ beta);
 
           this.Low[stateIndex] = ~delta;
           this.High[stateIndex] = (alpha ^ gamma) | delta;

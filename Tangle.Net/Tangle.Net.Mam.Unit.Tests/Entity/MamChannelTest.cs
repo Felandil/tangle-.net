@@ -70,7 +70,7 @@
         new Curl(CurlMode.CurlP27),
         new CurlMask(),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
-        new HammingNonceDiver(CurlMode.CurlP27, ProofOfWork.HammingNonce.Mode._64bit));
+        new HammingNonceDiver(CurlMode.CurlP27));
       var channelFactory = new MamChannelFactory(mamFactory, CurlMerkleTreeFactory.Default, new InMemoryIotaRepository());
       var channelKey = new TryteString("NXRZEZIKWGKIYDPVBRKWLYTWLUVSDLDCHVVSVIWDCIUZRAKPJUIABQDZBV9EGTJWUFTIGAUT9STIENCBC");
       var channel = channelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
