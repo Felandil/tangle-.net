@@ -97,7 +97,7 @@
         channelSubscription.Init(
           new Hash((string)unserializedSubscriptionData.MessageRoot.Value),
           (Mode)unserializedSubscriptionData.Mode,
-          new Hash((string)unserializedSubscriptionData.Key.Value),
+          new TryteString((string)unserializedSubscriptionData.Key.Value),
           new Hash(nextRootValue));
       }
 
