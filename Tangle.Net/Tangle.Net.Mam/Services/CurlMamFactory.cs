@@ -13,8 +13,6 @@
   using Tangle.Net.ProofOfWork.HammingNonce;
   using Tangle.Net.Utils;
 
-  using Mode = ProofOfWork.HammingNonce.Mode;
-
   /// <inheritdoc cref="IMamFactory"/>
   public class CurlMamFactory : IMamFactory
   {
@@ -54,7 +52,7 @@
         new Curl(CurlMode.CurlP27),
         new CurlMask(),
         new IssSigningHelper(new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27), new Curl(CurlMode.CurlP27)),
-        new HammingNonceDiver(CurlMode.CurlP27, Mode._32bit));
+        new HammingNonceDiver(CurlMode.CurlP27));
 
     /// <summary>
     /// Gets the hamming nonce diver.
@@ -83,7 +81,7 @@
       TryteString message,
       Hash nextRoot,
       TryteString channelKey,
-      Entity.Mode mode,
+      Mode mode,
       int securityLevel)
     {
       var nextRootTrits = nextRoot.ToTrits();
@@ -210,9 +208,9 @@
     /// <returns>
     /// The <see cref="Address"/>.
     /// </returns>
-    private Address GetMessageAddress(TryteString rootHash, Entity.Mode mode)
+    private Address GetMessageAddress(TryteString rootHash, Mode mode)
     {
-      if (mode == Entity.Mode.Public)
+      if (mode == Mode.Public)
       {
         return new Address(rootHash.Value);
       }

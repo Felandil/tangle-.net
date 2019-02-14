@@ -4,11 +4,7 @@
   using System.Collections.Generic;
   using System.Threading.Tasks;
 
-  using Tangle.Net.Cryptography;
   using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.Entity;
-  using Tangle.Net.ProofOfWork.Entity;
-  using Tangle.Net.Utils;
 
   /// <summary>
   /// The cpu pow diver.

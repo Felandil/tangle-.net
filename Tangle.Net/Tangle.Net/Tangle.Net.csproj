@@ -70,7 +70,6 @@
     <Compile Include="Cryptography\Signing\SignatureValidator.cs" />
     <Compile Include="ProofOfWork\AbstractPearlDiver.cs" />
     <Compile Include="ProofOfWork\Entity\UlongTritTouple.cs" />
-    <Compile Include="ProofOfWork\HammingNonce\Mode.cs" />
     <Compile Include="ProofOfWork\HammingNonce\UlongTritConverter.cs" />
     <Compile Include="ProofOfWork\HammingNonce\HammingNonceDiver.cs" />
     <Compile Include="ProofOfWork\IPearlDiver.cs" />

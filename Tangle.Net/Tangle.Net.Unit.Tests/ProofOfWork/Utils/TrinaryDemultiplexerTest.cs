@@ -35,7 +35,7 @@
     public void TestCorrectLengthOutput()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;
@@ -59,7 +59,7 @@
     public void TestDemuxMapsCorrectly()
     {
       var trits = Converter.TrytesToTrits("ADHMOICIPKGYHYL9VMLSSXHGKTUTEQUTIWUQWSVYHZWTAHNIYQICEJWFTCYBGRGRM9DWBCGDELIGEIIIH");
-      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength, Mode._64bit);
+      var ulongTrits = UlongTritConverter.TritsToUlong(trits, Curl.StateLength);
 
       ulongTrits.Low[0] = 15811494920322472813;
       ulongTrits.Low[1] = 17941353825114769379;

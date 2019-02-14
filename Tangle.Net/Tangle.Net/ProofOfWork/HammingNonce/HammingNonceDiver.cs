@@ -2,9 +2,6 @@
 {
   using Tangle.Net.Cryptography.Curl;
 
-  /// <summary>
-  /// The hamming nonce diver.
-  /// </summary>
   public class HammingNonceDiver : AbstractPearlDiver
   {
     /// <inheritdoc />
@@ -14,39 +11,33 @@
     }
 
     /// <inheritdoc />
-    public HammingNonceDiver(CurlMode mode, Mode scratchMode)
+    public HammingNonceDiver(CurlMode mode)
       : base(mode)
     {
-      this.ScratchMode = scratchMode;
     }
 
     /// <inheritdoc />
-    public override ulong High0 => this.ScratchMode == Mode._32bit ? 1533916891 : 13176245766935394011;
+    public override ulong High0 => 0xB6DB6DB6DB6DB6DB;
 
     /// <inheritdoc />
-    public override ulong High1 => this.ScratchMode == Mode._32bit ? 1676802300 : 14403622084951293727;
+    public override ulong High1 => 0x8FC7E3F1F8FC7E3F;
 
     /// <inheritdoc />
-    public override ulong High2 => this.ScratchMode == Mode._32bit ? 2147352831 : 18445620372817592319;
+    public override ulong High2 => 0xFFC01FFFF803FFFF;
 
     /// <inheritdoc />
-    public override ulong High3 => this.ScratchMode == Mode._32bit ? 256 : (ulong)2199023255551;
+    public override ulong High3 => 0x003FFFFFFFFFFFFF;
 
     /// <inheritdoc />
-    public override ulong Low0 => this.ScratchMode == Mode._32bit ? 1840700269 : 15811494920322472813;
+    public override ulong Low0 => 0xDB6DB6DB6DB6DB6D;
 
     /// <inheritdoc />
-    public override ulong Low1 => this.ScratchMode == Mode._32bit ? 2088648479 : 17941353825114769379;
+    public override ulong Low1 => 0xF1F8FC7E3F1F8FC7;
 
     /// <inheritdoc />
-    public override ulong Low2 => this.ScratchMode == Mode._32bit ? 67108608 : (ulong)576458557575118879;
+    public override ulong Low2 => 0x7FFFE00FFFFC01FF;
 
     /// <inheritdoc />
-    public override ulong Low3 => this.ScratchMode == Mode._32bit ? 2147483391 : 18446741876833779711;
-
-    /// <summary>
-    /// Gets the scratch mode.
-    /// </summary>
-    private Mode ScratchMode { get; }
+    public override ulong Low3 => 0xFFC0000007FFFFFF;
   }
 }

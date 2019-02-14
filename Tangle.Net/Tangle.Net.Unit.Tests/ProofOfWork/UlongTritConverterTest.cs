@@ -19,7 +19,7 @@
     public void TestTritToULongConversion()
     {
       var input = new[] { -1, 0, 1 };
-      var result = UlongTritConverter.TritsToUlong(input, Curl.StateLength, Mode._64bit);
+      var result = UlongTritConverter.TritsToUlong(input, Curl.StateLength);
 
       Assert.AreEqual(ulong.MaxValue, result.Low[0]);
       Assert.AreEqual(UlongTritConverter.Min, result.High[0]);

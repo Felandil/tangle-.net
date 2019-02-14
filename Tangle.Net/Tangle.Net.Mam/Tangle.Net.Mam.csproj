@@ -52,7 +52,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Tangle.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Tangle.Net.2.0.2\lib\net461\Tangle.Net.dll</HintPath>
+      <HintPath>..\packages\Tangle.Net.2.0.3\lib\net461\Tangle.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
