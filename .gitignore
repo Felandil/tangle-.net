@@ -16,6 +16,8 @@ es
 coverage
 _book
 
+.vscode
+
 # User-specific files
 *.suo
 *.user
