@@ -5,7 +5,7 @@ You can read more about it here: https://blog.iota.org/introducing-masked-authen
 
 Channels
 --------------
-In the context of MAM, channels basically represent the sender. A channel manages the channels seed, tracks the state of a channel, creats and signs messages.
+In the context of MAM, channels represent the sender. A channel manages the its seed, tracks its state, creates and signs messages.
 More about the statefullness of channels can be read below.
 
 Creating a message through a channel and publishing it, can be done with a few lines of code. Channels should not be instantiated directly, rather they are the 
@@ -21,6 +21,15 @@ product of a channel factory.
 
 Subscriptions
 --------------
+Subscriptions are used to listen to certain channels and retrieve messages from it. Listening do a channel can be done from any point (root) on, but not backwards.
+For a subscription it is not needed to know the channels seed.
+
+.. code-block:: python
+
+  var factory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, CurlMask.Default);
+
+  var channelSubscription = this.SubscriptionFactory.Create(new Hash("CHANNELROOT"), Mode.Restricted, "yourchannelkey");
+  var publishedMessages = await channelSubscription.FetchAsync();
 
 Serialization and State
 --------------
