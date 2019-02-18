@@ -28,15 +28,33 @@ For a subscription it is not needed to know the channels seed.
 
   var factory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, CurlMask.Default);
 
-  var channelSubscription = this.SubscriptionFactory.Create(new Hash("CHANNELROOT"), Mode.Restricted, "yourchannelkey");
+  var channelSubscription = factory.Create(new Hash("CHANNELROOT"), Mode.Restricted, "yourchannelkey");
   var publishedMessages = await channelSubscription.FetchAsync();
 
 Serialization and State
 --------------
+Given the statefullness of channels and subscriptions, any application should persist the state of them. This is especially true for channels, where each message has its
+own index. No second message should be published to that index (similar to the address reuse issie).
 
-Code example
+The state of a channel/subscription can be retrieved by simply calling the .ToJson method. This generates a JSON representation of the channel/subscription.
+When recreating the channel/subscription, simply use the factories CreateFromJson method. 
+
+.. code-block:: python
+
+  var subscrptionJson = subscription.ToJson();
+  var factory = new MamChannelSubscriptionFactory(iotaRepository, CurlMamParser.Default, CurlMask.Default);
+
+  var channelSubscription = factory.CreateFromJson(subscrptionJson)
+
+.. code-block:: python
+
+  var channelJson = channel.ToJson();
+  var factory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, iotaRepository);
+
+  var channel = factory.CreateFromJson(channelJson)
+
+Code examples
 --------------
-
 
 .. code-block:: python
 
