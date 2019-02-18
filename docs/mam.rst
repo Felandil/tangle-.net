@@ -3,6 +3,11 @@ MAM
 Masked Authenticated Messaging (MAM) is a second layer data communication protocol which adds functionality to emit and access an encrypted data stream.
 You can read more about it here: https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e 
 
+Compatibility
+--------------
+The current C# MAM implementation is compatible to https://www.npmjs.com/package/mam.ts.
+Compatibility with the iota.mam.js has not been tested and may therefore not be compatible.
+
 Channels
 --------------
 In the context of MAM, channels represent the sender. A channel manages the its seed, tracks its state, creates and signs messages.
@@ -55,7 +60,4 @@ When recreating the channel/subscription, simply use the factories CreateFromJso
 
 Code examples
 --------------
-
-.. code-block:: python
-
-  // code here
+To deepen your unterstanding on how channels, subscriptions and compatibility with the TS version (see above) work, take a look at https://github.com/Felandil/tangle-.net/tree/master/Tangle.Net/Tangle.Net.Examples/Examples/Mam
