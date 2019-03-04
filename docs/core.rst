@@ -17,26 +17,35 @@ TryteString
 A TryteString is the ASCII representation of a sequence of trytes. Please note that only the letters A-Z and the number 9 are allowed. The following regular expression verifies if a given string is a TryteString or not.
 
 .. code-block:: bash
+
     ^[9A-Z]*$
 
 As the TryteString is only the basic class you will propably stumble accross many references for its subclasses:
 
-+ Address <br>
++ Address
+
   If you want to sign an input, you should generate the address with the AddressGenerator. That way the private key will be generated aswell, which is needed to sign the transaction.
   For any other cases you can simply instantiate the address with its trytes.
-+ Checksum <br>
++ Checksum 
+
   Checksum for a given address
-+ Digest <br>
- Digest to a generated private key for an address. Will be generated along with an address and its private key
-+ Fragment <br>
++ Digest 
+
+  Digest to a generated private key for an address. Will be generated along with an address and its private key
++ Fragment 
+
   Payload part of a transaction. Can either contain parts of the signature or carry data
-+ Hash <br>
++ Hash 
+
   81 trytes long hash to a bundle, transaction or similar
-+ Seed <br>
++ Seed
+
   81 trytes long "master key". Used to derive addresses and private keys
-+ Tag <br>
++ Tag 
+
   27 trytes long part of a transaction. Can be set to any value 
-+ TransactionTrytes <br>
++ TransactionTrytes 
+
   2673 trytes long. Represents a transaction as trytes
 
 Bundle
@@ -49,6 +58,7 @@ Note that you technically can create all transactions on a bundle manually, but 
 The simpliest way to send a bundle to the tangle is to use a bundle without value
 
 .. code-block:: bash
+
     var bundle = new Bundle();
     bundle.AddTransfer(new Transfer
                         {
@@ -90,6 +100,7 @@ Generating an address
 -------------
 
 .. code-block:: bash
+
     var seed = new Seed("SOMESEEDHERE")
     var addressGenerator = new AddressGenerator(seed, SecurityLevel.Medium);
     var address = addressGenerator.GetAddress(0);
@@ -112,6 +123,7 @@ For most use cases it should be fine to instantiate the repository as displayed 
 Anyway it sometimes may be useful to have some kind of fallback mechanism in place to handle unresponsive or out of sync nodes. To handle this you can use the fallback client, that will handle node errors internally.
 
 .. code-block:: bash
+
     var repository = new RestIotaRepository(
     new FallbackIotaClient(
         new List<string>
