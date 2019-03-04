@@ -22,37 +22,29 @@ A TryteString is the ASCII representation of a sequence of trytes. Please note t
 
 As the TryteString is only the basic class you will propably stumble accross many references for its subclasses:
 
-+ Address
-
+* Address
   If you want to sign an input, you should generate the address with the AddressGenerator. That way the private key will be generated aswell, which is needed to sign the transaction.
   For any other cases you can simply instantiate the address with its trytes.
 
-+ Checksum 
-
+* Checksum 
   Checksum for a given address
 
-+ Digest 
-
+* Digest 
   Digest to a generated private key for an address. Will be generated along with an address and its private key
 
-+ Fragment 
-
+* Fragment 
   Payload part of a transaction. Can either contain parts of the signature or carry data
 
-+ Hash 
-
+* Hash 
   81 trytes long hash to a bundle, transaction or similar
 
-+ Seed
-
+* Seed
   81 trytes long "master key". Used to derive addresses and private keys
 
-+ Tag 
-
+* Tag 
   27 trytes long part of a transaction. Can be set to any value 
-  
-+ TransactionTrytes 
 
+* TransactionTrytes 
   2673 trytes long. Represents a transaction as trytes
 
 Bundle
