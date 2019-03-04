@@ -1,8 +1,8 @@
 Introduction
 ============
-This is a inoffical port of the IOTA Client library.
+This is an inoffical .NET Standard 2.0 and .NET Framework 4.6.1 port of the IOTA Client library.
 
-It implements all standard API calls, as described in the API documentation (https://iota.readme.io/v1.3.0/reference) and the extended methods for signing, sending and receiving bundles.
+It implements all standard API calls, as described in the API documentation (https://docs.iota.org/docs/iri/0.1/references/api-reference) and the extended methods for signing, sending and receiving bundles.
 
 .. toctree::
    :maxdepth: 2
