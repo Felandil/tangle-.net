@@ -67,11 +67,5 @@ The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/cshar
 
 ## Getting started
 
-Have a look at the console application, start by instantiating a new repository or have a look at the documentation!
-
-```csharp
-var repository = new RestIotaRepository(new RestClient("https://localhost:14265"));
-var nodeInfo = repository.GetNodeInfo();
-var neighbours = repository.GetNeighbors();
-```
+https://tangle-net.readthedocs.io/en/latest/getting_started.html
 

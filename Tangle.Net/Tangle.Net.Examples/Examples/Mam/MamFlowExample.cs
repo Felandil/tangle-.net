@@ -57,6 +57,7 @@
 
       // Messages published on a channel, can be retrieved by subscribing to the channel.
       // To find and decrypt messages published on a restricted stream, we need the root of the first message in our stream and the channelKey
+      // If your channel key is not an ASCII string, create the subscription like this this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey.Value, true);
       var channelSubscription = this.SubscriptionFactory.Create(message.Root, Mode.Restricted, channelKey.Value);
 
       // Fetch the messages published on that stream

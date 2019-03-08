@@ -60,10 +60,13 @@
     /// <returns>
     /// The <see cref="MamChannelSubscription"/>.
     /// </returns>
-    public MamChannelSubscription Create(Hash root, Mode mode, string channelKey = null)
+    public MamChannelSubscription Create(Hash root, Mode mode, string channelKey = null, bool keyIsTrytes = false)
     {
       var channelSubscription = new MamChannelSubscription(this.Repository, this.Parser, this.Mask);
-      channelSubscription.Init(root, mode, channelKey != null ? TryteString.FromAsciiString(channelKey) : Hash.Empty);
+      channelSubscription.Init(
+        root,
+        mode,
+        channelKey != null ? keyIsTrytes ? new TryteString(channelKey) : TryteString.FromAsciiString(channelKey) : Hash.Empty);
 
       return channelSubscription;
     }
