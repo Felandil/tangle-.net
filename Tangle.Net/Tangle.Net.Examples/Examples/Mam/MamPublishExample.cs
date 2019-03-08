@@ -56,6 +56,7 @@
       var channelKey = Seed.Random();
 
       // To send a message we first create a channel via factory. Note that only one seed should be used per channel
+      // If your channel key is not an ASCII string, create the channel like this this.ChannelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value, true);
       var channel = this.ChannelFactory.Create(Mode.Restricted, seed, SecurityLevel.Medium, channelKey.Value);
 
       // Creating a message is rather easy. The channel keeps track of everything internal

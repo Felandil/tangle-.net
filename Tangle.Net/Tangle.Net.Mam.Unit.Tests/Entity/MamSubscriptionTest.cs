@@ -2,12 +2,8 @@
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-  using Tangle.Net.Cryptography;
-  using Tangle.Net.Cryptography.Curl;
-  using Tangle.Net.Cryptography.Signing;
   using Tangle.Net.Entity;
   using Tangle.Net.Mam.Entity;
-  using Tangle.Net.Mam.Merkle;
   using Tangle.Net.Mam.Services;
 
   /// <summary>
@@ -27,7 +23,7 @@
 
       var root = new Hash(Seed.Random().Value);
       var channelKey = Seed.Random();
-      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey.Value);
+      var subscription = subscriptionFactory.Create(root, Mode.Restricted, channelKey.Value, true);
 
       var serializedSubscription = subscription.ToJson();
 
