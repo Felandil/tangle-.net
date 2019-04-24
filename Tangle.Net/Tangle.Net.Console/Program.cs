@@ -52,7 +52,15 @@
           5000),
         new PoWSrvService());
 
-      repository.AddNeighbors(new List<string> { "udp://8.8.8.8:14265" });
+      try
+      {
+        repository.AddNeighbors(new List<string> { "udp://8.8.8.8:14265" });
+      }
+      catch (IotaApiException e)
+      {
+
+      }
+
 
       Console.WriteLine("Done");
       Console.ReadKey();

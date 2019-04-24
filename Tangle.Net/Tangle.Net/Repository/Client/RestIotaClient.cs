@@ -1,5 +1,6 @@
 ﻿namespace Tangle.Net.Repository.Client
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
   using System.Net;
@@ -143,10 +144,10 @@
 
       if (response.ErrorException != null)
       {
-        throw new IotaApiException($"Command {commandName} failed! See inner exception for details.", response.ErrorException);
+        throw response.ErrorException;
       }
 
-      throw new IotaApiException($"Command {commandName} failed! Status Code: {(int)response.StatusCode}");
+      throw new Exception($"Command {commandName} failed! Status Code: {(int)response.StatusCode}");
     }
   }
 }
