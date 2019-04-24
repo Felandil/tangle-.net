@@ -16,24 +16,24 @@
     /// <summary>
     /// The add neighbor.
     /// </summary>
-    /// <param name="neighbors">
+    /// <param name="neighborUris">
     /// The neighbors.
     /// </param>
     /// <returns>
     /// The <see cref="AddNeighborsResponse"/>.
     /// </returns>
-    AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors);
+    AddNeighborsResponse AddNeighbors(IEnumerable<string> neighborUris);
 
     /// <summary>
     /// The add neighbor async.
     /// </summary>
-    /// <param name="neighbors">
+    /// <param name="neighborUris">
     /// The neighbors.
     /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<AddNeighborsResponse> AddNeighborAsync(IEnumerable<Neighbor> neighbors);
+    Task<AddNeighborsResponse> AddNeighborsAsync(IEnumerable<string> neighborUris);
 
     /// <summary>
     /// The get neighbors.
@@ -70,24 +70,24 @@
     /// <summary>
     /// The remove neighbors.
     /// </summary>
-    /// <param name="neighbors">
+    /// <param name="neighborUris">
     /// The neighbors.
     /// </param>
     /// <returns>
     /// The <see cref="RemoveNeighborsResponse"/>.
     /// </returns>
-    RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors);
+    RemoveNeighborsResponse RemoveNeighbors(IEnumerable<string> neighborUris);
 
     /// <summary>
     /// The remove neighbors async.
     /// </summary>
-    /// <param name="neighbors">
+    /// <param name="neighborUris">
     /// The neighbors.
     /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
-    Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors);
+    Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<string> neighborUris);
 
     #endregion
   }

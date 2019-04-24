@@ -11,17 +11,18 @@
   public partial class RestIotaRepository : IIotaRepository
   {
     /// <inheritdoc />
-    public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
+    public AddNeighborsResponse AddNeighbors(IEnumerable<string> neighborUris)
     {
       return this.Client.ExecuteParameterizedCommand<AddNeighborsResponse>(
-        new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+        new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighborUris.ToList() } });
     }
 
+
     /// <inheritdoc />
-    public async Task<AddNeighborsResponse> AddNeighborAsync(IEnumerable<Neighbor> neighbors)
+    public async Task<AddNeighborsResponse> AddNeighborsAsync(IEnumerable<string> neighborUris)
     {
       return await this.Client.ExecuteParameterizedCommandAsync<AddNeighborsResponse>(
-               new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighbors.Select(n => n.Address).ToList() } });
+               new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighborUris.ToList() } });
     }
 
     /// <inheritdoc />
@@ -49,24 +50,24 @@
     }
 
     /// <inheritdoc />
-    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<Neighbor> neighbors)
+    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<string> neighborUris)
     {
       return this.Client.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
         new Dictionary<string, object>
           {
             { "command", CommandType.RemoveNeighbors },
-            { "uris", neighbors.Select(n => n.Address).ToList() }
+            { "uris", neighborUris.ToList() }
           });
     }
 
     /// <inheritdoc />
-    public async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors)
+    public async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<string> neighborUris)
     {
       return await this.Client.ExecuteParameterizedCommandAsync<RemoveNeighborsResponse>(
                new Dictionary<string, object>
                  {
                    { "command", CommandType.RemoveNeighbors },
-                   { "uris", neighbors.Select(n => n.Address).ToList() }
+                   { "uris", neighborUris.ToList() }
                  });
     }
   }
