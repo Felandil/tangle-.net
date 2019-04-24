@@ -132,6 +132,7 @@
     <Compile Include="Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="Repository\Responses\NodeErrorResponse.cs" />
     <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\WereAddressesSpentFromResponse.cs" />
     <Compile Include="Repository\Responses\CheckConsistencyResponse.cs" />
