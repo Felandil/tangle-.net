@@ -42,6 +42,10 @@
       {
         return this.Clients[this.NodePointer].ExecuteParameterizedCommand<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -55,6 +59,10 @@
       try
       {
         this.Clients[this.NodePointer].ExecuteParameterizedCommand(parameters);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {
@@ -71,6 +79,10 @@
       {
         return await this.Clients[this.NodePointer].ExecuteParameterizedCommandAsync<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -84,6 +96,10 @@
       try
       {
         await this.Clients[this.NodePointer].ExecuteParameterizedCommandAsync(parameters);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {
@@ -100,6 +116,10 @@
       {
         return this.Clients[this.NodePointer].ExecuteParameterlessCommand<T>(commandName);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -114,6 +134,10 @@
       try
       {
         return await this.Clients[this.NodePointer].ExecuteParameterlessCommandAsync<T>(commandName);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {

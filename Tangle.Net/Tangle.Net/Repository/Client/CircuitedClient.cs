@@ -36,6 +36,10 @@
         this.RequestCount++;
         base.ExecuteParameterizedCommand(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception)
       {
         this.HandleException();
@@ -52,6 +56,10 @@
         this.RequestCount++;
         return base.ExecuteParameterizedCommand<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception)
       {
         this.HandleException();
@@ -67,6 +75,10 @@
         this.CheckCircuit();
         this.RequestCount++;
         await base.ExecuteParameterizedCommandAsync(parameters);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (CircuitOpenException)
       {
@@ -88,6 +100,10 @@
         this.RequestCount++;
         return await base.ExecuteParameterizedCommandAsync<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (CircuitOpenException)
       {
         throw;
@@ -108,6 +124,10 @@
         this.RequestCount++;
         return base.ExecuteParameterlessCommand<T>(commandName);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (CircuitOpenException)
       {
         throw;
@@ -127,6 +147,10 @@
         this.CheckCircuit();
         this.RequestCount++;
         return await base.ExecuteParameterlessCommandAsync<T>(commandName);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (CircuitOpenException)
       {

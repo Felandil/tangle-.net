@@ -134,7 +134,7 @@
 
       if (nullResponse)
       {
-        throw new IotaApiException($"Command {commandName} failed!");
+        throw new Exception($"Command {commandName} failed!");
       }
 
       if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Unauthorized)
