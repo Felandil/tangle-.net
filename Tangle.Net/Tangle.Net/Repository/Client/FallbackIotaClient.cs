@@ -11,8 +11,6 @@
   [ExcludeFromCodeCoverage]
   public class FallbackIotaClient : IIotaClient
   {
-    public const string DefaultNodeUri = "https://field.deviota.com:443";
-
     public FallbackIotaClient(ICollection<string> clients, int timeout, int failureThresholdPercentage = 100, int resetTimeoutMilliseconds = 30000)
     {
       this.FailureThresholdPercentage = failureThresholdPercentage;
@@ -20,7 +18,7 @@
 
       if (clients.Count == 0)
       {
-        clients.Add(DefaultNodeUri);
+        throw new Exception("No nodes provided!");
       }
 
       this.Clients = this.CreateClients(clients, timeout);
