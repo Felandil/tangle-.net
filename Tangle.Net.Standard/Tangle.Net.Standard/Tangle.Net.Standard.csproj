@@ -56,6 +56,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\NonceCurl.cs" Link="ProofOfWork\HammingNonce\NonceCurl.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\HammingNonce\UlongTritConverter.cs" Link="ProofOfWork\HammingNonce\UlongTritConverter.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\IPearlDiver.cs" Link="ProofOfWork\IPearlDiver.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\PoWType.cs" Link="ProofOfWork\PoWType.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\IPoWService.cs" Link="ProofOfWork\Service\IPoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWService.cs" Link="ProofOfWork\Service\PoWService.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\ProofOfWork\Service\PoWSrvService.cs" Link="ProofOfWork\Service\PoWSrvService.cs" />
@@ -77,10 +78,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TipHashList.cs" Link="Repository\DataTransfer\TipHashList.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionHashList.cs" Link="Repository\DataTransfer\TransactionHashList.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\DataTransfer\TransactionsToApprove.cs" Link="Repository\DataTransfer\TransactionsToApprove.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IHealthyNodeSelector.cs" Link="Repository\Factory\IHealthyNodeSelector.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IIotaRepositoryFactory.cs" Link="Repository\Factory\IIotaRepositoryFactory.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IotaDanceHealthyNodeSelector.cs" Link="Repository\Factory\IotaDanceHealthyNodeSelector.cs" />
-    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\RestIotaRepositoryFactory.cs" Link="Repository\Factory\RestIotaRepositoryFactory.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Factory\IotaRepositoryFactory.cs" Link="Repository\Factory\IotaRepositoryFactory.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaCoreRepository.cs" Link="Repository\IIotaCoreRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaExtendedRepository.cs" Link="Repository\IIotaExtendedRepository.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\IIotaNodeRepository.cs" Link="Repository\IIotaNodeRepository.cs" />
@@ -98,6 +96,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTransactionsResponse.cs" Link="Repository\Responses\GetTransactionsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTransactionsToApproveResponse.cs" Link="Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\GetTrytesResponse.cs" Link="Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\NodeErrorResponse.cs" Link="Repository\Responses\NodeErrorResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\RemoveNeighborsResponse.cs" Link="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\Responses\WereAddressesSpentFromResponse.cs" Link="Repository\Responses\WereAddressesSpentFromResponse.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net\Repository\RestIotaCoreRepository.cs" Link="Repository\RestIotaCoreRepository.cs" />
