@@ -6,8 +6,12 @@
 
   using Org.BouncyCastle.Math;
 
+  using RestSharp;
+  using RestSharp.Deserializers;
+
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
+  using Tangle.Net.Repository.Responses;
 
   /// <summary>
   /// The string extensions.
@@ -118,6 +122,11 @@
     public static TryteString ToTrytes(this IEnumerable<byte> value)
     {
       return new TryteString(TryteString.BytesToTrytes(value));
+    }
+
+    public static NodeErrorResponse ToNodeError(this IRestResponse response)
+    {
+      return new JsonDeserializer().Deserialize<NodeErrorResponse>(response);
     }
   }
 }

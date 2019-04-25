@@ -5,8 +5,6 @@
   /// </summary>
   public class AddNeighborsResponse
   {
-    #region Public Properties
-
     /// <summary>
     /// Gets or sets the added neighbors.
     /// </summary>
@@ -16,7 +14,5 @@
     /// Gets or sets the duration.
     /// </summary>
     public int Duration { get; set; }
-
-    #endregion
   }
 }

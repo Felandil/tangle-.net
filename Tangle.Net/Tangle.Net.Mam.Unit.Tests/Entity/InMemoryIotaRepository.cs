@@ -421,6 +421,18 @@
     }
 
     /// <inheritdoc />
+    public AddNeighborsResponse AddNeighbors(IEnumerable<string> neighborUris)
+    {
+      return null;
+    }
+
+    /// <inheritdoc />
+    public Task<AddNeighborsResponse> AddNeighborsAsync(IEnumerable<string> neighborUris)
+    {
+      return null;
+    }
+
+    /// <inheritdoc />
     public AddNeighborsResponse AddNeighbor(IEnumerable<Neighbor> neighbors)
     {
       return null;
@@ -464,6 +476,18 @@
 
     /// <inheritdoc />
     public Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<Neighbor> neighbors)
+    {
+      return null;
+    }
+
+    /// <inheritdoc />
+    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<string> neighborUris)
+    {
+      return null;
+    }
+
+    /// <inheritdoc />
+    public Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<string> neighborUris)
     {
       return null;
     }

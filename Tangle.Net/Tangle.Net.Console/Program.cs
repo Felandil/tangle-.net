@@ -28,7 +28,7 @@
         new FallbackIotaClient(
           new List<string>
             {
-              "https://peanut.iotasalad.org:14265",
+              "https://nodes.devnet.thetangle.org:443",
               "http://node04.iotatoken.nl:14265",
               "http://node05.iotatoken.nl:16265",
               "https://nodes.thetangle.org:443",
@@ -52,33 +52,15 @@
           5000),
         new PoWSrvService());
 
-      var response = repository.GetBundles(
-        new List<Hash> { new Hash("HRXMDIQMRFDFQFP9ZKHAGRRBWSDHCKJCTGZMHPIFUY9EVNGDXRCOUWTHFMLXRDYVMBZLEVFPZSKFA9999") },
-        true);
+      try
+      {
+        repository.AddNeighbors(new List<string> { "udp://8.8.8.8:14265" });
+      }
+      catch (IotaApiException e)
+      {
 
-      var confirmedBundle = response.FirstOrDefault(b => b.IsConfirmed);
-      confirmedBundle.Transactions.ForEach(
-        t =>
-          {
-            Console.WriteLine(t.Hash.Value);
-          });
+      }
 
-      var notReattached = repository.GetBundles(
-        new List<Hash> { new Hash("DNICBWUUIWYSTOVNTSOLZOHEAGWQPVMJSJDMCNFTR9MJNVVTDWOWSHFDVNZHKCDPVLEXSCILPXTNZ9999") },
-        true);
-
-      var single = repository.GetBundles(
-        new List<Hash> { new Hash("WXHKZQMPIOMUOWGLHLE9ZGAPOBZOBXKTLXAGOIJMQPCIZEZENFRTBIRWZ99KWC9UUKBRHDQUFFJEZ9999") },
-        true);
-
-      var all = repository.GetBundlesAsync(
-        new List<Hash>
-          {
-            new Hash("HRXMDIQMRFDFQFP9ZKHAGRRBWSDHCKJCTGZMHPIFUY9EVNGDXRCOUWTHFMLXRDYVMBZLEVFPZSKFA9999"),
-            new Hash("DNICBWUUIWYSTOVNTSOLZOHEAGWQPVMJSJDMCNFTR9MJNVVTDWOWSHFDVNZHKCDPVLEXSCILPXTNZ9999"),
-            new Hash("WXHKZQMPIOMUOWGLHLE9ZGAPOBZOBXKTLXAGOIJMQPCIZEZENFRTBIRWZ99KWC9UUKBRHDQUFFJEZ9999")
-          },
-        true).Result;
 
       Console.WriteLine("Done");
       Console.ReadKey();

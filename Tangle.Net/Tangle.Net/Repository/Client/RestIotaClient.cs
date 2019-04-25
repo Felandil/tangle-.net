@@ -1,11 +1,14 @@
 ﻿namespace Tangle.Net.Repository.Client
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
   using System.Net;
   using System.Threading.Tasks;
 
   using RestSharp;
+
+  using Tangle.Net.Utils;
 
   /// <summary>
   /// The rest iota client.
@@ -131,15 +134,20 @@
 
       if (nullResponse)
       {
-        throw new IotaApiException($"Command {commandName} failed!");
+        throw new Exception($"Command {commandName} failed!");
+      }
+
+      if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Unauthorized)
+      {
+        throw new IotaApiException(response.ToNodeError().Error);
       }
 
       if (response.ErrorException != null)
       {
-        throw new IotaApiException($"Command {commandName} failed! See inner exception for details.", response.ErrorException);
+        throw response.ErrorException;
       }
 
-      throw new IotaApiException($"Command {commandName} failed!");
+      throw new Exception($"Command {commandName} failed! Status Code: {(int)response.StatusCode}");
     }
   }
 }
