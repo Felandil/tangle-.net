@@ -404,7 +404,7 @@
     /// The test get transactions to approve throws exception should wrap exception.
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(IotaApiException))]
+    [ExpectedException(typeof(Exception))]
     public void TestGetTransactionsToApproveDoesNotReturnHttpStatusOkShouldWrapInException()
     {
       var restClientMock = new Mock<IRestClient>();

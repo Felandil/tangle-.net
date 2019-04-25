@@ -78,6 +78,7 @@
     <Compile Include="Cryptography\Signing\SignatureFragmentGenerator.cs" />
     <Compile Include="Entity\ValidationSummary.cs" />
     <Compile Include="ProofOfWork\CpuPearlDiver.cs" />
+    <Compile Include="ProofOfWork\PoWType.cs" />
     <Compile Include="ProofOfWork\Service\IPoWService.cs" />
     <Compile Include="ProofOfWork\Service\PoWSrvService.cs" />
     <Compile Include="ProofOfWork\Service\PoWService.cs" />
@@ -108,13 +109,10 @@
     <Compile Include="Entity\Fragment.cs" />
     <Compile Include="Entity\Tag.cs" />
     <Compile Include="Entity\Transaction.cs" />
-    <Compile Include="Repository\Factory\IHealthyNodeSelector.cs" />
-    <Compile Include="Repository\Factory\IotaDanceHealthyNodeSelector.cs" />
-    <Compile Include="Repository\Factory\RestIotaRepositoryFactory.cs" />
+    <Compile Include="Repository\Factory\IotaRepositoryFactory.cs" />
     <Compile Include="Repository\IIotaExtendedRepository.cs" />
     <Compile Include="Repository\IIotaNodeRepository.cs" />
     <Compile Include="Repository\IIotaRepository.cs" />
-    <Compile Include="Repository\Factory\IIotaRepositoryFactory.cs" />
     <Compile Include="Repository\InvalidBundleException.cs" />
     <Compile Include="Repository\Responses\AddNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\AttachToTangleResponse.cs" />
@@ -132,6 +130,7 @@
     <Compile Include="Repository\Responses\GetBalanceResponse.cs" />
     <Compile Include="Repository\Responses\GetTransactionsToApproveResponse.cs" />
     <Compile Include="Repository\Responses\GetTrytesResponse.cs" />
+    <Compile Include="Repository\Responses\NodeErrorResponse.cs" />
     <Compile Include="Repository\Responses\RemoveNeighborsResponse.cs" />
     <Compile Include="Repository\Responses\WereAddressesSpentFromResponse.cs" />
     <Compile Include="Repository\Responses\CheckConsistencyResponse.cs" />

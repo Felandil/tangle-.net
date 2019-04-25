@@ -11,8 +11,6 @@
   [ExcludeFromCodeCoverage]
   public class FallbackIotaClient : IIotaClient
   {
-    public const string DefaultNodeUri = "https://field.deviota.com:443";
-
     public FallbackIotaClient(ICollection<string> clients, int timeout, int failureThresholdPercentage = 100, int resetTimeoutMilliseconds = 30000)
     {
       this.FailureThresholdPercentage = failureThresholdPercentage;
@@ -20,7 +18,7 @@
 
       if (clients.Count == 0)
       {
-        clients.Add(DefaultNodeUri);
+        throw new Exception("No nodes provided!");
       }
 
       this.Clients = this.CreateClients(clients, timeout);
@@ -42,6 +40,10 @@
       {
         return this.Clients[this.NodePointer].ExecuteParameterizedCommand<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -55,6 +57,10 @@
       try
       {
         this.Clients[this.NodePointer].ExecuteParameterizedCommand(parameters);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {
@@ -71,6 +77,10 @@
       {
         return await this.Clients[this.NodePointer].ExecuteParameterizedCommandAsync<T>(parameters);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -84,6 +94,10 @@
       try
       {
         await this.Clients[this.NodePointer].ExecuteParameterizedCommandAsync(parameters);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {
@@ -100,6 +114,10 @@
       {
         return this.Clients[this.NodePointer].ExecuteParameterlessCommand<T>(commandName);
       }
+      catch (IotaApiException)
+      {
+        throw;
+      }
       catch (Exception exception)
       {
         this.PickHealthyClient(exception);
@@ -114,6 +132,10 @@
       try
       {
         return await this.Clients[this.NodePointer].ExecuteParameterlessCommandAsync<T>(commandName);
+      }
+      catch (IotaApiException)
+      {
+        throw;
       }
       catch (Exception exception)
       {

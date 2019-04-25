@@ -35,6 +35,7 @@
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\UlongTritConverterTest.cs" Link="ProofOfWork\UlongTritConverterTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" Link="ProofOfWork\Utils\TrinaryDemultiplexerTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\Client\CircuitedClientTest.cs" Link="Repository\Client\CircuitedClientTest.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\Factory\RestIotaRepositoryFactoryTests.cs" Link="Repository\Factory\RestIotaRepositoryFactoryTests.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Repository\RestIotaRepositoryTest.cs" Link="Repository\RestIotaRepositoryTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\AsciiToTrytesTest.cs" Link="Utils\AsciiToTrytesTest.cs" />
     <Compile Include="..\..\Tangle.Net\Tangle.Net.Unit.Tests\Utils\ExtensionTests.cs" Link="Utils\ExtensionTests.cs" />
@@ -57,6 +58,7 @@
   <ItemGroup>
     <Folder Include="Entity\" />
     <Folder Include="Repository\Client\" />
+    <Folder Include="Repository\Factory\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 
