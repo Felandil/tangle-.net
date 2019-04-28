@@ -5,7 +5,7 @@
 
   public class IotaAreaCodeDimension
   {
-    public static readonly int[] Precision = { 2, 4, 6, 8, 10, 11 };
+    internal static readonly int[] Precision = { 2, 4, 6, 8, 10, 11 };
 
     private IotaAreaCodeDimension()
     {

@@ -89,12 +89,12 @@
     public void TestSuccessfulPrecisionDecrease()
     {
       var areaCode = new IotaAreaCode("NPHTQORL9XKP");
-      Assert.AreEqual(11, areaCode.CodePrecision);
+      Assert.AreEqual(11, areaCode.Area.CodePrecision);
 
       Assert.AreEqual(10, areaCode.DecreasePrecision().CodePrecision);
       Assert.AreEqual("NPHTQORL9XK", areaCode.Value);
 
-      Assert.AreEqual(8, areaCode.DecreasePrecision().CodePrecision);
+      Assert.AreEqual(8, areaCode.DecreasePrecision().Area.CodePrecision);
       Assert.AreEqual("NPHTQORL9", areaCode.Value);
 
       Assert.AreEqual(6, areaCode.DecreasePrecision().CodePrecision);
@@ -119,22 +119,22 @@
     public void TestSuccessfulPrecisionIncrease()
     {
       var areaCode = new IotaAreaCode("NPAAAAAA9");
-      Assert.AreEqual(2, areaCode.CodePrecision);
+      Assert.AreEqual(2, areaCode.Area.CodePrecision);
 
       Assert.AreEqual(4, areaCode.IncreasePrecision().CodePrecision);
       Assert.AreEqual("NPQQAAAA9", areaCode.Value);
 
-      Assert.AreEqual(6, areaCode.IncreasePrecision().CodePrecision);
-      Assert.AreEqual("NPQQFFAA9", areaCode.Value);
+      Assert.AreEqual(6, areaCode.IncreasePrecision().Area.CodePrecision);
+      Assert.AreEqual("NPQQQQAA9", areaCode.Value);
 
       Assert.AreEqual(8, areaCode.IncreasePrecision().CodePrecision);
-      Assert.AreEqual("NPQQFFFF9", areaCode.Value);
+      Assert.AreEqual("NPQQQQQQ9", areaCode.Value);
 
       Assert.AreEqual(10, areaCode.IncreasePrecision().CodePrecision);
-      Assert.AreEqual("NPQQFFFF9FF", areaCode.Value);
+      Assert.AreEqual("NPQQQQQQ9QQ", areaCode.Value);
 
       Assert.AreEqual(11, areaCode.IncreasePrecision().CodePrecision);
-      Assert.AreEqual("NPQQFFFF9FFF", areaCode.Value);
+      Assert.AreEqual("NPQQQQQQ9QQQ", areaCode.Value);
     }
 
     [TestMethod]
@@ -142,6 +142,34 @@
     {
       Assert.AreEqual("9F4MGCH7+R6F", IotaAreaCode.ToOpenLocationCode("NPHTQORL9XKP"));
       Assert.AreEqual("9F4MGCH7+R6F", new IotaAreaCode("NPHTQORL9XKP").ToOpenLocationCode());
+    }
+
+    [TestMethod]
+    public void TestExtractCodeFromTrytes()
+    {
+      var areaCode = IotaAreaCode.Extract("NPHTQORL9XKP999999999");
+      Assert.AreEqual("NPHTQORL9XKP", areaCode.Value);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestTrytesToExtractAreInvalidShouldThrowException()
+    {
+      IotaAreaCode.Extract("BNBPHBTQBOBRBLB9XKP999999999");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestSetPrecisionIsOutOfBoundsShouldThrowException()
+    {
+      new IotaAreaCode("NPHTQORL9").SetPrecision(0);
+    }
+
+    [TestMethod]
+    public void TestSetPrecision()
+    {
+      var areaCode = new IotaAreaCode("NPHTQORL9").SetPrecision(4);
+      Assert.AreEqual("NPHTAAAA9", areaCode.Value);
     }
 
     [TestMethod]

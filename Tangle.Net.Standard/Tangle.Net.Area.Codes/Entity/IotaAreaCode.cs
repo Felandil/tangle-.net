@@ -81,13 +81,19 @@
       return Regex.IsMatch(remaining, $"^[${Alphabet.IotaAreaCode.Substring(0, 20)}]*$");
     }
 
-    //public static IotaAreaCode Extract(string trytes)
-    //{
+    public static IotaAreaCode Extract(string trytes)
+    {
+      var regex = "([" + Alphabet.IotaAreaCode.Substring(0, 9) + "][" + Alphabet.IotaAreaCode.Substring(0, 18) + "]["
+                  + Alphabet.IotaAreaCode.Substring(0, 21) + "]{6}9(?:[" + Alphabet.IotaAreaCode.Substring(0, 20) + "]{2,3})?)";
 
-    //  //const reString = `([${ IAC_APHABET.substr(0, 9)}][${IAC_APHABET.substr(0, 18)}][${IAC_APHABET.substr(0, 21)}]{6}9(?:[${IAC_APHABET.substr(0, 20)}]{2,3})?)`;
-    //  //const result = new RegExp(reString).exec(trytes);
-    //  //return result? result[1] : undefined;
-    //}
+      var match = Regex.Match(trytes, regex);
+      if (!match.Success)
+      {
+        throw new ArgumentException("Given trytes are not a valid Iota Area Code!");
+      }
+
+      return new IotaAreaCode(match.Value);
+    }
 
     public static string ToOpenLocationCode(string iotaAreaCode)
     {
@@ -125,6 +131,20 @@
       }
 
       this.Value = Precision.Calculate(this, IotaAreaCodeDimension.Precision[Array.IndexOf(IotaAreaCodeDimension.Precision, this.CodePrecision) - 1]);
+      this.area = null;
+
+      return this;
+    }
+
+    public IotaAreaCode SetPrecision(int precision)
+    {
+      if (!IotaAreaCodeDimension.Precision.Contains(precision))
+      {
+        throw new ArgumentException($"Invalid precision. Allowed values are {string.Join(", ", IotaAreaCodeDimension.Precision)}");
+      }
+
+      this.Value = Precision.Calculate(this, precision);
+      this.area = null;
 
       return this;
     }
@@ -137,6 +157,7 @@
       }
 
       this.Value = Precision.Calculate(this, IotaAreaCodeDimension.Precision[Array.IndexOf(IotaAreaCodeDimension.Precision, this.CodePrecision) + 1]);
+      this.area = null;
 
       return this;
     }
