@@ -56,6 +56,10 @@
       var setPrecision = new IotaAreaCode("NPHTQORL9").SetPrecision(4);
       Console.WriteLine($"Set Precision {setPrecision}");
 
+      Console.WriteLine("----------------");
+
+      Repository.FindAsync().Wait();
+
       Console.ReadKey();
     }
   }

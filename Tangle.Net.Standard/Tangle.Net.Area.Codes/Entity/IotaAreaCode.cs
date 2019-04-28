@@ -28,10 +28,9 @@
 
     public static IotaAreaCode Encode(double latitude, double longitude, int precision = OpenLocationCode.CodePrecisionNormal)
     {
-      if (precision != OpenLocationCode.CodePrecisionNormal && precision != OpenLocationCode.CodePrecisionExtra)
+      if (!IotaAreaCodeDimension.Precision.Contains(precision))
       {
-        throw new Exception(
-          $"Invalid Code Precision {precision}. Only OpenLocationCode.CodePrecisionNormal and OpenLocationCode.CodePrecisionExtra is accepted.");
+        throw new ArgumentException($"Invalid precision. Allowed values are {string.Join(", ", IotaAreaCodeDimension.Precision)}");
       }
 
       return FromOpenLocationCode(OpenLocationCode.Encode(latitude, longitude, precision));
