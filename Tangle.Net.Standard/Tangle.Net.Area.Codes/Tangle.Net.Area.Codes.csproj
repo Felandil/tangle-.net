@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Felandil</Authors>
+    <Company>Felandil</Company>
+    <Version>0.1.0</Version>
+    <Product>.NET Standard implementation of IOTA Area Codes</Product>
+    <Description>.NET Standard implementation of IOTA Area Codes</Description>
+    <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
+    <PackageTags>iota csharp open location</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
