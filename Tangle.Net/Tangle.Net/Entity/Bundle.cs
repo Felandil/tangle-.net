@@ -143,6 +143,11 @@
       this.RemainderAddress = address;
     }
 
+    public void AddTransfers(List<Transfer> transfers)
+    {
+      transfers.ForEach(this.AddTransfer);
+    }
+
     /// <summary>
     /// The add entry.
     /// </summary>
@@ -158,7 +163,7 @@
 
       if (transfer.ValueToTransfer < 0)
       {
-        throw new ArgumentException("Use AddInputs to add addresses for spending tokens.");
+        throw new ArgumentException("Value smaller than 0. Use AddInputs to add addresses for spending tokens.");
       }
 
       if (transfer.Message != null && transfer.Message.TrytesLength > Fragment.Length)
