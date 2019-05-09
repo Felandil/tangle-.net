@@ -16,5 +16,10 @@
     public Transaction Transaction => this.transaction ?? (this.transaction = Transaction.FromTrytes(this.TransactionTrytes));
 
     public TransactionTrytes TransactionTrytes { get; }
+
+    public static TransactionTrytesReceivedEventArgs FromZmqMessage(string message)
+    {
+      return new TransactionTrytesReceivedEventArgs(new TransactionTrytes(message.Split(' ')[1]));
+    }
   }
 }

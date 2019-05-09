@@ -4,13 +4,14 @@
   using System.Threading;
   using System.Threading.Tasks;
 
-  using Tangle.Net.Entity;
   using Tangle.Net.Zmq.Events;
 
   using ZeroMQ;
 
   public static class ZmqIriListener
   {
+    public static event EventHandler<TransactionConfirmedEventArgs> TransactionConfirmed;
+
     public static event EventHandler<TransactionTrytesReceivedEventArgs> TransactionTrytesReceived;
 
     public static CancellationTokenSource Listen(string uri, string messageType)
@@ -23,14 +24,14 @@
           {
             using (var context = new ZContext())
             {
-              using (var requester = new ZSocket(context, ZSocketType.SUB))
+              using (var socket = new ZSocket(context, ZSocketType.SUB))
               {
-                requester.Subscribe(messageType);
-                requester.Connect(uri);
+                socket.Subscribe(messageType);
+                socket.Connect(uri);
 
                 while (!token.IsCancellationRequested)
                 {
-                  var message = requester.ReceiveMessage();
+                  var message = socket.ReceiveMessage();
                   HandleMessage(message.PopString());
                 }
               }
@@ -43,14 +44,15 @@
 
     private static void HandleMessage(string message)
     {
-      var dividedMessage = message.Split(' ');
+      var splitMessage = message.Split(' ');
 
-      switch (dividedMessage[0])
+      switch (splitMessage[0])
       {
         case MessageType.TransactionTrytes:
-          TransactionTrytesReceived?.Invoke(
-            "ZmqIriListener",
-            new TransactionTrytesReceivedEventArgs(new TransactionTrytes(dividedMessage[1])));
+          TransactionTrytesReceived?.Invoke("ZmqIriListener", TransactionTrytesReceivedEventArgs.FromZmqMessage(message));
+          break;
+        case MessageType.TransactionConfirmed:
+          TransactionConfirmed?.Invoke("ZmqIriListener", TransactionConfirmedEventArgs.FromZmqMessage(message));
           break;
         default:
           break;

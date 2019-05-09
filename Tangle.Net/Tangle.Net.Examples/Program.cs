@@ -33,14 +33,14 @@
     /// </param>
     internal static void Main(string[] args)
     {
-      ZmqIriListener.TransactionTrytesReceived += (sender, eventArgs) =>
+      ZmqIriListener.TransactionConfirmed += (sender, eventArgs) =>
         {
           //Console.WriteLine(eventArgs.TransactionTrytes.Value);
           Console.WriteLine("-----------------------");
-          Console.WriteLine(eventArgs.Transaction.Hash);
+          Console.WriteLine(eventArgs.Address);
         };
 
-      var tokenSource = ZmqIriListener.Listen("tcp://zmq.devnet.iota.org:5556", MessageType.TransactionTrytes);
+      var tokenSource = ZmqIriListener.Listen("tcp://trinity.iota-tangle.io:5556", MessageType.TransactionConfirmed);
 
       var stopwatch = new Stopwatch();
       stopwatch.Start();

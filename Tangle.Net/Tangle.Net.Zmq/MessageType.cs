@@ -4,7 +4,7 @@
   {
     public const string All = "";
 
-    public const string ConfirmedTransaction = "sn";
+    public const string TransactionConfirmed = "sn";
 
     public const string IriCacheInformation = "hmr";
 

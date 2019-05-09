@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\TransactionConfirmedEventArgs.cs" />
     <Compile Include="Events\TransactionTrytesReceivedEventArgs.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
