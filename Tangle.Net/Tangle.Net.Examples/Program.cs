@@ -2,6 +2,8 @@
 {
   using System;
   using System.Configuration;
+  using System.Diagnostics;
+  using System.Threading;
   using System.Threading.Tasks;
   using System.Web.Configuration;
 
@@ -15,6 +17,8 @@
   using Tangle.Net.Repository;
   using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.Factory;
+  using Tangle.Net.Zmq;
+  using Tangle.Net.Zmq.Events;
 
   /// <summary>
   /// The program.
@@ -29,10 +33,29 @@
     /// </param>
     internal static void Main(string[] args)
     {
+      ZmqIriListener.TransactionTrytesReceived += (sender, eventArgs) =>
+        {
+          //Console.WriteLine(eventArgs.TransactionTrytes.Value);
+          Console.WriteLine("-----------------------");
+          Console.WriteLine(eventArgs.Transaction.Hash);
+        };
+
+      var tokenSource = ZmqIriListener.Listen("tcp://zmq.devnet.iota.org:5556", MessageType.TransactionTrytes);
+
+      var stopwatch = new Stopwatch();
+      stopwatch.Start();
+
+      while (stopwatch.ElapsedMilliseconds < 60000)
+      {
+        Thread.Sleep(100);
+      }
+
+      tokenSource.Cancel();
+
       //ExecuteApiExample();
 
       // new MamFlowExample().Execute().Wait();
-      new MamFetchExample().Execute().Wait();
+      // new MamFetchExample().Execute().Wait();
       // new MamPublishExample().Execute().Wait();
 
       Console.ReadKey();

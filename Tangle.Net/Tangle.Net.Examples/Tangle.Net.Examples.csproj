@@ -84,6 +84,10 @@
       <Project>{183e56d2-d79b-45f7-8b92-cbef8d2e9469}</Project>
       <Name>Tangle.Net.Mam</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tangle.Net.Zmq\Tangle.Net.Zmq.csproj">
+      <Project>{B9EAADF7-4E8C-4FB2-BE58-404BF79043F9}</Project>
+      <Name>Tangle.Net.Zmq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangle.Net\Tangle.Net.csproj">
       <Project>{6678B808-1464-490E-BECD-842305000560}</Project>
       <Name>Tangle.Net</Name>
