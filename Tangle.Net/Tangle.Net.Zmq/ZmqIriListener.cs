@@ -10,13 +10,21 @@
 
   public static class ZmqIriListener
   {
+    public static event EventHandler<IriCacheInformationEventArgs> IriCacheInformation;
+
+    public static event EventHandler<NeighborDnsConfirmationsEventArgs> NeighborDnsConfirmations;
+
     public static event EventHandler<NeighborDnsValidationsEventArgs> NeighborDnsValidations;
+
+    public static event EventHandler<TipTransactionRequesterEventArgs> TipTransactionRequester;
 
     public static event EventHandler<TransactionConfirmedEventArgs> TransactionConfirmed;
 
     public static event EventHandler<TransactionsTraversedEventArgs> TransactionsTraversed;
 
     public static event EventHandler<TransactionTrytesReceivedEventArgs> TransactionTrytesReceived;
+
+    public static event EventHandler<UpdateToNeighborsIpEventArgs> UpdateToNeighborsIp;
 
     public static CancellationTokenSource Listen(string uri, string messageType)
     {
@@ -49,20 +57,33 @@
     private static void HandleMessage(string message)
     {
       var splitMessage = message.Split(' ');
+      var sourceName = "ZmqIriListener";
 
       switch (splitMessage[0])
       {
         case MessageType.TransactionTrytes:
-          TransactionTrytesReceived?.Invoke("ZmqIriListener", new TransactionTrytesReceivedEventArgs(message));
+          TransactionTrytesReceived?.Invoke(sourceName, new TransactionTrytesReceivedEventArgs(message));
           break;
         case MessageType.TransactionConfirmed:
-          TransactionConfirmed?.Invoke("ZmqIriListener", new TransactionConfirmedEventArgs(message));
+          TransactionConfirmed?.Invoke(sourceName, new TransactionConfirmedEventArgs(message));
           break;
         case MessageType.TransactionsTraversed:
-          TransactionsTraversed?.Invoke("ZmqIriListener", new TransactionsTraversedEventArgs(message));
+          TransactionsTraversed?.Invoke(sourceName, new TransactionsTraversedEventArgs(message));
           break;
         case MessageType.NeighborDnsValidations:
-          NeighborDnsValidations?.Invoke("ZmqIriListener", new NeighborDnsValidationsEventArgs(message));
+          NeighborDnsValidations?.Invoke(sourceName, new NeighborDnsValidationsEventArgs(message));
+          break;
+        case MessageType.NeighborDnsConfirmations:
+          NeighborDnsConfirmations?.Invoke(sourceName, new NeighborDnsConfirmationsEventArgs(message));
+          break;
+        case MessageType.UpdateToNeighborsIp:
+          UpdateToNeighborsIp?.Invoke(sourceName, new UpdateToNeighborsIpEventArgs(message));
+          break;
+        case MessageType.IriCacheInformation:
+          IriCacheInformation?.Invoke(sourceName, new IriCacheInformationEventArgs(message));
+          break;
+        case MessageType.TipTransactionRequester:
+          TipTransactionRequester?.Invoke(sourceName, new TipTransactionRequesterEventArgs(message));
           break;
         default:
           break;

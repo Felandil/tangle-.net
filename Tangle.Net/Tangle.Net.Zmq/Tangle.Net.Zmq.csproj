@@ -46,10 +46,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\IriCacheInformationEventArgs.cs" />
+    <Compile Include="Events\NeighborDnsConfirmationsEventArgs.cs" />
     <Compile Include="Events\NeighborDnsValidationsEventArgs.cs" />
+    <Compile Include="Events\TipTransactionRequesterEventArgs.cs" />
     <Compile Include="Events\TransactionConfirmedEventArgs.cs" />
     <Compile Include="Events\TransactionsTraversedEventArgs.cs" />
     <Compile Include="Events\TransactionTrytesReceivedEventArgs.cs" />
+    <Compile Include="Events\UpdateToNeighborsIpEventArgs.cs" />
     <Compile Include="Events\ZmqEventArgs.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
