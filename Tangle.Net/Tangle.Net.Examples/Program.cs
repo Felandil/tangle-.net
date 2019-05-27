@@ -13,6 +13,7 @@
   using Tangle.Net.Examples.Examples;
   using Tangle.Net.Examples.Examples.Api;
   using Tangle.Net.Examples.Examples.Mam;
+  using Tangle.Net.Examples.Examples.Zmq;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
   using Tangle.Net.Repository.Client;
@@ -33,25 +34,7 @@
     /// </param>
     internal static void Main(string[] args)
     {
-      ZmqIriListener.TransactionConfirmed += (sender, eventArgs) =>
-        {
-          //Console.WriteLine(eventArgs.TransactionTrytes.Value);
-          Console.WriteLine("-----------------------");
-          Console.WriteLine(eventArgs.Milestone);
-          Console.WriteLine(eventArgs.Address);
-        };
-
-      var tokenSource = ZmqIriListener.Listen("tcp://trinity.iota-tangle.io:5556", MessageType.TransactionTrytes);
-
-      var stopwatch = new Stopwatch();
-      stopwatch.Start();
-
-      while (stopwatch.ElapsedMilliseconds < 600000)
-      {
-        Thread.Sleep(100);
-      }
-
-      tokenSource.Cancel();
+      ZmqTransactionListenerExample.Execute();
 
       //ExecuteApiExample();
 

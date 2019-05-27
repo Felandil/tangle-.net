@@ -47,10 +47,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\IriCacheInformationEventArgs.cs" />
+    <Compile Include="Events\LatestMilestoneIndexEventArgs.cs" />
+    <Compile Include="Events\LatestSolidSubtangleMilestoneEventArgs.cs" />
+    <Compile Include="Events\LatestSolidSubtangleMilestoneTransactionHashEventArgs.cs" />
     <Compile Include="Events\NeighborDnsConfirmationsEventArgs.cs" />
     <Compile Include="Events\NeighborDnsValidationsEventArgs.cs" />
+    <Compile Include="Events\RequestQueueTransactionRemovalEventArgs.cs" />
     <Compile Include="Events\TipTransactionRequesterEventArgs.cs" />
     <Compile Include="Events\TransactionConfirmedEventArgs.cs" />
+    <Compile Include="Events\TransactionsEventArgs.cs" />
     <Compile Include="Events\TransactionsTraversedEventArgs.cs" />
     <Compile Include="Events\TransactionTrytesReceivedEventArgs.cs" />
     <Compile Include="Events\UpdateToNeighborsIpEventArgs.cs" />

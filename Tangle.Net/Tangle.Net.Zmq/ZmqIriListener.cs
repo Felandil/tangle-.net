@@ -12,13 +12,23 @@
   {
     public static event EventHandler<IriCacheInformationEventArgs> IriCacheInformation;
 
+    public static event EventHandler<LatestMilestoneIndexEventArgs> LatestMilestoneIndex;
+
+    public static event EventHandler<LatestSolidSubtangleMilestoneEventArgs> LatestSolidSubtangleMilestone;
+
+    public static event EventHandler<LatestSolidSubtangleMilestoneTransactionHashEventArgs> LatestSolidSubtangleMilestoneTransactionHash;
+
     public static event EventHandler<NeighborDnsConfirmationsEventArgs> NeighborDnsConfirmations;
 
     public static event EventHandler<NeighborDnsValidationsEventArgs> NeighborDnsValidations;
 
+    public static event EventHandler<RequestQueueTransactionRemovalEventArgs> RequestQueueTransactionRemoval;
+
     public static event EventHandler<TipTransactionRequesterEventArgs> TipTransactionRequester;
 
     public static event EventHandler<TransactionConfirmedEventArgs> TransactionConfirmed;
+
+    public static event EventHandler<TransactionsEventArgs> Transactions;
 
     public static event EventHandler<TransactionsTraversedEventArgs> TransactionsTraversed;
 
@@ -84,6 +94,21 @@
           break;
         case MessageType.TipTransactionRequester:
           TipTransactionRequester?.Invoke(sourceName, new TipTransactionRequesterEventArgs(message));
+          break;
+        case MessageType.RequestQueueTransactionRemoval:
+          RequestQueueTransactionRemoval?.Invoke(sourceName, new RequestQueueTransactionRemovalEventArgs(message));
+          break;
+        case MessageType.LatestMilestoneIndex:
+          LatestMilestoneIndex?.Invoke(sourceName, new LatestMilestoneIndexEventArgs(message));
+          break;
+        case MessageType.LatestSolidSubtangleMilestone:
+          LatestSolidSubtangleMilestone?.Invoke(sourceName, new LatestSolidSubtangleMilestoneEventArgs(message));
+          break;
+        case MessageType.LatestSolidSubtangleMilestoneTransactionHash:
+          LatestSolidSubtangleMilestoneTransactionHash?.Invoke(sourceName, new LatestSolidSubtangleMilestoneTransactionHashEventArgs(message));
+          break;
+        case MessageType.Transactions:
+          Transactions?.Invoke(sourceName, new TransactionsEventArgs(message));
           break;
         default:
           break;
