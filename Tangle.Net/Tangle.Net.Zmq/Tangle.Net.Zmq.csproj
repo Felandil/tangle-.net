@@ -46,8 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\NeighborDnsValidationsEventArgs.cs" />
     <Compile Include="Events\TransactionConfirmedEventArgs.cs" />
+    <Compile Include="Events\TransactionsTraversedEventArgs.cs" />
     <Compile Include="Events\TransactionTrytesReceivedEventArgs.cs" />
+    <Compile Include="Events\ZmqEventArgs.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ZmqIriListener.cs" />

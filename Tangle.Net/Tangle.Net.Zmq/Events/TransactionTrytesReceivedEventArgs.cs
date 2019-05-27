@@ -4,22 +4,19 @@
 
   using Tangle.Net.Entity;
 
-  public class TransactionTrytesReceivedEventArgs : EventArgs
+  public class TransactionTrytesReceivedEventArgs : ZmqEventArgs
   {
     private Transaction transaction;
 
-    public TransactionTrytesReceivedEventArgs(TransactionTrytes transactionTrytes)
+    private TransactionTrytes transactionTrytes;
+
+    public TransactionTrytesReceivedEventArgs(string message) : base(message)
     {
-      this.TransactionTrytes = transactionTrytes;
     }
 
     public Transaction Transaction => this.transaction ?? (this.transaction = Transaction.FromTrytes(this.TransactionTrytes));
 
-    public TransactionTrytes TransactionTrytes { get; }
-
-    public static TransactionTrytesReceivedEventArgs FromZmqMessage(string message)
-    {
-      return new TransactionTrytesReceivedEventArgs(new TransactionTrytes(message.Split(' ')[1]));
-    }
+    public TransactionTrytes TransactionTrytes =>
+      this.transactionTrytes ?? (this.transactionTrytes = new TransactionTrytes(this.Message.Split(' ')[1]));
   }
 }

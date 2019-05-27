@@ -37,15 +37,16 @@
         {
           //Console.WriteLine(eventArgs.TransactionTrytes.Value);
           Console.WriteLine("-----------------------");
+          Console.WriteLine(eventArgs.Milestone);
           Console.WriteLine(eventArgs.Address);
         };
 
-      var tokenSource = ZmqIriListener.Listen("tcp://trinity.iota-tangle.io:5556", MessageType.TransactionConfirmed);
+      var tokenSource = ZmqIriListener.Listen("tcp://trinity.iota-tangle.io:5556", MessageType.TransactionTrytes);
 
       var stopwatch = new Stopwatch();
       stopwatch.Start();
 
-      while (stopwatch.ElapsedMilliseconds < 60000)
+      while (stopwatch.ElapsedMilliseconds < 600000)
       {
         Thread.Sleep(100);
       }

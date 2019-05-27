@@ -10,7 +10,11 @@
 
   public static class ZmqIriListener
   {
+    public static event EventHandler<NeighborDnsValidationsEventArgs> NeighborDnsValidations;
+
     public static event EventHandler<TransactionConfirmedEventArgs> TransactionConfirmed;
+
+    public static event EventHandler<TransactionsTraversedEventArgs> TransactionsTraversed;
 
     public static event EventHandler<TransactionTrytesReceivedEventArgs> TransactionTrytesReceived;
 
@@ -49,10 +53,16 @@
       switch (splitMessage[0])
       {
         case MessageType.TransactionTrytes:
-          TransactionTrytesReceived?.Invoke("ZmqIriListener", TransactionTrytesReceivedEventArgs.FromZmqMessage(message));
+          TransactionTrytesReceived?.Invoke("ZmqIriListener", new TransactionTrytesReceivedEventArgs(message));
           break;
         case MessageType.TransactionConfirmed:
-          TransactionConfirmed?.Invoke("ZmqIriListener", TransactionConfirmedEventArgs.FromZmqMessage(message));
+          TransactionConfirmed?.Invoke("ZmqIriListener", new TransactionConfirmedEventArgs(message));
+          break;
+        case MessageType.TransactionsTraversed:
+          TransactionsTraversed?.Invoke("ZmqIriListener", new TransactionsTraversedEventArgs(message));
+          break;
+        case MessageType.NeighborDnsValidations:
+          NeighborDnsValidations?.Invoke("ZmqIriListener", new NeighborDnsValidationsEventArgs(message));
           break;
         default:
           break;
