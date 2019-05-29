@@ -4,9 +4,10 @@
   using System.Threading;
   using System.Threading.Tasks;
 
-  using Tangle.Net.Zmq.Events;
+  using NetMQ;
+  using NetMQ.Sockets;
 
-  using ZeroMQ;
+  using Tangle.Net.Zmq.Events;
 
   public static class ZmqIriListener
   {
@@ -44,18 +45,14 @@
       Task.Factory.StartNew(
         () =>
           {
-            using (var context = new ZContext())
+            using (var socket = new SubscriberSocket())
             {
-              using (var socket = new ZSocket(context, ZSocketType.SUB))
-              {
-                socket.Subscribe(messageType);
-                socket.Connect(uri);
+              socket.Connect(uri);
+              socket.Subscribe(messageType);
 
-                while (!token.IsCancellationRequested)
-                {
-                  var message = socket.ReceiveMessage();
-                  HandleMessage(message.PopString());
-                }
+              while (!token.IsCancellationRequested)
+              {
+                HandleMessage(socket.ReceiveFrameString());
               }
             }
           },
