@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.0.1</Version>
+    <Authors>Felandil</Authors>
+    <Company>Felandil</Company>
+    <Product>.NET Standard 2.0 IOTA ZMQ C# Port</Product>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/Felandil/tangle-.net</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Felandil/tangle-.net/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/Felandil/tangle-.net</RepositoryUrl>
+    <PackageTags>iota csharp zmq</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\IriCacheInformationEventArgs.cs" Link="Events\IriCacheInformationEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\LatestMilestoneIndexEventArgs.cs" Link="Events\LatestMilestoneIndexEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\LatestSolidSubtangleMilestoneEventArgs.cs" Link="Events\LatestSolidSubtangleMilestoneEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\LatestSolidSubtangleMilestoneTransactionHashEventArgs.cs" Link="Events\LatestSolidSubtangleMilestoneTransactionHashEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\NeighborDnsConfirmationsEventArgs.cs" Link="Events\NeighborDnsConfirmationsEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\NeighborDnsValidationsEventArgs.cs" Link="Events\NeighborDnsValidationsEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\RequestQueueTransactionRemovalEventArgs.cs" Link="Events\RequestQueueTransactionRemovalEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\TipTransactionRequesterEventArgs.cs" Link="Events\TipTransactionRequesterEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\TransactionConfirmedEventArgs.cs" Link="Events\TransactionConfirmedEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\TransactionsEventArgs.cs" Link="Events\TransactionsEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\TransactionsTraversedEventArgs.cs" Link="Events\TransactionsTraversedEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\TransactionTrytesReceivedEventArgs.cs" Link="Events\TransactionTrytesReceivedEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\UpdateToNeighborsIpEventArgs.cs" Link="Events\UpdateToNeighborsIpEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\Events\ZmqEventArgs.cs" Link="Events\ZmqEventArgs.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\MessageType.cs" Link="MessageType.cs" />
+    <Compile Include="..\..\Tangle.Net\Tangle.Net.Zmq\ZmqIriListener.cs" Link="ZmqIriListener.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tangle.Net.Standard" Version="3.0.1" />
+    <PackageReference Include="ZeroMQ" Version="4.1.0.31" />
+  </ItemGroup>
+
+</Project>

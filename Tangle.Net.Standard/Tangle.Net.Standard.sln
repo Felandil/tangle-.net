@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangle.Net.Standard.Mam.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangle.Net.Area.Codes", "Tangle.Net.Area.Codes\Tangle.Net.Area.Codes.csproj", "{256040CE-168B-4E6A-AA1D-930BE8A7A037}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Area.Codes.Tests", "Tangle.Net.Area.Codes.Tests\Tangle.Net.Area.Codes.Tests.csproj", "{A181D305-55DB-4D8E-ADE7-D45E475A9F42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangle.Net.Area.Codes.Tests", "Tangle.Net.Area.Codes.Tests\Tangle.Net.Area.Codes.Tests.csproj", "{A181D305-55DB-4D8E-ADE7-D45E475A9F42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Area.Codes.Example", "Tangle.Net.Area.Codes.Example\Tangle.Net.Area.Codes.Example.csproj", "{F84C3A95-4211-4559-BE33-9B72A3045E60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangle.Net.Area.Codes.Example", "Tangle.Net.Area.Codes.Example\Tangle.Net.Area.Codes.Example.csproj", "{F84C3A95-4211-4559-BE33-9B72A3045E60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangle.Net.Standard.Zmq", "Tangle.Net.Standard.Zmq\Tangle.Net.Standard.Zmq.csproj", "{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,18 @@ Global
 		{F84C3A95-4211-4559-BE33-9B72A3045E60}.Release|x64.Build.0 = Release|Any CPU
 		{F84C3A95-4211-4559-BE33-9B72A3045E60}.Release|x86.ActiveCfg = Release|Any CPU
 		{F84C3A95-4211-4559-BE33-9B72A3045E60}.Release|x86.Build.0 = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|x64.Build.0 = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Debug|x86.Build.0 = Debug|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|x64.ActiveCfg = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|x64.Build.0 = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|x86.ActiveCfg = Release|Any CPU
+		{ECEDD00D-3D47-43A3-A446-1BAE36746F9A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
