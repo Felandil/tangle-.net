@@ -11,7 +11,7 @@
   public partial class RestIotaRepository : IIotaRepository
   {
     /// <inheritdoc />
-    public AddNeighborsResponse AddNeighbors(IEnumerable<string> neighborUris)
+    public virtual AddNeighborsResponse AddNeighbors(IEnumerable<string> neighborUris)
     {
       return this.Client.ExecuteParameterizedCommand<AddNeighborsResponse>(
         new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighborUris.ToList() } });
@@ -19,38 +19,38 @@
 
 
     /// <inheritdoc />
-    public async Task<AddNeighborsResponse> AddNeighborsAsync(IEnumerable<string> neighborUris)
+    public virtual async Task<AddNeighborsResponse> AddNeighborsAsync(IEnumerable<string> neighborUris)
     {
       return await this.Client.ExecuteParameterizedCommandAsync<AddNeighborsResponse>(
                new Dictionary<string, object> { { "command", CommandType.AddNeighbors }, { "uris", neighborUris.ToList() } });
     }
 
     /// <inheritdoc />
-    public NeighborList GetNeighbors()
+    public virtual NeighborList GetNeighbors()
     {
       return this.Client.ExecuteParameterlessCommand<NeighborList>(CommandType.GetNeighbors);
     }
 
     /// <inheritdoc />
-    public async Task<NeighborList> GetNeighborsAsync()
+    public virtual async Task<NeighborList> GetNeighborsAsync()
     {
       return await this.Client.ExecuteParameterlessCommandAsync<NeighborList>(CommandType.GetNeighbors);
     }
 
     /// <inheritdoc />
-    public NodeInfo GetNodeInfo()
+    public virtual NodeInfo GetNodeInfo()
     {
       return this.Client.ExecuteParameterlessCommand<NodeInfo>(CommandType.GetNodeInfo);
     }
 
     /// <inheritdoc />
-    public async Task<NodeInfo> GetNodeInfoAsync()
+    public virtual async Task<NodeInfo> GetNodeInfoAsync()
     {
       return await this.Client.ExecuteParameterlessCommandAsync<NodeInfo>(CommandType.GetNodeInfo);
     }
 
     /// <inheritdoc />
-    public RemoveNeighborsResponse RemoveNeighbors(IEnumerable<string> neighborUris)
+    public virtual RemoveNeighborsResponse RemoveNeighbors(IEnumerable<string> neighborUris)
     {
       return this.Client.ExecuteParameterizedCommand<RemoveNeighborsResponse>(
         new Dictionary<string, object>
@@ -61,7 +61,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<string> neighborUris)
+    public virtual async Task<RemoveNeighborsResponse> RemoveNeighborsAsync(IEnumerable<string> neighborUris)
     {
       return await this.Client.ExecuteParameterizedCommandAsync<RemoveNeighborsResponse>(
                new Dictionary<string, object>
