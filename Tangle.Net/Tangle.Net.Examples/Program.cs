@@ -2,6 +2,8 @@
 {
   using System;
   using System.Configuration;
+  using System.Diagnostics;
+  using System.Threading;
   using System.Threading.Tasks;
   using System.Web.Configuration;
 
@@ -11,10 +13,13 @@
   using Tangle.Net.Examples.Examples;
   using Tangle.Net.Examples.Examples.Api;
   using Tangle.Net.Examples.Examples.Mam;
+  using Tangle.Net.Examples.Examples.Zmq;
   using Tangle.Net.ProofOfWork;
   using Tangle.Net.Repository;
   using Tangle.Net.Repository.Client;
   using Tangle.Net.Repository.Factory;
+  using Tangle.Net.Zmq;
+  using Tangle.Net.Zmq.Events;
 
   /// <summary>
   /// The program.
@@ -29,10 +34,12 @@
     /// </param>
     internal static void Main(string[] args)
     {
+      ZmqTransactionListenerExample.Execute();
+
       //ExecuteApiExample();
 
       // new MamFlowExample().Execute().Wait();
-      new MamFetchExample().Execute().Wait();
+      // new MamFetchExample().Execute().Wait();
       // new MamPublishExample().Execute().Wait();
 
       Console.ReadKey();
