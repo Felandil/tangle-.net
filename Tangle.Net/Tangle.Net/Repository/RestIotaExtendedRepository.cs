@@ -935,7 +935,7 @@
       var nextTransactions = result.Where(t => t.CurrentIndex != t.LastIndex).ToList();
       if (nextTransactions.Count > 0)
       {
-        result.AddRange(this.TraverseBundles(nextTransactions.Select(t => t.TrunkTransaction).ToList(), nextTransactions.Select(t => t.BundleHash).ToList()));
+        result.AddRange(await this.TraverseBundlesAsync(nextTransactions.Select(t => t.TrunkTransaction).ToList(), nextTransactions.Select(t => t.BundleHash).ToList()));
       }
 
       return result;
