@@ -13,6 +13,8 @@
   using Tangle.Net.Entity;
   using Tangle.Net.Repository.Responses;
 
+  using BigInteger = System.Numerics.BigInteger;
+
   /// <summary>
   /// The string extensions.
   /// </summary>
@@ -105,9 +107,8 @@
     /// </returns>
     public static TryteString ToTrytes(this long value, int padding)
     {
-      // TODO: this is ugly. create conversion method for long within converter
       return new TryteString(
-        Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value.ToString(CultureInfo.InvariantCulture)), padding)));
+        Converter.TritsToTrytes(Converter.ConvertBigIntToTrits(new BigInteger(value), padding)));
     }
 
     /// <summary>

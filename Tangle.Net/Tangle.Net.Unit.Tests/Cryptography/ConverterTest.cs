@@ -58,7 +58,7 @@
         new BigInteger("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
       var outBytes = Converter.ConvertBigIntToBytes(bigInteger);
       var outBigInteger = Converter.ConvertBytesToBigInt(outBytes);
-      Assert.IsTrue(bigInteger.Equals(outBigInteger));
+      Assert.AreEqual(bigInteger.ToString(), outBigInteger.ToString());
     }
 
     /// <summary>

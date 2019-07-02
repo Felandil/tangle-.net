@@ -3,7 +3,6 @@
   using System;
   using System.Collections.Generic;
   using System.Linq;
-  using System.Threading.Tasks;
 
   using Org.BouncyCastle.Math;
 
@@ -15,8 +14,6 @@
   /// </summary>
   public static class Converter
   {
-    #region Constants
-
     /// <summary>
     /// The radix.
     /// </summary>
@@ -32,47 +29,39 @@
     /// </summary>
     private const int MinTritValue = -1;
 
-    #endregion
-
-    #region Static Fields
-
     /// <summary>
     /// The trytes lookup.
     /// </summary>
     private static readonly Dictionary<char, int[]> TrytesLookup = new Dictionary<char, int[]>
                                                                      {
-                                                                       { '9', new[] { 0, 0, 0 } }, 
-                                                                       { 'A', new[] { 1, 0, 0 } }, 
-                                                                       { 'B', new[] { -1, 1, 0 } }, 
-                                                                       { 'C', new[] { 0, 1, 0 } }, 
-                                                                       { 'D', new[] { 1, 1, 0 } }, 
-                                                                       { 'E', new[] { -1, -1, 1 } }, 
-                                                                       { 'F', new[] { 0, -1, 1 } }, 
-                                                                       { 'G', new[] { 1, -1, 1 } }, 
-                                                                       { 'H', new[] { -1, 0, 1 } }, 
-                                                                       { 'I', new[] { 0, 0, 1 } }, 
-                                                                       { 'J', new[] { 1, 0, 1 } }, 
-                                                                       { 'K', new[] { -1, 1, 1 } }, 
-                                                                       { 'L', new[] { 0, 1, 1 } }, 
-                                                                       { 'M', new[] { 1, 1, 1 } }, 
-                                                                       { 'N', new[] { -1, -1, -1 } }, 
-                                                                       { 'O', new[] { 0, -1, -1 } }, 
-                                                                       { 'P', new[] { 1, -1, -1 } }, 
-                                                                       { 'Q', new[] { -1, 0, -1 } }, 
-                                                                       { 'R', new[] { 0, 0, -1 } }, 
-                                                                       { 'S', new[] { 1, 0, -1 } }, 
-                                                                       { 'T', new[] { -1, 1, -1 } }, 
-                                                                       { 'U', new[] { 0, 1, -1 } }, 
-                                                                       { 'V', new[] { 1, 1, -1 } }, 
-                                                                       { 'W', new[] { -1, -1, 0 } }, 
-                                                                       { 'X', new[] { 0, -1, 0 } }, 
-                                                                       { 'Y', new[] { 1, -1, 0 } }, 
+                                                                       { '9', new[] { 0, 0, 0 } },
+                                                                       { 'A', new[] { 1, 0, 0 } },
+                                                                       { 'B', new[] { -1, 1, 0 } },
+                                                                       { 'C', new[] { 0, 1, 0 } },
+                                                                       { 'D', new[] { 1, 1, 0 } },
+                                                                       { 'E', new[] { -1, -1, 1 } },
+                                                                       { 'F', new[] { 0, -1, 1 } },
+                                                                       { 'G', new[] { 1, -1, 1 } },
+                                                                       { 'H', new[] { -1, 0, 1 } },
+                                                                       { 'I', new[] { 0, 0, 1 } },
+                                                                       { 'J', new[] { 1, 0, 1 } },
+                                                                       { 'K', new[] { -1, 1, 1 } },
+                                                                       { 'L', new[] { 0, 1, 1 } },
+                                                                       { 'M', new[] { 1, 1, 1 } },
+                                                                       { 'N', new[] { -1, -1, -1 } },
+                                                                       { 'O', new[] { 0, -1, -1 } },
+                                                                       { 'P', new[] { 1, -1, -1 } },
+                                                                       { 'Q', new[] { -1, 0, -1 } },
+                                                                       { 'R', new[] { 0, 0, -1 } },
+                                                                       { 'S', new[] { 1, 0, -1 } },
+                                                                       { 'T', new[] { -1, 1, -1 } },
+                                                                       { 'U', new[] { 0, 1, -1 } },
+                                                                       { 'V', new[] { 1, 1, -1 } },
+                                                                       { 'W', new[] { -1, -1, 0 } },
+                                                                       { 'X', new[] { 0, -1, 0 } },
+                                                                       { 'Y', new[] { 1, -1, 0 } },
                                                                        { 'Z', new[] { -1, 0, 0 } }
                                                                      };
-
-    #endregion
-
-    #region Public Methods and Operators
 
     /// <summary>
     /// The increment.
@@ -151,26 +140,28 @@
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    public static int[] ConvertBigIntToTrits(BigInteger value, int size)
+    public static int[] ConvertBigIntToTrits(System.Numerics.BigInteger value, int size)
     {
-      var isNegative = value.CompareTo(BigInteger.Zero) < 0;
-
       var destination = new int[size];
+      var isNegative = value.Sign == -1;
 
-      var absoluteValue = isNegative ? value.Abs() : value;
+      var absoluteValue = isNegative ? System.Numerics.BigInteger.Abs(value) : value;
+      var radix = new System.Numerics.BigInteger(Radix);
+
+
       for (var i = 0; i < size; i++)
       {
-        var divRemainder = absoluteValue.DivideAndRemainder(BigInteger.ValueOf(Radix));
-        var remainder = divRemainder[1].IntValue;
-        absoluteValue = divRemainder[0];
+        var remainder = new System.Numerics.BigInteger();
+        absoluteValue = System.Numerics.BigInteger.DivRem(absoluteValue, radix, out remainder);
+
 
         if (remainder > MaxTritValue)
         {
           remainder = MinTritValue;
-          absoluteValue = absoluteValue.Add(BigInteger.One);
+          absoluteValue = System.Numerics.BigInteger.Add(absoluteValue, System.Numerics.BigInteger.One);
         }
 
-        destination[i] = remainder;
+        destination[i] = (int)remainder;
       }
 
       if (isNegative)
@@ -184,18 +175,11 @@
       return destination;
     }
 
-    /// <summary>
-    /// The convert bytes to big int.
-    /// </summary>
-    /// <param name="bytes">
-    /// The bytes.
-    /// </param>
-    /// <returns>
-    /// The <see cref="BigInteger"/>.
-    /// </returns>
-    public static BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
+    public static System.Numerics.BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
     {
-      return new BigInteger(bytes.ToArray());
+      return BitConverter.IsLittleEndian
+               ? new System.Numerics.BigInteger(bytes.Reverse().ToArray())
+               : new System.Numerics.BigInteger(bytes.ToArray());
     }
 
     /// <summary>
@@ -365,7 +349,7 @@
 
       for (var i = trits.Length; i-- > 0;)
       {
-        returnValue = (returnValue * Radix) + trits[i];
+        returnValue = returnValue * Radix + trits[i];
       }
 
       return returnValue;
@@ -412,10 +396,6 @@
 
       return trits.ToArray();
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// The any.
@@ -488,7 +468,5 @@
 
       return new[] { s_out, c_out };
     }
-
-    #endregion
   }
 }
