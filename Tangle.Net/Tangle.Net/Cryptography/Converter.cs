@@ -3,8 +3,7 @@
   using System;
   using System.Collections.Generic;
   using System.Linq;
-
-  using Org.BouncyCastle.Math;
+  using System.Numerics;
 
   using Tangle.Net.Cryptography.Curl;
   using Tangle.Net.Utils;
@@ -104,8 +103,8 @@
     public static byte[] ConvertBigIntToBytes(BigInteger value)
     {
       var result = new byte[Kerl.ByteHashLength];
-      var bytes = value.ToByteArray();
-      var isNegative = value.CompareTo(BigInteger.Zero) < 0;
+      var bytes = value.ToByteArray().Reverse().ToArray();
+      var isNegative = value.Sign == -1;
 
       var i = 0;
       while (i + bytes.Length < Kerl.ByteHashLength)
@@ -140,25 +139,23 @@
     /// <returns>
     /// The <see cref="int[]"/>.
     /// </returns>
-    public static int[] ConvertBigIntToTrits(System.Numerics.BigInteger value, int size)
+    public static int[] ConvertBigIntToTrits(BigInteger value, int size)
     {
       var destination = new int[size];
       var isNegative = value.Sign == -1;
 
-      var absoluteValue = isNegative ? System.Numerics.BigInteger.Abs(value) : value;
-      var radix = new System.Numerics.BigInteger(Radix);
-
+      var absoluteValue = isNegative ? BigInteger.Abs(value) : value;
+      var radix = new BigInteger(Radix);
 
       for (var i = 0; i < size; i++)
       {
-        var remainder = new System.Numerics.BigInteger();
-        absoluteValue = System.Numerics.BigInteger.DivRem(absoluteValue, radix, out remainder);
-
+        var remainder = new BigInteger();
+        absoluteValue = BigInteger.DivRem(absoluteValue, radix, out remainder);
 
         if (remainder > MaxTritValue)
         {
           remainder = MinTritValue;
-          absoluteValue = System.Numerics.BigInteger.Add(absoluteValue, System.Numerics.BigInteger.One);
+          absoluteValue = BigInteger.Add(absoluteValue, BigInteger.One);
         }
 
         destination[i] = (int)remainder;
@@ -175,11 +172,9 @@
       return destination;
     }
 
-    public static System.Numerics.BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
+    public static BigInteger ConvertBytesToBigInt(IEnumerable<byte> bytes)
     {
-      return BitConverter.IsLittleEndian
-               ? new System.Numerics.BigInteger(bytes.Reverse().ToArray())
-               : new System.Numerics.BigInteger(bytes.ToArray());
+      return BitConverter.IsLittleEndian ? new BigInteger(bytes.Reverse().ToArray()) : new BigInteger(bytes.ToArray());
     }
 
     /// <summary>
@@ -214,10 +209,12 @@
     public static BigInteger ConvertTritsToBigInt(int[] trits, int offset, int size)
     {
       var value = BigInteger.Zero;
+      var radix = new BigInteger(Radix);
 
       for (var i = size; i-- > 0;)
       {
-        value = value.Multiply(BigInteger.ValueOf(Radix)).Add(BigInteger.ValueOf(trits[offset + i]));
+        var multiplied = BigInteger.Multiply(radix, value);
+        value = BigInteger.Add(new BigInteger(trits[offset + i]), multiplied);
       }
 
       return value;
@@ -234,7 +231,7 @@
     /// </returns>
     public static byte[] ConvertTritsToBytes(int[] trits)
     {
-      return ConvertBigIntToBytes(ConvertTritsToBigInt(trits, 0, Constants.TritHashLength));
+      return ConvertBigIntToBytes(BigInteger.Parse(ConvertTritsToBigInt(trits, 0, Constants.TritHashLength).ToString()));
     }
 
     /// <summary>

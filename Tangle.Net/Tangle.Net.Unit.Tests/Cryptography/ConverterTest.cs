@@ -1,6 +1,7 @@
 ﻿namespace Tangle.Net.Unit.Tests.Cryptography
 {
   using System;
+  using System.Collections;
   using System.Linq;
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,10 +56,26 @@
     public void BytesFromBigInt()
     {
       var bigInteger =
-        new BigInteger("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
+        System.Numerics.BigInteger.Parse("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
       var outBytes = Converter.ConvertBigIntToBytes(bigInteger);
       var outBigInteger = Converter.ConvertBytesToBigInt(outBytes);
       Assert.AreEqual(bigInteger.ToString(), outBigInteger.ToString());
+    }
+
+    [TestMethod]
+    public void TestBytesMatch()
+    {
+      var bigIntegerCsharp =
+        System.Numerics.BigInteger.Parse("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
+      var bigIntegerBouncy =
+        new BigInteger("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
+
+      Assert.AreEqual(bigIntegerCsharp.ToString(), bigIntegerBouncy.ToString());
+
+      var csharpBytes = bigIntegerCsharp.ToByteArray().Reverse();
+      var bouncyBytes = bigIntegerBouncy.ToByteArray();
+
+      Assert.IsTrue(csharpBytes.SequenceEqual(bouncyBytes));
     }
 
     /// <summary>
@@ -91,7 +108,7 @@
         var inBigInteger = Converter.ConvertBytesToBigInt(inBytes);
         var trits = Converter.ConvertBigIntToTrits(inBigInteger, TritSize);
         var outBigInteger = Converter.ConvertTritsToBigInt(trits, 0, TritSize);
-        var outBytes = Converter.ConvertBigIntToBytes(outBigInteger);
+        var outBytes = Converter.ConvertBigIntToBytes(System.Numerics.BigInteger.Parse(outBigInteger.ToString()));
 
         for (var y = 0; y < inBytes.Length; y++)
         {
@@ -113,7 +130,7 @@
         inTrits[242] = 0;
 
         var inBigInteger = Converter.ConvertTritsToBigInt(inTrits, 0, TritSize);
-        var bytes = Converter.ConvertBigIntToBytes(inBigInteger);
+        var bytes = Converter.ConvertBigIntToBytes(System.Numerics.BigInteger.Parse(inBigInteger.ToString()));
         var outBigInteger = Converter.ConvertBytesToBigInt(bytes);
         var outTrits = Converter.ConvertBigIntToTrits(outBigInteger, TritSize);
 
