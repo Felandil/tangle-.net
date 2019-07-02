@@ -9,24 +9,14 @@
   using Tangle.Net.Repository.DataTransfer;
   using Tangle.Net.Repository.Responses;
 
-  /// <summary>
-  /// The rest iota repository.
-  /// </summary>
   public partial class RestIotaRepository : IIotaRepository
   {
-
-    /// <summary>
-    /// The max get trytes hash count.
-    /// </summary>
     private const int MaxGetTrytesHashCount = 500;
 
-    /// <summary>
-    ///   The valid find transactions parameters.
-    /// </summary>
     private readonly string[] validFindTransactionParameters = { "addresses", "tags", "approvees", "bundles" };
 
     /// <inheritdoc />
-    public List<TransactionTrytes> AttachToTangle(
+    public virtual List<TransactionTrytes> AttachToTangle(
       Hash branchTransaction,
       Hash trunkTransaction,
       IEnumerable<Transaction> transactions,
@@ -36,7 +26,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> AttachToTangleAsync(
+    public virtual async Task<List<TransactionTrytes>> AttachToTangleAsync(
       Hash branchTransaction,
       Hash trunkTransaction,
       IEnumerable<Transaction> transactions,
@@ -47,21 +37,21 @@
     }
 
     /// <inheritdoc />
-    public void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
+    public virtual void BroadcastTransactions(IEnumerable<TransactionTrytes> transactions)
     {
       this.Client.ExecuteParameterizedCommand(
         new Dictionary<string, object> { { "command", CommandType.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
-    public async Task BroadcastTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
+    public virtual async Task BroadcastTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
     {
       await this.Client.ExecuteParameterizedCommandAsync(
         new Dictionary<string, object> { { "command", CommandType.BroadcastTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
-    public TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters)
+    public virtual TransactionHashList FindTransactions(Dictionary<string, IEnumerable<TryteString>> parameters)
     {
       var command = this.CreateFindTransactionsParameters(parameters);
       var result = this.Client.ExecuteParameterizedCommand<GetTransactionsResponse>(command);
@@ -70,7 +60,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionHashList> FindTransactionsAsync(
+    public virtual async Task<TransactionHashList> FindTransactionsAsync(
       Dictionary<string, IEnumerable<TryteString>> parameters)
     {
       var command = this.CreateFindTransactionsParameters(parameters);
@@ -80,7 +70,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
+    public virtual TransactionHashList FindTransactionsByAddresses(IEnumerable<Address> addresses)
     {
       return this.FindTransactions(
                new Dictionary<string, IEnumerable<TryteString>>
@@ -93,7 +83,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionHashList> FindTransactionsByAddressesAsync(IEnumerable<Address> addresses)
+    public virtual async Task<TransactionHashList> FindTransactionsByAddressesAsync(IEnumerable<Address> addresses)
     {
       return await this.FindTransactionsAsync(
         new Dictionary<string, IEnumerable<TryteString>>
@@ -106,7 +96,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes)
+    public virtual TransactionHashList FindTransactionsByApprovees(IEnumerable<Hash> approveeHashes)
     {
       return this.FindTransactions(
                new Dictionary<string, IEnumerable<TryteString>>
@@ -120,7 +110,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionHashList> FindTransactionsByApproveesAsync(IEnumerable<Hash> approveeHashes)
+    public virtual async Task<TransactionHashList> FindTransactionsByApproveesAsync(IEnumerable<Hash> approveeHashes)
     {
       return await this.FindTransactionsAsync(
         new Dictionary<string, IEnumerable<TryteString>>
@@ -134,7 +124,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes)
+    public virtual TransactionHashList FindTransactionsByBundles(IEnumerable<Hash> bundleHashes)
     {
       return this.FindTransactions(
                new Dictionary<string, IEnumerable<TryteString>>
@@ -147,7 +137,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionHashList> FindTransactionsByBundlesAsync(IEnumerable<Hash> bundleHashes)
+    public virtual async Task<TransactionHashList> FindTransactionsByBundlesAsync(IEnumerable<Hash> bundleHashes)
     {
       return await this.FindTransactionsAsync(
         new Dictionary<string, IEnumerable<TryteString>>
@@ -160,7 +150,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags)
+    public virtual TransactionHashList FindTransactionsByTags(IEnumerable<Tag> tags)
     {
       return this.FindTransactions(
                new Dictionary<string, IEnumerable<TryteString>>
@@ -172,7 +162,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionHashList> FindTransactionsByTagsAsync(IEnumerable<Tag> tags)
+    public virtual async Task<TransactionHashList> FindTransactionsByTagsAsync(IEnumerable<Tag> tags)
     {
       return await this.FindTransactionsAsync(
         new Dictionary<string, IEnumerable<TryteString>>
@@ -184,7 +174,7 @@
     }
 
     /// <inheritdoc />
-    public AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
+    public virtual AddressWithBalances GetBalances(List<Address> addresses, int threshold = 100)
     {
       var result = this.Client.ExecuteParameterizedCommand<GetBalanceResponse>(
         new Dictionary<string, object>
@@ -210,7 +200,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<AddressWithBalances> GetBalancesAsync(List<Address> addresses, int threshold = 100)
+    public virtual async Task<AddressWithBalances> GetBalancesAsync(List<Address> addresses, int threshold = 100)
     {
       var result = await this.Client.ExecuteParameterizedCommandAsync<GetBalanceResponse>(
                      new Dictionary<string, object>
@@ -236,7 +226,7 @@
     }
 
     /// <inheritdoc />
-    public InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
+    public virtual InclusionStates GetInclusionStates(List<Hash> transactionHashes, IEnumerable<Hash> tips)
     {
       var result = this.Client.ExecuteParameterizedCommand<GetInclusionStatesResponse>(
         new Dictionary<string, object>
@@ -256,7 +246,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<InclusionStates> GetInclusionStatesAsync(List<Hash> transactionHashes, IEnumerable<Hash> tips)
+    public virtual async Task<InclusionStates> GetInclusionStatesAsync(List<Hash> transactionHashes, IEnumerable<Hash> tips)
     {
       var result = await this.Client.ExecuteParameterizedCommandAsync<GetInclusionStatesResponse>(
                      new Dictionary<string, object>
@@ -276,7 +266,7 @@
     }
 
     /// <inheritdoc />
-    public TipHashList GetTips()
+    public virtual TipHashList GetTips()
     {
       var response = this.Client.ExecuteParameterlessCommand<GetTipsResponse>(CommandType.GetTips);
 
@@ -288,7 +278,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TipHashList> GetTipsAsync()
+    public virtual async Task<TipHashList> GetTipsAsync()
     {
       var response = await this.Client.ExecuteParameterlessCommandAsync<GetTipsResponse>(CommandType.GetTips);
 
@@ -300,7 +290,7 @@
     }
 
     /// <inheritdoc />
-    public TransactionsToApprove GetTransactionsToApprove(int depth = 8)
+    public virtual TransactionsToApprove GetTransactionsToApprove(int depth = 8)
     {
       var result = this.Client.ExecuteParameterizedCommand<GetTransactionsToApproveResponse>(
         new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } });
@@ -314,7 +304,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8, Hash reference = null)
+    public virtual async Task<TransactionsToApprove> GetTransactionsToApproveAsync(int depth = 8, Hash reference = null)
     {
       var parameters = new Dictionary<string, object> { { "command", CommandType.GetTransactionsToApprove }, { "depth", depth } };
 
@@ -334,7 +324,7 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> GetTrytes(List<Hash> hashes)
+    public virtual List<TransactionTrytes> GetTrytes(List<Hash> hashes)
     {
       var result = new GetTrytesResponse { Trytes = new List<string>() };
       if (hashes.Count > MaxGetTrytesHashCount)
@@ -359,7 +349,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> GetTrytesAsync(List<Hash> hashes)
+    public virtual async Task<List<TransactionTrytes>> GetTrytesAsync(List<Hash> hashes)
     {
       var result = new GetTrytesResponse { Trytes = new List<string>() };
       if (hashes.Count > MaxGetTrytesHashCount)
@@ -388,34 +378,34 @@
     }
 
     /// <inheritdoc />
-    public void InterruptAttachingToTangle()
+    public virtual void InterruptAttachingToTangle()
     {
       this.Client.ExecuteParameterizedCommand(new Dictionary<string, object> { { "command", CommandType.InterruptAttachingToTangle } });
     }
 
     /// <inheritdoc />
-    public async Task InterruptAttachingToTangleAsync()
+    public virtual async Task InterruptAttachingToTangleAsync()
     {
       await this.Client.ExecuteParameterizedCommandAsync(new Dictionary<string, object> { { "command", CommandType.InterruptAttachingToTangle } });
     }
 
 
     /// <inheritdoc />
-    public void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
+    public virtual void StoreTransactions(IEnumerable<TransactionTrytes> transactions)
     {
       this.Client.ExecuteParameterizedCommand(
         new Dictionary<string, object> { { "command", CommandType.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
-    public async Task StoreTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
+    public virtual async Task StoreTransactionsAsync(IEnumerable<TransactionTrytes> transactions)
     {
       await this.Client.ExecuteParameterizedCommandAsync(
         new Dictionary<string, object> { { "command", CommandType.StoreTransactions }, { "trytes", transactions.Select(t => t.Value).ToList() } });
     }
 
     /// <inheritdoc />
-    public List<Address> WereAddressesSpentFrom(List<Address> addresses)
+    public virtual List<Address> WereAddressesSpentFrom(List<Address> addresses)
     {
       var response = this.Client.ExecuteParameterizedCommand<WereAddressesSpentFromResponse>(
         new Dictionary<string, object>
@@ -433,7 +423,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses)
+    public virtual async Task<List<Address>> WereAddressesSpentFromAsync(List<Address> addresses)
     {
       var response = await this.Client.ExecuteParameterizedCommandAsync<WereAddressesSpentFromResponse>(
                        new Dictionary<string, object>
@@ -451,7 +441,7 @@
     }
 
     /// <inheritdoc />
-    public ConsistencyInfo CheckConsistency(List<Hash> tailHashes)
+    public virtual ConsistencyInfo CheckConsistency(List<Hash> tailHashes)
     {
       var response = this.Client.ExecuteParameterizedCommand<CheckConsistencyResponse>(
         new Dictionary<string, object>
@@ -469,7 +459,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
+    public virtual async Task<ConsistencyInfo> CheckConsistencyAsync(List<Hash> tailHashes)
     {
       var response = await this.Client.ExecuteParameterizedCommandAsync<CheckConsistencyResponse>(
         new Dictionary<string, object>
@@ -495,7 +485,7 @@
     /// <returns>
     /// The <see cref="Dictionary"/>.
     /// </returns>
-    private Dictionary<string, object> CreateFindTransactionsParameters(
+    protected Dictionary<string, object> CreateFindTransactionsParameters(
       Dictionary<string, IEnumerable<TryteString>> parameters)
     {
       if (parameters.Count == 0)

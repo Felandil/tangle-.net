@@ -85,7 +85,7 @@
     private IAddressGenerator AddressGenerator { get; }
 
     /// <inheritdoc />
-    public async Task<bool> IsPromotableAsync(Hash tailTransaction, int depth = 6)
+    public virtual async Task<bool> IsPromotableAsync(Hash tailTransaction, int depth = 6)
     {
       const int MilestoneInterval = 2 * 60 * 1000;
       const int OneWayDelay = 1 * 60 * 1000;
@@ -101,7 +101,7 @@
     }
 
     /// <inheritdoc />
-    public async Task PromoteTransactionAsync(Hash tailTransaction, int depth = 8, int minWeightMagnitude = 14, int attempts = 10)
+    public virtual async Task PromoteTransactionAsync(Hash tailTransaction, int depth = 8, int minWeightMagnitude = 14, int attempts = 10)
     {
       if (attempts <= 0)
       {
@@ -141,21 +141,21 @@
     }
 
     /// <inheritdoc />
-    public void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
+    public virtual void BroadcastAndStoreTransactions(List<TransactionTrytes> transactions)
     {
       this.BroadcastTransactions(transactions);
       this.StoreTransactions(transactions);
     }
 
     /// <inheritdoc />
-    public async Task BroadcastAndStoreTransactionsAsync(List<TransactionTrytes> transactions)
+    public virtual async Task BroadcastAndStoreTransactionsAsync(List<TransactionTrytes> transactions)
     {
       await this.BroadcastTransactionsAsync(transactions);
       await this.StoreTransactionsAsync(transactions);
     }
 
     /// <inheritdoc />
-    public FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start)
+    public virtual FindUsedAddressesResponse FindUsedAddressesWithTransactions(Seed seed, int securityLevel, int start)
     {
       var usedAddresses = new List<Address>();
       var associatedTransactionHashes = new List<Hash>();
@@ -187,7 +187,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<FindUsedAddressesResponse> FindUsedAddressesWithTransactionsAsync(Seed seed, int securityLevel, int start)
+    public virtual async Task<FindUsedAddressesResponse> FindUsedAddressesWithTransactionsAsync(Seed seed, int securityLevel, int start)
     {
       var usedAddresses = new List<Address>();
       var associatedTransactionHashes = new List<Hash>();
@@ -219,7 +219,7 @@
     }
 
     /// <inheritdoc />
-    public GetAccountDataResponse GetAccountData(
+    public virtual GetAccountDataResponse GetAccountData(
       Seed seed,
       bool includeInclusionStates,
       int securityLevel,
@@ -251,7 +251,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<GetAccountDataResponse> GetAccountDataAsync(Seed seed, bool includeInclusionStates, int securityLevel, int addressStartIndex, int addressStopIndex = 0)
+    public virtual async Task<GetAccountDataResponse> GetAccountDataAsync(Seed seed, bool includeInclusionStates, int securityLevel, int addressStartIndex, int addressStopIndex = 0)
     {
       var usedAddressesWithTransactions =
         await this.FindUsedAddressesWithTransactionsAsync(seed, securityLevel, addressStartIndex);
@@ -278,7 +278,7 @@
     }
 
     /// <inheritdoc />
-    public Bundle GetBundle(Hash transactionHash)
+    public virtual Bundle GetBundle(Hash transactionHash)
     {
       var bundle = new Bundle { Transactions = this.TraverseBundle(transactionHash) };
 
@@ -295,7 +295,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<Bundle> GetBundleAsync(Hash transactionHash)
+    public virtual async Task<Bundle> GetBundleAsync(Hash transactionHash)
     {
       var bundle = new Bundle { Transactions = await this.TraverseBundleAsync(transactionHash) };
 
@@ -312,7 +312,7 @@
     }
 
     /// <inheritdoc />
-    public List<Bundle> GetBundles(List<Hash> transactionHashes, bool includeInclusionStates)
+    public virtual List<Bundle> GetBundles(List<Hash> transactionHashes, bool includeInclusionStates)
     {
       var tailTransactions = new List<Hash>();
       var nonTailTransactions = new List<Transaction>();
@@ -366,7 +366,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<Bundle>> GetBundlesAsync(List<Hash> transactionHashes, bool includeInclusionStates)
+    public virtual async Task<List<Bundle>> GetBundlesAsync(List<Hash> transactionHashes, bool includeInclusionStates)
     {
       var tailTransactions = new List<Hash>();
       var nonTailTransactions = new List<Transaction>();
@@ -420,7 +420,7 @@
     }
 
     /// <inheritdoc />
-    public GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
+    public virtual GetInputsResponse GetInputs(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
     {
       if (startIndex > stopIndex)
       {
@@ -459,7 +459,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<GetInputsResponse> GetInputsAsync(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
+    public virtual async Task<GetInputsResponse> GetInputsAsync(Seed seed, long threshold, int securityLevel, int startIndex, int stopIndex = 0)
     {
       if (startIndex > stopIndex)
       {
@@ -499,21 +499,21 @@
 
 
     /// <inheritdoc />
-    public InclusionStates GetLatestInclusion(List<Hash> hashes)
+    public virtual InclusionStates GetLatestInclusion(List<Hash> hashes)
     {
       var nodeInfo = this.GetNodeInfo();
       return this.GetInclusionStates(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
     }
 
     /// <inheritdoc />
-    public async Task<InclusionStates> GetLatestInclusionAsync(List<Hash> hashes)
+    public virtual async Task<InclusionStates> GetLatestInclusionAsync(List<Hash> hashes)
     {
       var nodeInfo = await this.GetNodeInfoAsync();
       return await this.GetInclusionStatesAsync(hashes, new List<Hash> { new Hash(nodeInfo.LatestSolidSubtangleMilestone) });
     }
 
     /// <inheritdoc />
-    public List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
+    public virtual List<Address> GetNewAddresses(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
       var result = new List<Address>();
 
@@ -542,7 +542,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<Address>> GetNewAddressesAsync(Seed seed, int addressStartIndex, int count, int securityLevel)
+    public virtual async Task<List<Address>> GetNewAddressesAsync(Seed seed, int addressStartIndex, int count, int securityLevel)
     {
       var result = new List<Address>();
 
@@ -571,7 +571,7 @@
     }
 
     /// <inheritdoc />
-    public List<Bundle> GetTransfers(
+    public virtual List<Bundle> GetTransfers(
       Seed seed,
       int securityLevel,
       bool includeInclusionStates,
@@ -598,7 +598,7 @@
     }
 
     /// <inheritdoc />
-    public Bundle PrepareTransfer(
+    public virtual Bundle PrepareTransfer(
       Seed seed,
       Bundle bundle,
       int securityLevel,
@@ -640,7 +640,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<Bundle> PrepareTransferAsync(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null)
+    public virtual async Task<Bundle> PrepareTransferAsync(Seed seed, Bundle bundle, int securityLevel, Address remainderAddress = null, List<Address> inputAddresses = null)
     {
       // user wants to spend IOTA, so we need to find input addresses (if not provided) with valid balances
       if (bundle.Balance > 0)
@@ -677,7 +677,7 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
+    public virtual List<TransactionTrytes> ReplayBundle(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
     {
       var bundle = this.GetBundle(transactionHash);
 
@@ -685,7 +685,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
+    public virtual async Task<List<TransactionTrytes>> ReplayBundleAsync(Hash transactionHash, int depth = 8, int minWeightMagnitude = 14)
     {
       var bundle = await this.GetBundleAsync(transactionHash);
 
@@ -693,7 +693,7 @@
     }
 
     /// <inheritdoc />
-    public Bundle SendTransfer(
+    public virtual Bundle SendTransfer(
       Seed seed,
       Bundle bundle,
       int securityLevel,
@@ -709,7 +709,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<Bundle> SendTransferAsync(
+    public virtual async Task<Bundle> SendTransferAsync(
       Seed seed,
       Bundle bundle,
       int securityLevel,
@@ -725,7 +725,7 @@
     }
 
     /// <inheritdoc />
-    public List<TransactionTrytes> SendTrytes(
+    public virtual List<TransactionTrytes> SendTrytes(
       IEnumerable<Transaction> transactions,
       int depth = 8,
       int minWeightMagnitude = 14)
@@ -744,7 +744,7 @@
     }
 
     /// <inheritdoc />
-    public async Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 8, int minWeightMagnitude = 14)
+    public virtual async Task<List<TransactionTrytes>> SendTrytesAsync(IEnumerable<Transaction> transactions, int depth = 8, int minWeightMagnitude = 14)
     {
       var transactionsToApprove = await this.GetTransactionsToApproveAsync(depth);
 
@@ -935,7 +935,7 @@
       var nextTransactions = result.Where(t => t.CurrentIndex != t.LastIndex).ToList();
       if (nextTransactions.Count > 0)
       {
-        result.AddRange(this.TraverseBundles(nextTransactions.Select(t => t.TrunkTransaction).ToList(), nextTransactions.Select(t => t.BundleHash).ToList()));
+        result.AddRange(await this.TraverseBundlesAsync(nextTransactions.Select(t => t.TrunkTransaction).ToList(), nextTransactions.Select(t => t.BundleHash).ToList()));
       }
 
       return result;

@@ -1,12 +1,12 @@
 ﻿namespace Tangle.Net.Entity
 {
+  using System;
+
   /// <summary>
   /// The transfer.
   /// </summary>
   public class Transfer
   {
-    #region Constructors and Destructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Transfer"/> class.
     /// </summary>
@@ -15,9 +15,31 @@
       this.Tag = new Tag();
     }
 
-    #endregion
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Transfer"/> class.
+    /// </summary>
+    /// <param name="address">Address to send to as string</param>
+    /// <param name="tag">Tag to use as string</param>
+    /// <param name="message">Message to send. Will be handled as ASCII string</param>
+    /// <param name="timestamp">Transfer timestamp</param>
+    /// <param name="value">Value to attach to transfer</param>
+    public Transfer(string address, string tag, string message, DateTime timestamp, long value = 0)
+    {
+      this.Address = new Address(address);
+      this.Tag = new Tag(tag);
+      this.Message = TryteString.FromAsciiString(message);
+      this.Timestamp = Utils.Timestamp.Convert(timestamp);
+      this.ValueToTransfer = value;
+    }
 
-    #region Public Properties
+    public Transfer(Address address, Tag tag, TryteString message, DateTime timestamp, long value = 0)
+    {
+      this.Address = address;
+      this.Tag = tag;
+      this.Message = message;
+      this.Timestamp = Utils.Timestamp.Convert(timestamp);
+      this.ValueToTransfer = value;
+    }
 
     /// <summary>
     /// Gets or sets the address.
@@ -43,7 +65,5 @@
     /// Gets or sets the value to transfer.
     /// </summary>
     public long ValueToTransfer { get; set; }
-
-    #endregion
   }
 }
