@@ -3,10 +3,10 @@
   using System;
   using System.Collections;
   using System.Linq;
+  using System.Numerics;
 
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-  using Org.BouncyCastle.Math;
   using Org.BouncyCastle.Utilities;
 
   using Tangle.Net.Cryptography;
@@ -60,22 +60,6 @@
       var outBytes = Converter.ConvertBigIntToBytes(bigInteger);
       var outBigInteger = Converter.ConvertBytesToBigInt(outBytes);
       Assert.AreEqual(bigInteger.ToString(), outBigInteger.ToString());
-    }
-
-    [TestMethod]
-    public void TestBytesMatch()
-    {
-      var bigIntegerCsharp =
-        System.Numerics.BigInteger.Parse("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
-      var bigIntegerBouncy =
-        new BigInteger("-39661267093385976646699885460151224333890761109786635767964779188997717436995426392349825946870259974898439594016");
-
-      Assert.AreEqual(bigIntegerCsharp.ToString(), bigIntegerBouncy.ToString());
-
-      var csharpBytes = bigIntegerCsharp.ToByteArray().Reverse();
-      var bouncyBytes = bigIntegerBouncy.ToByteArray();
-
-      Assert.IsTrue(csharpBytes.SequenceEqual(bouncyBytes));
     }
 
     /// <summary>
