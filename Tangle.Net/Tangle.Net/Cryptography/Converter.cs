@@ -231,7 +231,7 @@
     /// </returns>
     public static byte[] ConvertTritsToBytes(int[] trits)
     {
-      return ConvertBigIntToBytes(BigInteger.Parse(ConvertTritsToBigInt(trits, 0, Constants.TritHashLength).ToString()));
+      return ConvertBigIntToBytes(ConvertTritsToBigInt(trits, 0, Constants.TritHashLength));
     }
 
     /// <summary>

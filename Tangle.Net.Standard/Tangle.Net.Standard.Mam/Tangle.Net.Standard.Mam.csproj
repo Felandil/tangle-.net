@@ -49,7 +49,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Tangle.Net.Standard" Version="3.0.0" />
+    <PackageReference Include="Tangle.Net.Standard" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

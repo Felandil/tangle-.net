@@ -1,10 +1,8 @@
 ﻿namespace Tangle.Net.Utils
 {
   using System.Collections.Generic;
-  using System.Globalization;
   using System.Linq;
-
-  using Org.BouncyCastle.Math;
+  using System.Numerics;
 
   using RestSharp;
   using RestSharp.Deserializers;
@@ -12,8 +10,6 @@
   using Tangle.Net.Cryptography;
   using Tangle.Net.Entity;
   using Tangle.Net.Repository.Responses;
-
-  using BigInteger = System.Numerics.BigInteger;
 
   /// <summary>
   /// The string extensions.
