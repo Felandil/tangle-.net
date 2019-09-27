@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="NetMQ" Version="4.0.0.1" />
-    <PackageReference Include="Tangle.Net.Standard" Version="3.0.1" />
+    <PackageReference Include="Tangle.Net.Standard" Version="3.1.0" />
   </ItemGroup>
 
 </Project>
