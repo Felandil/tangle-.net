@@ -116,9 +116,9 @@ Generating an address
 .. code-block:: bash
 
     var seed = new Seed("SOMESEEDHERE")
-    var addressGenerator = new AddressGenerator(seed, SecurityLevel.Medium);
-    var address = addressGenerator.GetAddress(0);
-    var addresses = addressGenerator.GetAddresses(0, 10);
+    var addressGenerator = new AddressGenerator();
+    var address = addressGenerator.GetAddress(seed, SecurityLevel.Medium, 0);
+    var addresses = addressGenerator.GetAddresses(seed, SecurityLevel.Medium, 0, 10);
 
 When you generate an address you will need to provide an index. Since addresses are generated deterministically the first address index will always result in the same address. For generating more than one address use the GetAddresses method, provided with a count.
 

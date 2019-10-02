@@ -149,8 +149,7 @@
 
       for (var i = 0; i < size; i++)
       {
-        var remainder = new BigInteger();
-        absoluteValue = BigInteger.DivRem(absoluteValue, radix, out remainder);
+        absoluteValue = BigInteger.DivRem(absoluteValue, radix, out var remainder);
 
         if (remainder > MaxTritValue)
         {
