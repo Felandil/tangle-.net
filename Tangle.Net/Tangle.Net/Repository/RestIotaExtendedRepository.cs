@@ -93,7 +93,7 @@
       var consitencyInfo = await this.CheckConsistencyAsync(new List<Hash> { tailTransaction });
       var transaction = Transaction.FromTrytes((await this.GetTrytesAsync(new List<Hash> { tailTransaction })).First());
 
-      var timestamp = Timestamp.UnixSecondsTimestamp;
+      var timestamp = Timestamp.UnixMillisecondsTimestamp;
       var isAboveMaxDepth = transaction.AttachmentTimestamp < timestamp
                             && timestamp - transaction.AttachmentTimestamp < (depth * MilestoneInterval) - OneWayDelay;
 
