@@ -41,6 +41,13 @@ namespace Tangle.Net.Api
                         Payload = new IndexationPayload { Index = index, Data = payload.ToHex() }
                       };
 
+      return await this.SendMessageAsync(message);
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
+      where T : PayloadBase
+    {
       using (var client = new HttpClient())
       {
 
