@@ -15,6 +15,7 @@ namespace Tangle.Net.Api
 
   using Tangle.Net.Models;
   using Tangle.Net.Models.MessagePayload;
+  using Tangle.Net.Services;
 
   public class NodeRestClient : IClient
   {
@@ -37,7 +38,7 @@ namespace Tangle.Net.Api
                       {
                         Parent1MessageId = tips.TipOneMessageId,
                         Parent2MessageId = tips.TipTwoMessageId,
-                        Payload = new IndexationPayload { Index = index, Data = "" }
+                        Payload = new IndexationPayload { Index = index, Data = payload.ToHex() }
                       };
 
       using (var client = new HttpClient())
