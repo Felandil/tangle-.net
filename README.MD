@@ -13,28 +13,33 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced in IOTA 1.5 (Chrysalis)
 
-## Supported Operations
+## Supported REST Operations
 
-| Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
-| ------------------------------ | --------------- | -------------------------------- | --------------- | 
-| getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
-| getNodeInfo					 | Yes             | getAccountData				      | Yes		        |
-| addNeighbors					 | Yes			   | getBundle					      | Yes		        |
-| removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
-| getTips						 | Yes             | getLatestInclusion			      | Yes             |
-| findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | Yes			    |
-| getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
-| getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
-| attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
-| interruptAttachingToTangle	 | Yes             |
-| broadcastTransactions			 | Yes			   |
-| storeTransactions				 | Yes			   |
-| wereAddressesSpentFrom	     | Yes			   |
-| checkConsistency				 | Yes			   |
+**Proof of work** can currently only be done remotely. Signing transactions etc. is still work in progress.
 
-In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
+| Operation - Node				 			   | Supported       | 
+| ------------------------------------------------ | --------------- | 
+| GET /health					 				   | Yes		     |
+| GET /api/v1/info					 			   | Yes             |		
+| GET /api/v1/tips					 			   | Yes			 |	
+
+<br>
+
+| Operation - Tangle				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| GET /api/v1/tips					 			   | Yes			 |	
+
+<br>
+
+| Operation - Messages				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| POST /api/v1/messages				 | Partially			   | 			
+| GET /api/v1/messages						 | Yes             | 			
+| GET /api/v1/messages/{messageId}			 | Partially	           |  
+| GET /api/v1/messages/{messageId}/metadata						 | Yes	| 	
+| GET /api/v1/messages/{messageId}/raw			 | Yes             | 		
+| GET /api/v1/messages/{messageId}/children					 | Yes  |		
+
 
 ## Documentation
 
