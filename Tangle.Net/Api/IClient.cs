@@ -17,6 +17,8 @@
 
     Task<MessageMetadataResponse> GetMessageMetadataAsync(string messageId);
 
+    Task<MessageRawResponse> GetMessageRawAsync(string messageId);
+
     Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index);
 
     Task<TipsResponse> GetTipsAsync();

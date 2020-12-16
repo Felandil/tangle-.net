@@ -45,6 +45,12 @@ namespace Tangle.Net.Console
       Console.WriteLine(JsonConvert.SerializeObject(messageMetadata, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
+      Console.WriteLine("Reading Message Raw--------------------");
+      var messageRaw = await client.GetMessageRawAsync(sendResponse.MessageId);
+      Console.WriteLine(JsonConvert.SerializeObject(messageRaw, Formatting.Indented));
+      Console.WriteLine(messageRaw.MessageRaw.ToHex());
+      Console.WriteLine("---------------------------------------");
+
       Console.WriteLine("Reading Message Ids -------------------");
       var messageIds = await client.GetMessageIdsByIndexAsync("Tangle.Net");
       Console.WriteLine(JsonConvert.SerializeObject(messageIds, Formatting.Indented));

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace Tangle.Net.Api
 {
   using System.Net.Http;
-  using System.Text.Json;
   using System.Threading.Tasks;
 
   using Tangle.Net.Api.Responses;
-  using System.Text.Json.Serialization;
 
   using Newtonsoft.Json;
 
@@ -81,6 +77,17 @@ namespace Tangle.Net.Api
         var response = JsonConvert.DeserializeObject<ClientResponse<MessageMetadataResponse>>(await responseStream.Content.ReadAsStringAsync());
 
         return response.Data;
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageRawResponse> GetMessageRawAsync(string messageId)
+    {
+      using (var client = new HttpClient())
+      {
+        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/raw");
+
+        return new MessageRawResponse { MessageRaw = await responseStream.Content.ReadAsByteArrayAsync() };
       }
     }
 
