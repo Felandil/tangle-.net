@@ -56,6 +56,12 @@ namespace Tangle.Net.Console
       Console.WriteLine(JsonConvert.SerializeObject(messageIds, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
+      Console.WriteLine("Reading Milestone ---------------------");
+      var milestone = await client.GetMessageAsync<MilestonePayload>("188de81095c508b9a46519960aac6df4927a5f8a3c77e595157be8c13bb73b1d");
+      Console.WriteLine(JsonConvert.SerializeObject(milestone, Formatting.Indented));
+      Console.WriteLine($"Issued at: {milestone.Payload.Timestamp.UnixTimestampToDateTime():F}");
+      Console.WriteLine("---------------------------------------");
+
       Console.ReadKey();
     }
   }

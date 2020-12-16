@@ -5,5 +5,7 @@
     public const string Conflicting = "conflicting";
 
     public const string Included = "included";
+
+    public const string NoTransaction = "noTransaction";
   }
 }
