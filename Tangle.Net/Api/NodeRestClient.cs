@@ -63,6 +63,16 @@
     }
 
     /// <inheritdoc />
+    public async Task<bool> IsNodeHealthy()
+    {
+      using (var client = new HttpClient())
+      {
+        var response = await client.GetAsync($"{this.NodeUrl}/health");
+        return response.IsSuccessStatusCode;
+      }
+    }
+
+    /// <inheritdoc />
     public async Task<NodeInfo> GetNodeInfoAsync()
     {
       return await ExecuteRequestAsync<NodeInfo>($"{this.NodeUrl}/api/v1/info");

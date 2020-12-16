@@ -10,6 +10,8 @@
 
   public interface IClient
   {
+    Task<bool> IsNodeHealthy();
+
     Task<NodeInfo> GetNodeInfoAsync();
 
     Task<MessageIdResponse> SendDataAsync(string payload, string index);
