@@ -11,41 +11,39 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 ## About
 
-This project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
+This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced in IOTA 1.5 (Chrysalis)
 
-## Supported Operations
+## Supported REST Operations
 
-Next Up: 
+**Proof of work** can currently only be done remotely. Signing transactions etc. is still work in progress.
 
-	**Multisig**
-	**Curl Performance**
-	**Flash Channels**
+| Operation - Node				 			   | Supported       | 
+| ------------------------------------------------ | --------------- | 
+| GET /health					 				   | Yes		     |
+| GET /api/v1/info					 			   | Yes             |		
+| GET /api/v1/tips					 			   | Yes			 |	
 
+<br>
 
-| Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
-| ------------------------------ | --------------- | -------------------------------- | --------------- | 
-| getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
-| getNodeInfo					 | Yes             | getAccountData				      | Yes		        |
-| addNeighbors					 | Yes			   | getBundle					      | Yes		        |
-| removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
-| getTips						 | Yes             | getLatestInclusion			      | Yes             |
-| findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | Yes			    |
-| getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
-| getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
-| attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
-| interruptAttachingToTangle	 | Yes             |
-| broadcastTransactions			 | Yes			   |
-| storeTransactions				 | Yes			   |
-| wereAddressesSpentFrom	     | Yes			   |
-| checkConsistency				 | Yes			   |
+| Operation - Tangle				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| GET /api/v1/tips					 			   | Yes			 |	
 
-In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
+<br>
+
+| Operation - Messages				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| POST /api/v1/messages				 | Partially			   | 			
+| GET /api/v1/messages						 | Yes             | 			
+| GET /api/v1/messages/{messageId}			 | Partially	           |  
+| GET /api/v1/messages/{messageId}/metadata						 | Yes	| 	
+| GET /api/v1/messages/{messageId}/raw			 | Yes             | 		
+| GET /api/v1/messages/{messageId}/children					 | Yes  |		
+
 
 ## Documentation
 
-https://tangle-net.readthedocs.io/en/latest/
+**OUDATED** https://tangle-net.readthedocs.io/en/latest/
 
 ## Contributing
 
@@ -53,9 +51,11 @@ If you want to contribute, please feel free to grab an issue or implement more f
 
 ## Encryption
 
-The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/csharp/).
+**TBD**
 
 ## NuGet
+
+**OUDATED** 
 
 ### Tangle.Net
 .NET 4.6.1: https://www.nuget.org/packages/Tangle.Net <br>
