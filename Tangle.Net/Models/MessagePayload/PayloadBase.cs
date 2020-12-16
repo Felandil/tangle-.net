@@ -4,7 +4,7 @@
 
   public abstract class PayloadBase
   {
-    [JsonProperty(PropertyName = "type")]
+    [JsonProperty("type")]
     public int Type { get; set; }
   }
 }

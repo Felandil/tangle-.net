@@ -4,7 +4,7 @@
 
   internal class ClientResponse<T>
   {
-    [JsonProperty(PropertyName = "data")]
+    [JsonProperty("data")]
     public T Data { get; set; }
   }
 }

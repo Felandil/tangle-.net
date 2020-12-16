@@ -15,6 +15,8 @@
 
     Task<Message<T>> GetMessageAsync<T>(string messageId) where T : PayloadBase;
 
+    Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index);
+
     Task<TipsResponse> GetTipsAsync();
   }
 }

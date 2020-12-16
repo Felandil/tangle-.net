@@ -40,6 +40,11 @@ namespace Tangle.Net.Console
       Console.WriteLine(message.Payload.Data.HexToString());
       Console.WriteLine("---------------------------------------");
 
+      Console.WriteLine("Reading Message Ids -------------------");
+      var messageIds = await client.GetMessageIdsByIndexAsync("Tangle.Net");
+      Console.WriteLine(JsonConvert.SerializeObject(messageIds, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+
       Console.ReadKey();
     }
   }

@@ -73,6 +73,18 @@ namespace Tangle.Net.Api
     }
 
     /// <inheritdoc />
+    public async Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index)
+    {
+      using (var client = new HttpClient())
+      {
+        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages?index={index}");
+        var response = JsonConvert.DeserializeObject<ClientResponse<MessageIdsByIndexResponse>>(await responseStream.Content.ReadAsStringAsync());
+
+        return response.Data;
+      }
+    }
+
+    /// <inheritdoc />
     public async Task<TipsResponse> GetTipsAsync()
     {
       using (var client = new HttpClient())

@@ -8,19 +8,19 @@
     where T : PayloadBase
 
   {
-    [JsonProperty(PropertyName = "networkId")]
+    [JsonProperty("networkId")]
     public string NetworkId { get; set; }
 
-    [JsonProperty(PropertyName = "nonce")]
+    [JsonProperty("nonce")]
     public string Nonce { get; set; }
 
-    [JsonProperty(PropertyName = "parent1MessageId")]
+    [JsonProperty("parent1MessageId")]
     public string Parent1MessageId { get; set; }
 
-    [JsonProperty(PropertyName = "parent2MessageId")]
+    [JsonProperty("parent2MessageId")]
     public string Parent2MessageId { get; set; }
 
-    [JsonProperty(PropertyName = "payload")]
+    [JsonProperty("payload")]
     public T Payload { get; set; }
   }
 }

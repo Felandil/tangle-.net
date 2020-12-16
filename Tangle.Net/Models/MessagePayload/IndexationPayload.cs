@@ -9,10 +9,10 @@
       this.Type = 2;
     }
 
-    [JsonProperty(PropertyName = "data")]
+    [JsonProperty("data")]
     public string Data { get; set; }
 
-    [JsonProperty(PropertyName = "index")]
+    [JsonProperty("index")]
     public string Index { get; set; }
   }
 }

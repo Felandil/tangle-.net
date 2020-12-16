@@ -4,7 +4,7 @@
 
   public class MessageIdResponse
   {
-    [JsonProperty(PropertyName = "messageId")]
+    [JsonProperty("messageId")]
     public string MessageId { get; set; }
   }
 }
