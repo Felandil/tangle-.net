@@ -8,7 +8,7 @@ namespace Tangle.Net.Console
 
   using Tangle.Net.Api;
   using Tangle.Net.Models.MessagePayload;
-  using Tangle.Net.Services;
+  using Tangle.Net.Utils;
 
   using Console = System.Console;
 
@@ -30,7 +30,7 @@ namespace Tangle.Net.Console
 
 
       Console.WriteLine("Sending Message -----------------------");
-      var sendResponse = await client.SendMessageAsync("Hello world!", "Tangle.Net");
+      var sendResponse = await client.SendDataAsync("Hello world!", "Tangle.Net");
       Console.WriteLine(JsonConvert.SerializeObject(sendResponse, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
@@ -38,6 +38,11 @@ namespace Tangle.Net.Console
       var message = await client.GetMessageAsync<IndexationPayload>(sendResponse.MessageId);
       Console.WriteLine(JsonConvert.SerializeObject(message, Formatting.Indented));
       Console.WriteLine(message.Payload.Data.HexToString());
+      Console.WriteLine("---------------------------------------");
+
+      Console.WriteLine("Reading Message Metadata---------------");
+      var messageMetadata = await client.GetMessageMetadataAsync(sendResponse.MessageId);
+      Console.WriteLine(JsonConvert.SerializeObject(messageMetadata, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
       Console.WriteLine("Reading Message Ids -------------------");

@@ -6,7 +6,7 @@ namespace Tangle.Net.Tests.Services
 {
   using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-  using Tangle.Net.Services;
+  using Tangle.Net.Utils;
 
   [TestClass]
   public class ConverterTest

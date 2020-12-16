@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
-
-namespace Tangle.Net.Services
+﻿namespace Tangle.Net.Utils
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
+  using System.Text;
 
   public static class Converter
   {

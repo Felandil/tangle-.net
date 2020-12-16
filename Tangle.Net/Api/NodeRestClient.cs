@@ -15,7 +15,7 @@ namespace Tangle.Net.Api
 
   using Tangle.Net.Models;
   using Tangle.Net.Models.MessagePayload;
-  using Tangle.Net.Services;
+  using Tangle.Net.Utils;
 
   public class NodeRestClient : IClient
   {
@@ -31,7 +31,7 @@ namespace Tangle.Net.Api
     }
 
     /// <inheritdoc />
-    public async Task<MessageIdResponse> SendMessageAsync(string payload, string index)
+    public async Task<MessageIdResponse> SendDataAsync(string payload, string index)
     {
       var tips = await this.GetTipsAsync();
       var message = new Message<IndexationPayload>
@@ -67,6 +67,18 @@ namespace Tangle.Net.Api
       {
         var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}");
         var response = JsonConvert.DeserializeObject<ClientResponse<Message<T>>>(await responseStream.Content.ReadAsStringAsync());
+
+        return response.Data;
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageMetadataResponse> GetMessageMetadataAsync(string messageId)
+    {
+      using (var client = new HttpClient())
+      {
+        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/metadata");
+        var response = JsonConvert.DeserializeObject<ClientResponse<MessageMetadataResponse>>(await responseStream.Content.ReadAsStringAsync());
 
         return response.Data;
       }
