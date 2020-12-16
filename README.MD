@@ -11,16 +11,9 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 ## About
 
-This project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
+This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced in IOTA 1.5 (Chrysalis)
 
 ## Supported Operations
-
-Next Up: 
-
-	**Multisig**
-	**Curl Performance**
-	**Flash Channels**
-
 
 | Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
 | ------------------------------ | --------------- | -------------------------------- | --------------- | 
@@ -45,7 +38,7 @@ In addition to all operations you can also do the Proof of Work locally via CPU.
 
 ## Documentation
 
-https://tangle-net.readthedocs.io/en/latest/
+**OUDATED** https://tangle-net.readthedocs.io/en/latest/
 
 ## Contributing
 
@@ -53,9 +46,11 @@ If you want to contribute, please feel free to grab an issue or implement more f
 
 ## Encryption
 
-The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/csharp/).
+**TBD**
 
 ## NuGet
+
+**OUDATED** 
 
 ### Tangle.Net
 .NET 4.6.1: https://www.nuget.org/packages/Tangle.Net <br>
