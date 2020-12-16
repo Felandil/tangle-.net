@@ -19,6 +19,8 @@
 
     Task<MessageRawResponse> GetMessageRawAsync(string messageId);
 
+    Task<MessageChildrenResponse> GetMessageChildrenAsync(string messageId);
+
     Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index);
 
     Task<TipsResponse> GetTipsAsync();
