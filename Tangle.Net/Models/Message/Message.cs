@@ -1,8 +1,8 @@
-﻿namespace Tangle.Net.Models
+﻿namespace Tangle.Net.Models.Message
 {
   using Newtonsoft.Json;
 
-  using Tangle.Net.Models.MessagePayload;
+  using Tangle.Net.Models.Message.MessagePayload;
 
   public class Message<T>
     where T : PayloadBase

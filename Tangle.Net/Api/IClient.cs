@@ -3,11 +3,15 @@
   using System.Threading.Tasks;
 
   using Tangle.Net.Api.Responses;
+  using Tangle.Net.Api.Responses.Message;
   using Tangle.Net.Models;
-  using Tangle.Net.Models.MessagePayload;
+  using Tangle.Net.Models.Message;
+  using Tangle.Net.Models.Message.MessagePayload;
 
   public interface IClient
   {
+    Task<NodeInfo> GetNodeInfoAsync();
+
     Task<MessageIdResponse> SendDataAsync(string payload, string index);
 
     Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
@@ -15,7 +19,7 @@
 
     Task<Message<T>> GetMessageAsync<T>(string messageId) where T : PayloadBase;
 
-    Task<MessageMetadataResponse> GetMessageMetadataAsync(string messageId);
+    Task<MessageMetadata> GetMessageMetadataAsync(string messageId);
 
     Task<MessageRawResponse> GetMessageRawAsync(string messageId);
 

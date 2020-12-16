@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Models.MessagePayload
+﻿namespace Tangle.Net.Models.Message.MessagePayload
 {
   using System.Collections.Generic;
 

@@ -1,8 +1,8 @@
-﻿namespace Tangle.Net.Api.Responses
+﻿namespace Tangle.Net.Models.Message
 {
   using Newtonsoft.Json;
 
-  public class MessageMetadataResponse
+  public class MessageMetadata
   {
     [JsonProperty("isSolid")]
     public bool IsSolid { get; set; }

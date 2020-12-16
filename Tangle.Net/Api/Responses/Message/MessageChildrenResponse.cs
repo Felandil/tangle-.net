@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Api.Responses
+﻿namespace Tangle.Net.Api.Responses.Message
 {
   using System.Collections.Generic;
 

@@ -1,29 +1,77 @@
-﻿using System.Text;
-
-namespace Tangle.Net.Api
+﻿namespace Tangle.Net.Api
 {
   using System.Net.Http;
+  using System.Text;
   using System.Threading.Tasks;
-
-  using Tangle.Net.Api.Responses;
 
   using Newtonsoft.Json;
 
+  using Tangle.Net.Api.Responses;
+  using Tangle.Net.Api.Responses.Message;
   using Tangle.Net.Models;
-  using Tangle.Net.Models.MessagePayload;
+  using Tangle.Net.Models.Message;
+  using Tangle.Net.Models.Message.MessagePayload;
   using Tangle.Net.Utils;
 
   public class NodeRestClient : IClient
   {
-    private string NodeUrl { get; }
-
-    public NodeRestClient() : this("https://api.lb-0.testnet.chrysalis2.com")
+    public NodeRestClient()
+      : this("https://api.lb-0.testnet.chrysalis2.com")
     {
     }
 
     public NodeRestClient(string nodeUrl)
     {
       this.NodeUrl = nodeUrl;
+    }
+
+    private string NodeUrl { get; }
+
+    /// <inheritdoc />
+    public async Task<Message<T>> GetMessageAsync<T>(string messageId)
+      where T : PayloadBase
+    {
+      return await ExecuteRequestAsync<Message<T>>($"{this.NodeUrl}/api/v1/messages/{messageId}");
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageChildrenResponse> GetMessageChildrenAsync(string messageId)
+    {
+      return await ExecuteRequestAsync<MessageChildrenResponse>($"{this.NodeUrl}/api/v1/messages/{messageId}/children");
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index)
+    {
+      return await ExecuteRequestAsync<MessageIdsByIndexResponse>($"{this.NodeUrl}/api/v1/messages?index={index}");
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageMetadata> GetMessageMetadataAsync(string messageId)
+    {
+      return await ExecuteRequestAsync<MessageMetadata>($"{this.NodeUrl}/api/v1/messages/{messageId}/metadata");
+    }
+
+    /// <inheritdoc />
+    public async Task<MessageRawResponse> GetMessageRawAsync(string messageId)
+    {
+      using (var client = new HttpClient())
+      {
+        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/raw");
+        return new MessageRawResponse { MessageRaw = await responseStream.Content.ReadAsByteArrayAsync() };
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task<NodeInfo> GetNodeInfoAsync()
+    {
+      return await ExecuteRequestAsync<NodeInfo>($"{this.NodeUrl}/api/v1/info");
+    }
+
+    /// <inheritdoc />
+    public async Task<TipsResponse> GetTipsAsync()
+    {
+      return await ExecuteRequestAsync<TipsResponse>($"{this.NodeUrl}/api/v1/tips");
     }
 
     /// <inheritdoc />
@@ -55,73 +103,12 @@ namespace Tangle.Net.Api
       }
     }
 
-    /// <inheritdoc />
-    public async Task<Message<T>> GetMessageAsync<T>(string messageId)
-      where T : PayloadBase
+    private static async Task<T> ExecuteRequestAsync<T>(string uri)
     {
       using (var client = new HttpClient())
       {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}");
-        var response = JsonConvert.DeserializeObject<ClientResponse<Message<T>>>(await responseStream.Content.ReadAsStringAsync());
-
-        return response.Data;
-      }
-    }
-
-    /// <inheritdoc />
-    public async Task<MessageMetadataResponse> GetMessageMetadataAsync(string messageId)
-    {
-      using (var client = new HttpClient())
-      {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/metadata");
-        var response = JsonConvert.DeserializeObject<ClientResponse<MessageMetadataResponse>>(await responseStream.Content.ReadAsStringAsync());
-
-        return response.Data;
-      }
-    }
-
-    /// <inheritdoc />
-    public async Task<MessageRawResponse> GetMessageRawAsync(string messageId)
-    {
-      using (var client = new HttpClient())
-      {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/raw");
-
-        return new MessageRawResponse { MessageRaw = await responseStream.Content.ReadAsByteArrayAsync() };
-      }
-    }
-
-    /// <inheritdoc />
-    public async Task<MessageChildrenResponse> GetMessageChildrenAsync(string messageId)
-    {
-      using (var client = new HttpClient())
-      {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/children");
-        var response = JsonConvert.DeserializeObject<ClientResponse<MessageChildrenResponse>>(await responseStream.Content.ReadAsStringAsync());
-
-        return response.Data;
-      }
-    }
-
-    /// <inheritdoc />
-    public async Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index)
-    {
-      using (var client = new HttpClient())
-      {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages?index={index}");
-        var response = JsonConvert.DeserializeObject<ClientResponse<MessageIdsByIndexResponse>>(await responseStream.Content.ReadAsStringAsync());
-
-        return response.Data;
-      }
-    }
-
-    /// <inheritdoc />
-    public async Task<TipsResponse> GetTipsAsync()
-    {
-      using (var client = new HttpClient())
-      {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/tips");
-        var response = JsonConvert.DeserializeObject<ClientResponse<TipsResponse>>(await responseStream.Content.ReadAsStringAsync());
+        var responseStream = await client.GetAsync(uri);
+        var response = JsonConvert.DeserializeObject<ClientResponse<T>>(await responseStream.Content.ReadAsStringAsync());
 
         return response.Data;
       }
