@@ -50,11 +50,23 @@ namespace Tangle.Net.Api
     {
       using (var client = new HttpClient())
       {
-
         var content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json");
         var responseStream = await client.PostAsync($"{this.NodeUrl}/api/v1/messages", content);
 
         var response = JsonConvert.DeserializeObject<ClientResponse<MessageIdResponse>>(await responseStream.Content.ReadAsStringAsync());
+
+        return response.Data;
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task<Message<T>> GetMessageAsync<T>(string messageId)
+      where T : PayloadBase
+    {
+      using (var client = new HttpClient())
+      {
+        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}");
+        var response = JsonConvert.DeserializeObject<ClientResponse<Message<T>>>(await responseStream.Content.ReadAsStringAsync());
 
         return response.Data;
       }

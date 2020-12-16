@@ -13,6 +13,8 @@
     Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
       where T : PayloadBase;
 
+    Task<Message<T>> GetMessageAsync<T>(string messageId) where T : PayloadBase;
+
     Task<TipsResponse> GetTipsAsync();
   }
 }

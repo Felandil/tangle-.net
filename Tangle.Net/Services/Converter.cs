@@ -3,39 +3,25 @@ using System.Text;
 
 namespace Tangle.Net.Services
 {
+  using System.Collections.Generic;
   using System.Linq;
 
   public static class Converter
   {
     private static string[] EncodeLookup { get; set; }
-    private static int[] DecodeLookup { get; set; }
+
+    public static readonly string HexAlphabet = "0123456789abcdef";
 
     static Converter()
     {
-      var alphabet = "0123456789abcdef";
       var encodeLookup = new string[256];
-      var decodeLookup = new int[256];
 
       for (var i = 0; i < 256; i++)
       {
-        encodeLookup[i] = alphabet[(i >> 4) & 0xF].ToString() + alphabet[i & 0xF];
-        if (i >= 16)
-        {
-          continue;
-        }
-
-        if (i < 10)
-        {
-          decodeLookup[0x30 + i] = (char)i;
-        }
-        else
-        {
-          decodeLookup[0x61 - 10 + i] = (char)i;
-        }
+        encodeLookup[i] = HexAlphabet[(i >> 4) & 0xF].ToString() + HexAlphabet[i & 0xF];
       }
 
       EncodeLookup = encodeLookup;
-      DecodeLookup = decodeLookup;
     }
 
     public static string ToHex(this string value)
@@ -57,6 +43,57 @@ namespace Tangle.Net.Services
       }
 
       return hex;
+    }
+
+    public static byte[] HexToBytes(this string value, bool reverse = false)
+    {
+      if (!value.IsHex())
+      {
+        throw new ArgumentException("Given value is not a hex string!");
+      }
+
+      var result = new List<byte>();
+
+      var i = 0;
+      while (i < value.Length)
+      {
+        var hexPart = value.Substring(i, 2);
+        result.Add((byte)Array.IndexOf(EncodeLookup, hexPart));
+
+        i += 2;
+      }
+
+      if (reverse)
+      {
+        result.Reverse();
+      }
+
+      return result.ToArray();
+    }
+
+    public static string HexToString(this string value)
+    {
+      return value.HexToBytes().BytesToUtf8();
+    }
+
+    public static string BytesToUtf8(this byte[] bytes)
+    {
+      return Encoding.UTF8.GetString(bytes);
+    }
+
+    public static string BytesToAscii(this byte[] bytes)
+    {
+      return Encoding.ASCII.GetString(bytes);
+    }
+
+    public static bool IsHex(this string value)
+    {
+      if (value.Length % 2 == 1)
+      {
+        return false;
+      }
+
+      return value.All(c => HexAlphabet.Contains(c));
     }
 
     public static byte[] Utf8ToBytes(this string value)
