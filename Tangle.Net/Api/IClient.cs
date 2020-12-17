@@ -6,7 +6,7 @@
   using Tangle.Net.Api.Responses.Message;
   using Tangle.Net.Models;
   using Tangle.Net.Models.Message;
-  using Tangle.Net.Models.Message.MessagePayload;
+  using Tangle.Net.Models.Message.Payload;
 
   public interface IClient
   {

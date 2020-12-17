@@ -2,7 +2,7 @@
 {
   using Newtonsoft.Json;
 
-  using Tangle.Net.Models.Message.MessagePayload;
+  using Tangle.Net.Models.Message.Payload;
 
   public class Message<T>
     where T : PayloadBase
