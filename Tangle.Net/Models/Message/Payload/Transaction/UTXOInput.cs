@@ -1,9 +1,9 @@
-﻿namespace Tangle.Net.Models.Message.Payload
+﻿namespace Tangle.Net.Models.Message.Payload.Transaction
 {
   using Newtonsoft.Json;
 
   // ReSharper disable once InconsistentNaming
-  public class UTXOInput
+  public class UTXOInput : PayloadBase
   {
     [JsonProperty("transactionId")]
     public string TransactionId { get; set; }

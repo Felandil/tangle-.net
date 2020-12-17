@@ -2,9 +2,15 @@
 {
   using Newtonsoft.Json;
 
-  public class TransactionPayload : PayloadBase
+  using Tangle.Net.Models.Message.Payload.Transaction;
+
+  public class TransactionPayload<T> : PayloadBase
+    where T : PayloadBase
   {
     [JsonProperty("essence")]
     public TransactionEssence Essence { get; set; }
+
+    [JsonProperty("unlockBlocks")]
+    public T UnlockBlocks { get; set; }
   }
 }

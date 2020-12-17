@@ -1,8 +1,8 @@
-﻿namespace Tangle.Net.Models.Message.Payload
+﻿namespace Tangle.Net.Models.Message.Payload.Transaction
 {
   using Newtonsoft.Json;
 
-  public class SigLockedSingleOutput
+  public class SigLockedSingleOutput : PayloadBase
   {
     [JsonProperty("address")]
     public Ed25519Address Address { get; set; }
