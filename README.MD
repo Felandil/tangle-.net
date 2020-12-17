@@ -16,13 +16,14 @@ This is the inofficial IOTA C# library. Currently "work in progress" to implemen
 ## Contributing
 
 If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by sending a few bucks to
+```
 EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJWKZBQRBNIX
-
+```
 ## Supported REST Operations
 
 **Proof of work** can currently only be done remotely. Signing transactions etc. is still work in progress.
 
-| <div style="width:350px">Operation - Node</div>			 			   | Supported       | 
+| Operation - Node<img width=300/>		 			   | Supported       | 
 | ------------------------------------------------ | --------------- | 
 | GET /health					 				   | Yes		     |
 | GET /api/v1/info					 			   | Yes             |		
@@ -30,13 +31,13 @@ EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJ
 
 <br/>
 
-| <div style="width:350px">Operation - Tangle</div>				 				   | Supported       | 
+| Operation - Tangle<img width=290/>					 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | GET /api/v1/tips					 			   | Yes			 |	
 
 <br/>
 
-| <div style="width:350px">Operation - Messages</div>				 				   | Supported       | 
+| Operation - Messages<img width=270/>			 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | POST /api/v1/messages				 | Partially			   | 			
 | GET /api/v1/messages						 | Yes             | 			
@@ -47,7 +48,7 @@ EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJ
 
 <br/>
 
-| <div style="width:350px">Operation - UTXO</div>				 				   | Supported       | 
+| Operation - UTXO<img width=295/>				 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | GET /api/v1/outputs/{outputId}				 			   | No			 |	
 | GET /api/v1/addresses/{address}				 			   | No			 |	
