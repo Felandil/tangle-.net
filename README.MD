@@ -15,7 +15,7 @@ This is the inofficial IOTA C# library. Currently "work in progress" to implemen
 
 ## Contributing
 
-If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by sending a few bucks to
+If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by donating to
 ```
 EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJWKZBQRBNIX
 ```
@@ -27,7 +27,6 @@ EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJ
 | ------------------------------------------------ | --------------- | 
 | GET /health					 				   | Yes		     |
 | GET /api/v1/info					 			   | Yes             |		
-| GET /api/v1/tips					 			   | Yes			 |	
 
 <br/>
 
