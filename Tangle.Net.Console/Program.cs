@@ -7,7 +7,7 @@ namespace Tangle.Net.Console
   using Newtonsoft.Json;
 
   using Tangle.Net.Api;
-  using Tangle.Net.Models.Message.MessagePayload;
+  using Tangle.Net.Models.Message.Payload;
   using Tangle.Net.Utils;
 
   using Console = System.Console;

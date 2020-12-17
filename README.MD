@@ -13,41 +13,52 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced in IOTA 1.5 (Chrysalis)
 
+## Contributing
+
+If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by sending a few bucks to
+EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJWKZBQRBNIX
+
 ## Supported REST Operations
 
 **Proof of work** can currently only be done remotely. Signing transactions etc. is still work in progress.
 
-| Operation - Node				 			   | Supported       | 
+| <div style="width:350px">Operation - Node</div>			 			   | Supported       | 
 | ------------------------------------------------ | --------------- | 
 | GET /health					 				   | Yes		     |
 | GET /api/v1/info					 			   | Yes             |		
 | GET /api/v1/tips					 			   | Yes			 |	
 
-<br>
+<br/>
 
-| Operation - Tangle				 				   | Supported       | 
+| <div style="width:350px">Operation - Tangle</div>				 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | GET /api/v1/tips					 			   | Yes			 |	
 
-<br>
+<br/>
 
-| Operation - Messages				 				   | Supported       | 
+| <div style="width:350px">Operation - Messages</div>				 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | POST /api/v1/messages				 | Partially			   | 			
 | GET /api/v1/messages						 | Yes             | 			
 | GET /api/v1/messages/{messageId}			 | Partially	           |  
 | GET /api/v1/messages/{messageId}/metadata						 | Yes	| 	
 | GET /api/v1/messages/{messageId}/raw			 | Yes             | 		
-| GET /api/v1/messages/{messageId}/children					 | Yes  |		
+| GET /api/v1/messages/{messageId}/children					 | Yes  |
 
+<br/>
+
+| <div style="width:350px">Operation - UTXO</div>				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| GET /api/v1/outputs/{outputId}				 			   | No			 |	
+| GET /api/v1/addresses/{address}				 			   | No			 |	
+| GET /api/v1/addresses/ed25519/{address}				 			   | No			 |	
+| GET /api/v1/addresses/{address}/outputs				 			   | No			 |	
+| GET /api/v1/addresses/ed25519/{address}/outputs				 			   | No			 |	
 
 ## Documentation
 
 **OUDATED** https://tangle-net.readthedocs.io/en/latest/
 
-## Contributing
-
-If you want to contribute, please feel free to grab an issue or implement more features.
 
 ## Encryption
 
