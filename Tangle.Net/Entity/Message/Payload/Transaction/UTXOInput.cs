@@ -3,18 +3,12 @@
   using Newtonsoft.Json;
 
   // ReSharper disable once InconsistentNaming
-  public class UTXOInput : PayloadBase
+  public class UTXOInput : PayloadType
   {
     [JsonProperty("transactionId")]
     public string TransactionId { get; set; }
 
     [JsonProperty("transactionOutputIndex")]
     public int TransactionOutputIndex { get; set; }
-
-    /// <inheritdoc />
-    protected override byte[] SerializeImplementation()
-    {
-      return new byte[] { };
-    }
   }
 }

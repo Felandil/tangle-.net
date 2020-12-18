@@ -2,17 +2,18 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
   using System.Text;
 
   using Newtonsoft.Json;
 
   using Tangle.Net.Utils;
 
-  public class IndexationPayload : PayloadBase
+  public class IndexationPayload : Payload
   {
     public IndexationPayload()
     {
-      this.Type = 2;
+      this.Type = IndexationPayloadType;
     }
 
     [JsonProperty("data")]
@@ -32,6 +33,29 @@
       bytes.AddRange(this.Data.HexToBytes());
 
       return bytes.ToArray();
+    }
+
+    public static IndexationPayload Deserialize(byte[] payload)
+    {
+      var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
+      var pointer = 4;
+      if (payloadType != IndexationPayloadType)
+      {
+        throw new Exception($"Payload Type ({payloadType}) is not an indexation payload!");
+      }
+
+      var indexLength = BitConverter.ToInt16(payload.Skip(pointer).Take(2).ToArray(), 0);
+      pointer += 2;
+
+      var index = Encoding.ASCII.GetString(payload.Skip(pointer).Take(indexLength).ToArray());
+      pointer += indexLength;
+
+      var dataLength = BitConverter.ToInt32(payload.Skip(pointer).Take(4).ToArray(), 0);
+      pointer += 4;
+
+      var data = payload.Skip(pointer).Take(dataLength).ToHex();
+
+      return new IndexationPayload { Data = data, Index = index };
     }
   }
 }

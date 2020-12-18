@@ -2,13 +2,11 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
 
-  using Newtonsoft.Json;
-
-  public abstract class PayloadBase
+  public abstract class Payload : PayloadType
   {
-    [JsonProperty("type")]
-    public int Type { get; set; }
+    public const int IndexationPayloadType = 2;
 
     protected abstract byte[] SerializeImplementation();
 
@@ -21,6 +19,19 @@
       result.AddRange(serializedImplementation);
 
       return result.ToArray();
+    }
+
+    public static T Deserialize<T>(byte[] payload)
+      where T : Payload
+    {
+      var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
+      switch (payloadType)
+      {
+        case IndexationPayloadType:
+          return IndexationPayload.Deserialize(payload) as T;
+      }
+
+      return default(T);
     }
   }
 }

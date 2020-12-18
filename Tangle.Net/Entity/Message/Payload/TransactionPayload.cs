@@ -4,14 +4,14 @@
 
   using Tangle.Net.Entity.Message.Payload.Transaction;
 
-  public class TransactionPayload<T> : PayloadBase
-    where T : PayloadBase
+  public class TransactionPayload<TBlock> : Payload
+    where TBlock : Payload
   {
     [JsonProperty("essence")]
     public TransactionEssence Essence { get; set; }
 
     [JsonProperty("unlockBlocks")]
-    public T UnlockBlocks { get; set; }
+    public TBlock UnlockBlocks { get; set; }
 
     /// <inheritdoc />
     protected override byte[] SerializeImplementation()

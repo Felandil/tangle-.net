@@ -2,15 +2,9 @@
 {
   using Newtonsoft.Json;
 
-  public class Ed25519Address : PayloadBase
+  public class Ed25519Address : PayloadType
   {
     [JsonProperty("address")]
     public string Address { get; set; }
-
-    /// <inheritdoc />
-    protected override byte[] SerializeImplementation()
-    {
-      return new byte[] { };
-    }
   }
 }

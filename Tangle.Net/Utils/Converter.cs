@@ -28,7 +28,7 @@
       return value.Utf8ToBytes().ToHex();
     }
 
-    public static string ToHex(this byte[] bytes, bool reverse = false)
+    public static string ToHex(this IEnumerable<byte> bytes, bool reverse = false)
     {
       var hex = string.Empty;
 

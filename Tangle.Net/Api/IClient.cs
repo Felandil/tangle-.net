@@ -17,9 +17,9 @@
     Task<MessageIdResponse> SendDataAsync(string payload, string index);
 
     Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
-      where T : PayloadBase;
+      where T : Payload;
 
-    Task<Message<T>> GetMessageAsync<T>(string messageId) where T : PayloadBase;
+    Task<Message<T>> GetMessageAsync<T>(string messageId) where T : Payload;
 
     Task<MessageMetadata> GetMessageMetadataAsync(string messageId);
 

@@ -2,15 +2,9 @@
 {
   using Newtonsoft.Json;
 
-  public class ReferenceUnlockBlock : PayloadBase
+  public class ReferenceUnlockBlock : PayloadType
   {
     [JsonProperty("reference")]
     public long Reference { get; set; }
-
-    /// <inheritdoc />
-    protected override byte[] SerializeImplementation()
-    {
-      return new byte[] { };
-    }
   }
 }

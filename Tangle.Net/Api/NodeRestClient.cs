@@ -63,7 +63,7 @@
 
     /// <inheritdoc />
     public async Task<Message<T>> GetMessageAsync<T>(string messageId)
-      where T : PayloadBase
+      where T : Payload
     {
       return await ExecuteRequestAsync<Message<T>>($"{this.NodeUrl}/api/v1/messages/{messageId}");
     }
@@ -134,7 +134,7 @@
 
     /// <inheritdoc />
     public async Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
-      where T : PayloadBase
+      where T : Payload
     {
       if (this.PowProvider != null)
       {

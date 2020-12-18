@@ -2,18 +2,12 @@
 {
   using Newtonsoft.Json;
 
-  public class SigLockedSingleOutput : PayloadBase
+  public class SigLockedSingleOutput : PayloadType
   {
     [JsonProperty("address")]
     public Ed25519Address Address { get; set; }
 
     [JsonProperty("amount")]
     public long Amount { get; set; }
-
-    /// <inheritdoc />
-    protected override byte[] SerializeImplementation()
-    {
-      return new byte[] { };
-    }
   }
 }

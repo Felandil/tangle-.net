@@ -4,7 +4,7 @@
 
   using Newtonsoft.Json;
 
-  public class MilestonePayload : PayloadBase
+  public class MilestonePayload : Payload
   {
     [JsonProperty("inclusionMerkleProof")]
     public string InclusionMerkleProof { get; set; }

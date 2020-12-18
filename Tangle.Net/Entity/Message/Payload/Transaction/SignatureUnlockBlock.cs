@@ -2,15 +2,9 @@
 {
   using Newtonsoft.Json;
 
-  public class SignatureUnlockBlock : PayloadBase
+  public class SignatureUnlockBlock : PayloadType
   {
     [JsonProperty("signature")]
     public Ed25519Signature Signature { get; set; }
-
-    /// <inheritdoc />
-    protected override byte[] SerializeImplementation()
-    {
-      return new byte[] { };
-    }
   }
 }
