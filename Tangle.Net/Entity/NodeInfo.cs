@@ -1,6 +1,11 @@
-﻿namespace Tangle.Net.Models
+﻿namespace Tangle.Net.Entity
 {
+  using System;
   using System.Collections.Generic;
+  using System.Linq;
+  using System.Text;
+
+  using Isopoh.Cryptography.Blake2b;
 
   using Newtonsoft.Json;
 
@@ -29,5 +34,11 @@
 
     [JsonProperty("version")]
     public string Version { get; set; }
+
+    public string CalculateMessageNetworkId()
+    {
+      var networkIdBytes = Blake2B.ComputeHash(Encoding.ASCII.GetBytes(this.NetworkId), new Blake2BConfig { OutputSizeInBytes = 32 }, null);
+      return BitConverter.ToInt64(networkIdBytes.Take(8).ToArray(), 0).ToString();
+    }
   }
 }

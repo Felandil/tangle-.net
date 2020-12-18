@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Models.Message.Payload.Transaction
+﻿namespace Tangle.Net.Entity.Message.Payload.Transaction
 {
   using Newtonsoft.Json;
 
@@ -10,5 +10,11 @@
 
     [JsonProperty("transactionOutputIndex")]
     public int TransactionOutputIndex { get; set; }
+
+    /// <inheritdoc />
+    protected override byte[] SerializeImplementation()
+    {
+      return new byte[] { };
+    }
   }
 }

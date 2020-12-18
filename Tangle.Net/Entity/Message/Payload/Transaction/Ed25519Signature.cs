@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Models.Message.Payload.Transaction
+﻿namespace Tangle.Net.Entity.Message.Payload.Transaction
 {
   using Newtonsoft.Json;
 
@@ -9,5 +9,11 @@
 
     [JsonProperty("signature")]
     public string Signature { get; set; }
+
+    /// <inheritdoc />
+    protected override byte[] SerializeImplementation()
+    {
+      return new byte[] { };
+    }
   }
 }

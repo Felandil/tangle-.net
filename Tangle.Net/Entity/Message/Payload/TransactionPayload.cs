@@ -1,8 +1,8 @@
-﻿namespace Tangle.Net.Models.Message.Payload
+﻿namespace Tangle.Net.Entity.Message.Payload
 {
   using Newtonsoft.Json;
 
-  using Tangle.Net.Models.Message.Payload.Transaction;
+  using Tangle.Net.Entity.Message.Payload.Transaction;
 
   public class TransactionPayload<T> : PayloadBase
     where T : PayloadBase
@@ -12,5 +12,11 @@
 
     [JsonProperty("unlockBlocks")]
     public T UnlockBlocks { get; set; }
+
+    /// <inheritdoc />
+    protected override byte[] SerializeImplementation()
+    {
+      return new byte[] { };
+    }
   }
 }

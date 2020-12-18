@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Models.Message.Payload
+﻿namespace Tangle.Net.Entity.Message.Payload
 {
   using System.Collections.Generic;
 
@@ -26,5 +26,11 @@
 
     [JsonProperty("timestamp")]
     public long Timestamp { get; set; }
+
+    /// <inheritdoc />
+    protected override byte[] SerializeImplementation()
+    {
+      return new byte[] { };
+    }
   }
 }

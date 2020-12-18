@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Models.Message
+﻿namespace Tangle.Net.Entity.Message
 {
   using Newtonsoft.Json;
 

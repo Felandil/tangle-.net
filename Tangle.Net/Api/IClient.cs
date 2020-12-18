@@ -4,9 +4,9 @@
 
   using Tangle.Net.Api.Responses;
   using Tangle.Net.Api.Responses.Message;
-  using Tangle.Net.Models;
-  using Tangle.Net.Models.Message;
-  using Tangle.Net.Models.Message.Payload;
+  using Tangle.Net.Entity;
+  using Tangle.Net.Entity.Message;
+  using Tangle.Net.Entity.Message.Payload;
 
   public interface IClient
   {
