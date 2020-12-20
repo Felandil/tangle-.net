@@ -11,7 +11,7 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 ## About
 
-This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced in IOTA 1.5 (Chrysalis)
+This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced with IOTA 1.5 (Chrysalis). For any questions on how to get started (and since the documentation is very much outdated) feel free to contact me via discord (Felandil#6471)
 
 ## Contributing
 

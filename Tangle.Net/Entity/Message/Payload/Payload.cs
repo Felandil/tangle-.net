@@ -6,6 +6,7 @@
 
   public abstract class Payload : PayloadType
   {
+    public const int MilestonePayloadType = 1;
     public const int IndexationPayloadType = 2;
 
     protected abstract byte[] SerializeImplementation();
