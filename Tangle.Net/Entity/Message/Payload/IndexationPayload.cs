@@ -25,14 +25,14 @@
     /// <inheritdoc />
     protected override byte[] SerializeImplementation()
     {
-      var bytes = new List<byte>();
-      bytes.AddRange(BitConverter.GetBytes(this.Type));
-      bytes.AddRange(BitConverter.GetBytes((short)this.Index.Length));
-      bytes.AddRange(Encoding.ASCII.GetBytes(this.Index));
-      bytes.AddRange(BitConverter.GetBytes(this.Data.Length / 2));
-      bytes.AddRange(this.Data.HexToBytes());
+      var serialized = new List<byte>();
+      serialized.AddRange(BitConverter.GetBytes(this.Type));
+      serialized.AddRange(BitConverter.GetBytes((short)this.Index.Length));
+      serialized.AddRange(Encoding.ASCII.GetBytes(this.Index));
+      serialized.AddRange(BitConverter.GetBytes(this.Data.Length / 2));
+      serialized.AddRange(this.Data.HexToBytes());
 
-      return bytes.ToArray();
+      return serialized.ToArray();
     }
 
     public static IndexationPayload Deserialize(byte[] payload)

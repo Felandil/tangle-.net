@@ -39,28 +39,28 @@
     /// <inheritdoc />
     protected override byte[] SerializeImplementation()
     {
-      var result = new List<byte>();
+      var serialized = new List<byte>();
 
-      result.AddRange(BitConverter.GetBytes(this.Type));
-      result.AddRange(BitConverter.GetBytes(this.Index));
-      result.AddRange(BitConverter.GetBytes(this.Timestamp));
-      result.AddRange(this.Parent1MessageId.HexToBytes());
-      result.AddRange(this.Parent2MessageId.HexToBytes());
-      result.AddRange(this.InclusionMerkleProof.HexToBytes());
+      serialized.AddRange(BitConverter.GetBytes(this.Type));
+      serialized.AddRange(BitConverter.GetBytes(this.Index));
+      serialized.AddRange(BitConverter.GetBytes(this.Timestamp));
+      serialized.AddRange(this.Parent1MessageId.HexToBytes());
+      serialized.AddRange(this.Parent2MessageId.HexToBytes());
+      serialized.AddRange(this.InclusionMerkleProof.HexToBytes());
 
-      result.Add((byte)this.PublicKeys.Count);
+      serialized.Add((byte)this.PublicKeys.Count);
       foreach (var publicKey in this.PublicKeys)
       {
-        result.AddRange(publicKey.HexToBytes());
+        serialized.AddRange(publicKey.HexToBytes());
       }
 
-      result.Add((byte)(this.Signatures.Count));
+      serialized.Add((byte)(this.Signatures.Count));
       foreach (var signature in this.Signatures)
       {
-        result.AddRange(signature.HexToBytes());
+        serialized.AddRange(signature.HexToBytes());
       }
 
-      return result.ToArray();
+      return serialized.ToArray();
     }
 
     public static MilestonePayload Deserialize(byte[] payload)
@@ -103,10 +103,9 @@
       var signatures = new List<string>();
       for (var i = 0; i < signatureCount; i++)
       {
-        signatures.Add(payload.Skip(pointer).Take(32).ToHex());
-        pointer += 32;
+        signatures.Add(payload.Skip(pointer).Take(64).ToHex());
+        pointer += 64;
       }
-
 
       return new MilestonePayload
                {

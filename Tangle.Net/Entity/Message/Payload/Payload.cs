@@ -4,8 +4,9 @@
   using System.Collections.Generic;
   using System.Linq;
 
-  public abstract class Payload : PayloadType
+  public abstract class Payload : PayloadType, ISerializable
   {
+    public const int TransactionPayloadType = 0;
     public const int MilestonePayloadType = 1;
     public const int IndexationPayloadType = 2;
 

@@ -2,7 +2,7 @@
 {
   using Newtonsoft.Json;
 
-  public class PayloadType
+  public abstract class PayloadType
   {
     [JsonProperty("type")]
     public int Type { get; set; }
