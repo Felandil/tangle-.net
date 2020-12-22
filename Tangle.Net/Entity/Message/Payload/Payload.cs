@@ -30,6 +30,8 @@
       {
         case IndexationPayloadType:
           return IndexationPayload.Deserialize(payload) as T;
+        case MilestonePayloadType:
+          return MilestonePayload.Deserialize(payload) as T;
       }
 
       return default(T);

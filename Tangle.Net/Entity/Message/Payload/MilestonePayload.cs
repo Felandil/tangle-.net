@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
 
   using Newtonsoft.Json;
 
@@ -39,40 +40,19 @@
     protected override byte[] SerializeImplementation()
     {
       var result = new List<byte>();
-      //writeStream.writeUInt32("payloadMilestone.type", object.type);
+
       result.AddRange(BitConverter.GetBytes(this.Type));
-
-      //writeStream.writeUInt32("payloadMilestone.index", object.index);
       result.AddRange(BitConverter.GetBytes(this.Index));
-
-      //writeStream.writeUInt64("payloadMilestone.timestamp", BigInt(object.timestamp));
       result.AddRange(BitConverter.GetBytes(this.Timestamp));
-
-      //writeStream.writeFixedHex("payloadMilestone.parent1MessageId", MESSAGE_ID_LENGTH, object.parent1MessageId);
-      //writeStream.writeFixedHex("payloadMilestone.parent2MessageId", MESSAGE_ID_LENGTH, object.parent2MessageId);
       result.AddRange(this.Parent1MessageId.HexToBytes());
       result.AddRange(this.Parent2MessageId.HexToBytes());
-
-      //writeStream.writeFixedHex("payloadMilestone.inclusionMerkleProof",
-      //  MERKLE_PROOF_LENGTH, object.inclusionMerkleProof);
       result.AddRange(this.InclusionMerkleProof.HexToBytes());
 
-      //writeStream.writeByte("payloadMilestone.publicKeysCount", object.publicKeys.length);
-      //for (let i = 0; i < object.publicKeys.length; i++)
-      //{
-      //  writeStream.writeFixedHex("payloadMilestone.publicKey", Ed25519.PUBLIC_KEY_SIZE, object.publicKeys[i]);
-      //}
       result.Add((byte)this.PublicKeys.Count);
       foreach (var publicKey in this.PublicKeys)
       {
         result.AddRange(publicKey.HexToBytes());
       }
-
-      //writeStream.writeByte("payloadMilestone.signaturesCount", object.signatures.length);
-      //for (let i = 0; i < object.signatures.length; i++)
-      //{
-      //  writeStream.writeFixedHex("payloadMilestone.signature", Ed25519.SIGNATURE_SIZE, object.signatures[i]);
-      //}
 
       result.Add((byte)(this.Signatures.Count));
       foreach (var signature in this.Signatures)
@@ -81,6 +61,63 @@
       }
 
       return result.ToArray();
+    }
+
+    public static MilestonePayload Deserialize(byte[] payload)
+    {
+      var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
+      var pointer = 4;
+      if (payloadType != MilestonePayloadType)
+      {
+        throw new Exception($"Payload Type ({payloadType}) is not a milestone payload!");
+      }
+
+      var index = BitConverter.ToInt32(payload.Skip(pointer).Take(4).ToArray(), 0);
+      pointer += 4;
+
+      var timestamp = BitConverter.ToInt64(payload.Skip(pointer).Take(8).ToArray(), 0);
+      pointer += 8;
+
+      var parent1MessageId = payload.Skip(pointer).Take(32).ToHex();
+      pointer += 32;
+
+      var parent2MessageId = payload.Skip(pointer).Take(32).ToHex();
+      pointer += 32;
+
+      var inclusionMerkleProof = payload.Skip(pointer).Take(32).ToHex();
+      pointer += 32;
+
+      var publicKeyCount = payload[pointer];
+      pointer += 1;
+
+      var publicKeys = new List<string>();
+      for (var i = 0; i < publicKeyCount; i++)
+      {
+        publicKeys.Add(payload.Skip(pointer).Take(32).ToHex());
+        pointer += 32;
+      }
+
+      var signatureCount = payload[pointer];
+      pointer += 1;
+
+      var signatures = new List<string>();
+      for (var i = 0; i < signatureCount; i++)
+      {
+        signatures.Add(payload.Skip(pointer).Take(32).ToHex());
+        pointer += 32;
+      }
+
+
+      return new MilestonePayload
+               {
+                 Index = index,
+                 Timestamp = timestamp,
+                 Parent1MessageId = parent1MessageId,
+                 Parent2MessageId = parent2MessageId,
+                 InclusionMerkleProof = inclusionMerkleProof,
+                 PublicKeys = publicKeys,
+                 Signatures = signatures
+               };
     }
   }
 }

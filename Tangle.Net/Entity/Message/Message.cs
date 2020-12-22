@@ -6,6 +6,7 @@
 
   using Newtonsoft.Json;
 
+  using Tangle.Net.Entity.Message.Payload;
   using Tangle.Net.Utils;
 
   public class Message<T>
