@@ -21,11 +21,8 @@
     [JsonProperty("index")]
     public int Index { get; set; }
 
-    [JsonProperty("parent1MessageId")]
-    public string Parent1MessageId { get; set; }
-
-    [JsonProperty("parent2MessageId")]
-    public string Parent2MessageId { get; set; }
+    [JsonProperty("parentMessageIds")]
+    public List<string> ParentMessageIds { get; set; }
 
     [JsonProperty("publicKeys")]
     public List<string> PublicKeys { get; set; }
@@ -40,25 +37,19 @@
     protected override byte[] SerializeImplementation()
     {
       var serialized = new List<byte>();
+      var parentMessageIds = this.ParentMessageIds.Select(id => id.HexToBytes()).ToList();
+      var publicKeys = this.PublicKeys.Select(key => key.HexToBytes()).ToList();
+      var signatures = this.Signatures.Select(signature => signature.HexToBytes()).ToList();
 
       serialized.AddRange(BitConverter.GetBytes(this.Type));
       serialized.AddRange(BitConverter.GetBytes(this.Index));
       serialized.AddRange(BitConverter.GetBytes(this.Timestamp));
-      serialized.AddRange(this.Parent1MessageId.HexToBytes());
-      serialized.AddRange(this.Parent2MessageId.HexToBytes());
+      parentMessageIds.ForEach(serialized.AddRange);
       serialized.AddRange(this.InclusionMerkleProof.HexToBytes());
-
       serialized.Add((byte)this.PublicKeys.Count);
-      foreach (var publicKey in this.PublicKeys)
-      {
-        serialized.AddRange(publicKey.HexToBytes());
-      }
-
+      publicKeys.ForEach(serialized.AddRange);
       serialized.Add((byte)(this.Signatures.Count));
-      foreach (var signature in this.Signatures)
-      {
-        serialized.AddRange(signature.HexToBytes());
-      }
+      signatures.ForEach(serialized.AddRange);
 
       return serialized.ToArray();
     }
@@ -66,6 +57,7 @@
     public static MilestonePayload Deserialize(byte[] payload)
     {
       var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
+      var parentMessageIds = new List<string>();
       var pointer = 4;
       if (payloadType != MilestonePayloadType)
       {
@@ -78,10 +70,10 @@
       var timestamp = BitConverter.ToInt64(payload.Skip(pointer).Take(8).ToArray(), 0);
       pointer += 8;
 
-      var parent1MessageId = payload.Skip(pointer).Take(32).ToHex();
+      parentMessageIds.Add(payload.Skip(pointer).Take(32).ToHex());
       pointer += 32;
 
-      var parent2MessageId = payload.Skip(pointer).Take(32).ToHex();
+      parentMessageIds.Add(payload.Skip(pointer).Take(32).ToHex());
       pointer += 32;
 
       var inclusionMerkleProof = payload.Skip(pointer).Take(32).ToHex();
@@ -111,8 +103,7 @@
                {
                  Index = index,
                  Timestamp = timestamp,
-                 Parent1MessageId = parent1MessageId,
-                 Parent2MessageId = parent2MessageId,
+                 ParentMessageIds = parentMessageIds,
                  InclusionMerkleProof = inclusionMerkleProof,
                  PublicKeys = publicKeys,
                  Signatures = signatures

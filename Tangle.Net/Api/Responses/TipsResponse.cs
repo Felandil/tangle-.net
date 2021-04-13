@@ -1,13 +1,11 @@
-﻿namespace Tangle.Net.Api.Responses
-{
-  using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
+namespace Tangle.Net.Api.Responses
+{
   public class TipsResponse
   {
-    [JsonProperty("tip1MessageId")]
-    public string TipOneMessageId { get; set; }
-
-    [JsonProperty("tip2MessageId")]
-    public string TipTwoMessageId { get; set; }
+    [JsonProperty("tipMessageIds")]
+    public List<string> TipMessageIds { get; set; }
   }
 }
