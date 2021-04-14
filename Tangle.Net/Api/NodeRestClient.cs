@@ -124,8 +124,7 @@
       var tips = await this.GetTipsAsync();
       var message = new Message<IndexationPayload>
                       {
-                        Parent1MessageId = tips.TipOneMessageId,
-                        Parent2MessageId = tips.TipTwoMessageId,
+                        ParentMessageIds = tips.TipMessageIds,
                         Payload = new IndexationPayload { Index = index, Data = payload.ToHex() }
                       };
 

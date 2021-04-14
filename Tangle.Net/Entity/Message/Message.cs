@@ -6,7 +6,6 @@
 
   using Newtonsoft.Json;
 
-  using Tangle.Net.Entity.Message.Payload;
   using Tangle.Net.Utils;
 
   public class Message<T>
@@ -19,11 +18,8 @@
     [JsonProperty("nonce")]
     public string Nonce { get; set; }
 
-    [JsonProperty("parent1MessageId")]
-    public string Parent1MessageId { get; set; }
-
-    [JsonProperty("parent2MessageId")]
-    public string Parent2MessageId { get; set; }
+    [JsonProperty("parentMessageIds")]
+    public List<string> ParentMessageIds { get; set; }
 
     [JsonProperty("payload")]
     public T Payload { get; set; }
@@ -31,10 +27,10 @@
     public byte[] Serialize()
     {
       var result = new List<byte>();
+      var parentMessageIds = this.ParentMessageIds.Select(id => id.HexToBytes()).ToList();
 
       result.AddRange(BitConverter.GetBytes(long.Parse(this.NetworkId ?? "0")));
-      result.AddRange(this.Parent1MessageId.HexToBytes());
-      result.AddRange(this.Parent2MessageId.HexToBytes());
+      parentMessageIds.ForEach(result.AddRange);
       result.AddRange(this.Payload.Serialize());
       result.AddRange(BitConverter.GetBytes(long.Parse(this.Nonce ?? "0")));
 
@@ -44,12 +40,13 @@
     public static Message<T> Deserialize(byte[] message)
     {
       var networkId = BitConverter.ToInt64(message.Take(8).ToArray(), 0);
+      var parentMessageIds = new List<string>();
       var pointer = 8;
 
-      var parent1MessageId = message.Skip(pointer).Take(32).ToHex();
+      parentMessageIds.Add(message.Skip(pointer).Take(32).ToHex());
       pointer += 32;
 
-      var parent2MessageId = message.Skip(pointer).Take(32).ToHex();
+      parentMessageIds.Add(message.Skip(pointer).Take(32).ToHex());
       pointer += 32;
 
       var payloadLength = BitConverter.ToInt32(message.Skip(pointer).Take(4).ToArray(), 0);
@@ -70,8 +67,7 @@
                {
                  NetworkId = networkId.ToString(),
                  Nonce = nonce.ToString(),
-                 Parent1MessageId = parent1MessageId,
-                 Parent2MessageId = parent2MessageId,
+                 ParentMessageIds = parentMessageIds,
                  Payload = payload
                };
     }

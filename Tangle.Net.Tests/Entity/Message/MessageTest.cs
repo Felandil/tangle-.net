@@ -16,13 +16,18 @@
     [TestMethod]
     public void TestMessageSerializationWithIndexationPayload()
     {
+      var parentMessageIds = new List<string>
+      {
+        "7d52ed02a67ddfe3617345c8f2639363250f880d6b1380615bf5df411d4e59a4",
+        "80ccbb4d519b28e855e2682b393439fafab437d6f2f3c9747f3225caeef95bac"
+      };
+
       var message = new Message<IndexationPayload>
                       {
                         NetworkId = "6530425480034647824",
                         Nonce = "0",
                         Payload = new IndexationPayload { Index = "Tangle .Net", Data = "Hello world!".ToHex() },
-                        Parent2MessageId = "80ccbb4d519b28e855e2682b393439fafab437d6f2f3c9747f3225caeef95bac",
-                        Parent1MessageId = "7d52ed02a67ddfe3617345c8f2639363250f880d6b1380615bf5df411d4e59a4"
+                        ParentMessageIds = parentMessageIds
                       };
 
       var expected = new byte[]
@@ -55,8 +60,8 @@
 
       Assert.AreEqual("6530425480034647824", message.NetworkId);
       Assert.AreEqual("0", message.Nonce);
-      Assert.AreEqual("7d52ed02a67ddfe3617345c8f2639363250f880d6b1380615bf5df411d4e59a4", message.Parent1MessageId);
-      Assert.AreEqual("80ccbb4d519b28e855e2682b393439fafab437d6f2f3c9747f3225caeef95bac", message.Parent2MessageId);
+      Assert.AreEqual("7d52ed02a67ddfe3617345c8f2639363250f880d6b1380615bf5df411d4e59a4", message.ParentMessageIds[0]);
+      Assert.AreEqual("80ccbb4d519b28e855e2682b393439fafab437d6f2f3c9747f3225caeef95bac", message.ParentMessageIds[1]);
       Assert.AreEqual(2, message.Payload.Type);
       Assert.AreEqual("Tangle .Net", message.Payload.Index);
       Assert.AreEqual("Hello world!".ToHex(), message.Payload.Data);
@@ -65,18 +70,22 @@
     [TestMethod]
     public void TestMessageSerializationWithMilestonePayload()
     {
+      var parentMessageIds = new List<string>
+      {
+        "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
+        "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c"
+      };    
+
       var message = new Message<MilestonePayload>
                       {
                         NetworkId = "6530425480034647824",
                         Nonce = "2229935",
-                        Parent1MessageId = "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-                        Parent2MessageId = "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
+                        ParentMessageIds = parentMessageIds,
                         Payload = new MilestonePayload
                                     {
                                       Index = 64849,
                                       Timestamp = 1608073977,
-                                      Parent1MessageId = "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-                                      Parent2MessageId = "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
+                                      ParentMessageIds = parentMessageIds,
                                       InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
                                       PublicKeys =
                                         new List<string>
@@ -119,6 +128,12 @@
     [TestMethod]
     public void TestMessageDeserializationWithMilestonePayload()
     {
+      var parentMessageIds = new List<string>
+      {
+        "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
+        "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
+      };
+
       var messageBytes = new byte[]
            {
                          16, 255, 159, 217, 95, 187, 160, 90, 109, 148, 95, 121, 55, 226, 90, 57, 124, 223, 101, 25, 201, 158, 209, 96, 155, 145, 49,
@@ -143,14 +158,12 @@
                               {
                                 NetworkId = "6530425480034647824",
                                 Nonce = "2229935",
-                                Parent1MessageId = "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-                                Parent2MessageId = "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
+                                ParentMessageIds = parentMessageIds,
                                 Payload = new MilestonePayload
                                             {
                                               Index = 64849,
                                               Timestamp = 1608073977,
-                                              Parent1MessageId = "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-                                              Parent2MessageId = "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
+                                              ParentMessageIds = parentMessageIds,
                                               InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
                                               PublicKeys =
                                                 new List<string>
@@ -168,13 +181,13 @@
 
       Assert.AreEqual(expectedMessage.NetworkId, actualMessage.NetworkId);
       Assert.AreEqual(expectedMessage.Nonce, actualMessage.Nonce);
-      Assert.AreEqual(expectedMessage.Parent1MessageId, actualMessage.Parent1MessageId);
-      Assert.AreEqual(expectedMessage.Parent2MessageId, actualMessage.Parent2MessageId);
+      Assert.AreEqual(expectedMessage.ParentMessageIds[0], actualMessage.ParentMessageIds[0]);
+      Assert.AreEqual(expectedMessage.ParentMessageIds[1], actualMessage.ParentMessageIds[1]);
 
       Assert.AreEqual(expectedMessage.Payload.Index, actualMessage.Payload.Index);
       Assert.AreEqual(expectedMessage.Payload.Timestamp, actualMessage.Payload.Timestamp);
-      Assert.AreEqual(expectedMessage.Payload.Parent1MessageId, actualMessage.Payload.Parent1MessageId);
-      Assert.AreEqual(expectedMessage.Payload.Parent2MessageId, actualMessage.Payload.Parent2MessageId);
+      Assert.AreEqual(expectedMessage.Payload.ParentMessageIds[0], actualMessage.Payload.ParentMessageIds[0]);
+      Assert.AreEqual(expectedMessage.Payload.ParentMessageIds[1], actualMessage.Payload.ParentMessageIds[1]);
       Assert.AreEqual(expectedMessage.Payload.InclusionMerkleProof, actualMessage.Payload.InclusionMerkleProof);
 
       Assert.AreEqual(expectedMessage.Payload.PublicKeys[0], actualMessage.Payload.PublicKeys[0]);
@@ -187,12 +200,17 @@
     [TestMethod]
     public void TestMessageSerializationWithTransactionPayload()
     {
+      var parentMessageIds = new List<string>
+      {
+        "67b959e3b2ed8a8adfdeb6e5a1efe573e7caee5cac91e64220407d2043147219",
+        "beba1162ef983a6570b1119d635661c121783a9b9d973a17b46bd26ae997a6a4"
+      };    
+
       var message = new Message<TransactionPayload<SignatureUnlockBlock>>
                       {
                         NetworkId = "6530425480034647824",
                         Nonce = "724240",
-                        Parent1MessageId = "67b959e3b2ed8a8adfdeb6e5a1efe573e7caee5cac91e64220407d2043147219",
-                        Parent2MessageId = "beba1162ef983a6570b1119d635661c121783a9b9d973a17b46bd26ae997a6a4",
+                        ParentMessageIds = parentMessageIds,
                         Payload = new TransactionPayload<SignatureUnlockBlock>
                                     {
                                       Essence = new TransactionEssence

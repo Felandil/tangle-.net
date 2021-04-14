@@ -1,6 +1,7 @@
-﻿namespace Tangle.Net.Entity.Message
+namespace Tangle.Net.Entity.Message
 {
   using Newtonsoft.Json;
+  using System.Collections.Generic;
 
   public class MessageMetadata
   {
@@ -10,11 +11,8 @@
     [JsonProperty("messageId")]
     public string MessageId { get; set; }
 
-    [JsonProperty("parent1MessageId")]
-    public string Parent1MessageId { get; set; }
-
-    [JsonProperty("parent2MessageId")]
-    public string Parent2MessageId { get; set; }
+    [JsonProperty("parentMessageIds")]
+    public List<string> ParentMessageIds { get; set; }
 
     [JsonProperty("shouldPromote")]
     public bool ShouldPromote { get; set; }
