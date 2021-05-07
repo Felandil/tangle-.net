@@ -17,7 +17,7 @@ This is the inofficial IOTA C# library. Currently "work in progress" to implemen
 
 If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by donating to
 ```
-EAGVYUFNOKIBECWJXQHFQQIQLAGSBYWXTLFLDZDGSLVDT9XMCKNOOUBDXCZHTJYYQWPKPIEUWVLXBBJJWKZBQRBNIX
+iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 ```
 ## Supported REST Operations
 
