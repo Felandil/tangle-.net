@@ -33,7 +33,7 @@
     public string Bech32Hrp { get; set; }
 
     [JsonProperty("messagesPerSecond")]
-    public int MessagesPerSecond { get; set; }
+    public float MessagesPerSecond { get; set; }
 
     [JsonProperty("pruningIndex")]
     public int PruningIndex { get; set; }

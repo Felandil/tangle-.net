@@ -1,61 +1,59 @@
-﻿namespace Tangle.Net.Api
+﻿using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Tangle.Net.Api.Responses;
+using Tangle.Net.Api.Responses.Message;
+using Tangle.Net.Entity;
+using Tangle.Net.Entity.Message;
+using Tangle.Net.Entity.Message.Payload;
+using Tangle.Net.ProofOfWork;
+using Tangle.Net.Utils;
+
+namespace Tangle.Net.Api
 {
-  using System;
-  using System.Net.Http;
-  using System.Text;
-  using System.Threading.Tasks;
-
-  using Isopoh.Cryptography.Blake2b;
-
-  using Newtonsoft.Json;
-
-  using Tangle.Net.Api.Responses;
-  using Tangle.Net.Api.Responses.Message;
-  using Tangle.Net.Entity;
-  using Tangle.Net.Entity.Message;
-  using Tangle.Net.Entity.Message.Payload;
-  using Tangle.Net.ProofOfWork;
-  using Tangle.Net.Utils;
-
   public class NodeRestClient : IClient
   {
     /// <summary>
-    /// Use default node (https://chrysalis-nodes.iota.org) and remote PoW
+    ///   Use default node (https://chrysalis-nodes.iota.org) and remote PoW
     /// </summary>
     public NodeRestClient()
       : this("https://chrysalis-nodes.iota.org")
-    { }
+    {
+    }
 
     /// <summary>
-    /// Use specified PoWProvider and default node (https://chrysalis-nodes.iota.org)
+    ///   Use specified PoWProvider and default node (https://chrysalis-nodes.iota.org)
     /// </summary>
     /// <param name="powProvider">
-    /// The PoW Provider
+    ///   The PoW Provider
     /// </param>
     public NodeRestClient(IPowProvider powProvider) : this(powProvider, "https://chrysalis-nodes.iota.org")
-    { }
+    {
+    }
 
     /// <summary>
-    /// Use the specified node with remote PoW
+    ///   Use the specified node with remote PoW
     /// </summary>
     /// <param name="nodeUrl">Node Url</param>
     public NodeRestClient(string nodeUrl)
     {
-      this.NodeUrl = nodeUrl;
+      NodeUrl = nodeUrl;
     }
 
     /// <summary>
-    /// Use specified PoWProvider and the specified node
+    ///   Use specified PoWProvider and the specified node
     /// </summary>
     /// <param name="powProvider">The PoW Provider</param>
     /// <param name="nodeUrl">Node Url</param>
     public NodeRestClient(IPowProvider powProvider, string nodeUrl)
     {
-      this.PowProvider = powProvider;
-      this.NodeUrl = nodeUrl;
+      PowProvider = powProvider;
+      NodeUrl = nodeUrl;
     }
 
-    private IPowProvider PowProvider { get; set; }
+    private IPowProvider PowProvider { get; }
 
     private string NodeUrl { get; }
 
@@ -63,25 +61,25 @@
     public async Task<Message<T>> GetMessageAsync<T>(string messageId)
       where T : Payload
     {
-      return await ExecuteRequestAsync<Message<T>>($"{this.NodeUrl}/api/v1/messages/{messageId}");
+      return await ExecuteRequestAsync<Message<T>>($"{NodeUrl}/api/v1/messages/{messageId}");
     }
 
     /// <inheritdoc />
     public async Task<MessageChildrenResponse> GetMessageChildrenAsync(string messageId)
     {
-      return await ExecuteRequestAsync<MessageChildrenResponse>($"{this.NodeUrl}/api/v1/messages/{messageId}/children");
+      return await ExecuteRequestAsync<MessageChildrenResponse>($"{NodeUrl}/api/v1/messages/{messageId}/children");
     }
 
     /// <inheritdoc />
     public async Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index)
     {
-      return await ExecuteRequestAsync<MessageIdsByIndexResponse>($"{this.NodeUrl}/api/v1/messages?index={index.ToHex()}");
+      return await ExecuteRequestAsync<MessageIdsByIndexResponse>($"{NodeUrl}/api/v1/messages?index={index.ToHex()}");
     }
 
     /// <inheritdoc />
     public async Task<MessageMetadata> GetMessageMetadataAsync(string messageId)
     {
-      return await ExecuteRequestAsync<MessageMetadata>($"{this.NodeUrl}/api/v1/messages/{messageId}/metadata");
+      return await ExecuteRequestAsync<MessageMetadata>($"{NodeUrl}/api/v1/messages/{messageId}/metadata");
     }
 
     /// <inheritdoc />
@@ -89,8 +87,8 @@
     {
       using (var client = new HttpClient())
       {
-        var responseStream = await client.GetAsync($"{this.NodeUrl}/api/v1/messages/{messageId}/raw");
-        return new MessageRawResponse { MessageRaw = await responseStream.Content.ReadAsByteArrayAsync() };
+        var responseStream = await client.GetAsync($"{NodeUrl}/api/v1/messages/{messageId}/raw");
+        return new MessageRawResponse {MessageRaw = await responseStream.Content.ReadAsByteArrayAsync()};
       }
     }
 
@@ -99,7 +97,7 @@
     {
       using (var client = new HttpClient())
       {
-        var response = await client.GetAsync($"{this.NodeUrl}/health");
+        var response = await client.GetAsync($"{NodeUrl}/health");
         return response.IsSuccessStatusCode;
       }
     }
@@ -107,48 +105,50 @@
     /// <inheritdoc />
     public async Task<NodeInfo> GetNodeInfoAsync()
     {
-      return await ExecuteRequestAsync<NodeInfo>($"{this.NodeUrl}/api/v1/info");
+      return await ExecuteRequestAsync<NodeInfo>($"{NodeUrl}/api/v1/info");
     }
 
     /// <inheritdoc />
     public async Task<TipsResponse> GetTipsAsync()
     {
-      return await ExecuteRequestAsync<TipsResponse>($"{this.NodeUrl}/api/v1/tips");
+      return await ExecuteRequestAsync<TipsResponse>($"{NodeUrl}/api/v1/tips");
     }
 
     /// <inheritdoc />
     public async Task<MessageIdResponse> SendDataAsync(string payload, string index)
     {
-      var tips = await this.GetTipsAsync();
+      var tips = await GetTipsAsync();
       var message = new Message<IndexationPayload>
-                      {
-                        ParentMessageIds = tips.TipMessageIds,
-                        Payload = new IndexationPayload { Index = index.ToHex(), Data = payload.ToHex() }
-                      };
+      {
+        ParentMessageIds = tips.TipMessageIds,
+        Payload = new IndexationPayload {Index = index.ToHex(), Data = payload.ToHex()}
+      };
 
-      return await this.SendMessageAsync(message);
+      return await SendMessageAsync(message);
     }
 
     /// <inheritdoc />
     public async Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
       where T : Payload
     {
-      if (this.PowProvider != null)
+      if (PowProvider != null)
       {
-        var nodeInfo = await this.GetNodeInfoAsync();
+        var nodeInfo = await GetNodeInfoAsync();
         message.NetworkId = nodeInfo.CalculateMessageNetworkId();
 
         var serialize = message.Serialize();
-        var nonce = this.PowProvider.DoPow(serialize, 4000);
+        var nonce = PowProvider.DoPow(serialize, 4000);
         message.Nonce = Convert.ToString(nonce, 10);
       }
 
       using (var client = new HttpClient())
       {
         var content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json");
-        var responseStream = await client.PostAsync($"{this.NodeUrl}/api/v1/messages", content);
+        var responseStream = await client.PostAsync($"{NodeUrl}/api/v1/messages", content);
 
-        var response = JsonConvert.DeserializeObject<ClientResponse<MessageIdResponse>>(await responseStream.Content.ReadAsStringAsync());
+        var response =
+          JsonConvert.DeserializeObject<ClientResponse<MessageIdResponse>>(await responseStream.Content
+            .ReadAsStringAsync());
 
         return response.Data;
       }
@@ -159,7 +159,8 @@
       using (var client = new HttpClient())
       {
         var responseStream = await client.GetAsync(uri);
-        var response = JsonConvert.DeserializeObject<ClientResponse<T>>(await responseStream.Content.ReadAsStringAsync());
+        var response =
+          JsonConvert.DeserializeObject<ClientResponse<T>>(await responseStream.Content.ReadAsStringAsync());
 
         return response.Data;
       }
