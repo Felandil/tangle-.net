@@ -23,12 +23,12 @@
       };
 
       var message = new Message<IndexationPayload>
-                      {
-                        NetworkId = "6530425480034647824",
-                        Nonce = "0",
-                        Payload = new IndexationPayload { Index = "Tangle .Net", Data = "Hello world!".ToHex() },
-                        ParentMessageIds = parentMessageIds
-                      };
+      {
+        NetworkId = "6530425480034647824",
+        Nonce = "0",
+        Payload = new IndexationPayload { Index = "Tangle .Net", Data = "Hello world!".ToHex() },
+        ParentMessageIds = parentMessageIds
+      };
 
       var expected = new byte[]
                        {
@@ -74,32 +74,32 @@
       {
         "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
         "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c"
-      };    
+      };
 
       var message = new Message<MilestonePayload>
-                      {
-                        NetworkId = "6530425480034647824",
-                        Nonce = "2229935",
-                        ParentMessageIds = parentMessageIds,
-                        Payload = new MilestonePayload
-                                    {
-                                      Index = 64849,
-                                      Timestamp = 1608073977,
-                                      ParentMessageIds = parentMessageIds,
-                                      InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
-                                      PublicKeys =
+      {
+        NetworkId = "6530425480034647824",
+        Nonce = "2229935",
+        ParentMessageIds = parentMessageIds,
+        Payload = new MilestonePayload
+        {
+          Index = 64849,
+          Timestamp = 1608073977,
+          ParentMessageIds = parentMessageIds,
+          InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+          PublicKeys =
                                         new List<string>
                                           {
                                             "7205c145525cee64f1c9363696811d239919d830ad964b4e29359e6475848f5a",
                                             "e468e82df33d10dea3bd0eadcd7867946a674d207c39f5af4cc44365d268a7e6"
                                           },
-                                      Signatures = new List<string>
+          Signatures = new List<string>
                                                      {
                                                        "119695b7d7d0182052f05ab1f172b85db955e2c88b26b87f38c8906243de6d2ad69703f6298aa63bc409868e944c11f588a27986c35ee3462fa130ecfcd1b401",
                                                        "e0d0926198ec951d586dc5d544315b1cd19f26a095f0184301835b412dfc95248b356d77901ad2d7a399de43c6795ef503b32ed2673fe6fd4261fce26ff90302"
                                                      }
-                                    },
-                      };
+        },
+      };
 
       var expected = new byte[]
                  {
@@ -155,29 +155,29 @@
 
       var actualMessage = Message<MilestonePayload>.Deserialize(messageBytes);
       var expectedMessage = new Message<MilestonePayload>
-                              {
-                                NetworkId = "6530425480034647824",
-                                Nonce = "2229935",
-                                ParentMessageIds = parentMessageIds,
-                                Payload = new MilestonePayload
-                                            {
-                                              Index = 64849,
-                                              Timestamp = 1608073977,
-                                              ParentMessageIds = parentMessageIds,
-                                              InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
-                                              PublicKeys =
+      {
+        NetworkId = "6530425480034647824",
+        Nonce = "2229935",
+        ParentMessageIds = parentMessageIds,
+        Payload = new MilestonePayload
+        {
+          Index = 64849,
+          Timestamp = 1608073977,
+          ParentMessageIds = parentMessageIds,
+          InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+          PublicKeys =
                                                 new List<string>
                                                   {
                                                     "7205c145525cee64f1c9363696811d239919d830ad964b4e29359e6475848f5a",
                                                     "e468e82df33d10dea3bd0eadcd7867946a674d207c39f5af4cc44365d268a7e6"
                                                   },
-                                              Signatures = new List<string>
+          Signatures = new List<string>
                                                              {
                                                                "119695b7d7d0182052f05ab1f172b85db955e2c88b26b87f38c8906243de6d2ad69703f6298aa63bc409868e944c11f588a27986c35ee3462fa130ecfcd1b401",
                                                                "e0d0926198ec951d586dc5d544315b1cd19f26a095f0184301835b412dfc95248b356d77901ad2d7a399de43c6795ef503b32ed2673fe6fd4261fce26ff90302"
                                                              }
-                                            },
-                              };
+        },
+      };
 
       Assert.AreEqual(expectedMessage.NetworkId, actualMessage.NetworkId);
       Assert.AreEqual(expectedMessage.Nonce, actualMessage.Nonce);
@@ -204,18 +204,18 @@
       {
         "67b959e3b2ed8a8adfdeb6e5a1efe573e7caee5cac91e64220407d2043147219",
         "beba1162ef983a6570b1119d635661c121783a9b9d973a17b46bd26ae997a6a4"
-      };    
+      };
 
       var message = new Message<TransactionPayload<SignatureUnlockBlock>>
-                      {
-                        NetworkId = "6530425480034647824",
-                        Nonce = "724240",
-                        ParentMessageIds = parentMessageIds,
-                        Payload = new TransactionPayload<SignatureUnlockBlock>
-                                    {
-                                      Essence = new TransactionEssence
-                                                  {
-                                                    Inputs = new List<UTXOInput>
+      {
+        NetworkId = "6530425480034647824",
+        Nonce = "724240",
+        ParentMessageIds = parentMessageIds,
+        Payload = new TransactionPayload<SignatureUnlockBlock>
+        {
+          Essence = new TransactionEssence
+          {
+            Inputs = new List<UTXOInput>
                                                                {
                                                                  new UTXOInput
                                                                    {
@@ -224,7 +224,7 @@
                                                                      TransactionOutputIndex = 0
                                                                    }
                                                                },
-                                                    Outputs = new List<SigLockedSingleOutput>
+            Outputs = new List<SigLockedSingleOutput>
                                                                 {
                                                                   new SigLockedSingleOutput
                                                                     {
@@ -236,13 +236,13 @@
                                                                                   }
                                                                     }
                                                                 },
-                                                    Payload = new IndexationPayload
-                                                                {
-                                                                  Index = "test\n",
-                                                                  Data = "746573740a"
-                                                    }
-                                                  },
-                                      UnlockBlocks = new List<SignatureUnlockBlock>
+            Payload = new IndexationPayload
+            {
+              Index = "test\n",
+              Data = "746573740a"
+            }
+          },
+          UnlockBlocks = new List<SignatureUnlockBlock>
                                                        {
                                                          new SignatureUnlockBlock
                                                            {
@@ -253,8 +253,8 @@
                                                                            }
                                                            }
                                                        }
-                                    }
-                      };
+        }
+      };
 
       var expected = new byte[]
                       {

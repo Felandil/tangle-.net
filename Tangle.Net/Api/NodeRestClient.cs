@@ -20,19 +20,19 @@
   public class NodeRestClient : IClient
   {
     /// <summary>
-    /// Use default node (https://api.lb-0.testnet.chrysalis2.com) and remote PoW
+    /// Use default node (https://chrysalis-nodes.iota.org) and remote PoW
     /// </summary>
     public NodeRestClient()
-      : this("https://api.lb-0.testnet.chrysalis2.com")
+      : this("https://chrysalis-nodes.iota.org")
     { }
 
     /// <summary>
-    /// Use specified PoWProvider and default node (https://api.lb-0.testnet.chrysalis2.com)
+    /// Use specified PoWProvider and default node (https://chrysalis-nodes.iota.org)
     /// </summary>
     /// <param name="powProvider">
     /// The PoW Provider
     /// </param>
-    public NodeRestClient(IPowProvider powProvider) : this(powProvider, "https://api.lb-0.testnet.chrysalis2.com")
+    public NodeRestClient(IPowProvider powProvider) : this(powProvider, "https://chrysalis-nodes.iota.org")
     { }
 
     /// <summary>
@@ -55,8 +55,6 @@
       this.NodeUrl = nodeUrl;
     }
 
-
-
     private IPowProvider PowProvider { get; set; }
 
     private string NodeUrl { get; }
@@ -77,7 +75,7 @@
     /// <inheritdoc />
     public async Task<MessageIdsByIndexResponse> GetMessageIdsByIndexAsync(string index)
     {
-      return await ExecuteRequestAsync<MessageIdsByIndexResponse>($"{this.NodeUrl}/api/v1/messages?index={index}");
+      return await ExecuteRequestAsync<MessageIdsByIndexResponse>($"{this.NodeUrl}/api/v1/messages?index={index.ToHex()}");
     }
 
     /// <inheritdoc />
@@ -125,7 +123,7 @@
       var message = new Message<IndexationPayload>
                       {
                         ParentMessageIds = tips.TipMessageIds,
-                        Payload = new IndexationPayload { Index = index, Data = payload.ToHex() }
+                        Payload = new IndexationPayload { Index = index.ToHex(), Data = payload.ToHex() }
                       };
 
       return await this.SendMessageAsync(message);
@@ -141,7 +139,7 @@
         message.NetworkId = nodeInfo.CalculateMessageNetworkId();
 
         var serialize = message.Serialize();
-        var nonce = this.PowProvider.DoPow(serialize, 100);
+        var nonce = this.PowProvider.DoPow(serialize, 4000);
         message.Nonce = Convert.ToString(nonce, 10);
       }
 

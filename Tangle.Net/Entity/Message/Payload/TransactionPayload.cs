@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.Linq;
 
   using Newtonsoft.Json;
 
@@ -20,6 +21,17 @@
 
     [JsonProperty("unlockBlocks")]
     public List<TBlock> UnlockBlocks { get; set; }
+
+    public static TransactionPayload<TBlock> Deserialize(byte[] payload)
+    {
+      var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
+      var pointer = 4;
+      if (payloadType != TransactionPayloadType)
+      {
+        throw new Exception($"Payload Type ({payloadType}) is not a transaction payload!");
+      }
+      return new TransactionPayload<TBlock>();
+    }
 
     /// <inheritdoc />
     protected override byte[] SerializeImplementation()
