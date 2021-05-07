@@ -6,7 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Isopoh.Cryptography.Blake2b" Version="1.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Rebex.Elliptic.Ed25519" Version="1.2.1" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 

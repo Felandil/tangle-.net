@@ -23,8 +23,17 @@
     [JsonProperty("name")]
     public string Name { get; set; }
 
+    [JsonProperty("minPoWScore")]
+    public int MinPoWScore { get; set; }
+
     [JsonProperty("networkId")]
     public string NetworkId { get; set; }
+
+    [JsonProperty("bech32HRP")]
+    public string Bech32Hrp { get; set; }
+
+    [JsonProperty("messagesPerSecond")]
+    public int MessagesPerSecond { get; set; }
 
     [JsonProperty("pruningIndex")]
     public int PruningIndex { get; set; }
