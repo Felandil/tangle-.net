@@ -1,4 +1,6 @@
-﻿namespace Tangle.Net.Entity.Message.Payload
+﻿using Tangle.Net.Entity.Message.Payload.Receipt;
+
+namespace Tangle.Net.Entity.Message.Payload
 {
   using System;
   using System.Collections.Generic;
@@ -35,6 +37,10 @@
           return IndexationPayload.Deserialize(payload) as T;
         case MilestonePayloadType:
           return MilestonePayload.Deserialize(payload) as T;
+        case ReceiptPayloadType:
+          return ReceiptPayload.Deserialize(payload) as T;
+        case TreasuryTransactionPayloadType:
+          return TreasuryTransactionPayload.Deserialize(payload) as T;
       }
 
       return default(T);

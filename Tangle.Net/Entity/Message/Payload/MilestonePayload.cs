@@ -119,10 +119,13 @@ namespace Tangle.Net.Entity.Message.Payload
         pointer += 32;
       }
 
-      var hasReceipt = BitConverter.ToInt32(payload.Skip(pointer).Take(4).ToArray(), 0) != 0;
+      ReceiptPayload receipt = null;
+      var receiptLength = BitConverter.ToInt32(payload.Skip(pointer).Take(4).ToArray(), 0);
+      var hasReceipt = receiptLength != 0;
       if (hasReceipt)
       {
-
+        receipt = ReceiptPayload.Deserialize(payload.Skip(pointer).Take(receiptLength).ToArray());
+        pointer += receiptLength;
       }
       else
       {
@@ -149,7 +152,7 @@ namespace Tangle.Net.Entity.Message.Payload
         Signatures = signatures,
         NextPoWScore = nextPoWScore,
         NextPoWScoreMilestoneIndex = nextPoWScoreMilestoneIndex,
-        Receipt = null
+        Receipt = receipt
       };
     }
   }
