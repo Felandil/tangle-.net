@@ -26,28 +26,32 @@
 
     public byte[] Serialize()
     {
-      var result = new List<byte>();
+      var serialized = new List<byte>();
       var parentMessageIds = this.ParentMessageIds.Select(id => id.HexToBytes()).ToList();
 
-      result.AddRange(BitConverter.GetBytes(long.Parse(this.NetworkId ?? "0")));
-      parentMessageIds.ForEach(result.AddRange);
-      result.AddRange(this.Payload.Serialize());
-      result.AddRange(BitConverter.GetBytes(long.Parse(this.Nonce ?? "0")));
+      serialized.AddRange(BitConverter.GetBytes(long.Parse(this.NetworkId ?? "0")));
+      serialized.Add((byte)this.ParentMessageIds.Count);
+      parentMessageIds.ForEach(serialized.AddRange);
+      serialized.AddRange(this.Payload.Serialize());
+      serialized.AddRange(BitConverter.GetBytes(long.Parse(this.Nonce ?? "0")));
 
-      return result.ToArray();
+      return serialized.ToArray();
     }
 
     public static Message<T> Deserialize(byte[] message)
     {
       var networkId = BitConverter.ToInt64(message.Take(8).ToArray(), 0);
-      var parentMessageIds = new List<string>();
       var pointer = 8;
 
-      parentMessageIds.Add(message.Skip(pointer).Take(32).ToHex());
-      pointer += 32;
+      var parentMessageIdCount = message.Skip(pointer).Take(1).First();
+      pointer += 1;
 
-      parentMessageIds.Add(message.Skip(pointer).Take(32).ToHex());
-      pointer += 32;
+      var parentMessageIds = new List<string>();
+      for (var i = 0; i < parentMessageIdCount; i++)
+      {
+        parentMessageIds.Add(message.Skip(pointer).Take(32).ToHex());
+        pointer += 32;
+      }
 
       var payloadLength = BitConverter.ToInt32(message.Skip(pointer).Take(4).ToArray(), 0);
       pointer += 4;

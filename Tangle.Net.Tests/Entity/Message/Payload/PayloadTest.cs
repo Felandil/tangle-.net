@@ -15,7 +15,7 @@ namespace Tangle.Net.Tests.Entity.Message.Payload
     [TestMethod]
     public void TestIndexationPayloadSerialization()
     {
-      var payload = new IndexationPayload { Index = "Tangle .Net", Data = "Hello world!".ToHex() };
+      var payload = new IndexationPayload { Index = "Tangle .Net".ToHex(), Data = "Hello world!".ToHex() };
 
       var expected = new byte[]
                        {

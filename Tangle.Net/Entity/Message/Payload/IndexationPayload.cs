@@ -27,8 +27,8 @@
     {
       var serialized = new List<byte>();
       serialized.AddRange(BitConverter.GetBytes(this.Type));
-      serialized.AddRange(BitConverter.GetBytes((short)this.Index.Length));
-      serialized.AddRange(Encoding.ASCII.GetBytes(this.Index));
+      serialized.AddRange(BitConverter.GetBytes((short)(this.Index.Length / 2)));
+      serialized.AddRange(this.Index.HexToBytes());
       serialized.AddRange(BitConverter.GetBytes(this.Data.Length / 2));
       serialized.AddRange(this.Data.HexToBytes());
 
@@ -47,7 +47,7 @@
       var indexLength = BitConverter.ToInt16(payload.Skip(pointer).Take(2).ToArray(), 0);
       pointer += 2;
 
-      var index = Encoding.ASCII.GetString(payload.Skip(pointer).Take(indexLength).ToArray());
+      var index = payload.Skip(pointer).Take(indexLength).ToHex();
       pointer += indexLength;
 
       var dataLength = BitConverter.ToInt32(payload.Skip(pointer).Take(4).ToArray(), 0);

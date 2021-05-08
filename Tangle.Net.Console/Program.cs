@@ -57,6 +57,12 @@ namespace Tangle.Net.Console
       Console.WriteLine(messageRaw.MessageRaw.ToHex());
       Console.WriteLine("---------------------------------------");
 
+      Console.WriteLine("Converting Message Raw--------------------");
+      var messageRawParsed = Message<IndexationPayload>.Deserialize(messageRaw.MessageRaw);
+      Console.WriteLine(JsonConvert.SerializeObject(messageRawParsed, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+
+
       Console.WriteLine("Reading Message Ids -------------------");
       var messageIds = await client.GetMessageIdsByIndexAsync("Tangle.Net");
       Console.WriteLine(JsonConvert.SerializeObject(messageIds, Formatting.Indented));
@@ -65,6 +71,13 @@ namespace Tangle.Net.Console
       Console.WriteLine("Reading Milestone ---------------------");
       var milestone = await client.GetMessageAsync<MilestonePayload>("2f9a04d506a431afd332bb2938d4b995cc5364ba899ab4e4d56ae4745745261b");
       Console.WriteLine(JsonConvert.SerializeObject(milestone, Formatting.Indented));
+      Console.WriteLine($"Issued at: {milestone.Payload.Timestamp.UnixTimestampToDateTime():F}");
+      Console.WriteLine("---------------------------------------");
+
+      Console.WriteLine("Reading Milestone Raw ---------------------");
+      var rawMilestone = await client.GetMessageRawAsync("2f9a04d506a431afd332bb2938d4b995cc5364ba899ab4e4d56ae4745745261b");
+      var parsedRawMilestone = Message<MilestonePayload>.Deserialize(rawMilestone.MessageRaw);
+      Console.WriteLine(JsonConvert.SerializeObject(parsedRawMilestone, Formatting.Indented));
       Console.WriteLine($"Issued at: {milestone.Payload.Timestamp.UnixTimestampToDateTime():F}");
       Console.WriteLine("---------------------------------------");
 
