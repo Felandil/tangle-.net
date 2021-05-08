@@ -9,6 +9,8 @@
     public const int TransactionPayloadType = 0;
     public const int MilestonePayloadType = 1;
     public const int IndexationPayloadType = 2;
+    public const int ReceiptPayloadType = 3;
+    public const int TreasuryTransactionPayloadType = 4;
 
     protected abstract byte[] SerializeImplementation();
 

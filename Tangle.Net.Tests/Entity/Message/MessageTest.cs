@@ -1,4 +1,6 @@
-﻿namespace Tangle.Net.Tests.Entity.Message
+﻿using Newtonsoft.Json;
+
+namespace Tangle.Net.Tests.Entity.Message
 {
   using System;
   using System.Collections.Generic;
@@ -70,55 +72,53 @@
     [TestMethod]
     public void TestMessageSerializationWithMilestonePayload()
     {
-      var parentMessageIds = new List<string>
-      {
-        "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-        "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c"
-      };
-
       var message = new Message<MilestonePayload>
       {
-        NetworkId = "6530425480034647824",
-        Nonce = "2229935",
-        ParentMessageIds = parentMessageIds,
+        NetworkId = "1454675179895816119",
+        Nonce = "1581149492032252383",
+        ParentMessageIds = new List<string>
+        {
+          "5bff3769dbff937d8872f0b7a11002cfd9805b1561b6154f119761edae08af0f",
+          "77a558da1b41a4841621d7e5965d5511cda3d8b81646e2c1708059bf19170edc",
+          "bdde8d1ec1cbdc9aa6e8568a61fc27dfbf3a5474c02c0b1f372aed8b2b2c8bd1",
+          "d7e755158db3b28f933830ba1b780d4c2a40438b091f1bd0d0cc6cc69b5e0b66",
+          "e439d513e8f21b1e1130847f380deeb509ebf5e856d696cd029ca13edd8d50fe",
+          "e6b1f204be4c0029739ffb37a91f28111033005f607075131a4ba053c05bf8f3"
+        },
         Payload = new MilestonePayload
         {
-          Index = 64849,
-          Timestamp = 1608073977,
-          ParentMessageIds = parentMessageIds,
+          Type = 1,
+          Index = 89162,
+          Timestamp = 1620511989,
+          ParentMessageIds = new List<string>
+          {
+            "5bff3769dbff937d8872f0b7a11002cfd9805b1561b6154f119761edae08af0f",
+            "77a558da1b41a4841621d7e5965d5511cda3d8b81646e2c1708059bf19170edc",
+            "bdde8d1ec1cbdc9aa6e8568a61fc27dfbf3a5474c02c0b1f372aed8b2b2c8bd1",
+            "d7e755158db3b28f933830ba1b780d4c2a40438b091f1bd0d0cc6cc69b5e0b66",
+            "e439d513e8f21b1e1130847f380deeb509ebf5e856d696cd029ca13edd8d50fe",
+            "e6b1f204be4c0029739ffb37a91f28111033005f607075131a4ba053c05bf8f3"
+          },
           InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+          NextPoWScore = 0,
+          NextPoWScoreMilestoneIndex = 0,
           PublicKeys =
-                                        new List<string>
-                                          {
-                                            "7205c145525cee64f1c9363696811d239919d830ad964b4e29359e6475848f5a",
-                                            "e468e82df33d10dea3bd0eadcd7867946a674d207c39f5af4cc44365d268a7e6"
-                                          },
+            new List<string>
+            {
+              "365fb85e7568b9b32f7359d6cbafa9814472ad0ecbad32d77beaf5dd9e84c6ba",
+              "a9b46fe743df783dedd00c954612428b34241f5913cf249d75bed3aafd65e4cd"
+            },
           Signatures = new List<string>
-                                                     {
-                                                       "119695b7d7d0182052f05ab1f172b85db955e2c88b26b87f38c8906243de6d2ad69703f6298aa63bc409868e944c11f588a27986c35ee3462fa130ecfcd1b401",
-                                                       "e0d0926198ec951d586dc5d544315b1cd19f26a095f0184301835b412dfc95248b356d77901ad2d7a399de43c6795ef503b32ed2673fe6fd4261fce26ff90302"
-                                                     }
+          {
+            "59ae85d697902115fc83a12abab66e88d3211e78e3f956eac5642724570ac8787d997a7db22bf730e4d4303403c5e63f94987f0ba74480883ce6551e4696b20b",
+            "3bfbce92cd6e99f4e7eb61c4190e80e351b0be6835a28f48f222e9ef521c0b56fde971a2a46714ab5df3214daa2ba68bfa32c030357cffccf111e026ac93a50e"
+          }
         },
       };
 
-      var expected = new byte[]
-                 {
-                         16, 255, 159, 217, 95, 187, 160, 90, 2, 109, 148, 95, 121, 55, 226, 90, 57, 124, 223, 101, 25, 201, 158, 209, 96, 155, 145, 49,
-                         105, 52, 31, 103, 226, 181, 162, 210, 204, 173, 89, 41, 134, 117, 186, 122, 111, 239, 54, 207, 42, 174, 244, 171, 249, 7,
-                         110, 238, 116, 93, 148, 1, 114, 22, 98, 36, 19, 154, 221, 104, 74, 254, 174, 89, 28, 50, 1, 0, 0, 1, 0, 0, 0, 81, 253, 0, 0,
-                         249, 66, 217, 95, 0, 0, 0, 0, 2, 109, 148, 95, 121, 55, 226, 90, 57, 124, 223, 101, 25, 201, 158, 209, 96, 155, 145, 49, 105,
-                         52, 31, 103, 226, 181, 162, 210, 204, 173, 89, 41, 134, 117, 186, 122, 111, 239, 54, 207, 42, 174, 244, 171, 249, 7, 110,
-                         238, 116, 93, 148, 1, 114, 22, 98, 36, 19, 154, 221, 104, 74, 254, 174, 89, 28, 14, 87, 81, 192, 38, 229, 67, 178, 232, 171,
-                         46, 176, 96, 153, 218, 161, 209, 229, 223, 71, 119, 143, 119, 135, 250, 171, 69, 205, 241, 47, 227, 168, 2, 114, 5, 193, 69,
-                         82, 92, 238, 100, 241, 201, 54, 54, 150, 129, 29, 35, 153, 25, 216, 48, 173, 150, 75, 78, 41, 53, 158, 100, 117, 132, 143,
-                         90, 228, 104, 232, 45, 243, 61, 16, 222, 163, 189, 14, 173, 205, 120, 103, 148, 106, 103, 77, 32, 124, 57, 245, 175, 76, 196,
-                         67, 101, 210, 104, 167, 230, 2, 17, 150, 149, 183, 215, 208, 24, 32, 82, 240, 90, 177, 241, 114, 184, 93, 185, 85, 226, 200,
-                         139, 38, 184, 127, 56, 200, 144, 98, 67, 222, 109, 42, 214, 151, 3, 246, 41, 138, 166, 59, 196, 9, 134, 142, 148, 76, 17,
-                         245, 136, 162, 121, 134, 195, 94, 227, 70, 47, 161, 48, 236, 252, 209, 180, 1, 224, 208, 146, 97, 152, 236, 149, 29, 88, 109,
-                         197, 213, 68, 49, 91, 28, 209, 159, 38, 160, 149, 240, 24, 67, 1, 131, 91, 65, 45, 252, 149, 36, 139, 53, 109, 119, 144, 26,
-                         210, 215, 163, 153, 222, 67, 198, 121, 94, 245, 3, 179, 46, 210, 103, 63, 230, 253, 66, 97, 252, 226, 111, 249, 3, 2, 175, 6,
-                         34, 0, 0, 0, 0, 0
-                 };
+      var messageAsHex =
+        "b77f44715e0b3014065bff3769dbff937d8872f0b7a11002cfd9805b1561b6154f119761edae08af0f77a558da1b41a4841621d7e5965d5511cda3d8b81646e2c1708059bf19170edcbdde8d1ec1cbdc9aa6e8568a61fc27dfbf3a5474c02c0b1f372aed8b2b2c8bd1d7e755158db3b28f933830ba1b780d4c2a40438b091f1bd0d0cc6cc69b5e0b66e439d513e8f21b1e1130847f380deeb509ebf5e856d696cd029ca13edd8d50fee6b1f204be4c0029739ffb37a91f28111033005f607075131a4ba053c05bf8f3bf010000010000004a5c0100f50c976000000000065bff3769dbff937d8872f0b7a11002cfd9805b1561b6154f119761edae08af0f77a558da1b41a4841621d7e5965d5511cda3d8b81646e2c1708059bf19170edcbdde8d1ec1cbdc9aa6e8568a61fc27dfbf3a5474c02c0b1f372aed8b2b2c8bd1d7e755158db3b28f933830ba1b780d4c2a40438b091f1bd0d0cc6cc69b5e0b66e439d513e8f21b1e1130847f380deeb509ebf5e856d696cd029ca13edd8d50fee6b1f204be4c0029739ffb37a91f28111033005f607075131a4ba053c05bf8f30e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8000000000000000002365fb85e7568b9b32f7359d6cbafa9814472ad0ecbad32d77beaf5dd9e84c6baa9b46fe743df783dedd00c954612428b34241f5913cf249d75bed3aafd65e4cd000000000259ae85d697902115fc83a12abab66e88d3211e78e3f956eac5642724570ac8787d997a7db22bf730e4d4303403c5e63f94987f0ba74480883ce6551e4696b20b3bfbce92cd6e99f4e7eb61c4190e80e351b0be6835a28f48f222e9ef521c0b56fde971a2a46714ab5df3214daa2ba68bfa32c030357cffccf111e026ac93a50edf295ff1155ff115";
+      var expected = messageAsHex.HexToBytes();
 
       var actual = message.Serialize();
 
@@ -128,59 +128,56 @@
     [TestMethod]
     public void TestMessageDeserializationWithMilestonePayload()
     {
-      var parentMessageIds = new List<string>
-      {
-        "6d945f7937e25a397cdf6519c99ed1609b913169341f67e2b5a2d2ccad592986",
-        "75ba7a6fef36cf2aaef4abf9076eee745d940172166224139add684afeae591c",
-      };
-
-      var messageBytes = new byte[]
-           {
-                         16, 255, 159, 217, 95, 187, 160, 90, 2, 109, 148, 95, 121, 55, 226, 90, 57, 124, 223, 101, 25, 201, 158, 209, 96, 155, 145, 49,
-                         105, 52, 31, 103, 226, 181, 162, 210, 204, 173, 89, 41, 134, 117, 186, 122, 111, 239, 54, 207, 42, 174, 244, 171, 249, 7,
-                         110, 238, 116, 93, 148, 1, 114, 22, 98, 36, 19, 154, 221, 104, 74, 254, 174, 89, 28, 50, 1, 0, 0, 1, 0, 0, 0, 81, 253, 0, 0,
-                         249, 66, 217, 95, 0, 0, 0, 0, 109, 148, 95, 121, 55, 226, 90, 57, 124, 223, 101, 25, 201, 158, 209, 96, 155, 145, 49, 105,
-                         52, 31, 103, 226, 181, 162, 210, 204, 173, 89, 41, 134, 117, 186, 122, 111, 239, 54, 207, 42, 174, 244, 171, 249, 7, 110,
-                         238, 116, 93, 148, 1, 114, 22, 98, 36, 19, 154, 221, 104, 74, 254, 174, 89, 28, 14, 87, 81, 192, 38, 229, 67, 178, 232, 171,
-                         46, 176, 96, 153, 218, 161, 209, 229, 223, 71, 119, 143, 119, 135, 250, 171, 69, 205, 241, 47, 227, 168, 2, 114, 5, 193, 69,
-                         82, 92, 238, 100, 241, 201, 54, 54, 150, 129, 29, 35, 153, 25, 216, 48, 173, 150, 75, 78, 41, 53, 158, 100, 117, 132, 143,
-                         90, 228, 104, 232, 45, 243, 61, 16, 222, 163, 189, 14, 173, 205, 120, 103, 148, 106, 103, 77, 32, 124, 57, 245, 175, 76, 196,
-                         67, 101, 210, 104, 167, 230, 2, 17, 150, 149, 183, 215, 208, 24, 32, 82, 240, 90, 177, 241, 114, 184, 93, 185, 85, 226, 200,
-                         139, 38, 184, 127, 56, 200, 144, 98, 67, 222, 109, 42, 214, 151, 3, 246, 41, 138, 166, 59, 196, 9, 134, 142, 148, 76, 17,
-                         245, 136, 162, 121, 134, 195, 94, 227, 70, 47, 161, 48, 236, 252, 209, 180, 1, 224, 208, 146, 97, 152, 236, 149, 29, 88, 109,
-                         197, 213, 68, 49, 91, 28, 209, 159, 38, 160, 149, 240, 24, 67, 1, 131, 91, 65, 45, 252, 149, 36, 139, 53, 109, 119, 144, 26,
-                         210, 215, 163, 153, 222, 67, 198, 121, 94, 245, 3, 179, 46, 210, 103, 63, 230, 253, 66, 97, 252, 226, 111, 249, 3, 2, 175, 6,
-                         34, 0, 0, 0, 0, 0
-           };
+      var messageAsHex =
+        "b77f44715e0b3014060481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b889129da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08eaad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29ed530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402ad7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff62bf01000001000000972b0100f725956000000000060481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b889129da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08eaad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29ed530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402ad7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff620e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8000000000000000002365fb85e7568b9b32f7359d6cbafa9814472ad0ecbad32d77beaf5dd9e84c6baa9b46fe743df783dedd00c954612428b34241f5913cf249d75bed3aafd65e4cd0000000002e5046adc0a5a7eea3efc7de097f230835541162eb1b94a57dbe558f4cdf0701748aa2331b903fadb538f3993da385f9cb5d69bbdc8fc747eda4d6cf5ca3c320e64ce45d94f01195844fd5278526ee4111477698b2eb3c9a56a691b1c4fcdea174acad1c9ee11fd914be45e907bf18ef3b570f7ee2d5a8844fcbeeac132c524050d9e3ba8833aa883";
+      var messageBytes = messageAsHex.HexToBytes();
 
       var actualMessage = Message<MilestonePayload>.Deserialize(messageBytes);
       var expectedMessage = new Message<MilestonePayload>
       {
-        NetworkId = "6530425480034647824",
-        Nonce = "2229935",
-        ParentMessageIds = parentMessageIds,
+        NetworkId = "1454675179895816119",
+        Nonce = "9486896952193555981",
+        ParentMessageIds = new List<string>
+        {
+          "0481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b8891",
+          "29da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08e",
+          "aad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7",
+          "b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29e",
+          "d530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402a",
+          "d7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff62"
+        },
         Payload = new MilestonePayload
         {
-          Index = 64849,
-          Timestamp = 1608073977,
-          ParentMessageIds = parentMessageIds,
+          Type = 1,
+          Index = 76695,
+          Timestamp = 1620387319,
+          ParentMessageIds = new List<string>
+          {
+            "0481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b8891",
+            "29da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08e",
+            "aad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7",
+            "b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29e",
+            "d530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402a",
+            "d7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff62"
+          },
           InclusionMerkleProof = "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+          NextPoWScore = 0,
+          NextPoWScoreMilestoneIndex = 0,
           PublicKeys =
-                                                new List<string>
-                                                  {
-                                                    "7205c145525cee64f1c9363696811d239919d830ad964b4e29359e6475848f5a",
-                                                    "e468e82df33d10dea3bd0eadcd7867946a674d207c39f5af4cc44365d268a7e6"
-                                                  },
+            new List<string>
+            {
+              "365fb85e7568b9b32f7359d6cbafa9814472ad0ecbad32d77beaf5dd9e84c6ba",
+              "a9b46fe743df783dedd00c954612428b34241f5913cf249d75bed3aafd65e4cd"
+            },
           Signatures = new List<string>
-                                                             {
-                                                               "119695b7d7d0182052f05ab1f172b85db955e2c88b26b87f38c8906243de6d2ad69703f6298aa63bc409868e944c11f588a27986c35ee3462fa130ecfcd1b401",
-                                                               "e0d0926198ec951d586dc5d544315b1cd19f26a095f0184301835b412dfc95248b356d77901ad2d7a399de43c6795ef503b32ed2673fe6fd4261fce26ff90302"
-                                                             }
+          {
+            "e5046adc0a5a7eea3efc7de097f230835541162eb1b94a57dbe558f4cdf0701748aa2331b903fadb538f3993da385f9cb5d69bbdc8fc747eda4d6cf5ca3c320e",
+            "64ce45d94f01195844fd5278526ee4111477698b2eb3c9a56a691b1c4fcdea174acad1c9ee11fd914be45e907bf18ef3b570f7ee2d5a8844fcbeeac132c52405"
+          }
         },
       };
 
       Assert.AreEqual(expectedMessage.NetworkId, actualMessage.NetworkId);
-      Assert.AreEqual(expectedMessage.Nonce, actualMessage.Nonce);
       Assert.AreEqual(expectedMessage.ParentMessageIds[0], actualMessage.ParentMessageIds[0]);
       Assert.AreEqual(expectedMessage.ParentMessageIds[1], actualMessage.ParentMessageIds[1]);
 
@@ -295,6 +292,12 @@
       };
 
      // var message = Message<TransactionPayload<SignatureUnlockBlock>>.Deserialize(messageBytes);
+    }
+
+    private static Message<MilestonePayload> GetMilestone()
+    {
+      return JsonConvert.DeserializeObject<Message<MilestonePayload>>(
+        "{\"networkId\":\"1454675179895816119\",\"parentMessageIds\":[\"0481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b8891\",\"29da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08e\",\"aad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7\",\"b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29e\",\"d530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402a\",\"d7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff62\"],\"payload\":{\"type\":1,\"index\":76695,\"timestamp\":1620387319,\"parentMessageIds\":[\"0481396ba54c93fa9a84aa87c787d7c7a9665d98a2ab945756966801229b8891\",\"29da994d7f4a66b50af58b1271f50c91dc217762ac1d6857afb321c83765e08e\",\"aad1f763e2634eb681661f180f2c3cc3948ee4426c67332e111dee028deadde7\",\"b24d2ae393c60b69f0cb13065bb67eaec88a64f3f6e4ff29085ef47b83dae29e\",\"d530f398f61a527b3494fc5bfb0325a52003fcee089a86b64b4bcf6c3283402a\",\"d7fbc7a180d5f72318f0566229362c67b7497d6a79ebd944d6d7ad40ff46ff62\"],\"inclusionMerkleProof\":\"0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8\",\"nextPoWScore\":0,\"nextPoWScoreMilestoneIndex\":0,\"publicKeys\":[\"365fb85e7568b9b32f7359d6cbafa9814472ad0ecbad32d77beaf5dd9e84c6ba\",\"a9b46fe743df783dedd00c954612428b34241f5913cf249d75bed3aafd65e4cd\"],\"receipt\":null,\"signatures\":[\"e5046adc0a5a7eea3efc7de097f230835541162eb1b94a57dbe558f4cdf0701748aa2331b903fadb538f3993da385f9cb5d69bbdc8fc747eda4d6cf5ca3c320e\",\"64ce45d94f01195844fd5278526ee4111477698b2eb3c9a56a691b1c4fcdea174acad1c9ee11fd914be45e907bf18ef3b570f7ee2d5a8844fcbeeac132c52405\"]},\"nonce\":\"9486896952193555981\"}");
     }
   }
 }
