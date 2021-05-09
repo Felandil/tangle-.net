@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Tangle.Net.Api.Responses;
 using Tangle.Net.Api.Responses.Message;
+using Tangle.Net.Api.Responses.Utxo;
 using Tangle.Net.Entity;
 using Tangle.Net.Entity.Message;
 using Tangle.Net.Entity.Message.Payload;
@@ -152,6 +153,11 @@ namespace Tangle.Net.Api
 
         return response.Data;
       }
+    }
+
+    public async Task<OutputResponse> FindOutputByIdAsync(string outputId)
+    {
+      return await ExecuteRequestAsync<OutputResponse>($"{NodeUrl}/api/v1/outputs/{outputId}");
     }
 
     private static async Task<T> ExecuteRequestAsync<T>(string uri)

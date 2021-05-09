@@ -25,16 +25,25 @@ namespace Tangle.Net.Console
     {
       var client = new NodeRestClient();
 
-      Console.WriteLine("Getting Node Info-----------------------");
-      var nodeinfo = await client.GetNodeInfoAsync();
-      Console.WriteLine(JsonConvert.SerializeObject(nodeinfo, Formatting.Indented));
-      Console.WriteLine("---------------------------------------");
+      await NodeOperations(client);
+      await TipsOperations(client);
+      await MessageOperations(client);
+      await UtxoOperations(client);
 
-      Console.WriteLine("Getting Tips --------------------------");
-      var tips = await client.GetTipsAsync();
-      Console.WriteLine(JsonConvert.SerializeObject(tips, Formatting.Indented));
-      Console.WriteLine("---------------------------------------");
+      Console.ReadKey();
+    }
 
+    private static async Task UtxoOperations(NodeRestClient client)
+    {
+      Console.WriteLine("Getting Output Information -----------------------");
+      var outputResponse =
+        await client.FindOutputByIdAsync("someoutputid");
+      Console.WriteLine(JsonConvert.SerializeObject(outputResponse, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+    }
+
+    private static async Task MessageOperations(NodeRestClient client)
+    {
       Console.WriteLine("Sending Message -----------------------");
       var sendResponse = await client.SendDataAsync("Hello world!", "Tangle.Net");
       Console.WriteLine(JsonConvert.SerializeObject(sendResponse, Formatting.Indented));
@@ -61,28 +70,43 @@ namespace Tangle.Net.Console
       Console.WriteLine(JsonConvert.SerializeObject(messageRawParsed, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
-
       Console.WriteLine("Reading Message Ids -------------------");
       var messageIds = await client.GetMessageIdsByIndexAsync("Tangle.Net");
       Console.WriteLine(JsonConvert.SerializeObject(messageIds, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
 
       Console.WriteLine("Reading Milestone ---------------------");
-      var milestone = await client.GetMessageAsync<MilestonePayload>("fb97ba6a265db83c927aceaf2dce9815730306132bd96040fe8793e76e23aac3");
+      var milestone =
+        await client.GetMessageAsync<MilestonePayload>("fb97ba6a265db83c927aceaf2dce9815730306132bd96040fe8793e76e23aac3");
       Console.WriteLine(JsonConvert.SerializeObject(milestone, Formatting.Indented));
       Console.WriteLine($"Issued at: {milestone.Payload.Timestamp.UnixTimestampToDateTime():F}");
       Console.WriteLine("---------------------------------------");
 
       Console.WriteLine("Reading Milestone Raw ---------------------");
-      var rawMilestone = await client.GetMessageRawAsync("fb97ba6a265db83c927aceaf2dce9815730306132bd96040fe8793e76e23aac3");
+      var rawMilestone =
+        await client.GetMessageRawAsync("fb97ba6a265db83c927aceaf2dce9815730306132bd96040fe8793e76e23aac3");
       var parsedRawMilestone = Message<MilestonePayload>.Deserialize(rawMilestone.MessageRaw);
       Console.WriteLine(JsonConvert.SerializeObject(parsedRawMilestone, Formatting.Indented));
       Console.WriteLine($"Issued at: {milestone.Payload.Timestamp.UnixTimestampToDateTime():F}");
       Console.WriteLine("---------------------------------------");
       Console.WriteLine(rawMilestone.MessageRaw.ToHex());
       Console.WriteLine("---------------------------------------");
+    }
 
-      Console.ReadKey();
+    private static async Task TipsOperations(NodeRestClient client)
+    {
+      Console.WriteLine("Getting Tips --------------------------");
+      var tips = await client.GetTipsAsync();
+      Console.WriteLine(JsonConvert.SerializeObject(tips, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+    }
+
+    private static async Task NodeOperations(NodeRestClient client)
+    {
+      Console.WriteLine("Getting Node Info-----------------------");
+      var nodeinfo = await client.GetNodeInfoAsync();
+      Console.WriteLine(JsonConvert.SerializeObject(nodeinfo, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
     }
   }
 }

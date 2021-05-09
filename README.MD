@@ -49,7 +49,7 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 
 | Operation - UTXO<img width=295/>				 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
-| GET /api/v1/outputs/{outputId}				 			   | No			 |	
+| GET /api/v1/outputs/{outputId}				 			   | Yes			 |	
 | GET /api/v1/addresses/{address}				 			   | No			 |	
 | GET /api/v1/addresses/ed25519/{address}				 			   | No			 |	
 | GET /api/v1/addresses/{address}/outputs				 			   | No			 |	
