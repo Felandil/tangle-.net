@@ -13,7 +13,7 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
   {
     public Ed25519Address()
     {
-      this.Type = 1;
+      this.Type = 0;
     }
 
     [JsonProperty("address")]

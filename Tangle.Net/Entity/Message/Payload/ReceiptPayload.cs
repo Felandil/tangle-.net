@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Tangle.Net.Entity.Message.Payload.Receipt;
 using Tangle.Net.Entity.Message.Payload.Transaction;
 using Tangle.Net.Utils;
 
-namespace Tangle.Net.Entity.Message.Payload.Receipt
+namespace Tangle.Net.Entity.Message.Payload
 {
   public class ReceiptPayload : Payload
   {
