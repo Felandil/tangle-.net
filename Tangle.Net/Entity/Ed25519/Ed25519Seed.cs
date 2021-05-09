@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using Rebex.Security.Cryptography;
 using Tangle.Net.Crypto;
 
-namespace Tangle.Net.Entity
+namespace Tangle.Net.Entity.Ed25519
 {
   public class Ed25519Seed
   {
@@ -20,7 +19,7 @@ namespace Tangle.Net.Entity
       {
         if (keyPair == null)
         {
-          var ed25519 = new Ed25519();
+          var ed25519 = new Rebex.Security.Cryptography.Ed25519();
           ed25519.FromSeed(this.SecretKey.Take(32).ToArray());
 
           this.keyPair = new KeyPair

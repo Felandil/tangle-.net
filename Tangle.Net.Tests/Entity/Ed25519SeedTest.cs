@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tangle.Net.Entity;
+using Tangle.Net.Entity.Ed25519;
 
 namespace Tangle.Net.Tests.Entity
 {

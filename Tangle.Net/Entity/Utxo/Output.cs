@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Tangle.Net.Entity.Ed25519;
 using Tangle.Net.Entity.Message.Payload.Transaction;
 
 namespace Tangle.Net.Entity.Utxo

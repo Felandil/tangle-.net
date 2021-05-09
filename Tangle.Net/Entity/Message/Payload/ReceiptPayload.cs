@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Tangle.Net.Entity.Ed25519;
 using Tangle.Net.Entity.Message.Payload.Receipt;
 using Tangle.Net.Entity.Message.Payload.Transaction;
 using Tangle.Net.Utils;

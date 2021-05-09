@@ -1,14 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Tangle.Net.Entity.Message;
+using Tangle.Net.Entity.Message.Payload;
+using Tangle.Net.Utils;
 
-namespace Tangle.Net.Entity.Message.Payload.Transaction
+namespace Tangle.Net.Entity.Ed25519
 {
-  using System.Collections.Generic;
-
-  using Newtonsoft.Json;
-
-  using Tangle.Net.Utils;
-
   public class Ed25519Address : PayloadType, ISerializable
   {
     public Ed25519Address()
@@ -18,6 +16,12 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
 
     [JsonProperty("address")]
     public string Address { get; set; }
+
+    [JsonProperty("balance")]
+    public long Balance { get; set; }
+
+    [JsonProperty("dustAllowed")]
+    public bool DustAllowed { get; set; }
 
     public byte[] Serialize()
     {

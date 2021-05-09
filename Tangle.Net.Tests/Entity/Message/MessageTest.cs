@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Tangle.Net.Entity.Ed25519;
 
 namespace Tangle.Net.Tests.Entity.Message
 {

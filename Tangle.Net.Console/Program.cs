@@ -25,9 +25,9 @@ namespace Tangle.Net.Console
     {
       var client = new NodeRestClient();
 
-      await NodeOperations(client);
-      await TipsOperations(client);
-      await MessageOperations(client);
+      //await NodeOperations(client);
+      //await TipsOperations(client);
+      //await MessageOperations(client);
       await UtxoOperations(client);
 
       Console.ReadKey();
@@ -36,9 +36,15 @@ namespace Tangle.Net.Console
     private static async Task UtxoOperations(NodeRestClient client)
     {
       Console.WriteLine("Getting Output Information -----------------------");
-      var outputResponse =
-        await client.FindOutputByIdAsync("someoutputid");
-      Console.WriteLine(JsonConvert.SerializeObject(outputResponse, Formatting.Indented));
+      //var outputResponse =
+      //  await client.FindOutputByIdAsync("someoutputid");
+      //Console.WriteLine(JsonConvert.SerializeObject(outputResponse, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+
+      Console.WriteLine("Getting Address Information -----------------------");
+      var addressFromBech32 =
+        await client.GetAddressFromBech32Async("iota1qp7k8gdfhqqz48csulkla6m67a9chjlsqq5ujysteqqqpcpqntugu4smx92");
+      Console.WriteLine(JsonConvert.SerializeObject(addressFromBech32, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
     }
 

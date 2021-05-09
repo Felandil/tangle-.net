@@ -7,6 +7,7 @@ using Tangle.Net.Api.Responses;
 using Tangle.Net.Api.Responses.Message;
 using Tangle.Net.Api.Responses.Utxo;
 using Tangle.Net.Entity;
+using Tangle.Net.Entity.Ed25519;
 using Tangle.Net.Entity.Message;
 using Tangle.Net.Entity.Message.Payload;
 using Tangle.Net.ProofOfWork;
@@ -158,6 +159,16 @@ namespace Tangle.Net.Api
     public async Task<OutputResponse> FindOutputByIdAsync(string outputId)
     {
       return await ExecuteRequestAsync<OutputResponse>($"{NodeUrl}/api/v1/outputs/{outputId}");
+    }
+
+    public async Task<Ed25519Address> GetAddressFromBech32Async(string addressBech32)
+    {
+      return await ExecuteRequestAsync<Ed25519Address>($"{NodeUrl}/api/v1/addresses/{addressBech32}");
+    }
+
+    public async Task<Ed25519Address> GetAddressFromEd25519Async(string addressEd25519)
+    {
+      return await ExecuteRequestAsync<Ed25519Address>($"{NodeUrl}/api/v1/addresses/ed25519/{addressEd25519}");
     }
 
     private static async Task<T> ExecuteRequestAsync<T>(string uri)

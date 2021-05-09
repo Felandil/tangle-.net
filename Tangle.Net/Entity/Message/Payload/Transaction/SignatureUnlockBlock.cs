@@ -1,4 +1,6 @@
-﻿namespace Tangle.Net.Entity.Message.Payload.Transaction
+﻿using Tangle.Net.Entity.Ed25519;
+
+namespace Tangle.Net.Entity.Message.Payload.Transaction
 {
   using System.Collections.Generic;
 
