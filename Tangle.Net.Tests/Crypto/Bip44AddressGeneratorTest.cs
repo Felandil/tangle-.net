@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tangle.Net.Crypto;
+using Tangle.Net.Crypto.Bip44;
 
 namespace Tangle.Net.Tests.Crypto
 {

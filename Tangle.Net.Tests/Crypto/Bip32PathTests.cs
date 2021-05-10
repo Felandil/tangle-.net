@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tangle.Net.Crypto;
+using Tangle.Net.Crypto.Bip44;
 
 namespace Tangle.Net.Tests.Crypto
 {

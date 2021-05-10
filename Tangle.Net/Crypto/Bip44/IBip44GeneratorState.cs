@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Crypto
+﻿namespace Tangle.Net.Crypto.Bip44
 {
   public interface IBip44GeneratorState
   {
