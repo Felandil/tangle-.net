@@ -30,7 +30,7 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 
 <br/>
 
-| Operation - Tips<img width=290/>					 				   | Supported       | 
+| Operation - Tips<img width=300/>					 				   | Supported       | 
 | ------------------------------------------------ | --------------- | 	
 | GET /api/v1/tips					 			   | Yes			 |	
 
@@ -52,8 +52,8 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 | GET /api/v1/outputs/{outputId}				 			   | Yes			 |	
 | GET /api/v1/addresses/{address}				 			   | Yes			 |	
 | GET /api/v1/addresses/ed25519/{address}				 			   | Yes			 |	
-| GET /api/v1/addresses/{address}/outputs				 			   | No			 |	
-| GET /api/v1/addresses/ed25519/{address}/outputs				 			   | No			 |	
+| GET /api/v1/addresses/{address}/outputs				 			   | Yes			 |	
+| GET /api/v1/addresses/ed25519/{address}/outputs				 			   | Yes			 |	
 
 ## Documentation
 

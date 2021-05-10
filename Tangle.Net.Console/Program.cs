@@ -46,6 +46,14 @@ namespace Tangle.Net.Console
         await client.GetAddressFromBech32Async("iota1qp7k8gdfhqqz48csulkla6m67a9chjlsqq5ujysteqqqpcpqntugu4smx92");
       Console.WriteLine(JsonConvert.SerializeObject(addressFromBech32, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
+
+
+      Console.WriteLine("Getting Address Outputs -----------------------");
+      var addressOutputs =
+        await client.GetOutputsFromBech32Async("someaddresswithoutputs", true);
+      Console.WriteLine(JsonConvert.SerializeObject(addressOutputs, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+      
     }
 
     private static async Task MessageOperations(NodeRestClient client)

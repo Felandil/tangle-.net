@@ -11,5 +11,9 @@ namespace Tangle.Net.Api.ClientDefinitions
     Task<Ed25519Address> GetAddressFromBech32Async(string addressBech32);
 
     Task<Ed25519Address> GetAddressFromEd25519Async(string addressEd25519);
+
+    Task<OutputsResponse> GetOutputsFromBech32Async(string addressBech32, bool includeSpent, int type = 0);
+
+    Task<OutputsResponse> GetOutputsFromEd25519Async(string addressEd25519, bool includeSpent, int type = 0);
   }
 }
