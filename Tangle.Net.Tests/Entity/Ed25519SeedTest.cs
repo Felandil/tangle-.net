@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tangle.Net.Crypto;
+using Tangle.Net.Crypto.Bip44;
 using Tangle.Net.Entity;
 using Tangle.Net.Entity.Ed25519;
+using Tangle.Net.Utils;
 
 namespace Tangle.Net.Tests.Entity
 {
@@ -50,6 +53,19 @@ namespace Tangle.Net.Tests.Entity
 
       CollectionAssert.AreEqual(expectedPublicKey, seed.KeyPair.PublicKey);
       CollectionAssert.AreEqual(expectedPrivateKey, seed.KeyPair.PrivateKey);
+    }
+
+    [TestMethod]
+    public void TestSubseedGenerationFromPath()
+    {
+      var seed = Ed25519Seed.FromMnemonic("witch collapse practice feed shame open despair creek road again ice least");
+      var path = Bip44AddressGenerator.GenerateAddress(1, 1, false);
+
+      var subseed = seed.GenerateSeedFromPath(path);
+
+      var expectedSeed = "56b7b7c582f3ebdfbe904ead6b3455a2a4595029a39126e6c2ebbadd98702ecd";
+
+      Assert.AreEqual(expectedSeed, subseed.SecretKey.ToHex());
     }
   }
 }

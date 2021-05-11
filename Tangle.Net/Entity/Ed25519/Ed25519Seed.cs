@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Net.Http.Headers;
 using Tangle.Net.Crypto;
+using Tangle.Net.Utils;
 
 namespace Tangle.Net.Entity.Ed25519
 {
@@ -36,6 +38,12 @@ namespace Tangle.Net.Entity.Ed25519
     public static Ed25519Seed FromMnemonic(string mnemonic)
     {
       return new Ed25519Seed(Bip39.MnemonicToSeed(mnemonic));
+    }
+
+    public Ed25519Seed GenerateSeedFromPath(Bip32Path path)
+    {
+      var result = Bip32.DerivePath(path, this.SecretKey);
+      return new Ed25519Seed(result.Key);
     }
   }
 }
