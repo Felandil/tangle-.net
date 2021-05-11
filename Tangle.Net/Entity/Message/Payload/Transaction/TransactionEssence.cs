@@ -1,4 +1,6 @@
-﻿namespace Tangle.Net.Entity.Message.Payload.Transaction
+﻿using Isopoh.Cryptography.Blake2b;
+
+namespace Tangle.Net.Entity.Message.Payload.Transaction
 {
   using System;
   using System.Collections.Generic;
@@ -7,6 +9,12 @@
 
   public class TransactionEssence : PayloadType, ISerializable
   {
+    public const int TransactionEssenceType = 0;
+    public TransactionEssence()
+    {
+      this.Type = 0;
+    }
+
     [JsonProperty("inputs")]
     public List<UTXOInput> Inputs { get; set; }
 
@@ -18,8 +26,7 @@
 
     public byte[] Serialize()
     {
-      var serialized = new List<byte>();
-      serialized.Add((byte)this.Type);
+      var serialized = new List<byte> {(byte) this.Type};
       serialized.AddRange(this.SerializeInputs());
       serialized.AddRange(this.SerializeOutputs());
       serialized.AddRange(this.Payload.Serialize());
@@ -35,7 +42,7 @@
       {
         serializedOutputs.AddRange(output.Serialize());
       }
-
+      
       return serializedOutputs.ToArray();
     }
 
@@ -49,6 +56,12 @@
       }
 
       return serializedInputs.ToArray();
+    }
+
+    public byte[] CalculateHash()
+    {
+      var asBytes = this.Serialize();
+      return Blake2B.ComputeHash(asBytes, new Blake2BConfig { OutputSizeInBytes = 32 }, null);
     }
   }
 }
