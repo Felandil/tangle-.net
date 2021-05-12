@@ -55,7 +55,7 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 | GET /api/v1/addresses/{address}/outputs				 			   | Yes			 |	
 | GET /api/v1/addresses/ed25519/{address}/outputs				 			   | Yes			 |	
 
-<br /><br/>
+<br/>
 
 ## Supported High Level Operations
 
@@ -63,12 +63,12 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 | ------------------------------------------------ | --------------- | 
 | GetBalance					 				   | Yes (untested)		     |
 | GetUnspentAddresses					 			   | Yes (untested)             |	
+| Send					 				   | No	     |
+| Retry					 				   | No	     |
 | Promote					 				   | No	     |
 | Reattach					 				   | No		     |
-| RetrieveData					 				   | No	     |
-| Retry					 				   | No	     |
-| Send					 				   | No	     |
-| SenData					 				   | No	     |	
+| SenData					 				   | Yes     |	
+| RetrieveData					 				   | Yes	     |
 
 
 ## Documentation

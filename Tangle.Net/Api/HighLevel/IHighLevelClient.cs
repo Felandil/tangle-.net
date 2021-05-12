@@ -9,5 +9,9 @@ namespace Tangle.Net.Api.HighLevel
     Task<GetBalanceResponse> GetBalanceAsync(GetBalanceRequest request);
 
     Task<GetUnspentAddressesResponse> GetUnspentAddressesAsync(GetUnspentAddressesRequest request);
+
+    Task<SendDataResponse> SendDataAsync(SendDataRequest request);
+
+    Task<RetrieveDataResponse> RetrieveDataAsync(RetrieveDataRequest request);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Tangle.Net.Api.HighLevel.Request;
 
 namespace Tangle.Net.Console
 {
@@ -28,9 +29,25 @@ namespace Tangle.Net.Console
       //await NodeOperations(client);
       //await TipsOperations(client);
       //await MessageOperations(client);
-      await UtxoOperations(client);
+      //await UtxoOperations(client);
+      await HighLevelOperations(client);
 
       Console.ReadKey();
+    }
+
+    private static async Task HighLevelOperations(NodeRestClient client)
+    {
+      var highLevelClient = new HighLevelClient(client);
+
+      Console.WriteLine("Sending High Level Data -----------------------");
+      var sendDataResponse = await highLevelClient.SendDataAsync(new SendDataRequest("Tangle .Net", "High Level Data"));
+      Console.WriteLine(JsonConvert.SerializeObject(sendDataResponse, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
+
+      Console.WriteLine("Retrieving High Level Data -----------------------");
+      var retrieveDataResponse = await highLevelClient.RetrieveDataAsync(new RetrieveDataRequest(sendDataResponse.MessageId));
+      Console.WriteLine(JsonConvert.SerializeObject(retrieveDataResponse, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
     }
 
     private static async Task UtxoOperations(NodeRestClient client)

@@ -8,6 +8,9 @@ using Tangle.Net.Api.HighLevel.Response;
 using Tangle.Net.Crypto.Bip44;
 using Tangle.Net.Entity.Bech32;
 using Tangle.Net.Entity.Ed25519;
+using Tangle.Net.Entity.Message;
+using Tangle.Net.Entity.Message.Payload;
+using Tangle.Net.Utils;
 
 namespace Tangle.Net.Api
 {
@@ -74,6 +77,26 @@ namespace Tangle.Net.Api
       } while (!foundAll);
 
       return new GetUnspentAddressesResponse(unspentAddresses);
+    }
+
+    public async Task<SendDataResponse> SendDataAsync(SendDataRequest request)
+    {
+      request.Validate();
+
+      var message = new Message<IndexationPayload>
+      {
+        Payload = new IndexationPayload { Index = request.IndexationKey.ToHex(), Data = request.Data.ToHex() }
+      };
+
+      var response = await this.Client.SendMessageAsync(message);
+
+      return new SendDataResponse(message, response.MessageId);
+    }
+
+    public async Task<RetrieveDataResponse> RetrieveDataAsync(RetrieveDataRequest request)
+    {
+      var message = await this.Client.GetMessageAsync<IndexationPayload>(request.MessageId);
+      return new RetrieveDataResponse(message.Payload.Index.HexToString(), message.Payload.Data.HexToString());
     }
   }
 }

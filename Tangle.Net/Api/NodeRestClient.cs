@@ -63,7 +63,16 @@ namespace Tangle.Net.Api
     public async Task<Message<T>> GetMessageAsync<T>(string messageId)
       where T : Payload
     {
-      return await ExecuteRequestAsync<Message<T>>($"{NodeUrl}/api/v1/messages/{messageId}");
+      var message = await ExecuteRequestAsync<Message<T>>($"{NodeUrl}/api/v1/messages/{messageId}");
+
+      // check if retrieved payload type is requested payload type
+      var defaultPayload = (T)Activator.CreateInstance(typeof(T));
+      if (message.Payload.Type != defaultPayload.Type)
+      {
+        throw new MessageTypeMismatchException(defaultPayload);
+      }
+
+      return message;
     }
 
     /// <inheritdoc />
@@ -119,11 +128,9 @@ namespace Tangle.Net.Api
     /// <inheritdoc />
     public async Task<MessageIdResponse> SendDataAsync(string payload, string index)
     {
-      var tips = await GetTipsAsync();
       var message = new Message<IndexationPayload>
       {
-        ParentMessageIds = tips.TipMessageIds,
-        Payload = new IndexationPayload {Index = index.ToHex(), Data = payload.ToHex()}
+        Payload = new IndexationPayload { Index = index.ToHex(), Data = payload.ToHex() }
       };
 
       return await SendMessageAsync(message);
@@ -133,6 +140,9 @@ namespace Tangle.Net.Api
     public async Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
       where T : Payload
     {
+      var tips = await GetTipsAsync();
+      message.ParentMessageIds = tips.TipMessageIds;
+
       if (PowProvider != null)
       {
         var nodeInfo = await GetNodeInfoAsync();
