@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Tangle.Net.Api.Responses.Utxo;
+using Tangle.Net.Api.Response.Utxo;
 using Tangle.Net.Entity.Ed25519;
 
 namespace Tangle.Net.Api.ClientDefinitions

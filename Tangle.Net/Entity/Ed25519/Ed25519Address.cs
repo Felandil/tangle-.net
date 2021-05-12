@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Isopoh.Cryptography.Blake2b;
 using Newtonsoft.Json;
 using Tangle.Net.Entity.Message;
 using Tangle.Net.Entity.Message.Payload;
@@ -14,6 +15,16 @@ namespace Tangle.Net.Entity.Ed25519
       this.Type = 0;
     }
 
+    public static Ed25519Address FromPublicKey(byte[] publicKey)
+    {
+      var addressHash = Blake2B.ComputeHash(publicKey, new Blake2BConfig { OutputSizeInBytes = 32 }, null);
+      return new Ed25519Address
+      {
+        Address = addressHash.ToHex(),
+        PublicKey = publicKey
+      };
+    }
+
     [JsonProperty("address")]
     public string Address { get; set; }
 
@@ -22,6 +33,9 @@ namespace Tangle.Net.Entity.Ed25519
 
     [JsonProperty("dustAllowed")]
     public bool DustAllowed { get; set; }
+
+    [JsonIgnore]
+    public byte[] PublicKey { get; private set; }
 
     public byte[] Serialize()
     {

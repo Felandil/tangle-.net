@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Tangle.Net.Api.Responses;
+using Tangle.Net.Api.Response;
 
 namespace Tangle.Net.Api.ClientDefinitions
 {

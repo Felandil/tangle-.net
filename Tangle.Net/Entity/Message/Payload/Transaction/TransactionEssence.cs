@@ -60,8 +60,7 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
 
     public byte[] CalculateHash()
     {
-      var asBytes = this.Serialize();
-      return Blake2B.ComputeHash(asBytes, new Blake2BConfig { OutputSizeInBytes = 32 }, null);
+      return Blake2B.ComputeHash(this.Serialize(), new Blake2BConfig { OutputSizeInBytes = 32 }, null);
     }
   }
 }

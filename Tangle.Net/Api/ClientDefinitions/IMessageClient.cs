@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Tangle.Net.Api.Responses.Message;
+using Tangle.Net.Api.Response.Message;
 using Tangle.Net.Entity.Message;
 using Tangle.Net.Entity.Message.Payload;
 

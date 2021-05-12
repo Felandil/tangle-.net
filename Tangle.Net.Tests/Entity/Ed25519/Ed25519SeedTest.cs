@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tangle.Net.Crypto;
 using Tangle.Net.Crypto.Bip44;
-using Tangle.Net.Entity;
 using Tangle.Net.Entity.Ed25519;
 using Tangle.Net.Utils;
 
-namespace Tangle.Net.Tests.Entity
+namespace Tangle.Net.Tests.Entity.Ed25519
 {
   [TestClass]
   public class Ed25519SeedTest

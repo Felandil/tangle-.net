@@ -17,14 +17,14 @@ namespace Tangle.Net.Tests.Crypto
     [TestMethod]
     public void TestAddressGenerationFromStateWithFirstAddress()
     {
-      var path = Bip44AddressGenerator.GenerateAddress(new DefaultBip44GeneratorState {IsInternal = true}, true);
+      var path = Bip44AddressGenerator.GenerateAddress(new InMemoryBip44GeneratorState {IsInternal = true}, true);
       Assert.AreEqual("m/44'/4218'/0'/1'/0'", path.ToString());
     }
 
     [TestMethod]
     public void TestAddressGenerationFromStateWithSecondAddress()
     {
-      var path = Bip44AddressGenerator.GenerateAddress(new DefaultBip44GeneratorState {IsInternal = true}, false);
+      var path = Bip44AddressGenerator.GenerateAddress(new InMemoryBip44GeneratorState {IsInternal = true}, false);
       Assert.AreEqual("m/44'/4218'/0'/0'/1'", path.ToString());
     }
   }

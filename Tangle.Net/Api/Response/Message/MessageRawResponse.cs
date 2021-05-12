@@ -1,4 +1,4 @@
-﻿namespace Tangle.Net.Api.Responses.Message
+﻿namespace Tangle.Net.Api.Response.Message
 {
   public class MessageRawResponse
   {

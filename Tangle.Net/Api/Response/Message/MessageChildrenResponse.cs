@@ -1,9 +1,8 @@
-﻿namespace Tangle.Net.Api.Responses.Message
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace Tangle.Net.Api.Response.Message
 {
-  using System.Collections.Generic;
-
-  using Newtonsoft.Json;
-
   public class MessageChildrenResponse
   {
     [JsonProperty("childrenMessageIds")]

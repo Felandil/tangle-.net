@@ -1,7 +1,7 @@
-﻿namespace Tangle.Net.Api.Responses.Message
-{
-  using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+namespace Tangle.Net.Api.Response.Message
+{
   public class MessageIdResponse
   {
     [JsonProperty("messageId")]

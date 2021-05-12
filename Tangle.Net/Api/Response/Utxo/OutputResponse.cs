@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Tangle.Net.Entity.Utxo;
 
-namespace Tangle.Net.Api.Responses.Utxo
+namespace Tangle.Net.Api.Response.Utxo
 {
   public class OutputResponse
   {
