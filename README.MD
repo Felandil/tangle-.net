@@ -64,10 +64,10 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 | GetBalance					 				   | Yes (untested)		     |
 | GetUnspentAddresses					 			   | Yes (untested)             |	
 | Send					 				   | No	     |
-| Retry					 				   | No	     |
-| Promote					 				   | No	     |
-| Reattach					 				   | No		     |
-| SenData					 				   | Yes     |	
+| Retry					 				   | Yes	     |
+| Promote					 				   | Yes	     |
+| Reattach					 				   | Yes		     |
+| SendData					 				   | Yes     |	
 | RetrieveData					 				   | Yes	     |
 
 

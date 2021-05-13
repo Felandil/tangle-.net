@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tangle.Net.Api.Exception;
 using Tangle.Net.Api.HighLevel;
 using Tangle.Net.Api.HighLevel.Request;
 using Tangle.Net.Api.HighLevel.Response;
@@ -79,7 +80,7 @@ namespace Tangle.Net.Api
       return new GetUnspentAddressesResponse(unspentAddresses);
     }
 
-    public async Task<SendDataResponse> SendDataAsync(SendDataRequest request)
+    public async Task<MessageResponse<IndexationPayload>> SendDataAsync(SendDataRequest request)
     {
       request.Validate();
 
@@ -90,13 +91,55 @@ namespace Tangle.Net.Api
 
       var response = await this.Client.SendMessageAsync(message);
 
-      return new SendDataResponse(message, response.MessageId);
+      return new MessageResponse<IndexationPayload>(message, response.MessageId);
     }
 
-    public async Task<RetrieveDataResponse> RetrieveDataAsync(RetrieveDataRequest request)
+    public async Task<RetrieveDataResponse> RetrieveDataAsync(MessageRequest request)
     {
       var message = await this.Client.GetMessageAsync<IndexationPayload>(request.MessageId);
       return new RetrieveDataResponse(message.Payload.Index.HexToString(), message.Payload.Data.HexToString());
+    }
+
+    public async Task<MessageResponse<T>> ReattachAsync<T>(MessageRequest request) where T : Payload
+    {
+      var message = await this.Client.GetMessageAsync<T>(request.MessageId);
+      await this.Client.SendMessageAsync(message);
+
+      return new MessageResponse<T>(message, request.MessageId);
+    }
+
+    public async Task<MessageResponse<T>> PromoteAsync<T>(MessageRequest request) where T : Payload
+    {
+      var message = await this.Client.GetMessageAsync<T>(request.MessageId);
+      var tips = await this.Client.GetTipsAsync();
+
+      if (tips.TipMessageIds.Contains(request.MessageId))
+      {
+        tips.TipMessageIds.RemoveAt(tips.TipMessageIds.IndexOf(request.MessageId));
+      }
+
+      message.ParentMessageIds = tips.TipMessageIds;
+
+      await this.Client.SendMessageAsync(message);
+
+      return new MessageResponse<T>(message, request.MessageId);
+    }
+
+    public async Task<MessageResponse<T>> RetryAsync<T>(MessageRequest request) where T : Payload
+    {
+      var messageMetadata = await this.Client.GetMessageMetadataAsync(request.MessageId);
+
+      if (messageMetadata.ShouldPromote)
+      {
+        return await this.PromoteAsync<T>(request);
+      }
+
+      if (messageMetadata.ShouldReattach)
+      {
+        return await this.ReattachAsync<T>(request);
+      }
+
+      throw new MessageNotRetriableException();
     }
   }
 }

@@ -45,7 +45,7 @@ namespace Tangle.Net.Console
       Console.WriteLine("---------------------------------------");
 
       Console.WriteLine("Retrieving High Level Data -----------------------");
-      var retrieveDataResponse = await highLevelClient.RetrieveDataAsync(new RetrieveDataRequest(sendDataResponse.MessageId));
+      var retrieveDataResponse = await highLevelClient.RetrieveDataAsync(new MessageRequest(sendDataResponse.MessageId));
       Console.WriteLine(JsonConvert.SerializeObject(retrieveDataResponse, Formatting.Indented));
       Console.WriteLine("---------------------------------------");
     }

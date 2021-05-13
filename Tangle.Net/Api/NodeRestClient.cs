@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Tangle.Net.Api.Exception;
 using Tangle.Net.Api.Response;
 using Tangle.Net.Api.Response.Message;
 using Tangle.Net.Api.Response.Utxo;
@@ -140,8 +141,11 @@ namespace Tangle.Net.Api
     public async Task<MessageIdResponse> SendMessageAsync<T>(Message<T> message)
       where T : Payload
     {
-      var tips = await GetTipsAsync();
-      message.ParentMessageIds = tips.TipMessageIds;
+      if (message.ParentMessageIds == null || message.ParentMessageIds.Count == 0)
+      {
+        var tips = await GetTipsAsync();
+        message.ParentMessageIds = tips.TipMessageIds;
+      }
 
       if (PowProvider != null)
       {

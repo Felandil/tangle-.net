@@ -1,8 +1,8 @@
 ﻿namespace Tangle.Net.Api.HighLevel.Request
 {
-  public class RetrieveDataRequest
+  public class MessageRequest
   {
-    public RetrieveDataRequest(string messageId)
+    public MessageRequest(string messageId)
     {
       MessageId = messageId;
     }
