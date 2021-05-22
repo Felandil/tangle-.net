@@ -15,6 +15,8 @@ namespace Tangle.Net.Api.HighLevel
 
     Task<RetrieveDataResponse> RetrieveDataAsync(MessageRequest request);
 
+    Task<MessageResponse<TransactionPayload>> SendTransferAsync(SendTransferRequest request);
+
     Task<MessageResponse<T>> ReattachAsync<T>(MessageRequest request) where T : Payload;
 
     Task<MessageResponse<T>> PromoteAsync<T>(MessageRequest request) where T : Payload;

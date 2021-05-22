@@ -26,9 +26,9 @@ namespace Tangle.Net.Tests.Entity.Message.Payload.Transaction
               TransactionOutputIndex = 0
             }
           },
-          Outputs = new List<SigLockedSingleOutput>
+          Outputs = new List<SigLockedOutput>
           {
-            new SigLockedSingleOutput
+            new SigLockedOutput
             {
               Amount = 1000,
               Address = new Ed25519Address

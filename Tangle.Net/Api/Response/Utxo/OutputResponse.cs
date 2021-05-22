@@ -12,7 +12,7 @@ namespace Tangle.Net.Api.Response.Utxo
     public string TransactionId { get; set; }
 
     [JsonProperty("outputIndex")]
-    public int OutputIndex { get; set; }
+    public short OutputIndex { get; set; }
 
     [JsonProperty("isSpent")]
     public bool IsSpent { get; set; }

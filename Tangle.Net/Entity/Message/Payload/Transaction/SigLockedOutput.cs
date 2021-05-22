@@ -7,11 +7,24 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
 
   using Newtonsoft.Json;
 
-  public class SigLockedSingleOutput : PayloadType, ISerializable
+  public class SigLockedOutput : PayloadType, ISerializable
   {
-    public SigLockedSingleOutput()
+    public const int SigLockedSingleOutputType = 0;
+    public const int SigLockedDustAllowanceOutput = 1;
+
+    public SigLockedOutput()
     {
       this.Type = 0;
+    }
+
+    public SigLockedOutput(int type)
+    {
+      if (type != SigLockedSingleOutputType && type != SigLockedDustAllowanceOutput)
+      {
+        throw new ArgumentException("Invalid Type. Type must be 0 (SigLockedSingleOutputType) or 1 (SigLockedDustAllowanceOutput)", nameof(type));
+      }
+
+      this.Type = type;
     }
 
     [JsonProperty("address")]

@@ -10,7 +10,7 @@ namespace Tangle.Net.Entity.Ed25519
   {
     public Ed25519Signature()
     {
-      this.Type = 1;
+      this.Type = 0;
     }
 
     [JsonProperty("publicKey")]

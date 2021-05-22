@@ -19,7 +19,7 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
     public List<UTXOInput> Inputs { get; set; }
 
     [JsonProperty("outputs")]
-    public List<SigLockedSingleOutput> Outputs { get; set; }
+    public List<SigLockedOutput> Outputs { get; set; }
 
     [JsonProperty("payload")]
     public IndexationPayload Payload { get; set; }
@@ -29,7 +29,7 @@ namespace Tangle.Net.Entity.Message.Payload.Transaction
       var serialized = new List<byte> {(byte) this.Type};
       serialized.AddRange(this.SerializeInputs());
       serialized.AddRange(this.SerializeOutputs());
-      serialized.AddRange(this.Payload.Serialize());
+      serialized.AddRange(this.Payload == null ? BitConverter.GetBytes(0) : this.Payload.Serialize());
 
       return serialized.ToArray();
     }

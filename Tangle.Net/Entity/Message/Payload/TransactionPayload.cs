@@ -8,8 +8,7 @@
 
   using Tangle.Net.Entity.Message.Payload.Transaction;
 
-  public class TransactionPayload<TBlock> : Payload
-    where TBlock : UnlockBlock
+  public class TransactionPayload : Payload
   {
     public TransactionPayload()
     {
@@ -20,9 +19,9 @@
     public TransactionEssence Essence { get; set; }
 
     [JsonProperty("unlockBlocks")]
-    public List<TBlock> UnlockBlocks { get; set; }
+    public List<UnlockBlock> UnlockBlocks { get; set; }
 
-    public static TransactionPayload<TBlock> Deserialize(byte[] payload)
+    public static TransactionPayload Deserialize(byte[] payload)
     {
       var payloadType = BitConverter.ToInt32(payload.Take(4).ToArray(), 0);
       var pointer = 4;
@@ -30,7 +29,7 @@
       {
         throw new Exception($"Payload Type ({payloadType}) is not a transaction payload!");
       }
-      return new TransactionPayload<TBlock>();
+      return new TransactionPayload();
     }
 
     /// <inheritdoc />

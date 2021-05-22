@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Tangle.Net.Api.HighLevel;
 using Tangle.Net.Api.HighLevel.Request;
+using Tangle.Net.Entity.Ed25519;
 
 namespace Tangle.Net.Console
 {
@@ -38,6 +41,12 @@ namespace Tangle.Net.Console
     private static async Task HighLevelOperations(NodeRestClient client)
     {
       var highLevelClient = new HighLevelClient(client);
+
+      Console.WriteLine("Sending Transfer -----------------------");
+      var seed = Ed25519Seed.FromMnemonic("");
+      var sendTransferResponse = await highLevelClient.SendTransferAsync(new SendTransferRequest(seed, "iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp", 1000000, "Tangle .Net", "Test"));
+      Console.WriteLine(JsonConvert.SerializeObject(sendTransferResponse, Formatting.Indented));
+      Console.WriteLine("---------------------------------------");
 
       Console.WriteLine("Sending High Level Data -----------------------");
       var sendDataResponse = await highLevelClient.SendDataAsync(new SendDataRequest("Tangle .Net", "High Level Data"));

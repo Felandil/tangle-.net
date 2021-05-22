@@ -204,53 +204,54 @@ namespace Tangle.Net.Tests.Entity.Message
         "beba1162ef983a6570b1119d635661c121783a9b9d973a17b46bd26ae997a6a4",
       };
 
-      var message = new Message<TransactionPayload<SignatureUnlockBlock>>
+      var message = new Message<TransactionPayload>
       {
         NetworkId = "6530425480034647824",
         Nonce = "724240",
         ParentMessageIds = parentMessageIds,
-        Payload = new TransactionPayload<SignatureUnlockBlock>
+        Payload = new TransactionPayload
         {
           Essence = new TransactionEssence
           {
             Inputs = new List<UTXOInput>
-                                                               {
-                                                                 new UTXOInput
-                                                                   {
-                                                                     TransactionId =
-                                                                       "c08141e6f09d8da0c7d5604e3e3bab20731948c120af42d58826817eaec9d186",
-                                                                     TransactionOutputIndex = 0
-                                                                   }
-                                                               },
-            Outputs = new List<SigLockedSingleOutput>
-                                                                {
-                                                                  new SigLockedSingleOutput
-                                                                    {
-                                                                      Amount = 1000,
-                                                                      Address = new Ed25519Address
-                                                                                  {
-                                                                                    Address =
-                                                                                      "3f8530482fd6d0e3a198c327f5ce0423f2eb9e22be8c3ab0554d081467b20a5b"
-                                                                                  }
-                                                                    }
-                                                                },
+            {
+              new UTXOInput
+              {
+                TransactionId =
+                  "c08141e6f09d8da0c7d5604e3e3bab20731948c120af42d58826817eaec9d186",
+                TransactionOutputIndex = 0
+              }
+            },
+            Outputs = new List<SigLockedOutput>
+            {
+              new SigLockedOutput
+              {
+                Amount = 1000,
+                Address = new Ed25519Address
+                {
+                  Address =
+                    "3f8530482fd6d0e3a198c327f5ce0423f2eb9e22be8c3ab0554d081467b20a5b"
+                }
+              }
+            },
             Payload = new IndexationPayload
             {
               Index = "test\n".ToHex(),
               Data = "746573740a"
             }
           },
-          UnlockBlocks = new List<SignatureUnlockBlock>
-                                                       {
-                                                         new SignatureUnlockBlock
-                                                           {
-                                                             Signature = new Ed25519Signature
-                                                                           {
-                                                                             PublicKey = "e6a908d6ccbfd4b797a2858c0b4067e4800a987d3f5d54096c6f384628e5a7eb",
-                                                                             Signature = "45f7e6fff1c35f47dbcb739919507c26cbf5c5bbe1ec0d2a2dd3bd097b320214c3fcf9a426b1efce4438e7efdc387c4fefda7fff9526b76b813942f96f756306"
-                                                                           }
-                                                           }
-                                                       }
+          UnlockBlocks = new List<UnlockBlock>
+          {
+            new SignatureUnlockBlock
+            {
+              Signature = new Ed25519Signature
+              {
+                PublicKey = "e6a908d6ccbfd4b797a2858c0b4067e4800a987d3f5d54096c6f384628e5a7eb",
+                Signature =
+                  "45f7e6fff1c35f47dbcb739919507c26cbf5c5bbe1ec0d2a2dd3bd097b320214c3fcf9a426b1efce4438e7efdc387c4fefda7fff9526b76b813942f96f756306"
+              }
+            }
+          }
         }
       };
 
@@ -262,7 +263,7 @@ namespace Tangle.Net.Tests.Entity.Message
                         192, 129, 65, 230, 240, 157, 141, 160, 199, 213, 96, 78, 62, 59, 171, 32, 115, 25, 72, 193, 32, 175, 66, 213, 136, 38, 129,
                         126, 174, 201, 209, 134, 0, 0, 1, 0, 0, 0, 63, 133, 48, 72, 47, 214, 208, 227, 161, 152, 195, 39, 245, 206, 4, 35, 242, 235,
                         158, 34, 190, 140, 58, 176, 85, 77, 8, 20, 103, 178, 10, 91, 232, 3, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 2, 0, 0, 0, 5, 0, 116,
-                        101, 115, 116, 10, 5, 0, 0, 0, 116, 101, 115, 116, 10, 1, 0, 0, 1, 230, 169, 8, 214, 204, 191, 212, 183, 151, 162, 133, 140,
+                        101, 115, 116, 10, 5, 0, 0, 0, 116, 101, 115, 116, 10, 1, 0, 0, 0, 230, 169, 8, 214, 204, 191, 212, 183, 151, 162, 133, 140,
                         11, 64, 103, 228, 128, 10, 152, 125, 63, 93, 84, 9, 108, 111, 56, 70, 40, 229, 167, 235, 69, 247, 230, 255, 241, 195, 95, 71,
                         219, 203, 115, 153, 25, 80, 124, 38, 203, 245, 197, 187, 225, 236, 13, 42, 45, 211, 189, 9, 123, 50, 2, 20, 195, 252, 249,
                         164, 38, 177, 239, 206, 68, 56, 231, 239, 220, 56, 124, 79, 239, 218, 127, 255, 149, 38, 183, 107, 129, 57, 66, 249, 111, 117,

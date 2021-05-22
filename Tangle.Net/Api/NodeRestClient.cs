@@ -185,12 +185,12 @@ namespace Tangle.Net.Api
       return await ExecuteRequestAsync<Ed25519Address>($"{NodeUrl}/api/v1/addresses/ed25519/{addressEd25519}");
     }
 
-    public async Task<OutputsResponse> GetOutputsFromBech32Async(string addressBech32, bool includeSpent, int type = 0)
+    public async Task<OutputsResponse> GetOutputsFromBech32Async(string addressBech32, bool includeSpent = false, int type = 0)
     {
       return await ExecuteRequestAsync<OutputsResponse>($"{NodeUrl}/api/v1/addresses/{addressBech32}/outputs?include-spent={includeSpent}&type={type}");
     }
 
-    public async Task<OutputsResponse> GetOutputsFromEd25519Async(string addressEd25519, bool includeSpent, int type = 0)
+    public async Task<OutputsResponse> GetOutputsFromEd25519Async(string addressEd25519, bool includeSpent = false, int type = 0)
     {
       return await ExecuteRequestAsync<OutputsResponse>($"{NodeUrl}/api/v1/addresses/ed25519/{addressEd25519}/outputs?include-spent={includeSpent}&type={type}");
     }

@@ -7,6 +7,11 @@
 
   public class ReferenceUnlockBlock : UnlockBlock
   {
+    public ReferenceUnlockBlock()
+    {
+      this.Type = 1;
+    }
+
     [JsonProperty("reference")]
     public short Reference { get; set; }
 
