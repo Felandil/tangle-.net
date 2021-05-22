@@ -61,9 +61,9 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 
 | Operation <img width=300/>		 			   | Supported       | 
 | ------------------------------------------------ | --------------- | 
-| GetBalance					 				   | Yes (untested)		     |
-| GetUnspentAddresses					 			   | Yes (untested)             |	
-| Send					 				   | No	     |
+| GetBalance					 				   | Yes 	     |
+| GetUnspentAddresses					 			   | Yes             |	
+| Send					 				   | Yes (untested)	     |
 | Retry					 				   | Yes	     |
 | Promote					 				   | Yes	     |
 | Reattach					 				   | Yes		     |
