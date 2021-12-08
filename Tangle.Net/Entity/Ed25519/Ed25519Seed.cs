@@ -40,6 +40,12 @@ namespace Tangle.Net.Entity.Ed25519
       return new Ed25519Seed(Bip39.MnemonicToSeed(mnemonic));
     }
 
+
+    public static Ed25519Seed Random()
+    {
+      return new Ed25519Seed(Bip39.MnemonicToSeed(Bip39.RandomMnemonic()));
+    }
+
     public Ed25519Seed GenerateSeedFromPath(Bip32Path path)
     {
       var result = Bip32.DerivePath(path, this.SecretKey);

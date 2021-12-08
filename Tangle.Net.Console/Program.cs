@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Tangle.Net.Api.HighLevel;
 using Tangle.Net.Api.HighLevel.Request;
+using Tangle.Net.Crypto;
 using Tangle.Net.Entity.Ed25519;
 
 namespace Tangle.Net.Console
@@ -31,9 +32,9 @@ namespace Tangle.Net.Console
 
       //await NodeOperations(client);
       //await TipsOperations(client);
-      //await MessageOperations(client);
+      await MessageOperations(client);
       //await UtxoOperations(client);
-      await HighLevelOperations(client);
+      //await HighLevelOperations(client);
 
       Console.ReadKey();
     }

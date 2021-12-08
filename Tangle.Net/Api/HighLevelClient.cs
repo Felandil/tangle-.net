@@ -286,7 +286,7 @@ namespace Tangle.Net.Api
         return await this.ReattachAsync<T>(request);
       }
 
-      throw new MessageNotRetriableException();
+      throw new MessageNotRetryableException();
     }
   }
 }

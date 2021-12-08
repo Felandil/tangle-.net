@@ -65,6 +65,10 @@ namespace Tangle.Net.Api
       where T : Payload
     {
       var message = await ExecuteRequestAsync<Message<T>>($"{NodeUrl}/api/v1/messages/{messageId}");
+      if (message == null)
+      {
+        throw new MessageNotFoundException(messageId);
+      }
 
       // check if retrieved payload type is requested payload type
       var defaultPayload = (T)Activator.CreateInstance(typeof(T));
