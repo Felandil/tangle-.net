@@ -1,4 +1,4 @@
-C# .NET 4.6 / .NET Standard Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
+C# .NET Standard Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
 
 ![cleanarch](http://i.imgur.com/WkBAATy.png)
 
@@ -11,61 +11,68 @@ http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 ## About
 
-This project was set up a little different from most (except the python one) IOTA libs, since Clean Architecture enables you to follow the SOLID principles (https://en.wikipedia.org/wiki/SOLID_(object-oriented_design) pretty easy.
-
-## Supported Operations
-
-Next Up: 
-
-	**Multisig**
-	**Curl Performance**
-	**Flash Channels**
-
-
-| Operation (Core)				 | Supported       | Operation (Extended)			  | Supported       | 
-| ------------------------------ | --------------- | -------------------------------- | --------------- | 
-| getNeighbors					 | Yes		       | broadcastAndStoreTransaction     | Yes		        |
-| getNodeInfo					 | Yes             | getAccountData				      | Yes		        |
-| addNeighbors					 | Yes			   | getBundle					      | Yes		        |
-| removeNeighbors				 | Yes			   | getInputs					      | Yes		        |
-| getTips						 | Yes             | getLatestInclusion			      | Yes             |
-| findTransactions				 | Yes	           | getNewAddresses				  | Yes		        |
-| getTrytes						 | Yes			   | getTransfers					  | Yes			    |
-| getInclusionStates			 | Yes             | prepareTransfers				  | Yes             |
-| getBalances					 | Yes    		   | replayBundle					  | Yes			    |
-| getTransactionsToApprove		 | Yes             | sendTransfer					  | Yes             |
-| attachToTangle				 | Yes             | sendTrytes						  | Yes		        |
-| interruptAttachingToTangle	 | Yes             |
-| broadcastTransactions			 | Yes			   |
-| storeTransactions				 | Yes			   |
-| wereAddressesSpentFrom	     | Yes			   |
-| checkConsistency				 | Yes			   |
-
-In addition to all operations you can also do the Proof of Work locally via CPU. Please note that this is very time consuming and might not be feasible for large bundles.
-
-## Documentation
-
-https://tangle-net.readthedocs.io/en/latest/
+This is the inofficial IOTA C# library. Currently "work in progress" to implement the changes introduced with IOTA 1.5 (Chrysalis). For any questions on how to get started (and since the documentation is very much outdated) feel free to contact me via discord (Felandil#6471)
 
 ## Contributing
 
-If you want to contribute, please feel free to grab an issue or implement more features.
+If you want to contribute, please feel free to grab an issue or implement more features. Alternatively you can support the development by donating to
+```
+iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
+```
+## Supported REST Operations
 
-## Encryption
+**Proof of work** can currently only be done remotely. Signing transactions etc. is still work in progress.
 
-The library uses the C# Port of Bouncy Castle (http://www.bouncycastle.org/csharp/).
+| Operation - Node<img width=300/>		 			   | Supported       | 
+| ------------------------------------------------ | --------------- | 
+| GET /health					 				   | Yes		     |
+| GET /api/v1/info					 			   | Yes             |		
+
+<br/>
+
+| Operation - Tips<img width=300/>					 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| GET /api/v1/tips					 			   | Yes			 |	
+
+<br/>
+
+| Operation - Messages<img width=270/>			 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| POST /api/v1/messages				 | Partially			   | 			
+| GET /api/v1/messages						 | Yes             | 			
+| GET /api/v1/messages/{messageId}			 | Partially	           |  
+| GET /api/v1/messages/{messageId}/metadata						 | Yes	| 	
+| GET /api/v1/messages/{messageId}/raw			 | Yes             | 		
+| GET /api/v1/messages/{messageId}/children					 | Yes  |
+
+<br/>
+
+| Operation - UTXO<img width=295/>				 				   | Supported       | 
+| ------------------------------------------------ | --------------- | 	
+| GET /api/v1/outputs/{outputId}				 			   | Yes			 |	
+| GET /api/v1/addresses/{address}				 			   | Yes			 |	
+| GET /api/v1/addresses/ed25519/{address}				 			   | Yes			 |	
+| GET /api/v1/addresses/{address}/outputs				 			   | Yes			 |	
+| GET /api/v1/addresses/ed25519/{address}/outputs				 			   | Yes			 |	
+
+<br/>
+
+## Supported High Level Operations
+
+| Operation <img width=300/>		 			   | Supported       | 
+| ------------------------------------------------ | --------------- | 
+| GetBalance					 				   | Yes 	     |
+| GetUnspentAddresses					 			   | Yes             |	
+| Send					 				   | Yes (untested)	     |
+| Retry					 				   | Yes	     |
+| Promote					 				   | Yes	     |
+| Reattach					 				   | Yes		     |
+| SendData					 				   | Yes     |	
+| RetrieveData					 				   | Yes	     |
+
 
 ## NuGet
 
-### Tangle.Net
-.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net <br>
-.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard/
+.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Chrysalis
 
-### Tangle.Net.Mam
-.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net.Mam/ <br>
-.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard.Mam/
-
-## Getting started
-
-https://tangle-net.readthedocs.io/en/latest/getting_started.html
 
