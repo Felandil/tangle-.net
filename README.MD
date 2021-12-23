@@ -1,4 +1,4 @@
-C# .NET 4.6 / .NET Standard Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
+C# .NET Standard Port of the IOTA lib (https://github.com/iotaledger/), build to fit into Clean Architecture (see below).
 
 ![cleanarch](http://i.imgur.com/WkBAATy.png)
 
@@ -71,28 +71,8 @@ iota1qqh6pxkg4huzv506623l6lrt4daraktak6rvxwsvtewakj89vy7mj4enzsp
 | RetrieveData					 				   | Yes	     |
 
 
-## Documentation
-
-**OUDATED** https://tangle-net.readthedocs.io/en/latest/
-
-
-## Encryption
-
-**TBD**
-
 ## NuGet
 
-**OUDATED** 
+.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Chrysalis
 
-### Tangle.Net
-.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net <br>
-.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard/
-
-### Tangle.Net.Mam
-.NET 4.6.1: https://www.nuget.org/packages/Tangle.Net.Mam/ <br>
-.NET Standard 2.0: https://www.nuget.org/packages/Tangle.Net.Standard.Mam/
-
-## Getting started
-
-https://tangle-net.readthedocs.io/en/latest/getting_started.html
 
